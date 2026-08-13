@@ -14,7 +14,9 @@
     "test": "node --test test/playground.structure.test.mjs",
     "test:browser": "node --test --test-concurrency=1 test/*.browser.test.mjs test/playground.browser-smoke.mjs",
     "test:all": "npm run test && npm run test:browser",
-    "serve": "node passive/server.mjs"
+    "serve": "node passive/server.mjs",
+    "demo": "node passive/server.mjs",
+    "demo:preflight": "node scripts/demo-preflight.mjs"
   },
   "devDependencies": {
     "playwright": "1.58.1"

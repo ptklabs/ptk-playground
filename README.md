@@ -14,6 +14,18 @@ can also load pinned local dependencies for SCA. It supports four workflows:
 
 Use these fixtures only in an environment you own or are authorised to test.
 
+## PTK Pro preview
+
+The home and campaign pages include a separate **PTK Pro — Coming soon**
+roadmap lane. It highlights selected public scenarios being used to validate
+additional future coverage. The preview is presentation metadata only: PTK Pro
+scanning is not enabled on this site, the current 12-minute demo uses published
+PTK capabilities, and every target remains open and scanner-neutral.
+
+Only a high-level status and planned engine are public. Scanner metadata and
+direct target files contain no product-tier data, private rule identities,
+payloads, detection logic, expected findings, access policy or credentials.
+
 ## Open the playground
 
 The public catalogue is available at:
@@ -138,7 +150,7 @@ show the catalogue, but it cannot reproduce those server behaviours.
 Start the dedicated route-aware server from the repository root:
 
 ```bash
-node passive/server.mjs
+npm run demo
 ```
 
 Default pages:
@@ -152,6 +164,32 @@ Default pages:
 
 The HTTPS endpoint uses a local self-signed certificate intended only for this
 fixture environment.
+
+The server binds to `127.0.0.1` by default so the deliberately vulnerable
+fixtures are not exposed to the local network. The ports can be changed with
+`PTK_PASSIVE_HTTP_PORT` and `PTK_PASSIVE_HTTPS_PORT` when required.
+
+Before a workshop or presentation, run the isolated readiness check:
+
+```bash
+npm run demo:preflight
+```
+
+The preflight starts a temporary loopback-only runtime on unused ports and
+checks the health contract, curated demo and scanner catalogues, local-only
+target routes, HTTPS availability, scoped session cookie, and the exact
+session-bound DAST review/control response pair. It stops its temporary server
+when complete.
+
+The route-aware runtime exposes a machine-readable readiness response at
+`/healthz`. A successful response identifies the service and reports whether
+the local HTTPS listener is available.
+
+Campaign and presenter progress is stored only in namespaced session storage.
+Use the visible **Reset** control on the current mission or demo page before a
+presentation. The Saved Workspace targets have their own **Clear saved
+announcement** action; review and repaired values use separate keys. These
+controls reset playground-owned state without clearing unrelated browser data.
 
 ## Understand the engines
 

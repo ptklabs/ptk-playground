@@ -148,7 +148,7 @@ test('scanner target catalogue is a minimal, exact projection of public missions
   assert.equal(scannerTargets.missions.reduce((total, mission) => total + mission.targets.length, 0), 16)
 })
 
-test('public mission catalogue is neutral, local and has paired target contracts', () => {
+test('public mission catalogue is local and has paired target contracts', () => {
   assert.equal(missions.schema, 'owasp-browser-security-missions/v1')
   assert.equal(missions.version, 1)
   assert.ok(Array.isArray(missions.missions) && missions.missions.length > 0)
@@ -186,7 +186,52 @@ test('public mission catalogue is neutral, local and has paired target contracts
   }
 })
 
-test('public playground does not expose private product-tier terminology', () => {
+test('product preview metadata is exact, presentation-only and scanner-neutral', () => {
+  const allowedFields = ['availability', 'engines', 'label', 'status', 'summary']
+  const allowedEngines = new Set(['DAST', 'SAST', 'IAST'])
+  const allowedStatuses = new Set(['validated', 'in-progress'])
+  const previews = missions.missions
+    .filter((mission) => mission.productPreview)
+    .map((mission) => ({ id: mission.id, preview: mission.productPreview }))
+
+  assert.deepEqual(previews.map(({ id }) => id), [
+    'session-bound-order-search',
+    'saved-workspace',
+    'imported-request-preferences'
+  ])
+  assert.deepEqual(
+    previews.map(({ id, preview }) => [id, preview.status, preview.engines]),
+    [
+      ['session-bound-order-search', 'in-progress', ['DAST']],
+      ['saved-workspace', 'validated', ['SAST']],
+      ['imported-request-preferences', 'validated', ['SAST']]
+    ]
+  )
+
+  for (const { id, preview } of previews) {
+    assert.deepEqual(Object.keys(preview).sort(), allowedFields, `${id} preview fields must be exact`)
+    assert.equal(preview.label, 'PTK Pro')
+    assert.equal(preview.availability, 'coming-soon')
+    assert.ok(allowedStatuses.has(preview.status), `${id} has an invalid preview status`)
+    assert.ok(preview.engines.length > 0, `${id} must name at least one planned engine`)
+    assert.equal(new Set(preview.engines).size, preview.engines.length, `${id} repeats a planned engine`)
+    assert.ok(preview.engines.every((engine) => allowedEngines.has(engine)), `${id} names a forbidden preview engine`)
+    assert.ok(preview.summary.length >= 20 && preview.summary.length <= 180, `${id} preview summary is not bounded`)
+    assert.doesNotMatch(
+      preview.summary,
+      /https?:|portal|rule\s*id|module\s*id|payload|detector|matcher|policy|entitlement|credential|expected\s+finding/i,
+      `${id} preview exposes implementation detail`
+    )
+  }
+
+  assert.doesNotMatch(JSON.stringify(scannerTargets), /PTK Pro|coming-soon|productPreview|portal/i)
+  assert.doesNotMatch(JSON.stringify(demo), /PTK Pro|coming-soon|productPreview|portal/i)
+  for (const file of walk(path.join(repoRoot, 'targets'))) {
+    assert.doesNotMatch(fs.readFileSync(file, 'utf8'), /PTK Pro|coming-soon|productPreview|portal/i, `${path.relative(repoRoot, file)} contains product preview metadata`)
+  }
+})
+
+test('public product preview terminology is confined to the approved presentation layer', () => {
   const publicFiles = [
     'README.md',
     'index.html',
@@ -204,22 +249,39 @@ test('public playground does not expose private product-tier terminology', () =>
     'assets/js/playground.js',
     'assets/css/playground.css'
   ]
+  const previewPresentationFiles = new Set([
+    'README.md',
+    'index.html',
+    'campaigns/index.html',
+    'catalog/missions.json',
+    'assets/js/playground.js'
+  ])
   for (const file of publicFiles) {
-    assert.doesNotMatch(read(file), /\bpro\b|portal/i, `${file} exposes private product-tier terminology`)
+    if (file !== 'assets/js/playground.js') {
+      assert.doesNotMatch(read(file), /portal/i, `${file} exposes Portal terminology`)
+    }
+    if (!previewPresentationFiles.has(file)) {
+      assert.doesNotMatch(read(file), /\bpro\b/i, `${file} exposes product-preview terminology outside the approved layer`)
+    }
     assert.doesNotMatch(read(file), /"category"\s*:\s*"(?:free|full|base \+ full|free \+ full)"/i, `${file} exposes an internal edition as a category`)
   }
 
   for (const file of walk(repoRoot).filter((entry) => entry.endsWith('.html'))) {
+    const relative = path.relative(repoRoot, file)
     const visibleMarkup = fs.readFileSync(file, 'utf8')
       .replace(/<script\b[\s\S]*?<\/script>/gi, '')
       .replace(/<style\b[\s\S]*?<\/style>/gi, '')
       .replace(/<pre\b[\s\S]*?<\/pre>/gi, '')
-    assert.doesNotMatch(
-      visibleMarkup,
-      /\bpro\b|\bportal\s+(?:rulepack|rules?|modules?|edition)\b/i,
-      `${path.relative(repoRoot, file)} exposes private product-tier terminology in visible text`
-    )
+    assert.doesNotMatch(visibleMarkup, /\bportal\b/i, `${relative} exposes Portal terminology in visible text`)
+    if (!['index.html', 'campaigns/index.html'].includes(relative)) {
+      assert.doesNotMatch(visibleMarkup, /\bpro\b/i, `${relative} exposes product-preview terminology in visible text`)
+    }
   }
+  assert.equal(
+    read('assets/js/playground.js').match(/\bportal\b/gi)?.length,
+    1,
+    'the renderer may name Portal only once inside the preview-summary rejection pattern'
+  )
 })
 
 test('catalogue routes resolve to static fixtures or passive server routes', () => {

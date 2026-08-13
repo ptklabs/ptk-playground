@@ -12,6 +12,8 @@ const playgroundRoot = path.resolve(__dirname, "..");
 const passiveRoot = __dirname;
 const HTTP_PORT = Number(process.env.PTK_PASSIVE_HTTP_PORT || 3080);
 const HTTPS_PORT = Number(process.env.PTK_PASSIVE_HTTPS_PORT || 3443);
+const LISTEN_HOST = String(process.env.PTK_PLAYGROUND_HOST || "127.0.0.1").trim() || "127.0.0.1";
+const DISPLAY_HOST = LISTEN_HOST === "127.0.0.1" ? "localhost" : LISTEN_HOST;
 const WS_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
 const fileResponse = (file, options = {}) => ({ file, ...options });
@@ -470,6 +472,26 @@ function maybeCreateTlsContext() {
 function createRequestHandler(isHttps) {
   return async (req, res) => {
     const url = new URL(req.url, `${isHttps ? "https" : "http"}://${req.headers.host || "localhost"}`);
+    if (url.pathname === "/healthz") {
+      if (req.method !== "GET" && req.method !== "HEAD") {
+        res.setHeader("Allow", "GET, HEAD");
+        jsonResponse(res, 405, { ok: false, code: "METHOD_NOT_ALLOWED" });
+        return;
+      }
+      jsonResponse(res, 200, {
+        ok: true,
+        service: "owasp-ptk-playground",
+        mode: "route-aware",
+        protocol: isHttps ? "https" : "http",
+        httpsAvailable: Boolean(tlsContext),
+        routes: {
+          demo: "/demo/",
+          scanner: "/scanner/",
+          catalogue: "/catalog/scanner-targets.json"
+        }
+      });
+      return;
+    }
     if (/^\/targets\/session-bound-order-search\/(?:vulnerable|fixed)\/api\/search$/.test(url.pathname)) {
       await serveOrderSearchApi(req, res, { pathname: url.pathname, isHttps });
       return;
@@ -478,18 +500,18 @@ function createRequestHandler(isHttps) {
   };
 }
 
+const tlsContext = maybeCreateTlsContext();
 const httpServer = http.createServer(createRequestHandler(false));
 httpServer.on("upgrade", handleUpgrade);
-httpServer.listen(HTTP_PORT, () => {
-  console.log(`[passive-fixtures] HTTP ready on http://localhost:${HTTP_PORT}/passive/`);
+httpServer.listen(HTTP_PORT, LISTEN_HOST, () => {
+  console.log(`[passive-fixtures] HTTP ready on http://${DISPLAY_HOST}:${HTTP_PORT}/passive/`);
 });
 
-const tlsContext = maybeCreateTlsContext();
 if (tlsContext) {
   const httpsServer = https.createServer(tlsContext, createRequestHandler(true));
   httpsServer.on("upgrade", handleUpgrade);
-  httpsServer.listen(HTTPS_PORT, () => {
-    console.log(`[passive-fixtures] HTTPS ready on https://localhost:${HTTPS_PORT}/passive/`);
+  httpsServer.listen(HTTPS_PORT, LISTEN_HOST, () => {
+    console.log(`[passive-fixtures] HTTPS ready on https://${DISPLAY_HOST}:${HTTPS_PORT}/passive/`);
   });
 } else {
   console.log("[passive-fixtures] HTTPS disabled: openssl not available for local certificate generation");

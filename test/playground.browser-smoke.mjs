@@ -80,6 +80,17 @@ test('playground desktop and mobile smoke stays local and renders the focused ca
 
       assert.equal(await page.goto(`${baseUrl}/campaigns/`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
       assert.equal(await page.locator('[data-mission-card]').count(), 8)
+      assert.equal(await page.locator('[data-product-preview]').count(), 3)
+      assert.equal(await page.locator('[data-product-preview][data-preview-status="validated"]').count(), 2)
+      assert.equal(await page.locator('[data-product-preview][data-preview-status="in-progress"]').count(), 1)
+      assert.equal(await page.locator('[data-product-preview][data-preview-status="validated"] a').count(), 2)
+      assert.equal(await page.locator('[data-product-preview="session-bound-order-search"] a').count(), 0)
+      assert.match(await page.locator('.product-preview').textContent(), /PTK Pro — Coming soon/)
+      assert.match(await page.locator('[data-product-preview="session-bound-order-search"]').textContent(), /Roadmap only — no preview scan or detection claim/)
+
+      await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' })
+      assert.equal(await page.locator('[data-product-preview]').count(), 3)
+      assert.equal(await page.locator('[data-product-preview] .badge--preview').allTextContents().then((values) => values.every((value) => value === 'PTK Pro')), true)
 
       await page.goto(`${baseUrl}/campaigns/deployment-response-boundary/`, { waitUntil: 'networkidle' })
       assert.equal(await page.locator('[data-route-server-panel]:visible').count(), 1)

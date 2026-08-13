@@ -97,6 +97,9 @@ test('GitHub Pages project subpath loads catalogues, campaigns and direct static
 
     await page.goto(`${baseUrl}campaigns/`, { waitUntil: 'networkidle' })
     assert.equal(await page.locator('[data-mission-card]').count(), 8)
+    assert.equal(await page.locator('[data-product-preview]').count(), 3)
+    assert.equal(await page.locator('[data-product-preview="saved-workspace"] a').getAttribute('href'), `${baseUrl}campaigns/saved-workspace/`)
+    assert.equal(await page.locator('[data-product-preview="session-bound-order-search"] a').count(), 0)
     await page.goto(`${baseUrl}scanner/`, { waitUntil: 'networkidle' })
     assert.equal(await page.locator('[data-scanner-target]').count(), 16)
     assert.deepEqual(failedLocalResponses, [])

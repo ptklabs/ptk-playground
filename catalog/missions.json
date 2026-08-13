@@ -213,6 +213,13 @@
       "modes": ["campaign", "explorer", "demo", "scanner"],
       "route": "./campaigns/session-bound-order-search/",
       "evidenceSummary": "Session-bound POST request",
+      "productPreview": {
+        "label": "PTK Pro",
+        "availability": "coming-soon",
+        "status": "in-progress",
+        "engines": ["DAST"],
+        "summary": "Additional active browser-request coverage is being developed for a future release."
+      },
       "targets": {
         "review": {
           "id": "session-order-search-review",
@@ -429,6 +436,13 @@
       "modes": ["campaign", "explorer", "demo", "scanner"],
       "route": "./campaigns/saved-workspace/",
       "evidenceSummary": "Local storage across navigation",
+      "productPreview": {
+        "label": "PTK Pro",
+        "availability": "coming-soon",
+        "status": "validated",
+        "engines": ["SAST"],
+        "summary": "Additional advanced analysis for persistent browser state has completed initial validation for a future release."
+      },
       "targets": {
         "review": {
           "id": "saved-workspace-review",
@@ -740,6 +754,13 @@
       "modes": ["campaign", "explorer", "demo", "scanner"],
       "route": "./campaigns/imported-request-preferences/",
       "evidenceSummary": "Imported data changes inherited request options",
+      "productPreview": {
+        "label": "PTK Pro",
+        "availability": "coming-soon",
+        "status": "validated",
+        "engines": ["SAST"],
+        "summary": "Additional advanced analysis for imported client configuration has completed initial validation for a future release."
+      },
       "targets": {
         "review": {
           "id": "imported-request-preferences-review",

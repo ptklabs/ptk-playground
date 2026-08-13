@@ -11,6 +11,14 @@ const engineLabels = {
   'dast-passive': 'Passive DAST'
 }
 
+const productPreviewFields = ['availability', 'engines', 'label', 'status', 'summary']
+const productPreviewEngines = new Set(['DAST', 'SAST', 'IAST'])
+const productPreviewStatuses = {
+  validated: 'Validated',
+  'in-progress': 'In progress'
+}
+const productPreviewForbiddenDetail = /https?:|portal|rule\s*id|module\s*id|payload|detector|matcher|policy|entitlement|credential|expected\s+finding/i
+
 let catalog = { cases: [] }
 let missionCatalog = { missions: [] }
 let scannerCatalog = { missions: [] }
@@ -66,6 +74,27 @@ function validateMissionCatalog(value) {
     }
     if (!isLocalRoute(mission.targets?.review?.route) || !isLocalRoute(mission.targets?.repaired?.route)) {
       throw new Error(`invalid_mission_targets:${mission.id}`)
+    }
+    if (mission.productPreview !== undefined) {
+      const preview = mission.productPreview
+      if (!isPlainObject(preview) || JSON.stringify(Object.keys(preview).sort()) !== JSON.stringify(productPreviewFields)) {
+        throw new Error(`invalid_product_preview_fields:${mission.id}`)
+      }
+      if (
+        preview.label !== 'PTK Pro' ||
+        preview.availability !== 'coming-soon' ||
+        !Object.hasOwn(productPreviewStatuses, preview.status) ||
+        !Array.isArray(preview.engines) ||
+        preview.engines.length === 0 ||
+        new Set(preview.engines).size !== preview.engines.length ||
+        preview.engines.some((engine) => !productPreviewEngines.has(engine)) ||
+        typeof preview.summary !== 'string' ||
+        preview.summary.trim().length < 20 ||
+        preview.summary.length > 180 ||
+        productPreviewForbiddenDetail.test(preview.summary)
+      ) {
+        throw new Error(`invalid_product_preview:${mission.id}`)
+      }
     }
     for (const target of Object.values(mission.targets)) {
       if (target.source !== undefined && !isLocalRoute(target.source)) throw new Error(`invalid_mission_source:${mission.id}`)
@@ -266,6 +295,57 @@ function renderMissionList() {
       attributes: { href: missionRoute(mission.route) }
     }))
     container.append(card)
+  }
+  renderProductPreviewList()
+}
+
+function renderProductPreviewList() {
+  const containers = document.querySelectorAll('[data-product-preview-list]')
+  if (!containers.length) return
+  const previews = missionCatalog.missions.filter((mission) => mission.productPreview)
+  for (const container of containers) {
+    container.replaceChildren()
+    for (const mission of previews) {
+      const preview = mission.productPreview
+      const card = element('article', {
+        className: 'product-preview-card',
+        attributes: {
+          'data-product-preview': mission.id,
+          'data-preview-status': preview.status
+        }
+      })
+      const labels = element('div', { className: 'badge-row' })
+      labels.append(
+        badge(preview.label, 'preview'),
+        badge('Coming soon', 'mixed')
+      )
+      card.append(labels)
+      card.append(element('h3', { text: mission.title }))
+      card.append(element('p', { text: preview.summary }))
+
+      const facts = element('dl', { className: 'product-preview-card__facts' })
+      facts.append(
+        element('dt', { text: 'Status' }),
+        element('dd', { text: productPreviewStatuses[preview.status] }),
+        element('dt', { text: preview.engines.length === 1 ? 'Planned engine' : 'Planned engines' }),
+        element('dd', { text: preview.engines.join(', ') })
+      )
+      card.append(facts)
+
+      if (preview.status === 'validated') {
+        card.append(element('a', {
+          className: 'button button--secondary',
+          text: 'Explore public scenario',
+          attributes: { href: missionRoute(mission.route) }
+        }))
+      } else {
+        card.append(element('p', {
+          className: 'product-preview-card__note',
+          text: 'Roadmap only — no preview scan or detection claim.'
+        }))
+      }
+      container.append(card)
+    }
   }
 }
 
@@ -1176,6 +1256,16 @@ function showCatalogError(error) {
   console.error('[ptk-playground] catalog load failed', error)
 }
 
+function showProductPreviewError(error) {
+  for (const container of document.querySelectorAll('[data-product-preview-list]')) {
+    container.replaceChildren(element('p', {
+      className: 'empty-state',
+      text: 'The product roadmap preview could not be loaded. Current playground missions remain available.'
+    }))
+  }
+  console.error('[ptk-playground] product preview load failed', error)
+}
+
 async function init() {
   try {
     if (document.body.dataset.page === 'demo') {
@@ -1202,7 +1292,17 @@ async function init() {
       pageRoot.dataset.catalogStatus = 'ready'
       return
     }
-    catalog = await loadCatalog()
+    if (document.body.dataset.page === 'home') {
+      catalog = await loadCatalog()
+      try {
+        missionCatalog = await loadMissions()
+        renderProductPreviewList()
+      } catch (error) {
+        showProductPreviewError(error)
+      }
+    } else {
+      catalog = await loadCatalog()
+    }
     if (document.body.dataset.engine === 'dast-passive' || catalog.cases.some((entry) => entry.engine === 'dast-passive')) {
       passiveStatus = await detectPassiveServer()
     }
