@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — JWT client misuse</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">JWT client misuse</h1>
+    </div>
+    <p class="meta">Tokens pulled from URL fragments or cookies and written to storage / outbound requests.</p>
+
+    <div class="card" data-rule="taint" data-severity="high">
+      <div class="card-meta"><strong>INLINE-1 (High): hash/cookie token → storage + fetch header</strong></div>
+      <pre><code>const token = location.hash || document.cookie;
+localStorage.setItem('token', token);
+fetch('/api', { headers: { Authorization: 'Bearer ' + token } });</code></pre>
+      <script>
+        (function () {
+          const token = location.hash || document.cookie;
+          localStorage.setItem('token', token);
+          fetch('/api', {
+            headers: {
+              Authorization: 'Bearer ' + token
+            }
+          });
+        })();
+      </script>
+    </div>
+  </div>
+</body>
+</html>

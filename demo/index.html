@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Browser Security Demo · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A 12-minute browser-security demonstration connecting SCA, SAST, IAST and DAST evidence.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+</head>
+<body data-page="demo">
+  <a class="skip-link" href="#main">Skip to demo journey</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation">
+        <a href="../campaigns/">Campaigns</a>
+        <a href="./" aria-current="page">Demo</a>
+        <a href="../scanner/">Scanner quick start</a>
+        <a href="../sast/">SAST</a>
+        <a href="../iast/">IAST</a>
+        <a href="../passive/">Passive DAST</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell demo-shell">
+    <section class="mission-hero" aria-labelledby="demo-title">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>Demo</span></nav>
+        <p class="eyebrow">12-minute presenter journey</p>
+        <h1 id="demo-title" data-demo-title>The browser is the source of truth</h1>
+        <p class="mission-hero__lede" data-demo-summary>Connect loaded code, live runtime behavior, authenticated traffic and transient SPA state.</p>
+        <div class="badge-row" aria-label="Evidence families"><span class="badge">SCA</span><span class="badge">SAST</span><span class="badge badge--primary">IAST</span><span class="badge badge--mixed">DAST</span></div>
+      </div>
+      <aside class="mission-progress" aria-labelledby="demo-progress-title">
+        <p class="eyebrow">Demo progress</p>
+        <h2 id="demo-progress-title"><span data-demo-progress-count>0</span> of <span data-demo-progress-total>3</span> chapters</h2>
+        <div class="progress-track" role="progressbar" aria-label="Demo completion" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" data-demo-progress-track><span data-demo-progress-bar></span></div>
+        <p class="demo-progress__next" data-demo-progress-next>Start with the support-widget chapter.</p>
+        <button class="button button--secondary" type="button" data-reset-demo>Reset demo</button>
+      </aside>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Use only on systems you are authorised to test.</strong> This journey uses harmless prepared evidence and local review/repaired targets.</p>
+    </aside>
+
+    <section class="section" aria-labelledby="prepare-title">
+      <div class="section-heading"><div><p class="eyebrow">Before presenting</p><h2 id="prepare-title">Prepare one browser session</h2><p>The demo is designed for OWASP PTK, but the targets and checkpoints remain scanner-neutral.</p></div></div>
+      <div class="demo-preparation">
+        <article class="mode-card"><span class="demo-step-number">1</span><h3>Open your browser scanner</h3><p>Use a fresh authorised browser session and keep its findings and traffic views ready.</p></article>
+        <article class="mode-card"><span class="demo-step-number">2</span><h3>Start the local runtime</h3><p>The authenticated DAST chapter needs the included route-aware fixture server.</p></article>
+        <article class="mode-card"><span class="demo-step-number">3</span><h3>Compare both variants</h3><p>Every chapter preserves the feature while pairing the review route with a repaired control.</p></article>
+      </div>
+    </section>
+
+    <section id="demo-server" class="section" aria-labelledby="demo-runtime-title">
+      <div class="section-heading"><div><p class="eyebrow">Runtime</p><h2 id="demo-runtime-title">Enable the session-bound chapter</h2><p>Static chapters work on any web server. Chapter 2 needs the local route-aware runtime.</p></div></div>
+      <div class="info-panel scanner-runtime-panel">
+        <div class="runtime-status"><span class="status-dot" data-demo-status-dot aria-hidden="true"></span><div><strong data-demo-status>Static demo mode</strong><p data-demo-status-detail>The static chapters are ready; session-bound target links remain disabled.</p></div></div>
+        <div class="scanner-command"><span>Start from the repository root</span><code>node passive/server.mjs</code></div>
+        <p>Then open <code>http://127.0.0.1:3080/demo/</code>. The session-bound review and repaired targets use HTTPS on port 3443.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="journey-title">
+      <div class="section-heading"><div><p class="eyebrow">Three chapters · four evidence families</p><h2 id="journey-title">Follow one browser story from code to behavior.</h2><p>Use the presenter steps, open the existing direct targets, and complete each neutral evidence checkpoint.</p></div></div>
+      <div class="demo-journey" data-demo-chapters aria-live="polite"><p class="empty-state">Loading demo journey…</p></div>
+    </section>
+
+    <section class="section demo-conclusion" data-demo-conclusion hidden aria-labelledby="demo-conclusion-title">
+      <div class="notice notice--success">
+        <span class="notice__icon" aria-hidden="true">✓</span>
+        <div><p class="eyebrow">Journey complete</p><h2 id="demo-conclusion-title">The browser connected evidence that isolated tools can miss.</h2><p>You followed deployed dependencies, client code, live data flow, authenticated traffic and transient SPA state—then verified each repaired control.</p></div>
+      </div>
+      <div class="hero__actions"><a class="button" href="../campaigns/">Explore all campaigns</a><a class="button button--secondary" href="../scanner/">Open scanner targets</a></div>
+    </section>
+
+    <p class="mission-announcement visually-hidden" aria-live="polite" data-demo-announcement></p>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>One journey · Existing isolated targets · No external requests.</p><nav aria-label="Project links"><a href="../campaigns/">All campaigns</a><a href="../catalog/demo.json">Demo metadata</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" ng-app="ptkAngularFixture">
+<head>
+  <meta charset="utf-8">
+  <title>AngularJS expression canary · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A focused AngularJS expression parsing fixture with a benign form-controlled input.">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script src="../assets/vendor/angularjs/angular.min.js"></script>
+  <style>
+    .fixture-shell { width: min(760px, calc(100% - 40px)); margin: 48px auto; }
+    .fixture-card { display: grid; gap: 18px; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); }
+    .fixture-card h1, .fixture-card p { margin: 0; }
+    .fixture-form { display: grid; gap: 12px; }
+    .fixture-form label { font-weight: 750; }
+    .fixture-form input { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); }
+    .fixture-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .fixture-result { min-height: 48px; padding: 12px; border-radius: var(--radius-sm); background: var(--surface-soft); }
+  </style>
+</head>
+<body>
+  <main class="fixture-shell" data-ptk-case="angularjs-expression-parser">
+    <section class="fixture-card" aria-labelledby="fixture-title">
+      <p class="eyebrow">Focused runtime canary</p>
+      <h1 id="fixture-title">Form-controlled AngularJS expression</h1>
+      <p>Change the benign expression, parse it, and compare the visible result with runtime security evidence.</p>
+      <form class="fixture-form" id="expression-form">
+        <label for="angular-expression">Expression</label>
+        <input id="angular-expression" name="expression" value="value + 1" autocomplete="off">
+        <div class="fixture-actions">
+          <button class="button" id="parse-expression" data-ptk-action="parse-expression" type="submit">Parse expression</button>
+          <button class="button button--secondary" id="reset-expression" data-ptk-action="reset-expression" type="button">Reset</button>
+        </div>
+      </form>
+      <output class="fixture-result" id="expression-result" aria-live="polite">Result: not run</output>
+    </section>
+  </main>
+
+  <script>
+    angular.module('ptkAngularFixture', []);
+
+    const form = document.getElementById('expression-form');
+    const input = document.getElementById('angular-expression');
+    const result = document.getElementById('expression-result');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      try {
+        const injector = angular.element(document.documentElement).injector();
+        const parseExpression = injector.get('$parse');
+        const value = parseExpression(input.value)({ value: 2 });
+        result.textContent = `Result: ${String(value)}`;
+      } catch (error) {
+        result.textContent = `Error: ${error && error.message ? error.message : String(error)}`;
+      }
+    });
+
+    document.getElementById('reset-expression').addEventListener('click', () => {
+      input.value = 'value + 1';
+      result.textContent = 'Result: not run';
+    });
+  </script>
+</body>
+</html>

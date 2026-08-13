@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Browser Security Campaigns · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Realistic browser-security missions with guided, explorer, demo and direct scanner workflows.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+</head>
+<body data-page="campaigns">
+  <a class="skip-link" href="#main">Skip to campaigns</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../">
+        <span class="brand__mark" aria-hidden="true">PTK</span>
+        <span>OWASP PTK Playground</span>
+      </a>
+      <nav class="site-nav" aria-label="Playground navigation">
+        <a href="./" aria-current="page">Campaigns</a>
+        <a href="../demo/">Demo</a>
+        <a href="../scanner/">Scanner quick start</a>
+        <a href="../sast/">SAST</a>
+        <a href="../iast/">IAST</a>
+        <a href="../passive/">Passive DAST</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <section class="engine-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>Campaigns</span></nav>
+      <p class="eyebrow">Application stories, not rule walls</p>
+      <h1>Learn how browser evidence fits together.</h1>
+      <p class="engine-hero__lede">Each campaign presents a realistic feature, a harmless proof and a repaired comparison. Use guided progression, open every objective, follow a presenter path or target the routes directly.</p>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Use only on systems you are authorised to test.</strong> Campaign targets are deliberately vulnerable and remain inside this local fixture corpus.</p>
+    </aside>
+
+    <section class="section" aria-labelledby="workflow-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">Choose your workflow</p><h2 id="workflow-title">One mission, four useful views</h2></div>
+      </div>
+      <div class="mode-grid mode-grid--four">
+        <article class="mode-card"><span class="badge badge--primary">Campaign</span><h3>Progressive</h3><p>Complete Discover, Prove and Fix objectives in order.</p></article>
+        <article class="mode-card"><span class="badge badge--mixed">Explorer</span><h3>Unrestricted</h3><p>Open every objective, hint, target and source immediately.</p></article>
+        <article class="mode-card"><span class="badge">Demo</span><h3>Presenter path</h3><p>Use concise cues to explain cross-engine browser evidence.</p><p><a href="../demo/">Open the curated demo</a></p></article>
+        <article class="mode-card"><span class="badge">Scanner</span><h3>Direct targets</h3><p>Use stable routes and neutral metadata without gameplay state.</p></article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="missions-title">
+      <div class="section-heading"><div><p class="eyebrow">Available now</p><h2 id="missions-title">Browser-security missions</h2><p>Each mission is a focused application story backed by isolated review and repaired targets.</p></div></div>
+      <div class="mission-grid" data-mission-list aria-live="polite"><p class="empty-state">Loading missions…</p></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p>Scanner-neutral targets · Deterministic browser behavior.</p>
+      <nav aria-label="Project links"><a href="../">All playground cases</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav>
+    </div>
+  </footer>
+</body>
+</html>

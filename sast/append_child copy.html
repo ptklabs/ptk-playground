@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — appendChild()</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <!-- External scripts -->
+  <script src="js/sources.js"></script>
+  <script src="js/append_child/append_child_sink.js"></script>
+
+
+  <script>
+    function setHashPayload() {
+      const payload = "<div class='hash-node'><img src=x onerror=alert('appendChild hash')></div>";
+      location.hash = encodeURIComponent(payload);
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — <code>appendChild()</code></h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+    <p class="meta">Payloads are converted into DOM nodes via <code class="inline">appendChild</code>, using <code class="inline">innerHTML</code> under the hood to keep the sink realistic.</p>
+
+    <div class="controls">
+      <a class="btn secondary" href="?payload=%3Cscript%3Ealert('qs')%3C/script%3E">Use query payload</a>
+      <button class="btn secondary" type="button" onclick="setHashPayload()">Set hash payload</button>
+    </div>
+
+    <div class="card">
+      <div class="card-meta"><strong>Preloaded values for external scenarios</strong></div>
+      <ul>
+        <li>Cookie <code class="inline">payload</code>: <span id="bootstrap-cookie">(pending)</span></li>
+        <li><code class="inline">localStorage.payload</code>: <span id="bootstrap-ls">(pending)</span></li>
+        <li><code class="inline">sessionStorage.payload</code>: <span id="bootstrap-ss">(pending)</span></li>
+        <li><code class="inline">window.name</code>: <span id="bootstrap-wn">(pending)</span></li>
+        <li><code class="inline">document.referrer</code>: <span id="bootstrap-ref">(pending)</span></li>
+      </ul>
+    </div>
+
+    <!-- Inline scenarios -->
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+
+      <div class="card" data-severity="high" id="il-1">
+        <div class="card-meta">INLINE-1 (High): Query/hash → <code class="inline">appendChild</code></div>
+        <pre>// inline-script[#1]
+(function(){
+  const target = 'inline-appendchild-target';
+  function render(payload) {
+    appendChildUtils.clear(target);
+    appendChildSink(payload, target);
+  }
+  const params = new URLSearchParams(location.search);
+  if (params.has('payload')) render(params.get('payload'));
+  if (location.hash) {
+    try { render(decodeURIComponent(location.hash.slice(1))); }
+    catch (err) { render(location.hash.slice(1)); }
+  }
+  window.addEventListener('hashchange', () => {
+    if (!location.hash) return;
+    try { render(decodeURIComponent(location.hash.slice(1))); }
+    catch (err) { render(location.hash.slice(1)); }
+  });
+})();</pre>
+        <div class="render-target" id="inline-appendchild-target">Waiting for payload…</div>
+        <script>
+          (function() {
+            const target = 'inline-appendchild-target';
+
+            function render(payload) {
+              if (payload == null) return;
+              appendChildUtils.clear(target);
+              appendChildSink(payload, target);
+            }
+            const params = new URLSearchParams(location.search);
+            if (params.has('payload')) render(params.get('payload'));
+            if (location.hash) {
+              try {
+                render(decodeURIComponent(location.hash.slice(1)));
+              } catch (err) {
+                render(location.hash.slice(1));
+              }
+            }
+            window.addEventListener('hashchange', () => {
+              if (!location.hash) return;
+              try {
+                render(decodeURIComponent(location.hash.slice(1)));
+              } catch (err) {
+                render(location.hash.slice(1));
+              }
+            });
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high" id="il-2">
+        <div class="card-meta">INLINE-2 (High): Field → <code class="inline">appendChild</code></div>
+        <pre>// inline-script[#2]
+function inlineAppendChildFromField(fieldId, targetId) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  appendChildSink(el.value, targetId);
+}</pre>
+        <div class="field">
+          <input id="inline_appendchild_payload" type="text" value="<div onclick=alert('inline')>Click me</div>" />
+          <button class="btn" type="button" onclick="inlineAppendChildFromField('inline_appendchild_payload', 'inline-appendchild-target')">Append inline field</button>
+        </div>
+        <script>
+          function inlineAppendChildFromField(fieldId, targetId) {
+            const el = document.getElementById(fieldId);
+            if (!el) return;
+            appendChildSink(el.value, targetId);
+          }
+        </script>
+      </div>
+
+      <div class="card" data-severity="safe" id="il-3">
+        <div class="card-meta">INLINE-3 (Safe): Create element + <code class="inline">textContent</code></div>
+        <pre>// inline-script[#3]
+(function(){
+  const params = new URLSearchParams(location.search);
+  const safe = params.get('safe');
+  const target = document.getElementById('inline-safe-target');
+  if (!target || !safe) return;
+  const span = document.createElement('span');
+  span.textContent = safe;
+  target.appendChild(span);
+})();</pre>
+        <div class="render-target" id="inline-safe-target">Waiting for safe payload…</div>
+        <script>
+          (function() {
+            const params = new URLSearchParams(location.search);
+            const safe = params.get('safe');
+            const target = document.getElementById('inline-safe-target');
+            if (!target || !safe) return;
+            const span = document.createElement('span');
+            span.textContent = safe;
+            target.appendChild(span);
+          })();
+        </script>
+      </div>
+
+    </div>
+
+    <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+      <div class="card" data-severity="high">
+        <div class="card-meta"><strong>Direct DOM sources</strong></div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extAppendChildFromHash()">EXT: location.hash</button>
+          <button class="btn" type="button" onclick="extAppendChildFromSearch()">EXT: URLSearchParams</button>
+          <button class="btn" type="button" onclick="extAppendChildFromWindowName()">EXT: window.name</button>
+          <button class="btn" type="button" onclick="extAppendChildFromReferrer()">EXT: document.referrer</button>
+        </div>
+        <div class="render-target" id="external-appendchild-target">External DOM source target</div>
+      </div>
+
+      <div class="card" data-severity="high">
+        <div class="card-meta"><strong>Storage &amp; cookies</strong></div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extAppendChildFromCookie()">EXT: document.cookie</button>
+          <button class="btn" type="button" onclick="extAppendChildFromLocalStorage()">EXT: localStorage</button>
+          <button class="btn" type="button" onclick="extAppendChildFromSessionStorage()">EXT: sessionStorage</button>
+        </div>
+        <div class="render-target" id="external-appendchild-storage">External storage target</div>
+      </div>
+
+      <div class="card" data-severity="medium">
+        <div class="card-meta"><strong>Wrappers &amp; builders</strong></div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extAppendChildTemplate()">EXT: template literal</button>
+          <button class="btn" type="button" onclick="extAppendChildWrapper()">EXT: wrapper function</button>
+          <button class="btn" type="button" onclick="extAppendChildDecode()">EXT: decodeURIComponent</button>
+        </div>
+        <div class="render-target" id="external-appendchild-builders">External builder target</div>
+      </div>
+
+      <div class="card" data-severity="high">
+        <div class="card-meta"><strong>Delegated events</strong></div>
+        <div class="field">
+          <input id="ext_appendchild_input" type="text" value="<div class='delegated'>Delegated append</div>" />
+          <button class="btn ext-appendchild-field-button" type="button" data-target="external-appendchild-target" data-field="ext_appendchild_input">EXT: delegated appendChild</button>
+        </div>
+      </div>
+
+      <div class="card" data-severity="safe">
+        <div class="card-meta"><strong>Safe pattern: text node</strong></div>
+        <div class="field">
+          <input id="ext_safe_appendchild_input" type="text" value="<svg/onload=alert(1)>" />
+          <button class="btn" type="button" onclick="extAppendChildSafe('ext_safe_appendchild_input')">EXT: append Text node</button>
+        </div>
+        <div class="output" id="ext-safe-appendchild-output">Awaiting payload…</div>
+      </div>
+
+    </div>
+
+    <footer>PTK SAST testbed — appendChild() (inline + external). <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

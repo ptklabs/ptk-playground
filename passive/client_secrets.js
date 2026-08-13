@@ -1,0 +1,40 @@
+// Synthetic, non-functional token-shaped values for scanner validation only.
+// None of these values grants access to a real account, service, or system.
+window.__PTK_PASSIVE_CLIENT_CONFIG__ = {
+  xApiKeyHeader: "sk_live_1234567890abcdef",
+  stripeSecret: "sk_live_1234567890abcdefghijklmnopqrstuvwxyz",
+  googleOAuthToken: "ya29.a0AfH6SMA1234567890abcdefghijklmnopqrstuvwxyz",
+  awsSecretAccessKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+  consumerSecret: "cs_1234567890abcdef",
+  HEROKU_API_KEY: "12345678-abcd-efab-cdef-1234567890ab",
+  twilioKey: "SK0123456789abcdef0123456789abcdef",
+  sendgridKey: "SG.xxxxxxxxxxxxxxxx.yyyyyyyyyyyyyyyy",
+  mailgunKey: "key-0123456789ABCDEF0123456789ABCDEF",
+  bearerTemplate: "Bearer abcdefghijklmnopqrstuvwxyz0123456789",
+  firebaseLike: "AAAAAAaaaaaa_-example",
+  PAYPAL_CLIENT_SECRET: "a1b2c3d4e5f6g7h8i9j0k1l2",
+  githubPat: "github_pat_abcdefghijklmnopqrstuvwxyz0123456789",
+  glrt: "glrt-abcdefghijklmnopqrstuvwx",
+  circleci: "circle-token=0123456789abcdef0123456789abcdef01234567",
+  dropboxToken: "sl.ABCDEFGHIJKLMNOPQRSTUVWXYZ012345",
+  shopifyToken: "shpat_0123456789abcdef0123456789abcdef",
+  digitalOcean: "dop_v1_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  linearKey: "lin_api_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  telegramBot: "123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678",
+  teamsWebhook: "https://tenant.webhook.office.com/webhookb2/org@tenant/IncomingWebhook/abc123/def456",
+  netlifyAuthToken: "0123456789abcdef0123456789abcdef01234567",
+  snyk_token: "12345678-1234-1234-1234-123456789abc",
+  discordWebhook: "https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyz",
+  riotKey: "RGAPI-12345678-1234-1234-1234-123456789abc",
+  privateKeyMaterial: "-----BEGIN PRIVATE KEY-----",
+  awsAccessKeyId: "AKIA0123456789ABCDEF",
+  slackToken: "xoxb-123456789012-abcdefghijklmnopqrstuv",
+  githubToken: "ghp_abcdefghijklmnopqrstuvwxyz",
+  sentryDsn: "https://0123456789abcdef0123456789abcdef@errors.ingest.sentry.io/42",
+  firebaseConfig: {
+    apiKey: "AIza0123456789abcdef0123456789abcdef"
+  },
+  stripePublishableKey: "pk_live_0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  mapboxToken: "pk.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  googleApiKey: "AIza0123456789abcdef0123456789abcdef"
+};

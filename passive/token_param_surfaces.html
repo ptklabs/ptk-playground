@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: token and parameter surfaces</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Token-in-URL and high-risk parameter fixture</h1>
+    <p class="meta">
+      The linked examples place tokens and high-risk parameter names directly into the request URL so passive recon can see them
+      in real traffic instead of just response bodies.
+    </p>
+    <div class="fixture">
+      <ul>
+        <li><a href="/passive/fixtures/tokens/url-leaks.html?access_token=ptk_access_token_12345678&id_token=ptk_id_token_12345678">Token-in-URL example</a></li>
+        <li><a href="/passive/fixtures/tokens/jwt-url.html?token=eyJhbGciOiJIUzI1NiJ9.e30.signature">JWT-like URL example</a></li>
+        <li><a href="/passive/fixtures/params/high-risk.html?next=/admin&url=http://localhost/admin&file=../../etc/passwd&id=101&uploadId=upload_42&tenantId=tenant_acme&role=owner&state=st_123&webhookUrl=https://hooks.example.test/callback">High-risk parameter set</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — document.write / writeln</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <!-- External script includes -->
+  <script src="js/sources.js"></script>
+  <script src="js/document_write/document_write_helpers.js"></script>
+
+  <script src="js/summary.js"></script>
+  <script>
+    const DOMPurify = {};
+    DOMPurify.sanitize = function(input) {
+      return input;
+    };
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — <code>document.write</code> / <code>writeln</code></h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">11</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">1</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">10</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">1</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">23</strong></span>
+    </div>
+    <p class="meta">This page mixes <strong>inline</strong> and <strong>external</strong> test cases. External scripts don’t auto-run to avoid page replacement; trigger them with buttons.</p>
+
+
+    <!-- Inline cases -->
+    <h2 class="section-title">Inline cases</h2>
+    <div class="grid">
+
+      <div class="card" id="il-1" data-severity="high, low">
+        <div class="card-meta">INLINE-1 (High): direct hash → write (vuln)</div>
+        <pre>// inline-script[#1]
+document.write(location.hash);</pre>
+        <script>
+          document.write(location.hash);
+        </script>
+      </div>
+
+      <div class="card" id="il-2" data-severity="high, low">
+        <div class="card-meta">INLINE-2 (High): decoded hash → write (vuln)</div>
+        <pre>// inline-script[#2]
+document.write(decodeURIComponent(location.hash.slice(1)));</pre>
+        <script>
+          document.write(decodeURIComponent(location.hash.slice(1)));
+        </script>
+      </div>
+
+      <div class="card" id="il-3" data-severity="high, low">
+        <div class="card-meta">INLINE-3 (High): aliasing from query → writeln (vuln)</div>
+        <pre>// inline-script[#3]
+var q = location.search.substring(1);
+q = decodeURIComponent(q);
+document.writeln(q);</pre>
+        <script>
+          var q = location.search.substring(1);
+          try {
+            q = decodeURIComponent(q);
+          } catch (e) {}
+          document.writeln(q);
+        </script>
+      </div>
+
+      <div class="card" id="il-4" data-severity="high, low">
+        <div class="card-meta">INLINE-4 (High): helper propagator (vuln)</div>
+        <pre>// inline-script[#4]
+function id(v){ return v; }
+var s = location.hash.slice(1);
+document.write(id(s));</pre>
+        <script>
+          function id(v) {
+            return v;
+          }
+          var s = location.hash.slice(1);
+          document.write(id(s));
+        </script>
+      </div>
+
+      <div class="card" id="il-5" data-severity="safe, low">
+        <div class="card-meta">INLINE-5: sanitized via DOMPurify.sanitize (safe if sanitizer effective)</div>
+        <pre>// inline-script[#5]
+document.write(DOMPurify.sanitize(location.hash.slice(1)));</pre>
+        <script>
+          document.write(DOMPurify.sanitize(location.hash.slice(1)));
+        </script>
+      </div>
+
+
+      <div class="card" id="il-7" data-severity="high, low">
+        <div class="card-meta">INLINE-6 (High): concat + template literal (vuln)</div>
+        <pre>// inline-script[#7]
+var name = new URLSearchParams(location.search).get('name') || 'Guest';
+document.write('<div>Hello ' + name + '</div>');
+document.writeln(`<p>${name}</p>`);</pre>
+        <script>
+          var name = new URLSearchParams(location.search).get('name') || 'Guest';
+          document.write('<div>Hello ' + name + '</div>');
+          document.writeln(`<p>${name}</p>`);
+        </script>
+      </div>
+
+      <div class="card" id="il-8" data-severity="high, medium, low">
+        <div class="card-meta">INLINE-7 (High): string-eval → write (vuln) — <strong>click to run</strong></div>
+        <pre>// inline-script[#8] (gated)
+function runInlineSetTimeoutEval() {
+  var p = location.hash.slice(1);
+  setTimeout("document.write('INLINE-SETTIMEOUT: ' + '" + p + "')", 10);
+}</pre>
+        <div class="controls">
+          <button class="btn" onclick="runInlineSetTimeoutEval()">Run inline setTimeout('document.write(...)')</button>
+        </div>
+        <script>
+          function runInlineSetTimeoutEval() {
+            var p = location.hash.slice(1);
+            setTimeout("document.write('INLINE-SETTIMEOUT: ' + '" + p + "')", 10);
+          }
+        </script>
+      </div>
+
+
+      <div class="card" id="il-9" data-severity="high, low">
+        <div class="card-meta">INLINE-8(High): document.addEventListener with extWriteFromInput</div>
+        <pre>// inline-script[#8] (gated)
+document.addEventListener('click', function(e){
+  var t = e && e.target;
+  if (t && t.matches && t.matches('.ext-write-button')) {
+    var id = t.getAttribute('data-field');
+    extWriteFromInput(id);
+  }
+});</pre>
+        <script>
+          document.addEventListener('click', function(e) {
+            var t = e && e.target;
+            if (t && t.matches && t.matches('.ext-write-button')) {
+              var id = t.getAttribute('data-field');
+              extWriteFromInput(id);
+            }
+          });
+        </script>
+      </div>
+    </div>
+
+    <!-- External cases -->
+    <h2 class="section-title">External cases (click to run)</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-meta"><strong>Direct/decoded/urlparam/window.name</strong> (no auto-run)</div>
+        <pre data-severity="high, low">onclick="runWrite(location.hash)"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="runWrite(location.hash)">EXT (High): direct hash → runWrite helper</button>
+
+        </div>
+        <pre data-severity="high, low">onclick="runWrite(getCookieByName('name'))"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="runWrite(getCookieByName('name'))">EXT (High): runWrite helper with ext source</button>
+
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+
+    <footer>PTK SAST testbed — document.write / writeln (inline + external). <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Web Messaging Channels</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 90px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+  
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Web Messaging Channels Module</h1>
+  <p class="note">Targets <code>BroadcastChannel.postMessage</code> and <code>MessagePort.postMessage</code> sinks from <code>iast_web_messaging_channels</code>.</p>
+
+  <div class="card">
+    <label for="message">Channel payload</label>
+    <textarea id="message" placeholder="user=TAINT"></textarea>
+    <button id="prime">Prime taint sources</button>
+    <p class="note">Taint origin may be ?message=..., hash fragments, or the textarea when primed.</p>
+  </div>
+
+  <div class="card">
+    <button id="btn-broadcast">BroadcastChannel.postMessage</button>
+    <button id="btn-port">MessageChannel postMessage</button>
+    <p class="note">BroadcastChannel uses the "ptk-iast" topic; MessageChannel leaks data to its paired port.</p>
+  </div>
+
+  <script>
+    function getPayload() {
+      const params = new URLSearchParams(location.search);
+      return params.get('message') || (location.hash ? decodeURIComponent(location.hash.slice(1)) : '');
+    }
+
+    function primeSources(value) {
+      if (!value) return;
+      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+      localStorage.setItem('iast_payload', value);
+      sessionStorage.setItem('iast_payload', value);
+      window.name = value;
+    }
+
+    const field = document.getElementById('message');
+    field.value = getPayload() || 'user=TAINT';
+
+    document.getElementById('prime').onclick = () => {
+      primeSources(field.value);
+      alert('Taint primed for messaging payload.');
+    };
+
+    const broadcast = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ptk-iast') : null;
+    const messageChannel = typeof MessageChannel !== 'undefined' ? new MessageChannel() : null;
+    if (messageChannel) {
+      messageChannel.port2.onmessage = () => { /* swallow */ };
+      messageChannel.port2.start();
+    }
+
+    document.getElementById('btn-broadcast').onclick = () => {
+      if (!broadcast) {
+        alert('BroadcastChannel not supported in this browser.');
+        return;
+      }
+      broadcast.postMessage(field.value);
+    };
+
+    document.getElementById('btn-port').onclick = () => {
+      if (!messageChannel) {
+        alert('MessageChannel not supported in this browser.');
+        return;
+      }
+      messageChannel.port1.postMessage(field.value);
+    };
+  </script>
+</body>
+</html>

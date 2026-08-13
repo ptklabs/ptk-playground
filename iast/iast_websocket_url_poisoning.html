@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST WebSocket URL Poisoning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST WebSocket URL Poisoning</h1>
+  <p class="note">Covers <code>new WebSocket(url)</code> with cross-origin tainted URLs from route/query/storage/message sources.</p>
+  <div class="card">
+    <label for="endpoint">WebSocket URL</label>
+    <input id="endpoint" type="text" value="wss://echo.websocket.events/?ptk=1">
+    <label for="sourceType">Source</label>
+    <select id="sourceType">
+      <option value="query">query</option>
+      <option value="hashQuery">hashQuery</option>
+      <option value="hashRoute">hashRoute</option>
+      <option value="postMessage">postMessage</option>
+      <option value="windowName">window.name</option>
+      <option value="referrer">referrer (open via helper)</option>
+      <option value="cookie">cookie</option>
+      <option value="localStorage">localStorage</option>
+      <option value="sessionStorage">sessionStorage</option>
+    </select>
+    <button id="prime">Prime source</button>
+    <button id="btn-open">Open WebSocket</button>
+    <p id="status" class="note">No source primed yet.</p>
+  </div>
+  <script>
+    const endpointField = document.getElementById('endpoint');
+    const status = document.getElementById('status');
+    let lastMessage = null;
+    function currentUrl() {
+      const selected = document.getElementById('sourceType').value;
+      const params = new URLSearchParams(location.search);
+      const rawHash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+      const hashParams = new URLSearchParams(rawHash.replace(/^#?/, ''));
+      if (selected === 'query') return params.get('payload') || endpointField.value;
+      if (selected === 'hashQuery') return hashParams.get('payload') || endpointField.value;
+      if (selected === 'hashRoute') return rawHash || endpointField.value;
+      if (selected === 'postMessage') return lastMessage || endpointField.value;
+      if (selected === 'windowName') return window.name || endpointField.value;
+      if (selected === 'referrer') return params.get('payload') || endpointField.value;
+      if (selected === 'cookie') { const m = document.cookie.match(/(?:^|; )iast_payload=([^;]+)/); return m ? decodeURIComponent(m[1]) : endpointField.value; }
+      if (selected === 'localStorage') return localStorage.getItem('iast_payload') || endpointField.value;
+      if (selected === 'sessionStorage') return sessionStorage.getItem('iast_payload') || endpointField.value;
+      return endpointField.value;
+    }
+    document.getElementById('prime').onclick = () => {
+      const url = endpointField.value;
+      const selected = document.getElementById('sourceType').value;
+      if (selected === 'query') history.replaceState(null, '', '?payload=' + encodeURIComponent(url));
+      if (selected === 'hashQuery') location.hash = 'payload=' + encodeURIComponent(url);
+      if (selected === 'hashRoute') location.hash = encodeURIComponent(url);
+      if (selected === 'postMessage') window.postMessage(url, '*');
+      if (selected === 'windowName') window.name = url;
+      if (selected === 'cookie') document.cookie = 'iast_payload=' + encodeURIComponent(url) + '; path=/';
+      if (selected === 'localStorage') localStorage.setItem('iast_payload', url);
+      if (selected === 'sessionStorage') sessionStorage.setItem('iast_payload', url);
+      status.textContent = 'Primed source: ' + selected;
+    };
+    window.addEventListener('message', (event) => { if (typeof event.data === 'string') lastMessage = event.data; });
+    document.getElementById('btn-open').onclick = () => {
+      try {
+        const ws = new WebSocket(currentUrl());
+        ws.addEventListener('error', () => {});
+        setTimeout(() => { try { ws.close(); } catch (_) {} }, 800);
+      } catch (err) {
+        console.warn('WebSocket construction failed', err);
+      }
+    };
+  </script>
+</body>
+</html>

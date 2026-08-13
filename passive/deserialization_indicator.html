@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: deserialization indicators</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Serialized-value passive indicators</h1>
+    <p class="meta">
+      Use this fixture together with query strings or cookies that contain serialized-looking payloads to validate the passive
+      deserialization route. The deserialization passive module is runtime-assisted rather than regex-only, so this page is mainly
+      a controlled landing surface for replay.
+    </p>
+    <div class="fixture">
+      <pre>PHP serialized: O:8:"stdClass":1:{s:4:"role";s:5:"admin";}
+Java serialized hint: rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcA==
+.NET LosFormatter hint: /wECAQ...
+
+Try loading:
+/passive/fixtures/deser/indicator.html?blob=O%3A8%3A%22stdClass%22%3A1%3A%7Bs%3A4%3A%22role%22%3Bs%3A5%3A%22admin%22%3B%7D</pre>
+    </div>
+  </div>
+</body>
+</html>

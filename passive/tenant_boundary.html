@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: tenant boundary surfaces</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Tenant boundary surface fixture</h1>
+    <p class="meta">
+      This route is served from a tenant-shaped path and includes scope fields and slug fields commonly relevant to SaaS boundary reviews.
+    </p>
+    <div class="fixture">
+      <h2>Scope-bearing markup</h2>
+      <form action="/switch-tenant" method="post">
+        <input type="hidden" name="tenantId" value="tenant_acme" />
+        <input type="hidden" name="orgId" value="org_redteam" />
+        <input type="hidden" name="workspaceId" value="ws_payments" />
+        <input type="hidden" name="memberId" value="usr_42" />
+        <input type="hidden" name="ownerId" value="usr_7" />
+        <input type="hidden" name="organizationRole" value="owner" />
+        <input type="hidden" name="tenantSlug" value="acme" />
+        <input type="hidden" name="workspaceSlug" value="red-team" />
+      </form>
+      <pre><code>window.__tenantContext = {
+  tenantSlug: "acme",
+  organizationSlug: "red-team",
+  workspaceSlug: "payments",
+  activeTenant: "tenant_acme"
+};</code></pre>
+    </div>
+  </div>
+</body>
+</html>

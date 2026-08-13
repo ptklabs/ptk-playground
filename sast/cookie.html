@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Cookie security</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+  <!-- External scripts -->
+  <script src="js/sources.js"></script>
+  <script src="js/cookie/cookie_sinks.js"></script>
+  <script src="js/cookie/cookie_insecure_sets.js"></script>
+
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — <code>document.cookie</code> security</h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">7</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">7</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">1</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">15</strong></span>
+    </div>
+    <p class="meta">
+      This page contains **cookie manipulation** scenarios only: insecure attributes, user-controlled values, over-permissive scope,
+      deletion patterns, and leakage. There are <em>no</em> HTML sinks here (no <code>document.write</code>/<code>innerHTML</code>).
+      Taint/exfil flows are normalised to <strong>High</strong>; configuration/hygiene issues default to <strong>Low</strong>;
+      sanitised examples are marked <strong>Safe</strong>.
+    </p>
+
+
+    <!-- Inline scenarios (no sinks) -->
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="card-meta"><strong>Element value</strong></div>
+        <div class="field">
+          <input id="element" type="text" value="alert('1')" />
+        </div>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high, low" id="il-1">
+        <div class="card-meta">INLINE-1 (High): Set cookie from user-controlled <code>location.hash</code> without attributes</div>
+        <pre>// inline-script[#1]
+(function(){
+  var v = location.hash ? location.hash.slice(1) : '';
+  document.cookie = "ptk_from_hash=" + v + "; path=/";
+})();</pre>
+        <script>
+          (function() {
+            var v = location.hash ? location.hash.slice(1) : '';
+            document.cookie = "ptk_from_hash=" + v + "; path=/";
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high, low" id="il-2">
+        <div class="card-meta">INLINE-2 (High): Set cookie from <code>location.search</code> with <code>SameSite=None</code> but missing <code>Secure</code></div>
+        <pre>// inline-script[#2]
+(function(){
+  var q = location.search ? location.search.substring(1) : '';
+  document.cookie = "ptk_from_query=" + q + "; Path=/; SameSite=None";
+})();</pre>
+        <script>
+          (function() {
+            var q = location.search ? location.search.substring(1) : '';
+            document.cookie = "ptk_from_query=" + q + "; Path=/; SameSite=None";
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-rule="config" data-severity="high, low" id="il-3">
+        <div class="card-meta">INLINE-3 (High): External source and inline sink</code></div>
+        <pre>// inline-script[#3]
+(function(){
+  var value = getLocationHash();
+  document.cookie = value;
+})();</pre>
+        <script>
+          (function() {
+            var value = getLocationHash();
+            document.cookie = value;
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-rule="config" data-severity="high, low" id="il-4">
+        <div class="card-meta">INLINE-4 (High): External source and external sink</div>
+        <pre>// inline-script[#4]
+(function(){
+  var value = getElementValue('element');
+  setCookie(value);
+})();</pre>
+        <script>
+          (function() {
+            var value = getElementValue('element');
+            setCookie(value);
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-rule="safe" data-severity="safe" id="il-5">
+        <div class="card-meta">INLINE-5 (Safe): Proper attributes + encoded value</div>
+        <pre>// inline-script[#5]
+(function(){
+  var val = encodeURIComponent("safe-value");
+  document.cookie = "ptk_safe=" + val + "; Path=/; Secure; SameSite=Strict";
+})();</pre>
+        <script>
+          (function() {
+            var val = encodeURIComponent("safe-value");
+            document.cookie = "ptk_safe=" + val + "; Path=/; Secure; SameSite=Strict";
+          })();
+        </script>
+      </div>
+    </div>
+
+    <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+      <div class="card" data-rule="taint">
+        <div class="card-meta"><strong>Insecure sets : user-controlled values, weak attributes</strong></div>
+        <pre>onclick="runCookieFromHashNoAttrs()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high, low" onclick="runCookieFromHashNoAttrs()">EXT: from hash (no attributes) - High</button>
+        </div>
+        <pre>onclick="javascript:document.cookie = getLocationSearch();"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high, low" onclick="javascript:document.cookie = getLocationSearch();">EXT: from location.search - High</button>
+        </div>
+        <pre>onclick="setCookieString(getElementValue('element'));"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high, low" onclick="setCookieString(getElementValue('element'));">EXT: from element.value - High</button>
+        </div>
+      </div>
+
+    </div>
+    <footer>PTK SAST testbed — Cookie security (no HTML sinks). <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

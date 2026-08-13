@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Prototype pollution (client)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">Client-side prototype pollution</h1>
+    </div>
+    <p class="meta">Prototype mutation using tainted data.</p>
+
+    <div class="card" data-rule="taint" data-severity="high">
+      <div class="card-meta"><strong>INLINE-1 (High): location/search → Object.setPrototypeOf</strong></div>
+      <pre><code>const protoPayload = location.search || '{"admin":true}';
+const parsed = JSON.parse(protoPayload || '{}');
+Object.setPrototypeOf({}, parsed);</code></pre>
+      <script>
+        (function () {
+          const protoPayload = location.search || '{"admin":true}';
+          const parsed = JSON.parse(protoPayload || '{}');
+          Object.setPrototypeOf({}, parsed);
+        })();
+      </script>
+    </div>
+  </div>
+</body>
+</html>

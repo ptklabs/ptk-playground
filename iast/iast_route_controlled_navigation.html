@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Route Controlled Navigation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Route Controlled Navigation</h1>
+  <p class="note">Covers pushState / replaceState / navigation.navigate with route-derived sources: pathname, pathSegment, clientRoute, historyState, hashRoute, hashQuery, and postMessage.</p>
+  <div class="card">
+    <label for="routeTarget">Route target</label>
+    <input id="routeTarget" type="text" value="/orders/ptk-route?from=iast">
+    <label for="sourceType">Route source</label>
+    <select id="sourceType">
+      <option value="pathname">pathname</option>
+      <option value="pathSegment">pathSegment</option>
+      <option value="clientRoute">clientRoute</option>
+      <option value="historyState">historyState</option>
+      <option value="hashRoute">hashRoute</option>
+      <option value="hashQuery">hashQuery</option>
+      <option value="postMessage">postMessage</option>
+    </select>
+    <button id="prime">Prime source</button>
+    <button id="btn-push">history.pushState</button>
+    <button id="btn-replace">history.replaceState</button>
+    <button id="btn-nav">navigation.navigate</button>
+    <p id="status" class="note">No route source primed yet.</p>
+  </div>
+  <script>
+    const routeField = document.getElementById('routeTarget');
+    const status = document.getElementById('status');
+    let lastMessage = null;
+    function sourceRoute() {
+      const selected = document.getElementById('sourceType').value;
+      if (selected === 'pathname') return location.pathname;
+      if (selected === 'pathSegment') return location.pathname.split('/').filter(Boolean).pop() || routeField.value;
+      if (selected === 'clientRoute') return routeField.value;
+      if (selected === 'historyState') return (history.state && history.state.route) || routeField.value;
+      if (selected === 'hashRoute') return decodeURIComponent(location.hash.replace(/^#/, '')) || routeField.value;
+      if (selected === 'hashQuery') return new URLSearchParams(decodeURIComponent(location.hash.replace(/^#/, ''))).get('route') || routeField.value;
+      if (selected === 'postMessage') return lastMessage || routeField.value;
+      return routeField.value;
+    }
+    document.getElementById('prime').onclick = () => {
+      const selected = document.getElementById('sourceType').value;
+      const route = routeField.value;
+      if (selected === 'pathname' || selected === 'pathSegment' || selected === 'clientRoute') history.replaceState({ route }, '', route);
+      if (selected === 'historyState') history.replaceState({ route }, '', location.href);
+      if (selected === 'hashRoute') location.hash = encodeURIComponent(route);
+      if (selected === 'hashQuery') location.hash = 'route=' + encodeURIComponent(route);
+      if (selected === 'postMessage') window.postMessage(route, '*');
+      status.textContent = 'Primed route source: ' + selected + ' -> ' + route;
+    };
+    window.addEventListener('message', (event) => { if (typeof event.data === 'string') lastMessage = event.data; });
+    document.getElementById('btn-push').onclick = () => history.pushState({ route: sourceRoute() }, '', sourceRoute());
+    document.getElementById('btn-replace').onclick = () => history.replaceState({ route: sourceRoute() }, '', sourceRoute());
+    document.getElementById('btn-nav').onclick = () => {
+      if ('navigation' in window && typeof navigation.navigate === 'function') navigation.navigate(sourceRoute());
+      else status.textContent = 'navigation.navigate not supported in this browser';
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — DOM selector injection</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+  <script src="js/sources.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/dom_selector/dom_selector.js"></script>
+
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+  <script>
+    window.DOMSelectorTest = {
+      applyHashSelector(value) {
+        window.location.hash = encodeURIComponent(value);
+        if (typeof window.runUnsafeHashSelector === "function") window.runUnsafeHashSelector();
+        if (typeof window.runSafeHashSelector === "function") window.runSafeHashSelector();
+      },
+      postMessagePayload(payload, origin, useWildcard) {
+        const frame = document.getElementById('selector-msg-target');
+        if (!frame || !frame.contentWindow) return;
+        const targetOrigin = useWildcard ? "*" : (origin || window.location.origin);
+        frame.contentWindow.postMessage(payload, targetOrigin);
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — DOM selector injection</h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-low">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+    <p class="meta">
+      Scenarios highlight untrusted data flowing into <code>querySelector</code>, jQuery root selectors, and delegated
+      <code>find()</code> calls. Controls let you mutate <code>location.hash</code> or broadcast selectors via
+      <code>postMessage</code>.
+    </p>
+
+
+    <iframe id="selector-msg-target" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+
+    <h2 class="section-title">High severity — tainted selectors reach DOM sinks</h2>
+    <div class="grid">
+      <div class="card" data-severity="high, low" id="ds-hash-queryselector">
+        <div class="card-meta">DS-H1 (High): <code>location.hash</code> fed into <code>document.querySelector</code></div>
+        <pre>// inline-script[#1]
+function runUnsafeHashSelector() {
+  var sel = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+  var victim = document.querySelector(sel);
+  if (victim) victim.innerHTML = '&lt;em&gt;hijacked&lt;/em&gt;';
+}
+runUnsafeHashSelector();</pre>
+        <script>
+          function runUnsafeHashSelector() {
+            var sel = location.hash ? decodeURIComponent(location.hash.slice(1)) : 'payload';
+            var victim = document.querySelector(sel);
+            if (victim) victim.innerHTML = '<em>hijacked</em>';
+          }
+          runUnsafeHashSelector();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, low" id="ds-jquery-root">
+        <div class="card-meta">DS-H2 (High): message payload used as root jQuery selector</div>
+        <pre>// inline-script[#2]
+function dsMessage(e) {  
+  var sel = e.data;
+  try {
+    var $target = $(sel);
+    $target.text('updated by message');
+  } catch (err) {
+    console.warn('Selector error', err);
+  }
+};
+dsMessage(document.cookie)</pre>
+        <script>
+          function dsMessage(e) {
+            var sel = e.data;
+            try {
+              var $target = $(sel);
+              $target.text('updated by message');
+            } catch (err) {
+              console.warn('Selector error', err);
+            }
+          };
+          dsMessage(document.cookie)
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, low" id="ds-jquery-find-root">
+        <div class="card-meta">DS-H3 (High): <code>find()</code> selector built from <code>window.name</code></div>
+        <pre>// inline-script[#3]
+(function(){
+  var root = document.getElementById('ds-root');
+  if (!root) return;
+  var target = window.name || '.card';
+  try {
+    $(root).find(target).addClass('highlighted');
+  } catch (err) {
+    console.warn('find selector failed', err);
+  }
+})();</pre>
+        <div id="ds-root" class="card-preview">Selector root block</div>
+        <script>
+          (function() {
+            var root = document.getElementById('ds-root');
+            if (!root) return;
+            var target = window.name || '.card';
+            try {
+              $(root).find(target).addClass('highlighted');
+            } catch (err) {
+              console.warn('find selector failed', err);
+            }
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, low" id="ds-jquery-find-query">
+        <div class="card-meta">DS-H4 (High): Query parameter forwarded to <code>find()</code></div>
+        <pre>// inline-script[#4]
+(function(){
+  var params = new URLSearchParams(location.search);
+  var target = params.get('selector') || '.card';
+  try {
+    $('#selector-grid').find(target).addClass('highlighted');
+  } catch (err) {
+    console.warn('find selector failed', err);
+  }
+})();</pre>
+        <div id="selector-grid" class="card-preview">
+          <div class="item">Item A</div>
+          <div class="item">Item B</div>
+        </div>
+        <script>
+          (function() {
+            var params = new URLSearchParams(location.search);
+            var target = params.get('selector') || '.card';
+            try {
+              $('#selector-grid').find(target).addClass('highlighted');
+            } catch (err) {
+              console.warn('find selector failed', err);
+            }
+          })();
+        </script>
+      </div>
+    </div>
+
+    <h2 class="section-title">Medium severity — risky configuration / weak validation</h2>
+    <div class="grid">
+      <div class="card" data-severity="medium, low" id="ds-wildcard-postmessage">
+        <div class="card-meta">DS-M1 (Medium): wildcard <code>postMessage</code> broadcasting selector strings</div>
+        <pre data-severity="medium">// inline-script[#5]
+(function(){
+  const frame = document.getElementById('selector-msg-target');
+  if (frame) frame.srcdoc = "&lt;!doctype html&gt;&lt;title&gt;selector-target&lt;/title&gt;";
+  window.broadcastSelector = function(payload) {
+    if (!frame || !frame.contentWindow) return;
+    frame.contentWindow.postMessage(payload, '*');
+  };
+})();</pre>
+        <script>
+          (function() {
+            const frame = document.getElementById('selector-msg-target');
+            if (frame) frame.srcdoc = "<!doctype html><title>selector-target</title>";
+            window.broadcastSelector = function(payload) {
+              if (!frame || !frame.contentWindow) return;
+              frame.contentWindow.postMessage(payload, '*');
+            };
+          })();
+        </script>
+      </div>
+
+
+    </div>
+
+    <h2 class="section-title">Safe scenarios — escaping and allow-lists</h2>
+    <div class="grid">
+      <div class="card" data-severity="safe, low" id="ds-safe-css-escape">
+        <div class="card-meta">DS-S1 (Safe): <code>CSS.escape</code> applied to hash-derived selector</div>
+        <pre>// inline-script[#7]
+function runSafeHashSelector() {
+  var raw = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+  var escaped = CSS.escape(String(raw));
+  var el = document.getElementById('selector-scope');
+  if (!el) return;
+  try {
+    var target = el.querySelector('#' + escaped);
+    if (target) target.classList.add('selected');
+  } catch (err) {}
+}
+runSafeHashSelector();</pre>
+        <div id="selector-scope" class="card-preview">
+          <div id="item-one">Item one</div>
+          <div id="item-two">Item two</div>
+        </div>
+        <script>
+          function runSafeHashSelector() {
+            var raw = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+            var escaped = CSS.escape(String(raw));
+            var el = document.getElementById('selector-scope');
+            if (!el) return;
+            try {
+              var target = el.querySelector('#' + escaped);
+              if (target) target.classList.add('selected');
+            } catch (err) {}
+          }
+          runSafeHashSelector();
+        </script>
+      </div>
+
+
+    </div>
+
+
+        <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+      <div class="card" data-rule="taint">
+        <div class="card-meta"><strong>Insecure sets : user-controlled values, weak attributes</strong></div>
+        <pre data-severity="high, low">onclick="extSelectorFromCookie()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high, low" onclick="extSelectorFromCookie()">EXT: from cookie (no attributes) - High</button>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      Use the controls above to mutate <code>location.hash</code> or broadcast message payloads. Inspect the DOM to observe
+      which elements are affected by unsafe selectors versus the safe, escaped variants.
+    </footer>
+  </div>
+
+
+</body>
+
+</html>

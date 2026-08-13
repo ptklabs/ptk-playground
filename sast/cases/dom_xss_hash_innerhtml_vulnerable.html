@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hash to HTML rendering canary · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A focused static-analysis canary that renders a URL fragment as HTML.">
+  <link rel="stylesheet" href="../../assets/css/playground.css">
+  <style>
+    .fixture-shell { width: min(760px, calc(100% - 40px)); margin: 48px auto; }
+    .fixture-card { display: grid; gap: 18px; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); }
+    .fixture-card h1, .fixture-card p { margin: 0; }
+    .fixture-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .fixture-result { min-height: 52px; padding: 12px; border-radius: var(--radius-sm); background: var(--surface-soft); }
+  </style>
+</head>
+<body>
+  <main class="fixture-shell" data-ptk-case="hash-html-rendering">
+    <section class="fixture-card" aria-labelledby="fixture-title">
+      <p class="eyebrow">Focused static canary</p>
+      <h1 id="fixture-title">Render a URL fragment as HTML</h1>
+      <p>This page deliberately passes the current URL fragment to an HTML-rendering API.</p>
+      <div class="fixture-actions">
+        <a class="button button--secondary" href="#%3Cstrong%3Efragment%20content%3C/strong%3E">Set sample fragment</a>
+        <button class="button" id="render-fragment" data-ptk-action="render-fragment" type="button">Render fragment</button>
+      </div>
+      <div class="fixture-result" id="fragment-result">Result: not run</div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('render-fragment').addEventListener('click', () => {
+      const fragment = location.hash.slice(1);
+      document.getElementById('fragment-result').innerHTML = fragment;
+    });
+  </script>
+</body>
+</html>

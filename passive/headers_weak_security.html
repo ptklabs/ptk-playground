@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: weak headers and trust boundaries</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Weak headers and client trust boundary fixture</h1>
+    <p class="meta">
+      This page is served with intentionally weak or noisy response headers by <code>server.mjs</code>. The response body also
+      includes several browser-visible trust-boundary hints so passive recon can project module-level signals from one route.
+    </p>
+    <div class="fixture">
+      <h2>Body signals</h2>
+      <ul>
+        <li>Insecure WebSocket literal: <code>ws://localhost:3080/passive/realtime/ws?token=ptk-realtime-token</code></li>
+        <li>Third-party script trust: <code>https://cdn.example-cdn.test/widget.js</code></li>
+        <li>Broad connect-src style endpoint list: <code>https://telemetry.example.net</code>, <code>https://logs.example.net</code></li>
+        <li>CSP report sink: <code>https://reports.example.net/csp</code></li>
+        <li>Wildcard postMessage target: <code>window.postMessage({type:"preview"}, "*")</code></li>
+        <li>Client-visible origin allowlist: <code>["https://app.example.test","https://admin.example.test","https://cdn.example-cdn.test"]</code></li>
+      </ul>
+      <pre><code>&lt;script&gt;
+const insecureRealtimeLiteral = "ws://localhost:3080/passive/realtime/ws?token=ptk-realtime-token";
+const clientOriginAllowlist = ["https://app.example.test", "https://admin.example.test", "https://cdn.example-cdn.test"];
+window.postMessage({ type: "preview", originAllowlist: clientOriginAllowlist }, "*");
+&lt;/script&gt;</code></pre>
+    </div>
+  </div>
+</body>
+</html>

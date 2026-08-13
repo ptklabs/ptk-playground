@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: API docs and GraphQL</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">API docs and GraphQL surface fixture</h1>
+    <p class="meta">
+      Use the linked routes below to exercise passive API inventory, OpenAPI, GraphQL, console, and docs exposure rules.
+    </p>
+    <div class="fixture">
+      <h2>Representative links</h2>
+      <ul>
+        <li><a href="/passive/openapi.json">OpenAPI JSON spec</a></li>
+        <li><a href="/passive/openapi.yaml">OpenAPI YAML spec</a></li>
+        <li><a href="/passive/postman.collection.json">Postman collection</a></li>
+        <li><a href="/passive/swagger-ui/index.html">Swagger UI style route</a></li>
+        <li><a href="/passive/graphiql">GraphiQL / Apollo Sandbox style route</a></li>
+        <li><a href="/passive/redoc">ReDoc style route</a></li>
+        <li><a href="/passive/graphql">GraphQL endpoint response</a></li>
+      </ul>
+      <pre><code>Swagger UI
+GraphiQL
+Apollo Sandbox
+ReDoc
+
+query ListOrders { orders { id total } }
+mutation UpdateOrder { updateOrder(id: "ord_1") { id status } }
+subscription OrderFeed { orderFeed { id status } }
+persistedQuery
+sha256Hash
+Cannot query field "dangerouslyVerboseField" on type "Query".</code></pre>
+    </div>
+  </div>
+</body>
+</html>

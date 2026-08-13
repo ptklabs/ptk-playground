@@ -1,0 +1,93 @@
+{
+  "schema": "owasp-browser-security-demo/v1",
+  "version": 1,
+  "id": "browser-context",
+  "title": "The browser is the source of truth",
+  "summary": "A concise presenter journey connecting loaded code, live runtime behavior, authenticated traffic and transient SPA state.",
+  "durationMinutes": 12,
+  "chapters": [
+    {
+      "id": "widget-trust-boundary",
+      "number": 1,
+      "missionId": "support-widget",
+      "durationMinutes": 4,
+      "title": "Connect code, runtime and dependency evidence",
+      "summary": "A support widget looks like one feature in the browser, while three evidence families explain different parts of its security posture.",
+      "presenterSteps": [
+        "Open the review target and identify the dependency loaded with the widget.",
+        "Review the browser-message handler before triggering the prepared reply.",
+        "Send the reply, correlate the live DOM behavior, and compare the repaired target."
+      ],
+      "evidence": [
+        { "engine": "SCA", "observation": "The loaded client dependency and its deployed version." },
+        { "engine": "SAST", "observation": "The message trust check and DOM update visible in client code." },
+        { "engine": "IAST", "observation": "The browser-message value reaching the live DOM operation." }
+      ],
+      "browserAdvantage": "The browser connects the dependency that actually loaded, the handler shipped to the page and the runtime path the user exercised.",
+      "checkpoint": {
+        "prompt": "Which explanation uses the complete browser evidence?",
+        "options": [
+          { "value": "combined", "label": "Loaded dependency, static handler and live DOM behavior describe one feature." },
+          { "value": "dependency-only", "label": "The dependency version alone proves every runtime path." },
+          { "value": "markup-only", "label": "The visible markup alone explains the message trust boundary." }
+        ],
+        "answer": "combined"
+      }
+    },
+    {
+      "id": "session-request",
+      "number": 2,
+      "missionId": "session-bound-order-search",
+      "durationMinutes": 4,
+      "title": "Test the request the application really sends",
+      "summary": "An order-search request exists only after the browser establishes scoped state and submits the application's form workflow.",
+      "presenterSteps": [
+        "Open the review workflow through the local route-aware server and establish its scoped session.",
+        "Submit the normal order search so the browser creates the form-encoded POST request.",
+        "Use active DAST on the captured request, then repeat the workflow against the repaired API."
+      ],
+      "evidence": [
+        { "engine": "DAST", "observation": "The exact same-origin POST, parameters and server response behavior." },
+        { "engine": "Browser state", "observation": "The scoped session and request context required by the endpoint." }
+      ],
+      "browserAdvantage": "The browser supplies the authenticated request shape and session context that a host-root crawl or invented request does not reproduce.",
+      "checkpoint": {
+        "prompt": "Why should the captured browser request be the DAST baseline?",
+        "options": [
+          { "value": "real-context", "label": "It preserves the method, encoding, parameters and scoped session used by the application." },
+          { "value": "host-root", "label": "A request to the host root always represents every authenticated form." },
+          { "value": "invented-get", "label": "Changing the request to an unauthenticated GET provides the same coverage." }
+        ],
+        "answer": "real-context"
+      }
+    },
+    {
+      "id": "transient-spa-state",
+      "number": 3,
+      "missionId": "transient-route-notice",
+      "durationMinutes": 4,
+      "title": "Catch evidence that exists for milliseconds",
+      "summary": "A same-document route change creates meaningful DOM behavior for only a brief interval before the application clears it.",
+      "presenterSteps": [
+        "Open the review target with static and runtime analysis ready before the interaction.",
+        "Trigger the route action and observe the same-document URL change without a reload.",
+        "Correlate the short-lived DOM evidence with active testing, then compare the allow-listed repaired route."
+      ],
+      "evidence": [
+        { "engine": "SAST", "observation": "The route-reading code and DOM operation present in the shipped script." },
+        { "engine": "IAST", "observation": "The live route value reaching the transient DOM update." },
+        { "engine": "DAST", "observation": "The active browser route mutation and observable execution evidence." }
+      ],
+      "browserAdvantage": "A browser-aware scanner observes same-document navigation and short-lived DOM state that may disappear before a later page snapshot.",
+      "checkpoint": {
+        "prompt": "What makes this SPA evidence easy to miss?",
+        "options": [
+          { "value": "transient-route", "label": "It appears after same-document navigation and survives for only a short interval." },
+          { "value": "full-reload", "label": "It exists permanently in the initial server response after every full reload." },
+          { "value": "external-service", "label": "It depends on an uncontrolled external service." }
+        ],
+        "answer": "transient-route"
+      }
+    }
+  ]
+}

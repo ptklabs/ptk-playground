@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — innerHTML</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <!-- External scripts -->
+  <script src="js/sources.js"></script>
+  <script src="js/inner_html/inner_html_sink.js"></script>
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — <code>element.innerHTML</code></h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">6</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">3</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">1</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">10</strong></span>
+    </div>
+    <p class="meta">Inline scenarios run automatically; external scenarios are triggered manually so you can attach breakpoints or observe the DOM mutations.</p>
+
+
+
+    <!-- Inline scenarios -->
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+
+      <div class="card" data-severity="high, low" id="il-1">
+        <div class="card-meta">INLINE-1 (High): Auto-run from query/hash into <code class="inline">innerHTML</code></div>
+        <pre>// inline-script[#1]
+(function(){
+  const target = 'inline-inner-html-target';
+  function render(content) {
+    if (content) innerHtmlSink(content, target);
+  }
+  const params = new URLSearchParams(location.search);
+  if (params.has('payload')) render(params.get('payload'));
+})();</pre>
+        <div class="render-target" id="inline-inner-html-target">Waiting for payload…</div>
+        <script>
+          (function() {
+            const target = 'inline-inner-html-target';
+
+            function render(content) {
+              if (content) innerHtmlSink(content, target);
+            }
+            const params = new URLSearchParams(location.search);
+            if (params.has('payload')) render(params.get('payload'));
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high" id="il-2">
+        <div class="card-meta">INLINE-2 (High): Direct field content → <code class="inline">innerHTML</code></div>
+        <pre>// inline-script[#2]
+function inlineInnerHtmlFromField(fieldId, targetId) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  innerHtmlSink(el.value, targetId);
+}</pre>
+        <div class="field">
+          <input id="inline_inner_html_payload" type="text" value="<strong>alert('field')</strong>" />
+          <button class="btn" type="button" onclick="inlineInnerHtmlFromField('inline_inner_html_payload', 'inline-inner-html-target')">Render inline field</button>
+        </div>
+        <script>
+          function inlineInnerHtmlFromField(fieldId, targetId) {
+            const el = document.getElementById(fieldId);
+            if (!el) return;
+            innerHtmlSink(el.value, targetId);
+          }
+          inlineInnerHtmlFromField('inline_inner_html_payload', 'inline-inner-html-target');
+        </script>
+      </div>
+
+      <div class="card" data-severity="safe" id="il-3">
+        <div class="card-meta">INLINE-3 (Safe): Use <code class="inline">textContent</code> instead of <code class="inline">innerHTML</code></div>
+        <pre>// inline-script[#3]
+(function(){
+  const params = new URLSearchParams(location.search);
+  const safe = params.get('safe');
+  const target = document.getElementById('inline-safe-target');
+  if (!target || !safe) return;
+  target.textContent = safe;
+})();</pre>
+        <div class="meta">Try <code class="inline">?safe=&lt;img src=x onerror=alert(1)&gt;</code> to see the difference.</div>
+        <div class="render-target" id="inline-safe-target">Waiting for safe payload…</div>
+        <script>
+          (function() {
+            const params = new URLSearchParams(location.search);
+            const safe = params.get('safe');
+            const target = document.getElementById('inline-safe-target');
+            if (!target || !safe) return;
+            target.textContent = safe;
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, low" id="il-4">
+        <div class="card-meta">INLINE-4 (High): Direct field content → <code class="inline">innerHTML</code></div>
+        <pre>// inline-script[#2]
+
+  const el = document.getElementById('inline_inner_html_cookie_target');
+  el.innerHTML = document.cookie
+</pre>
+        <div class="field">
+          <input id="inline_inner_html_cookie_target" type="text" value="<strong>alert('field')</strong>" />
+          <button class="btn" type="button" onclick="inlineInnerHtmlFromField('inline_inner_html_cookie_target', 'inline-inner-html-target')">Render inline field</button>
+        </div>
+        <script>
+          const el = document.getElementById('inline_inner_html_cookie_target');
+          el.innerHTML = document.cookie
+        </script>
+      </div>
+
+    </div>
+
+    <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-meta"><strong>Direct DOM sources → innerHTML</strong></div>
+        <pre data-severity="high, low">onclick="innerHtmlSink(location.hash,  'inline-inner-html-target')"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" type="button" onclick="innerHtmlSink(location.hash,  'inline-inner-html-target')">EXT (High): location.hash -> innerHtmlSink</button>
+        </div>
+        <pre>onclick="innerHtmlSink(getElementValue('target'),  'inline-inner-html-target')"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" type="button" onclick="innerHtmlSink(getElementValue('inline_inner_html_payload'),  'inline-inner-html-target')">EXT (High): element.value -> innerHtmlSink</button>
+        </div>
+        <div class="render-target" id="external-inner-html-target">External innerHTML target (DOM sources)</div>
+      </div>
+
+
+
+
+
+    </div>
+
+    <footer>PTK SAST testbed — innerHTML (inline + external). <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

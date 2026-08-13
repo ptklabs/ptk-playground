@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: file and data transfer surfaces</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">File and data transfer fixture</h1>
+    <p class="meta">
+      This page covers upload and download routes, multipart forms, archive requests, and cloud-storage style links.
+    </p>
+    <div class="fixture">
+      <form action="/passive/upload/index.html" method="post" enctype="multipart/form-data">
+        <input type="file" name="document" />
+      </form>
+      <ul>
+        <li><a href="/passive/downloads/report.csv">Attachment download</a></li>
+        <li><a href="/passive/files/data.dump">Archive/data file request</a></li>
+      </ul>
+      <pre>Pre-signed sample:
+https://ptk-bucket.s3.amazonaws.com/private/report.csv?X-Amz-Signature=abc123def456
+https://storage.googleapis.com/ptk-private/reports/2026-04.csv?GoogleAccessId=test@example.iam.gserviceaccount.com</pre>
+    </div>
+  </div>
+</body>
+</html>

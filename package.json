@@ -1,0 +1,25 @@
+{
+  "name": "@ptklabs/ptk-playground",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scanner-neutral browser-security campaigns and deterministic fixtures for OWASP PTK and other browser scanners.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ptklabs/ptk-playground.git"
+  },
+  "homepage": "https://ptklabs.github.io/ptk-playground/",
+  "scripts": {
+    "test": "node --test test/playground.structure.test.mjs",
+    "test:browser": "node --test --test-concurrency=1 test/*.browser.test.mjs test/playground.browser-smoke.mjs",
+    "test:all": "npm run test && npm run test:browser",
+    "serve": "node passive/server.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.58.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

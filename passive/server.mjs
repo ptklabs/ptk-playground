@@ -1,0 +1,496 @@
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import http from "node:http";
+import https from "node:https";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const playgroundRoot = path.resolve(__dirname, "..");
+const passiveRoot = __dirname;
+const HTTP_PORT = Number(process.env.PTK_PASSIVE_HTTP_PORT || 3080);
+const HTTPS_PORT = Number(process.env.PTK_PASSIVE_HTTPS_PORT || 3443);
+const WS_GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+
+const fileResponse = (file, options = {}) => ({ file, ...options });
+const playgroundFileResponse = (file, options = {}) => ({ file, root: playgroundRoot, ...options });
+const bodyResponse = (body, options = {}) => ({ body, ...options });
+
+const secureHeaderCanaryHeaders = Object.freeze({
+  "Content-Security-Policy": "default-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+  "X-Content-Type-Options": "nosniff",
+  "Cross-Origin-Opener-Policy": "same-origin",
+  "Cross-Origin-Embedder-Policy": "require-corp",
+  "Cross-Origin-Resource-Policy": "same-origin",
+  "Permissions-Policy": "camera=(), geolocation=(), microphone=()",
+  "Referrer-Policy": "no-referrer",
+  "Cache-Control": "no-store",
+  "Set-Cookie": "ptk_header_control=1; Path=/; Secure; HttpOnly; SameSite=Strict"
+});
+
+const orderSearchPageHeaders = Object.freeze({
+  "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'",
+  "Cache-Control": "no-store",
+  "Referrer-Policy": "no-referrer",
+  "X-Content-Type-Options": "nosniff",
+  "Set-Cookie": "ptk_order_session=active; Path=/targets/session-bound-order-search/; Secure; HttpOnly; SameSite=Strict"
+});
+
+const routeMap = new Map([
+  ["/", playgroundFileResponse("index.html")],
+  ["/index.html", playgroundFileResponse("index.html")],
+  ["/passive/", fileResponse("index.html")],
+  ["/passive/index.html", fileResponse("index.html")],
+  ["/passive/css/index.css", fileResponse("css/index.css", { contentType: "text/css; charset=utf-8" })],
+  ["/assets/css/playground.css", playgroundFileResponse("assets/css/playground.css", { contentType: "text/css; charset=utf-8" })],
+  ["/assets/js/playground.js", playgroundFileResponse("assets/js/playground.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/catalog/cases.json", playgroundFileResponse("catalog/cases.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/missions.json", playgroundFileResponse("catalog/missions.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/scanner-targets.json", playgroundFileResponse("catalog/scanner-targets.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/demo.json", playgroundFileResponse("catalog/demo.json", { contentType: "application/json; charset=utf-8" })],
+  ["/demo/", playgroundFileResponse("demo/index.html")],
+  ["/demo/index.html", playgroundFileResponse("demo/index.html")],
+  ["/scanner/", playgroundFileResponse("scanner/index.html")],
+  ["/scanner/index.html", playgroundFileResponse("scanner/index.html")],
+  ["/campaigns/", playgroundFileResponse("campaigns/index.html")],
+  ["/campaigns/index.html", playgroundFileResponse("campaigns/index.html")],
+  ["/campaigns/support-widget/", playgroundFileResponse("campaigns/support-widget/index.html")],
+  ["/campaigns/support-widget/index.html", playgroundFileResponse("campaigns/support-widget/index.html")],
+  ["/campaigns/deployment-response-boundary/", playgroundFileResponse("campaigns/deployment-response-boundary/index.html")],
+  ["/campaigns/deployment-response-boundary/index.html", playgroundFileResponse("campaigns/deployment-response-boundary/index.html")],
+  ["/campaigns/session-bound-order-search/", playgroundFileResponse("campaigns/session-bound-order-search/index.html")],
+  ["/campaigns/session-bound-order-search/index.html", playgroundFileResponse("campaigns/session-bound-order-search/index.html")],
+  ["/campaigns/on-demand-analytics/", playgroundFileResponse("campaigns/on-demand-analytics/index.html")],
+  ["/campaigns/on-demand-analytics/index.html", playgroundFileResponse("campaigns/on-demand-analytics/index.html")],
+  ["/campaigns/saved-workspace/", playgroundFileResponse("campaigns/saved-workspace/index.html")],
+  ["/campaigns/saved-workspace/index.html", playgroundFileResponse("campaigns/saved-workspace/index.html")],
+  ["/campaigns/live-profile-preview/", playgroundFileResponse("campaigns/live-profile-preview/index.html")],
+  ["/campaigns/live-profile-preview/index.html", playgroundFileResponse("campaigns/live-profile-preview/index.html")],
+  ["/campaigns/transient-route-notice/", playgroundFileResponse("campaigns/transient-route-notice/index.html")],
+  ["/campaigns/transient-route-notice/index.html", playgroundFileResponse("campaigns/transient-route-notice/index.html")],
+  ["/campaigns/imported-request-preferences/", playgroundFileResponse("campaigns/imported-request-preferences/index.html")],
+  ["/campaigns/imported-request-preferences/index.html", playgroundFileResponse("campaigns/imported-request-preferences/index.html")],
+  ["/targets/support-widget/vulnerable/", playgroundFileResponse("targets/support-widget/vulnerable/index.html")],
+  ["/targets/support-widget/vulnerable/index.html", playgroundFileResponse("targets/support-widget/vulnerable/index.html")],
+  ["/targets/support-widget/vulnerable/widget.js", playgroundFileResponse("targets/support-widget/vulnerable/widget.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/support-widget/fixed/", playgroundFileResponse("targets/support-widget/fixed/index.html")],
+  ["/targets/support-widget/fixed/index.html", playgroundFileResponse("targets/support-widget/fixed/index.html")],
+  ["/targets/support-widget/fixed/widget.js", playgroundFileResponse("targets/support-widget/fixed/widget.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/on-demand-analytics/vulnerable/", playgroundFileResponse("targets/on-demand-analytics/vulnerable/index.html")],
+  ["/targets/on-demand-analytics/vulnerable/index.html", playgroundFileResponse("targets/on-demand-analytics/vulnerable/index.html")],
+  ["/targets/on-demand-analytics/fixed/", playgroundFileResponse("targets/on-demand-analytics/fixed/index.html")],
+  ["/targets/on-demand-analytics/fixed/index.html", playgroundFileResponse("targets/on-demand-analytics/fixed/index.html")],
+  ["/targets/on-demand-analytics/analytics-loader.js", playgroundFileResponse("targets/on-demand-analytics/analytics-loader.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/saved-workspace/workspace-editor.js", playgroundFileResponse("targets/saved-workspace/workspace-editor.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/saved-workspace/vulnerable/", playgroundFileResponse("targets/saved-workspace/vulnerable/index.html")],
+  ["/targets/saved-workspace/vulnerable/index.html", playgroundFileResponse("targets/saved-workspace/vulnerable/index.html")],
+  ["/targets/saved-workspace/vulnerable/dashboard.html", playgroundFileResponse("targets/saved-workspace/vulnerable/dashboard.html")],
+  ["/targets/saved-workspace/vulnerable/dashboard.js", playgroundFileResponse("targets/saved-workspace/vulnerable/dashboard.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/saved-workspace/fixed/", playgroundFileResponse("targets/saved-workspace/fixed/index.html")],
+  ["/targets/saved-workspace/fixed/index.html", playgroundFileResponse("targets/saved-workspace/fixed/index.html")],
+  ["/targets/saved-workspace/fixed/dashboard.html", playgroundFileResponse("targets/saved-workspace/fixed/dashboard.html")],
+  ["/targets/saved-workspace/fixed/dashboard.js", playgroundFileResponse("targets/saved-workspace/fixed/dashboard.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/live-profile-preview/profile.json", playgroundFileResponse("targets/live-profile-preview/profile.json", { contentType: "application/json; charset=utf-8" })],
+  ["/targets/live-profile-preview/vulnerable/", playgroundFileResponse("targets/live-profile-preview/vulnerable/index.html")],
+  ["/targets/live-profile-preview/vulnerable/index.html", playgroundFileResponse("targets/live-profile-preview/vulnerable/index.html")],
+  ["/targets/live-profile-preview/vulnerable/profile-preview.js", playgroundFileResponse("targets/live-profile-preview/vulnerable/profile-preview.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/live-profile-preview/fixed/", playgroundFileResponse("targets/live-profile-preview/fixed/index.html")],
+  ["/targets/live-profile-preview/fixed/index.html", playgroundFileResponse("targets/live-profile-preview/fixed/index.html")],
+  ["/targets/live-profile-preview/fixed/profile-preview.js", playgroundFileResponse("targets/live-profile-preview/fixed/profile-preview.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/transient-route-notice/vulnerable/", playgroundFileResponse("targets/transient-route-notice/vulnerable/index.html")],
+  ["/targets/transient-route-notice/vulnerable/index.html", playgroundFileResponse("targets/transient-route-notice/vulnerable/index.html")],
+  ["/targets/transient-route-notice/vulnerable/route-notice.js", playgroundFileResponse("targets/transient-route-notice/vulnerable/route-notice.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/transient-route-notice/fixed/", playgroundFileResponse("targets/transient-route-notice/fixed/index.html")],
+  ["/targets/transient-route-notice/fixed/index.html", playgroundFileResponse("targets/transient-route-notice/fixed/index.html")],
+  ["/targets/transient-route-notice/fixed/route-notice.js", playgroundFileResponse("targets/transient-route-notice/fixed/route-notice.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/imported-request-preferences/preview.json", playgroundFileResponse("targets/imported-request-preferences/preview.json", { contentType: "application/json; charset=utf-8" })],
+  ["/targets/imported-request-preferences/vulnerable/", playgroundFileResponse("targets/imported-request-preferences/vulnerable/index.html")],
+  ["/targets/imported-request-preferences/vulnerable/index.html", playgroundFileResponse("targets/imported-request-preferences/vulnerable/index.html")],
+  ["/targets/imported-request-preferences/vulnerable/request-preferences.js", playgroundFileResponse("targets/imported-request-preferences/vulnerable/request-preferences.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/imported-request-preferences/fixed/", playgroundFileResponse("targets/imported-request-preferences/fixed/index.html")],
+  ["/targets/imported-request-preferences/fixed/index.html", playgroundFileResponse("targets/imported-request-preferences/fixed/index.html")],
+  ["/targets/imported-request-preferences/fixed/request-preferences.js", playgroundFileResponse("targets/imported-request-preferences/fixed/request-preferences.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/vendor/jquery/jquery-3.4.1.min.js", playgroundFileResponse("assets/vendor/jquery/jquery-3.4.1.min.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/vendor/jquery/jquery-3.7.1.min.js", playgroundFileResponse("assets/vendor/jquery/jquery-3.7.1.min.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/passive/header_disclosure_canary.html", fileResponse("header_disclosure_canary.html")],
+  ["/passive/assets/header-disclosure-canary.js", fileResponse("header_disclosure_canary.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/session-bound-order-search/order-search.js", playgroundFileResponse("targets/session-bound-order-search/order-search.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/session-bound-order-search/vulnerable/", playgroundFileResponse("targets/session-bound-order-search/index.html", { headers: orderSearchPageHeaders })],
+  ["/targets/session-bound-order-search/vulnerable/index.html", playgroundFileResponse("targets/session-bound-order-search/index.html", { headers: orderSearchPageHeaders })],
+  ["/targets/session-bound-order-search/fixed/", playgroundFileResponse("targets/session-bound-order-search/index.html", { headers: orderSearchPageHeaders })],
+  ["/targets/session-bound-order-search/fixed/index.html", playgroundFileResponse("targets/session-bound-order-search/index.html", { headers: orderSearchPageHeaders })],
+
+  ["/passive/cases/headers/powered-by.html", fileResponse("header_disclosure_canary.html", {
+    headers: {
+      ...secureHeaderCanaryHeaders,
+      "X-Powered-By": "PTK Header Canary"
+    }
+  })],
+  ["/passive/cases/headers/secure-control.html", fileResponse("header_disclosure_canary.html", {
+    headers: secureHeaderCanaryHeaders
+  })],
+
+  ["/passive/fixtures/headers/weak-security.html", fileResponse("headers_weak_security.html", {
+    headers: (isHttps) => ({
+      "Content-Security-Policy": "script-src 'unsafe-inline' 'unsafe-eval' *; style-src *; connect-src https://telemetry.example.net https://logs.example.net",
+      "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
+      "Cross-Origin-Embedder-Policy": "unsafe-none",
+      "Permissions-Policy": "geolocation=*, vibrate=*",
+      "Referrer-Policy": "unsafe-url",
+      "Clear-Site-Data": "\"*\"",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH",
+      "Access-Control-Allow-Headers": "Authorization, X-Api-Key, X-Requested-With",
+      "Access-Control-Expose-Headers": "Authorization, X-Auth, X-Access-Token",
+      "Access-Control-Allow-Private-Network": "true",
+      "X-Powered-By": "Express 5.0.0-beta",
+      "Server": "nginx/1.27.0",
+      "X-XSS-Protection": "1; mode=block",
+      "Expect-CT": "max-age=86400",
+      "Public-Key-Pins": "pin-sha256=\"abc\"; max-age=5184000",
+      "Set-Cookie": "session=ptk_session_demo; Path=/; HttpOnly",
+      "Cache-Control": "public, max-age=600",
+      ...(isHttps ? {} : {})
+    })
+  })],
+  ["/passive/fixtures/headers/hsts-over-http.html", fileResponse("headers_weak_security.html", {
+    headers: {
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains"
+    }
+  })],
+  ["/passive/fixtures/headers/report-only.html", fileResponse("headers_weak_security.html", {
+    headers: {
+      "Content-Security-Policy-Report-Only": "default-src *; report-uri https://reports.example.net/csp"
+    }
+  })],
+
+  ["/passive/fixtures/errors/stacktraces.html", fileResponse("stacktrace_env_hints.html")],
+  ["/passive/assets/client-config.js", fileResponse("client_secrets.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/passive/debug/source-map.html", fileResponse("sourcemap_debug.html")],
+  ["/passive/assets/app.bundle.js", fileResponse("sourcemap_debug_bundle.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/passive/assets/app.bundle.js.map", bodyResponse(JSON.stringify({
+    version: 3,
+    file: "app.bundle.js",
+    sources: ["src/app.js"],
+    names: [],
+    mappings: "AAAA"
+  }, null, 2), { contentType: "application/json; charset=utf-8" })],
+
+  ["/passive/swagger-ui/index.html", fileResponse("api_docs_graphql.html")],
+  ["/passive/graphiql", fileResponse("api_docs_graphql.html")],
+  ["/passive/redoc", fileResponse("api_docs_graphql.html")],
+  ["/passive/openapi.json", bodyResponse(JSON.stringify({
+    openapi: "3.1.0",
+    paths: {
+      "/orders": { get: { operationId: "listOrders" } }
+    }
+  }, null, 2), { contentType: "application/json; charset=utf-8" })],
+  ["/passive/openapi.yaml", bodyResponse("openapi: 3.1.0\npaths:\n  /orders:\n    get:\n      operationId: listOrders\n", { contentType: "application/yaml; charset=utf-8" })],
+  ["/passive/postman.collection.json", bodyResponse(JSON.stringify({
+    info: {
+      _postman_id: "ptk-passive-demo",
+      schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    item: []
+  }, null, 2), { contentType: "application/json; charset=utf-8" })],
+  ["/passive/graphql", bodyResponse(JSON.stringify({
+    operationName: "ListOrders",
+    query: "query ListOrders { orders { id total } }",
+    extensions: {
+      persistedQuery: {
+        sha256Hash: "0123456789abcdef"
+      }
+    },
+    errors: [
+      { message: "Cannot query field \"dangerouslyVerboseField\" on type \"Query\"." }
+    ]
+  }, null, 2), { contentType: "application/json; charset=utf-8" })],
+
+  ["/.well-known/security.txt", bodyResponse("Contact: mailto:security@example.test\nAcknowledgments: https://example.test/hall-of-fame\n", { contentType: "text/plain; charset=utf-8" })],
+  ["/.well-known/openid-configuration", bodyResponse(JSON.stringify({
+    issuer: "https://localhost:3443",
+    authorization_endpoint: "https://localhost:3443/authorize",
+    jwks_uri: "https://localhost:3443/.well-known/jwks.json"
+  }, null, 2), { contentType: "application/json; charset=utf-8" })],
+  ["/.well-known/assetlinks.json", bodyResponse(JSON.stringify([{ relation: ["delegate_permission/common.handle_all_urls"] }], null, 2), { contentType: "application/json; charset=utf-8" })],
+  ["/apple-app-site-association", bodyResponse(JSON.stringify({ applinks: { apps: [], details: [] } }, null, 2), { contentType: "application/json; charset=utf-8" })],
+  ["/.well-known/oauth-authorization-server", bodyResponse(JSON.stringify({ issuer: "https://localhost:3443" }, null, 2), { contentType: "application/json; charset=utf-8" })],
+  ["/.well-known/jwks.json", bodyResponse(JSON.stringify({ keys: [] }, null, 2), { contentType: "application/json; charset=utf-8" })],
+  ["/.well-known/change-password", bodyResponse("Change password helper", { contentType: "text/plain; charset=utf-8" })],
+  ["/robots.txt", bodyResponse("User-agent: *\nDisallow: /admin\n", { contentType: "text/plain; charset=utf-8" })],
+  ["/humans.txt", bodyResponse("PTK Passive Fixture Team\n", { contentType: "text/plain; charset=utf-8" })],
+
+  ["/passive/fixtures/data/sensitive-data.html", fileResponse("sensitive_data.html")],
+  ["/passive/fixtures/deser/indicator.html", fileResponse("deserialization_indicator.html")],
+  ["/passive/fixtures/tokens/index.html", fileResponse("token_param_surfaces.html")],
+  ["/passive/fixtures/tokens/url-leaks.html", fileResponse("token_param_surfaces.html")],
+  ["/passive/fixtures/tokens/jwt-url.html", fileResponse("token_param_surfaces.html")],
+  ["/passive/fixtures/params/high-risk.html", fileResponse("token_param_surfaces.html")],
+
+  ["/passive/checkout/payment.html", fileResponse("workflow_surfaces.html")],
+  ["/support/tickets/create", fileResponse("workflow_surfaces.html")],
+  ["/login", fileResponse("workflow_surfaces.html", { headers: { "Set-Cookie": "session=ptk_auth; Path=/; HttpOnly" } })],
+  ["/register", fileResponse("workflow_surfaces.html")],
+  ["/password/reset", fileResponse("workflow_surfaces.html")],
+  ["/logout", fileResponse("workflow_surfaces.html")],
+  ["/mfa/verify", fileResponse("workflow_surfaces.html")],
+  ["/impersonate", fileResponse("workflow_surfaces.html")],
+  ["/signin-oidc", fileResponse("workflow_surfaces.html")],
+
+  ["/orgs/acme/workspaces/red-team/settings.html", fileResponse("tenant_boundary.html", {
+    headers: {
+      "X-Tenant-Id": "tenant_acme",
+      "Set-Cookie": "tenantId=tenant_acme; Path=/; HttpOnly"
+    }
+  })],
+  ["/switch-tenant", fileResponse("tenant_boundary.html")],
+
+  ["/passive/realtime/overview.html", fileResponse("realtime_surfaces.html")],
+  ["/passive/realtime/events", bodyResponse("event: ready\ndata: passive-sse\n\n", { contentType: "text/event-stream; charset=utf-8", headers: { "Cache-Control": "no-cache" } })],
+  ["/sockjs/echo", fileResponse("realtime_surfaces.html")],
+  ["/socket.io/", fileResponse("realtime_surfaces.html")],
+
+  ["/wp-admin/index.html", fileResponse("framework_surface.html")],
+  ["/drupal/core/install.php", fileResponse("framework_surface.html")],
+  ["/dwr/engine.js", fileResponse("framework_surface.html", { contentType: "application/javascript; charset=utf-8" })],
+  ["/grafana/", fileResponse("framework_surface.html")],
+  ["/actuator", fileResponse("framework_surface.html")],
+  ["/phpinfo.php", fileResponse("framework_surface.html")],
+  ["/.git/config", fileResponse("framework_surface.html", { contentType: "text/plain; charset=utf-8" })],
+  ["/sidekiq", fileResponse("framework_surface.html")],
+  ["/phpmyadmin", fileResponse("framework_surface.html")],
+
+  ["/passive/upload/index.html", fileResponse("file_transfer_surface.html")],
+  ["/passive/downloads/report.csv", bodyResponse("id,total\nord_1,149.99\n", {
+    contentType: "text/csv; charset=utf-8",
+    headers: {
+      "Content-Disposition": "attachment; filename=\"report.csv\"",
+      "Cache-Control": "public, max-age=300",
+      "Set-Cookie": "download_session=ptk; Path=/"
+    }
+  })],
+  ["/passive/files/data.dump", bodyResponse("PTK_ARCHIVE\n", { contentType: "application/octet-stream" })],
+]);
+
+function contentTypeFor(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === ".css") return "text/css; charset=utf-8";
+  if (ext === ".js") return "application/javascript; charset=utf-8";
+  if (ext === ".json") return "application/json; charset=utf-8";
+  if (ext === ".txt") return "text/plain; charset=utf-8";
+  return "text/html; charset=utf-8";
+}
+
+function toHeaders(rawHeaders, isHttps) {
+  const resolved = typeof rawHeaders === "function" ? rawHeaders(isHttps) : (rawHeaders || {});
+  return Object.fromEntries(Object.entries(resolved).filter(([, value]) => value !== undefined));
+}
+
+function send(res, statusCode, body, contentType, headers = {}) {
+  const payload = Buffer.isBuffer(body) ? body : Buffer.from(String(body), "utf8");
+  res.writeHead(statusCode, {
+    "Content-Type": contentType,
+    "Content-Length": payload.length,
+    ...headers
+  });
+  res.end(payload);
+}
+
+function serveRoute(req, res, { pathname, isHttps }) {
+  const route = routeMap.get(pathname);
+  if (!route) {
+    send(res, 404, "Passive fixture route not found", "text/plain; charset=utf-8");
+    return;
+  }
+
+  const headers = toHeaders(route.headers, isHttps);
+  if (route.file) {
+    const filePath = path.join(route.root || passiveRoot, route.file);
+    if (!fs.existsSync(filePath)) {
+      send(res, 500, `Missing passive fixture file: ${route.file}`, "text/plain; charset=utf-8");
+      return;
+    }
+    const body = fs.readFileSync(filePath);
+    send(res, route.statusCode || 200, body, route.contentType || contentTypeFor(filePath), headers);
+    return;
+  }
+  send(res, route.statusCode || 200, route.body || "", route.contentType || "text/html; charset=utf-8", headers);
+}
+
+function readBoundedBody(req, maxBytes = 8192) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let size = 0;
+    let exceeded = false;
+    req.on("data", (chunk) => {
+      size += chunk.length;
+      if (size > maxBytes) {
+        exceeded = true;
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on("end", () => {
+      if (exceeded) {
+        const error = new Error("request_body_too_large");
+        error.code = "request_body_too_large";
+        reject(error);
+        return;
+      }
+      resolve(Buffer.concat(chunks).toString("utf8"));
+    });
+    req.on("error", reject);
+  });
+}
+
+function jsonResponse(res, statusCode, value) {
+  send(res, statusCode, JSON.stringify(value), "application/json; charset=utf-8", {
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff"
+  });
+}
+
+async function serveOrderSearchApi(req, res, { pathname, isHttps }) {
+  if (!isHttps) {
+    jsonResponse(res, 426, { ok: false, code: "HTTPS_REQUIRED" });
+    return;
+  }
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    jsonResponse(res, 405, { ok: false, code: "METHOD_NOT_ALLOWED" });
+    return;
+  }
+  if (!String(req.headers["content-type"] || "").toLowerCase().startsWith("application/x-www-form-urlencoded")) {
+    jsonResponse(res, 415, { ok: false, code: "FORM_ENCODING_REQUIRED" });
+    return;
+  }
+  if (!String(req.headers.cookie || "").split(/;\s*/).includes("ptk_order_session=active")) {
+    jsonResponse(res, 401, { ok: false, code: "SESSION_REQUIRED" });
+    return;
+  }
+  if (req.headers["x-playground-request"] !== "order-search") {
+    jsonResponse(res, 400, { ok: false, code: "REQUEST_CONTEXT_REQUIRED" });
+    return;
+  }
+
+  let rawBody;
+  try {
+    rawBody = await readBoundedBody(req);
+  } catch (error) {
+    if (error?.code === "request_body_too_large") {
+      jsonResponse(res, 413, { ok: false, code: "REQUEST_BODY_TOO_LARGE" });
+      return;
+    }
+    jsonResponse(res, 400, { ok: false, code: "REQUEST_BODY_INVALID" });
+    return;
+  }
+  const body = new URLSearchParams(rawBody);
+  const query = String(body.get("query") || "");
+  if (!query || query.length > 256) {
+    jsonResponse(res, 400, { ok: false, code: "QUERY_INVALID" });
+    return;
+  }
+
+  const reviewTarget = pathname.includes("/vulnerable/");
+  if (reviewTarget && /['"]/.test(query)) {
+    jsonResponse(res, 500, {
+      ok: false,
+      code: "ORDER_QUERY_SYNTAX",
+      message: "You have an error in your SQL syntax near the order search value"
+    });
+    return;
+  }
+  jsonResponse(res, 200, {
+    ok: true,
+    count: query === "wireless headphones" ? 1 : 0,
+    message: query === "wireless headphones" ? "One matching order" : "No matching orders"
+  });
+}
+
+function handleUpgrade(req, socket) {
+  const url = new URL(req.url, `http://${req.headers.host || `localhost:${HTTP_PORT}`}`);
+  if (!["/passive/realtime/ws", "/socket.io/", "/sockjs/echo"].includes(url.pathname)) {
+    socket.destroy();
+    return;
+  }
+  const websocketKey = req.headers["sec-websocket-key"];
+  if (!websocketKey) {
+    socket.destroy();
+    return;
+  }
+  const accept = createHash("sha1").update(`${websocketKey}${WS_GUID}`).digest("base64");
+  socket.write(
+    [
+      "HTTP/1.1 101 Switching Protocols",
+      "Upgrade: websocket",
+      "Connection: Upgrade",
+      `Sec-WebSocket-Accept: ${accept}`,
+      "\r\n"
+    ].join("\r\n")
+  );
+  socket.on("data", () => {});
+}
+
+function maybeCreateTlsContext() {
+  const certDir = path.join(os.tmpdir(), "ptk-passive-fixtures-tls");
+  const keyPath = path.join(certDir, "localhost.key");
+  const certPath = path.join(certDir, "localhost.crt");
+  try {
+    fs.mkdirSync(certDir, { recursive: true });
+    if (!fs.existsSync(keyPath) || !fs.existsSync(certPath)) {
+      execFileSync("openssl", [
+        "req",
+        "-x509",
+        "-newkey",
+        "rsa:2048",
+        "-nodes",
+        "-keyout",
+        keyPath,
+        "-out",
+        certPath,
+        "-days",
+        "365",
+        "-subj",
+        "/CN=localhost"
+      ], { stdio: "ignore" });
+    }
+    return {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certPath)
+    };
+  } catch (error) {
+    return null;
+  }
+}
+
+function createRequestHandler(isHttps) {
+  return async (req, res) => {
+    const url = new URL(req.url, `${isHttps ? "https" : "http"}://${req.headers.host || "localhost"}`);
+    if (/^\/targets\/session-bound-order-search\/(?:vulnerable|fixed)\/api\/search$/.test(url.pathname)) {
+      await serveOrderSearchApi(req, res, { pathname: url.pathname, isHttps });
+      return;
+    }
+    serveRoute(req, res, { pathname: url.pathname, isHttps });
+  };
+}
+
+const httpServer = http.createServer(createRequestHandler(false));
+httpServer.on("upgrade", handleUpgrade);
+httpServer.listen(HTTP_PORT, () => {
+  console.log(`[passive-fixtures] HTTP ready on http://localhost:${HTTP_PORT}/passive/`);
+});
+
+const tlsContext = maybeCreateTlsContext();
+if (tlsContext) {
+  const httpsServer = https.createServer(tlsContext, createRequestHandler(true));
+  httpsServer.on("upgrade", handleUpgrade);
+  httpsServer.listen(HTTPS_PORT, () => {
+    console.log(`[passive-fixtures] HTTPS ready on https://localhost:${HTTPS_PORT}/passive/`);
+  });
+} else {
+  console.log("[passive-fixtures] HTTPS disabled: openssl not available for local certificate generation");
+}

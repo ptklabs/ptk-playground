@@ -1,0 +1,278 @@
+{
+  "schema": "owasp-browser-security-targets/v1",
+  "version": 1,
+  "missions": [
+    {
+      "id": "support-widget",
+      "title": "Third-Party Support Widget",
+      "summary": "Review a browser support feature that combines cross-window messaging, DOM rendering and a loaded client dependency.",
+      "category": "Browser trust boundaries",
+      "engines": ["SCA", "SAST", "IAST"],
+      "route": "./campaigns/support-widget/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "support-widget-vulnerable",
+          "title": "Support widget review route",
+          "route": "./targets/support-widget/vulnerable/",
+          "displayRoute": "/targets/support-widget/vulnerable/",
+          "visibleBehavior": "The prepared strong element is interpreted and rendered as markup.",
+          "dependency": { "name": "jQuery", "version": "3.4.1" }
+        },
+        {
+          "variant": "repaired",
+          "id": "support-widget-fixed",
+          "title": "Support widget repaired route",
+          "route": "./targets/support-widget/fixed/",
+          "displayRoute": "/targets/support-widget/fixed/",
+          "visibleBehavior": "The same markup-shaped value is displayed literally as text.",
+          "dependency": { "name": "jQuery", "version": "3.7.1" }
+        }
+      ]
+    },
+    {
+      "id": "deployment-response-boundary",
+      "title": "Deployment Response Boundary",
+      "summary": "Compare two visually identical deployments whose security difference exists only in browser-observed response metadata.",
+      "category": "HTTP response evidence",
+      "engines": ["DAST"],
+      "route": "./campaigns/deployment-response-boundary/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "deployment-response-disclosure",
+          "title": "Deployment response with metadata disclosure",
+          "route": "./passive/cases/headers/powered-by.html",
+          "displayRoute": "/passive/cases/headers/powered-by.html",
+          "visibleBehavior": "The page matches the repaired control, but inspecting its response reveals a technology disclosure header.",
+          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 }
+        },
+        {
+          "variant": "repaired",
+          "id": "deployment-response-control",
+          "title": "Deployment response without metadata disclosure",
+          "route": "./passive/cases/headers/secure-control.html",
+          "displayRoute": "/passive/cases/headers/secure-control.html",
+          "visibleBehavior": "The same page and security baseline are returned without the technology disclosure header.",
+          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 }
+        }
+      ]
+    },
+    {
+      "id": "session-bound-order-search",
+      "title": "Session-Bound Order Search",
+      "summary": "Capture and test a same-origin POST request that only exists after the browser establishes scoped session state.",
+      "category": "Authenticated browser traffic",
+      "engines": ["DAST"],
+      "route": "./campaigns/session-bound-order-search/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "session-order-search-review",
+          "title": "Order search review workflow",
+          "route": "./targets/session-bound-order-search/vulnerable/",
+          "displayRoute": "/targets/session-bound-order-search/vulnerable/",
+          "visibleBehavior": "A normal order search succeeds; the harmless prepared diagnostic exposes a database-query error.",
+          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 },
+          "request": {
+            "method": "POST",
+            "route": "/targets/session-bound-order-search/vulnerable/api/search",
+            "contentType": "application/x-www-form-urlencoded",
+            "parameterNames": ["query"],
+            "setup": "Open the review page to establish its scoped session and submit the search form."
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "session-order-search-control",
+          "title": "Order search repaired workflow",
+          "route": "./targets/session-bound-order-search/fixed/",
+          "displayRoute": "/targets/session-bound-order-search/fixed/",
+          "visibleBehavior": "The same normal and diagnostic searches complete without exposing a database-query error.",
+          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 },
+          "request": {
+            "method": "POST",
+            "route": "/targets/session-bound-order-search/fixed/api/search",
+            "contentType": "application/x-www-form-urlencoded",
+            "parameterNames": ["query"],
+            "setup": "Open the repaired page to establish its scoped session and submit the same search form."
+          }
+        }
+      ]
+    },
+    {
+      "id": "on-demand-analytics",
+      "title": "On-Demand Analytics",
+      "summary": "Observe a client dependency that does not exist in initial page traffic and appears only after a browser action opens an application feature.",
+      "category": "Action-loaded dependencies",
+      "engines": ["SCA"],
+      "route": "./campaigns/on-demand-analytics/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "on-demand-analytics-review",
+          "title": "Analytics workspace review route",
+          "route": "./targets/on-demand-analytics/vulnerable/",
+          "displayRoute": "/targets/on-demand-analytics/vulnerable/",
+          "visibleBehavior": "The initial page is dependency-free; opening the workspace requests and runs the pinned review dependency.",
+          "dependency": { "name": "jQuery", "version": "3.4.1" }
+        },
+        {
+          "variant": "repaired",
+          "id": "on-demand-analytics-control",
+          "title": "Analytics workspace repaired route",
+          "route": "./targets/on-demand-analytics/fixed/",
+          "displayRoute": "/targets/on-demand-analytics/fixed/",
+          "visibleBehavior": "The same action and analytics result are preserved while the browser loads the reviewed dependency version.",
+          "dependency": { "name": "jQuery", "version": "3.7.1" }
+        }
+      ]
+    },
+    {
+      "id": "saved-workspace",
+      "title": "Saved Workspace",
+      "summary": "Follow user-controlled browser state from a settings page into a separate same-origin dashboard document.",
+      "category": "Persistent browser state",
+      "engines": ["SAST", "IAST"],
+      "route": "./campaigns/saved-workspace/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "saved-workspace-review",
+          "title": "Saved workspace review journey",
+          "route": "./targets/saved-workspace/vulnerable/",
+          "displayRoute": "/targets/saved-workspace/vulnerable/",
+          "visibleBehavior": "The settings page persists a harmless markup-shaped value; the child dashboard restores it as DOM markup.",
+          "journey": {
+            "summary": "Save the prepared announcement and follow the same-origin dashboard navigation.",
+            "entrySelector": "#save-announcement",
+            "childRoute": "/targets/saved-workspace/vulnerable/dashboard.html",
+            "childReadySelector": "#announcement-status"
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "saved-workspace-control",
+          "title": "Saved workspace repaired journey",
+          "route": "./targets/saved-workspace/fixed/",
+          "displayRoute": "/targets/saved-workspace/fixed/",
+          "visibleBehavior": "The same state and navigation are preserved while the child dashboard restores the value as literal text.",
+          "journey": {
+            "summary": "Save the same prepared announcement and follow the same-origin dashboard navigation.",
+            "entrySelector": "#save-announcement",
+            "childRoute": "/targets/saved-workspace/fixed/dashboard.html",
+            "childReadySelector": "#announcement-status"
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-profile-preview",
+      "title": "Live Profile Preview",
+      "summary": "Follow a same-origin JSON response field into a DOM rendering path that exists only after a browser action.",
+      "category": "Action-loaded response data",
+      "engines": ["SAST", "IAST"],
+      "route": "./campaigns/live-profile-preview/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "live-profile-preview-review",
+          "title": "Live profile review target",
+          "route": "./targets/live-profile-preview/vulnerable/",
+          "displayRoute": "/targets/live-profile-preview/vulnerable/",
+          "visibleBehavior": "The initial page has no profile traffic; the action loads a JSON field and interprets its harmless markup in the preview.",
+          "action": {
+            "summary": "Press Open live profile preview and wait for the response status.",
+            "triggerSelector": "#load-profile",
+            "readySelector": "#profile-status"
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "live-profile-preview-control",
+          "title": "Live profile repaired control",
+          "route": "./targets/live-profile-preview/fixed/",
+          "displayRoute": "/targets/live-profile-preview/fixed/",
+          "visibleBehavior": "The same action and JSON response are preserved while its markup-shaped field is displayed as literal text.",
+          "action": {
+            "summary": "Press the same preview button and wait for the response status.",
+            "triggerSelector": "#load-profile",
+            "readySelector": "#profile-status"
+          }
+        }
+      ]
+    },
+    {
+      "id": "transient-route-notice",
+      "title": "Transient Route Notice",
+      "summary": "Observe a short-lived SPA deep-link value that reaches the DOM after an in-document hash-route change.",
+      "category": "Transient SPA route state",
+      "engines": ["DAST", "SAST", "IAST"],
+      "route": "./campaigns/transient-route-notice/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "transient-route-notice-review",
+          "title": "Transient route notice review target",
+          "route": "./targets/transient-route-notice/vulnerable/",
+          "displayRoute": "/targets/transient-route-notice/vulnerable/",
+          "visibleBehavior": "The action changes only the fragment route; its harmless notice becomes markup for 30 ms before expiring.",
+          "action": {
+            "summary": "Press Open prepared route notice and scan the resulting hash-query route.",
+            "triggerSelector": "#open-route-notice",
+            "readySelector": "#route-status"
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "transient-route-notice-control",
+          "title": "Transient route notice repaired control",
+          "route": "./targets/transient-route-notice/fixed/",
+          "displayRoute": "/targets/transient-route-notice/fixed/",
+          "visibleBehavior": "The same known route value maps to constant text for 30 ms; unknown values are rejected without reflection.",
+          "action": {
+            "summary": "Press the same button and scan the resulting hash-query route.",
+            "triggerSelector": "#open-route-notice",
+            "readySelector": "#route-status"
+          }
+        }
+      ]
+    },
+    {
+      "id": "imported-request-preferences",
+      "title": "Imported Request Preferences",
+      "summary": "Trace a user-imported client configuration into an inherited browser request option, then compare an own-property allow-list repair.",
+      "category": "Client configuration integrity",
+      "engines": ["SAST", "IAST"],
+      "route": "./campaigns/imported-request-preferences/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "imported-request-preferences-review",
+          "title": "Imported preferences review target",
+          "route": "./targets/imported-request-preferences/vulnerable/",
+          "displayRoute": "/targets/imported-request-preferences/vulnerable/",
+          "visibleBehavior": "The imported document leaves the request object with no own credentials key, but its inherited value changes the same-origin preview request.",
+          "action": {
+            "summary": "Press Import and load preview, then inspect the request-options evidence.",
+            "triggerSelector": "#import-preferences",
+            "readySelector": "#preferences-status"
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "imported-request-preferences-control",
+          "title": "Imported preferences repaired control",
+          "route": "./targets/imported-request-preferences/fixed/",
+          "displayRoute": "/targets/imported-request-preferences/fixed/",
+          "visibleBehavior": "The same input and preview request use a null-prototype object containing only an accepted own credentials option.",
+          "action": {
+            "summary": "Press the same import button and inspect the repaired request-options evidence.",
+            "triggerSelector": "#import-preferences",
+            "readySelector": "#preferences-status"
+          }
+        }
+      ]
+    }
+  ]
+}

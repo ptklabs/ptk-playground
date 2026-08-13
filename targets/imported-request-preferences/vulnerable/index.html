@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Imported Request Preferences · Review Target</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A client preferences import whose merge creates an inherited browser request option.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script defer src="./request-preferences.js"></script>
+</head>
+<body data-playground-target="imported-request-preferences-review" data-target-variant="vulnerable">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">LAB</span><span>Browser Security Playground</span></a><nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/imported-request-preferences/">Mission</a><a href="./request-preferences.js">View source</a><a href="../fixed/">Repaired target</a></nav></div></header>
+
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../campaigns/imported-request-preferences/">Imported request preferences</a><span aria-hidden="true">/</span><span>Review target</span></nav>
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Client configuration intake</p><h1 id="target-title">Import request preferences.</h1><p class="target-hero__lede">The account preview parses a prepared preferences document, merges it into request options and then loads one local preview.</p><div class="hero__actions"><button id="import-preferences" class="button" type="button">Import and load preview</button><button id="reset-preferences" class="button button--secondary" type="button">Reset preferences</button></div></div><dl class="target-facts" aria-label="Target facts"><div><dt>Variant</dt><dd>Review</dd></div><div><dt>Input</dt><dd>JSON preferences</dd></div><div><dt>Request</dt><dd>Same origin</dd></div></dl></section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled training target.</strong> The import changes one temporary options object, does not modify the global object prototype and makes no external request.</p></aside>
+
+    <section class="widget-stage" aria-labelledby="preferences-title">
+      <div class="widget-card"><div class="widget-card__heading"><div><p class="eyebrow">Account preview</p><h2 id="preferences-title">Request preferences</h2></div><span class="status-pill">Review</span></div><form class="workspace-form" onsubmit="return false"><label for="preferences-json">Imported JSON</label><textarea id="preferences-json" spellcheck="false">{"__proto__":{"credentials":"include"}}</textarea></form><div id="request-details" class="support-thread" aria-live="polite">No preferences have been imported.</div></div>
+      <aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Neutral proof</p><h2 id="proof-title">Browser evidence</h2><p id="preview-message">The local account preview has not been requested.</p><output id="preferences-status" class="proof-token" aria-live="polite">PREFERENCES-IDLE</output></aside>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Direct target · One import action · One same-origin request.</p><nav aria-label="Target links"><a href="../fixed/">Compare the repaired target</a></nav></div></footer>
+</body>
+</html>

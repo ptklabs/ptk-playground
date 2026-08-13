@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Storage Taint To Exec</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    textarea, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 80px; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Storage Taint To Exec</h1>
+  <p class="note">Covers eval / Function / apply / setTimeout / setInterval using secondary sources, especially storage-backed values.</p>
+  <div class="card">
+    <label for="payload">Execution payload</label>
+    <textarea id="payload">window.__ptkStorageExec = 'hit'</textarea>
+    <label for="sourceType">Source</label>
+    <select id="sourceType">
+      <option value="cookie">cookie</option>
+      <option value="localStorage">localStorage</option>
+      <option value="sessionStorage">sessionStorage</option>
+      <option value="windowName">window.name</option>
+      <option value="hashRoute">hashRoute</option>
+      <option value="postMessage">postMessage</option>
+      <option value="referrer">referrer (open via helper)</option>
+    </select>
+    <button id="prime">Prime source</button>
+    <p id="status" class="note">No source primed yet.</p>
+  </div>
+  <div class="card">
+    <button id="btn-eval">eval(payload)</button>
+    <button id="btn-function">new Function(payload)</button>
+    <button id="btn-apply">Function(payload).apply(window)</button>
+    <button id="btn-timeout">setTimeout(payload, 10)</button>
+    <button id="btn-interval">setInterval(payload, 10)</button>
+  </div>
+  <script>
+    const payloadField = document.getElementById('payload');
+    const status = document.getElementById('status');
+    let lastMessage = null;
+    function currentPayload() {
+      const selected = document.getElementById('sourceType').value;
+      const hashText = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+      if (selected === 'cookie') {
+        const m = document.cookie.match(/(?:^|; )iast_payload=([^;]+)/);
+        return m ? decodeURIComponent(m[1]) : payloadField.value;
+      }
+      if (selected === 'localStorage') return localStorage.getItem('iast_payload') || payloadField.value;
+      if (selected === 'sessionStorage') return sessionStorage.getItem('iast_payload') || payloadField.value;
+      if (selected === 'windowName') return window.name || payloadField.value;
+      if (selected === 'hashRoute') return hashText || payloadField.value;
+      if (selected === 'postMessage') return lastMessage || payloadField.value;
+      if (selected === 'referrer') return new URLSearchParams(location.search).get('payload') || payloadField.value;
+      return payloadField.value;
+    }
+    document.getElementById('prime').onclick = () => {
+      const payload = payloadField.value;
+      const selected = document.getElementById('sourceType').value;
+      if (selected === 'cookie') document.cookie = 'iast_payload=' + encodeURIComponent(payload) + '; path=/';
+      if (selected === 'localStorage') localStorage.setItem('iast_payload', payload);
+      if (selected === 'sessionStorage') sessionStorage.setItem('iast_payload', payload);
+      if (selected === 'windowName') window.name = payload;
+      if (selected === 'hashRoute') location.hash = encodeURIComponent(payload);
+      if (selected === 'postMessage') window.postMessage(payload, '*');
+      status.textContent = 'Primed source: ' + selected;
+    };
+    window.addEventListener('message', (event) => {
+      if (typeof event.data === 'string') lastMessage = event.data;
+    });
+    document.getElementById('btn-eval').onclick = () => { try { eval(currentPayload()); } catch (e) { console.warn(e); } };
+    document.getElementById('btn-function').onclick = () => { try { new Function(currentPayload())(); } catch (e) { console.warn(e); } };
+    document.getElementById('btn-apply').onclick = () => { try { Function(currentPayload()).apply(window); } catch (e) { console.warn(e); } };
+    document.getElementById('btn-timeout').onclick = () => { try { setTimeout(currentPayload(), 10); } catch (e) { console.warn(e); } };
+    document.getElementById('btn-interval').onclick = () => { try { const id = setInterval(currentPayload(), 10); setTimeout(() => clearInterval(id), 50); } catch (e) { console.warn(e); } };
+  </script>
+</body>
+</html>

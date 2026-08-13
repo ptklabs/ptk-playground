@@ -1,0 +1,11 @@
+{
+  "package": "angular",
+  "version": "1.8.3",
+  "source": "https://registry.npmjs.org/angular/-/angular-1.8.3.tgz",
+  "license": "MIT",
+  "npmTarballSha256": "005824934b8145261b6ab131070ad7edaa50056cfacad5f86748fbcff9e26cdf",
+  "files": {
+    "angular.min.js": "396dc1a03d6cc02e9c51a80246e0db53c5c8df9bd07287e3b51bce4a29dab355",
+    "LICENSE.md": "f64ba8a51fa64d7f4616e88d0850eca2aa43c4ca73a798ff92f744012d0ff4df"
+  }
+}

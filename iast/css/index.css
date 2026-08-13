@@ -1,0 +1,106 @@
+:root {
+  --bg:#050b1f;
+  --bg-accent:#0a122e;
+  --card:#0f172a;
+  --border:#1f2a3f;
+  --muted:#9ca3af;
+  --link:#38bdf8;
+  --link-hover:#7dd3fc;
+  --hi:#fb7185;
+  --med:#fbbf24;
+  --lo:#34d399;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  background: radial-gradient(circle at top, rgba(56,189,248,0.25) 0%, var(--bg) 55%)
+              fixed;
+  color:#f1f5f9;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.title {
+  margin:0;
+  font-size:26px;
+  font-weight:700;
+  color:#f8fafc;
+}
+.badge {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(15,23,42,0.7);
+  font-size:13px;
+  color:var(--muted);
+}
+.meta {
+  color:var(--muted);
+  font-size:14px;
+  margin:0 0 20px;
+  max-width:720px;
+  line-height:1.5;
+}
+.grid {
+  display:grid;
+  gap:16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+}
+.card {
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+.card:hover {
+  box-shadow:0 18px 32px rgba(2,6,23,0.55);
+  transform: translateY(-2px);
+  border-color: var(--link);
+}
+.card-title {
+  font-size:16px;
+  font-weight:600;
+  margin:0;
+  color:#f8fafc;
+}
+.card p {
+  margin:0;
+  font-size:13px;
+  color:#cbd5f5;
+  line-height:1.45;
+}
+.tag {
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  font-weight:600;
+  color:var(--muted);
+}
+.footer {
+  margin-top:32px;
+  font-size:12px;
+  color:var(--muted);
+}
+.footer strong { color:#f8fafc; }
+
+table { color:inherit; }

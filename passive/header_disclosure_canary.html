@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Response header disclosure canary · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A focused passive-analysis fixture for comparing a disclosure header with a secure response control.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="stylesheet" href="/assets/css/playground.css">
+  <script type="module" src="/passive/assets/header-disclosure-canary.js"></script>
+</head>
+<body>
+  <main class="page-shell" data-ptk-case="response-header-disclosure">
+    <section class="engine-hero">
+      <div>
+        <p class="eyebrow">Focused response canary</p>
+        <h1>Compare one disclosure header with a secure control.</h1>
+        <p class="engine-hero__lede">The two HTTPS routes return the same page and secure baseline headers. One route adds a single technology disclosure header.</p>
+        <div class="hero__actions"><button class="button" id="inspect-response" type="button">Inspect response metadata</button></div>
+        <p id="response-inspection" class="target-proof" role="status" aria-live="polite">Ready to compare the current response.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

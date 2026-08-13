@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Dangerous URL Schemes Minimal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    .stack { display: grid; gap: 10px; max-width: 560px; }
+    input, button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <div class="stack">
+    <input id="payload" type="text" value="javascript:console.log('iast-url-attr')">
+    <a id="link-target" href="#">Link target</a>
+    <img id="img-target" alt="img target">
+    <form id="form-target" method="GET">
+      <button id="form-button" type="submit">Submit</button>
+    </form>
+    <button id="btn-attr-href" type="button">set href</button>
+    <button id="btn-attr-src" type="button">set src</button>
+    <button id="btn-attr-action" type="button">set action</button>
+    <button id="btn-attr-formaction" type="button">set formaction</button>
+  </div>
+
+  <script>
+    const payloadInput = document.getElementById('payload');
+    const value = () => payloadInput.value;
+
+    document.getElementById('btn-attr-href').addEventListener('click', () => {
+      document.getElementById('link-target').setAttribute('href', value());
+    });
+
+    document.getElementById('btn-attr-src').addEventListener('click', () => {
+      document.getElementById('img-target').setAttribute('src', value());
+    });
+
+    document.getElementById('btn-attr-action').addEventListener('click', () => {
+      document.getElementById('form-target').setAttribute('action', value());
+    });
+
+    document.getElementById('btn-attr-formaction').addEventListener('click', () => {
+      document.getElementById('form-button').setAttribute('formaction', value());
+    });
+  </script>
+</body>
+</html>

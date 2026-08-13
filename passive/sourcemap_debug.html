@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: source maps and debug artifacts</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Source maps and debug artifacts</h1>
+    <p class="meta">
+      This page references a JavaScript bundle with <code>sourceMappingURL</code> and includes common dev-server and Next.js style
+      debug artifacts in the markup.
+    </p>
+    <div class="fixture">
+      <script src="/passive/assets/app.bundle.js"></script>
+      <pre><code>webpack-dev-server
+sockjs-node
+__webpack_hmr
+hot-update.json
+__NEXT_DATA__
+/_next/static/chunks/main.js</code></pre>
+      <p><a href="/passive/assets/app.bundle.js.map">Open bundle source map</a></p>
+    </div>
+  </div>
+</body>
+</html>

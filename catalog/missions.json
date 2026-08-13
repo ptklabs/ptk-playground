@@ -1,0 +1,837 @@
+{
+  "schema": "owasp-browser-security-missions/v1",
+  "version": 1,
+  "missions": [
+    {
+      "id": "support-widget",
+      "title": "Third-Party Support Widget",
+      "summary": "Review a browser support feature that combines cross-window messaging, DOM rendering and a loaded client dependency.",
+      "story": "A support widget receives browser messages and displays replies inside an authenticated application page. Compare the deployed behavior with a repaired implementation.",
+      "category": "Browser trust boundaries",
+      "engines": ["SCA", "SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/support-widget/",
+      "dependency": {
+        "name": "jQuery",
+        "license": "MIT",
+        "reviewVersion": "3.4.1",
+        "repairedVersion": "3.7.1"
+      },
+      "targets": {
+        "review": {
+          "id": "support-widget-vulnerable",
+          "title": "Support widget review route",
+          "route": "./targets/support-widget/vulnerable/",
+          "displayRoute": "/targets/support-widget/vulnerable/",
+          "source": "./targets/support-widget/vulnerable/widget.js",
+          "visibleBehavior": "The prepared strong element is interpreted and rendered as markup."
+        },
+        "repaired": {
+          "id": "support-widget-fixed",
+          "title": "Support widget repaired route",
+          "route": "./targets/support-widget/fixed/",
+          "displayRoute": "/targets/support-widget/fixed/",
+          "source": "./targets/support-widget/fixed/widget.js",
+          "visibleBehavior": "The same markup-shaped value is displayed literally as text."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Discover the trust boundary",
+          "summary": "Inspect the deployed widget and identify the browser behavior that deserves investigation.",
+          "instructions": [
+            "Open the review target and inspect its loaded dependency and widget source.",
+            "Compare the browser-message input with the operation that updates the conversation preview.",
+            "Choose the observation that best describes the security boundary."
+          ],
+          "concepts": ["loaded dependency", "browser message", "HTML rendering"],
+          "hint": "Follow data from the message event into the conversation preview and note the loaded library version.",
+          "demoCue": "Show that code, runtime behavior and the loaded dependency are three views of one browser feature.",
+          "completion": {
+            "type": "choice",
+            "prompt": "Which observation should be investigated?",
+            "options": [
+              { "value": "message-html", "label": "Browser-message content is interpreted as HTML by an older dependency." },
+              { "value": "button-style", "label": "The support button uses a strong visual style." },
+              { "value": "local-route", "label": "The page and widget share the same route origin." }
+            ],
+            "answer": "message-html"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove the browser behavior",
+          "summary": "Trigger one harmless prepared browser message and collect deterministic visible evidence.",
+          "instructions": [
+            "Open the review target in a separate tab.",
+            "Press Send support reply and observe whether the prepared strong element becomes DOM markup.",
+            "Enter the evidence token shown by the target."
+          ],
+          "concepts": ["runtime source", "DOM sink", "visible evidence"],
+          "hint": "The token appears only after the target finds the prepared marker inside the rendered support thread.",
+          "demoCue": "Run the same button action while IAST is active, then correlate the visible marker with runtime evidence.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "WIDGET-MESSAGE-RENDERED"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate the repair",
+          "summary": "Repeat the feature on the repaired route and verify that functionality remains without HTML interpretation.",
+          "instructions": [
+            "Open the repaired target and repeat Send support reply.",
+            "Confirm that the markup-shaped content is displayed literally.",
+            "Inspect the strict origin, payload-type and text-rendering controls, then enter the remediation token."
+          ],
+          "concepts": ["exact origin", "payload type", "text rendering", "dependency upgrade"],
+          "hint": "The repaired route keeps the same user action but validates the message and writes text rather than HTML.",
+          "demoCue": "Compare the dependency versions and the two source files, then show that the safe route preserves the feature.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "WIDGET-SAFE-RENDER"
+          }
+        }
+      ]
+    },
+    {
+      "id": "deployment-response-boundary",
+      "title": "Deployment Response Boundary",
+      "summary": "Compare two visually identical deployments whose security difference exists only in browser-observed response metadata.",
+      "story": "An account console looks identical in review and repaired deployments. One response discloses its server technology while the repaired response preserves the same page and security baseline without the disclosure.",
+      "category": "HTTP response evidence",
+      "engines": ["DAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/deployment-response-boundary/",
+      "evidenceSummary": "Paired HTTP response control",
+      "targets": {
+        "review": {
+          "id": "deployment-response-disclosure",
+          "title": "Deployment response with metadata disclosure",
+          "route": "./passive/cases/headers/powered-by.html",
+          "displayRoute": "/passive/cases/headers/powered-by.html",
+          "source": "./passive/header_disclosure_canary.html",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          },
+          "visibleBehavior": "The page matches the repaired control, but inspecting its response reveals a technology disclosure header."
+        },
+        "repaired": {
+          "id": "deployment-response-control",
+          "title": "Deployment response without metadata disclosure",
+          "route": "./passive/cases/headers/secure-control.html",
+          "displayRoute": "/passive/cases/headers/secure-control.html",
+          "source": "./passive/header_disclosure_canary.html",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          },
+          "visibleBehavior": "The same page and security baseline are returned without the technology disclosure header."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Look beyond the rendered page",
+          "summary": "Identify why identical page content does not imply identical security posture.",
+          "instructions": [
+            "Start the route-aware server and open both deployment targets.",
+            "Confirm that their rendered content is identical.",
+            "Choose the browser evidence that must be compared."
+          ],
+          "concepts": ["response headers", "passive analysis", "paired control"],
+          "hint": "The meaningful difference travels with the HTTP response rather than appearing in the DOM.",
+          "demoCue": "Show both identical pages first, then move to the browser-observed response metadata to explain why source-only inspection is incomplete.",
+          "completion": {
+            "type": "choice",
+            "prompt": "Which evidence distinguishes the deployments?",
+            "options": [
+              { "value": "response-metadata", "label": "Their HTTP response metadata." },
+              { "value": "page-heading", "label": "Their visible page headings." },
+              { "value": "button-style", "label": "Their button presentation." }
+            ],
+            "answer": "response-metadata"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove the disclosure",
+          "summary": "Inspect the review response and collect deterministic evidence from the browser.",
+          "instructions": [
+            "Open the review target through the route-aware server.",
+            "Press Inspect response metadata.",
+            "Enter the evidence token displayed by the target."
+          ],
+          "concepts": ["technology disclosure", "HTTP response", "browser traffic"],
+          "hint": "The review response contains one additional technology-identifying header.",
+          "demoCue": "Run passive DAST while loading the route, then correlate the finding with the target's harmless response-inspection proof.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "RESPONSE-METADATA-DISCLOSED"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate the repaired response",
+          "summary": "Verify that the disclosure is gone without changing page behavior or the secure header baseline.",
+          "instructions": [
+            "Open the repaired target through the route-aware server.",
+            "Press Inspect response metadata and confirm the disclosure header is absent.",
+            "Enter the repaired evidence token."
+          ],
+          "concepts": ["negative oracle", "same body", "header minimisation"],
+          "hint": "The paired response keeps the same body and security headers while removing only the technology disclosure.",
+          "demoCue": "Use the repaired route as a negative oracle: identical functionality, same secure baseline and no disclosure finding.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "RESPONSE-METADATA-CLEAN"
+          }
+        }
+      ]
+    },
+    {
+      "id": "session-bound-order-search",
+      "title": "Session-Bound Order Search",
+      "summary": "Capture and test a same-origin POST request that only exists after the browser establishes scoped session state.",
+      "story": "An account console searches the current user's orders through a form-encoded POST request. The browser establishes the session and request context; the review API exposes a database error under malformed input while the repaired API preserves the workflow safely.",
+      "category": "Authenticated browser traffic",
+      "engines": ["DAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/session-bound-order-search/",
+      "evidenceSummary": "Session-bound POST request",
+      "targets": {
+        "review": {
+          "id": "session-order-search-review",
+          "title": "Order search review workflow",
+          "route": "./targets/session-bound-order-search/vulnerable/",
+          "displayRoute": "/targets/session-bound-order-search/vulnerable/",
+          "source": "./targets/session-bound-order-search/order-search.js",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          },
+          "request": {
+            "method": "POST",
+            "route": "/targets/session-bound-order-search/vulnerable/api/search",
+            "contentType": "application/x-www-form-urlencoded",
+            "parameterNames": ["query"],
+            "setup": "Open the review page to establish its scoped session and submit the search form."
+          },
+          "visibleBehavior": "A normal order search succeeds; the harmless prepared diagnostic exposes a database-query error."
+        },
+        "repaired": {
+          "id": "session-order-search-control",
+          "title": "Order search repaired workflow",
+          "route": "./targets/session-bound-order-search/fixed/",
+          "displayRoute": "/targets/session-bound-order-search/fixed/",
+          "source": "./targets/session-bound-order-search/order-search.js",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          },
+          "request": {
+            "method": "POST",
+            "route": "/targets/session-bound-order-search/fixed/api/search",
+            "contentType": "application/x-www-form-urlencoded",
+            "parameterNames": ["query"],
+            "setup": "Open the repaired page to establish its scoped session and submit the same search form."
+          },
+          "visibleBehavior": "The same normal and diagnostic searches complete without exposing a database-query error."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Capture the real browser request",
+          "summary": "Identify the request context that a URL-only scanner would not possess.",
+          "instructions": [
+            "Open the review workflow through the route-aware server.",
+            "Submit the normal order search and inspect the browser request.",
+            "Choose the evidence needed to replay the same operation."
+          ],
+          "concepts": ["session cookie", "POST body", "same-origin request context"],
+          "hint": "The API is not a useful standalone URL: the page establishes a scoped session and creates the form-encoded request.",
+          "demoCue": "Start DAST before submitting the normal form and show how browser traffic provides the method, body, session and request context together.",
+          "completion": {
+            "type": "choice",
+            "prompt": "What makes this request replayable?",
+            "options": [
+              { "value": "browser-request-context", "label": "Its captured method, body and scoped browser session." },
+              { "value": "api-path-only", "label": "The API pathname by itself." },
+              { "value": "page-title", "label": "The visible account-console title." }
+            ],
+            "answer": "browser-request-context"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove the server-side weakness",
+          "summary": "Use the prepared diagnostic to expose a deterministic database error inside the scoped session.",
+          "instructions": [
+            "Open the review workflow and first submit the normal search.",
+            "Press Run prepared diagnostic.",
+            "Enter the evidence token displayed by the target."
+          ],
+          "concepts": ["active request mutation", "server response", "database error"],
+          "hint": "The prepared input changes only the query value while preserving the captured request context.",
+          "demoCue": "Correlate the active DAST finding with the review API's deterministic error response without exposing or changing private scanner payloads.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "ORDER-SEARCH-DATABASE-ERROR"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate the repaired query path",
+          "summary": "Repeat the identical browser workflow and confirm that malformed data is handled without a database error.",
+          "instructions": [
+            "Open the repaired workflow and submit the normal search.",
+            "Run the same prepared diagnostic.",
+            "Enter the repaired evidence token."
+          ],
+          "concepts": ["paired API control", "same request shape", "safe query handling"],
+          "hint": "The repaired route keeps the same page, session, method, headers and body shape; only server-side query handling changes.",
+          "demoCue": "Use the repaired route as a negative oracle and verify that active DAST does not inherit the review finding.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "ORDER-SEARCH-SAFE"
+          }
+        }
+      ]
+    },
+    {
+      "id": "on-demand-analytics",
+      "title": "On-Demand Analytics",
+      "summary": "Observe a client dependency that does not exist in initial page traffic and appears only after a browser action opens an application feature.",
+      "story": "An account page keeps its analytics workspace dormant until the user opens it. That action loads a same-origin client dependency; compare the deployed version with the reviewed replacement while preserving the same feature.",
+      "category": "Action-loaded dependencies",
+      "engines": ["SCA"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/on-demand-analytics/",
+      "dependency": {
+        "name": "jQuery",
+        "license": "MIT",
+        "reviewVersion": "3.4.1",
+        "repairedVersion": "3.7.1"
+      },
+      "evidenceSummary": "Dependency request after browser action",
+      "targets": {
+        "review": {
+          "id": "on-demand-analytics-review",
+          "title": "Analytics workspace review route",
+          "route": "./targets/on-demand-analytics/vulnerable/",
+          "displayRoute": "/targets/on-demand-analytics/vulnerable/",
+          "source": "./targets/on-demand-analytics/analytics-loader.js",
+          "visibleBehavior": "The initial page is dependency-free; opening the workspace requests and runs the pinned review dependency."
+        },
+        "repaired": {
+          "id": "on-demand-analytics-control",
+          "title": "Analytics workspace repaired route",
+          "route": "./targets/on-demand-analytics/fixed/",
+          "displayRoute": "/targets/on-demand-analytics/fixed/",
+          "source": "./targets/on-demand-analytics/analytics-loader.js",
+          "visibleBehavior": "The same action and analytics result are preserved while the browser loads the reviewed dependency version."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Observe the initial dependency boundary",
+          "summary": "Establish why a page-load-only inventory misses part of this application's browser attack surface.",
+          "instructions": [
+            "Open the review target without pressing its workspace button.",
+            "Inspect the initial browser traffic and confirm that the analytics dependency has not been requested.",
+            "Choose the action needed to observe the complete client dependency set."
+          ],
+          "concepts": ["dynamic dependency", "browser action", "initial traffic"],
+          "hint": "The analytics feature is dormant until the application user opens its workspace.",
+          "demoCue": "Start with the quiet initial page and show why package files present in browser traffic can depend on a real user journey.",
+          "completion": {
+            "type": "choice",
+            "prompt": "What reveals the additional dependency?",
+            "options": [
+              { "value": "open-workspace", "label": "Open the analytics workspace and observe the new script request." },
+              { "value": "reload-only", "label": "Reload the untouched page repeatedly." },
+              { "value": "read-title", "label": "Read the visible page title." }
+            ],
+            "answer": "open-workspace"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove the action-loaded component",
+          "summary": "Load the review workspace and collect deterministic evidence that its dependency executed.",
+          "instructions": [
+            "Start composition analysis before triggering the feature.",
+            "Press Open analytics workspace and observe the new same-origin dependency request.",
+            "Enter the evidence token displayed after the analytics summary renders."
+          ],
+          "concepts": ["loaded component", "runtime traffic", "component version"],
+          "hint": "The evidence token appears only after the requested dependency executes and updates the workspace.",
+          "demoCue": "Correlate the new script request and loaded component finding with the visible analytics result, without relying on a static package manifest.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "ANALYTICS-DEPENDENCY-LOADED"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate the reviewed replacement",
+          "summary": "Repeat the same browser journey and verify that the feature works with the reviewed dependency.",
+          "instructions": [
+            "Open the repaired target with a new composition-analysis session.",
+            "Press Open analytics workspace and confirm that the same summary is rendered.",
+            "Enter the repaired evidence token and compare the loaded component versions."
+          ],
+          "concepts": ["dependency upgrade", "paired control", "feature preservation"],
+          "hint": "The repaired target changes the dependency version, not the user action or analytics output.",
+          "demoCue": "Use the repaired route as a negative advisory oracle while showing that the browser feature remains intact.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "ANALYTICS-DEPENDENCY-REVIEWED"
+          }
+        }
+      ]
+    },
+    {
+      "id": "saved-workspace",
+      "title": "Saved Workspace",
+      "summary": "Follow user-controlled browser state from a settings page into a separate same-origin dashboard document.",
+      "story": "A team member saves a dashboard announcement in workspace settings. A child dashboard route restores that origin-scoped state; compare markup interpretation with a repaired text-rendering path while preserving the two-document workflow.",
+      "category": "Persistent browser state",
+      "engines": ["SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/saved-workspace/",
+      "evidenceSummary": "Local storage across navigation",
+      "targets": {
+        "review": {
+          "id": "saved-workspace-review",
+          "title": "Saved workspace review journey",
+          "route": "./targets/saved-workspace/vulnerable/",
+          "displayRoute": "/targets/saved-workspace/vulnerable/",
+          "source": "./targets/saved-workspace/vulnerable/dashboard.js",
+          "journey": {
+            "summary": "Save the prepared announcement and follow the same-origin dashboard navigation.",
+            "entrySelector": "#save-announcement",
+            "childRoute": "/targets/saved-workspace/vulnerable/dashboard.html",
+            "childReadySelector": "#announcement-status"
+          },
+          "visibleBehavior": "The settings page persists a harmless markup-shaped value; the child dashboard restores it as DOM markup."
+        },
+        "repaired": {
+          "id": "saved-workspace-control",
+          "title": "Saved workspace repaired journey",
+          "route": "./targets/saved-workspace/fixed/",
+          "displayRoute": "/targets/saved-workspace/fixed/",
+          "source": "./targets/saved-workspace/fixed/dashboard.js",
+          "journey": {
+            "summary": "Save the same prepared announcement and follow the same-origin dashboard navigation.",
+            "entrySelector": "#save-announcement",
+            "childRoute": "/targets/saved-workspace/fixed/dashboard.html",
+            "childReadySelector": "#announcement-status"
+          },
+          "visibleBehavior": "The same state and navigation are preserved while the child dashboard restores the value as literal text."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Discover the cross-document source",
+          "summary": "Identify the browser state that survives navigation and becomes input to a new document.",
+          "instructions": [
+            "Open the review setup route and inspect the save action.",
+            "Follow the prepared announcement from the settings form into origin-scoped storage and the child dashboard.",
+            "Choose the evidence boundary that connects the two documents."
+          ],
+          "concepts": ["local storage", "same-origin navigation", "new document"],
+          "hint": "The dashboard does not receive the announcement in its URL or response body; it reads state left by the previous document.",
+          "demoCue": "Show the clean dashboard URL first, then trace the saved value across navigation to explain why browser state matters.",
+          "completion": {
+            "type": "choice",
+            "prompt": "What connects the settings page to the dashboard sink?",
+            "options": [
+              { "value": "origin-storage", "label": "Origin-scoped browser storage restored by the child document." },
+              { "value": "dashboard-url", "label": "A value embedded in the dashboard URL." },
+              { "value": "server-header", "label": "A response header sent by the dashboard server." }
+            ],
+            "answer": "origin-storage"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove the persisted rendering path",
+          "summary": "Save the prepared value, follow the child navigation and observe how the new document renders it.",
+          "instructions": [
+            "Start runtime analysis on the review setup route.",
+            "Press Save and open dashboard, allowing the browser to navigate to the child route.",
+            "Enter the evidence token displayed after the dashboard restores the saved value."
+          ],
+          "concepts": ["persistent source", "HTML sink", "child navigation"],
+          "hint": "The token appears when the restored strong element exists in the child dashboard DOM.",
+          "demoCue": "Correlate the visible element with static source evidence and the runtime storage-to-DOM flow across navigation.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "SAVED-WORKSPACE-MARKUP-RENDERED"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate safe restoration",
+          "summary": "Repeat the same two-document journey and verify that the saved value remains literal text.",
+          "instructions": [
+            "Open the repaired setup route and keep the prepared announcement unchanged.",
+            "Save it and follow the same child-dashboard navigation.",
+            "Confirm that the markup-shaped value is displayed literally, then enter the repaired token."
+          ],
+          "concepts": ["text rendering", "paired journey", "negative oracle"],
+          "hint": "The storage mechanism and navigation are unchanged; only the dashboard's DOM write is repaired.",
+          "demoCue": "Compare the two small dashboard sources and show that the application workflow remains intact without markup interpretation.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "SAVED-WORKSPACE-TEXT-SAFE"
+          }
+        }
+      ]
+    },
+    {
+      "id": "live-profile-preview",
+      "title": "Live Profile Preview",
+      "summary": "Follow a same-origin JSON response field into a DOM rendering path that exists only after a browser action.",
+      "story": "An account page keeps profile data out of initial traffic until a user opens its live preview. Compare the deployed response-to-DOM path with a repaired text-rendering path while preserving the endpoint, response and browser action.",
+      "category": "Action-loaded response data",
+      "engines": ["SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/live-profile-preview/",
+      "evidenceSummary": "JSON response after browser action",
+      "targets": {
+        "review": {
+          "id": "live-profile-preview-review",
+          "title": "Live profile review target",
+          "route": "./targets/live-profile-preview/vulnerable/",
+          "displayRoute": "/targets/live-profile-preview/vulnerable/",
+          "source": "./targets/live-profile-preview/vulnerable/profile-preview.js",
+          "action": {
+            "summary": "Press Open live profile preview and wait for the response status.",
+            "triggerSelector": "#load-profile",
+            "readySelector": "#profile-status"
+          },
+          "visibleBehavior": "The initial page has no profile traffic; the action loads a JSON field and interprets its harmless markup in the preview."
+        },
+        "repaired": {
+          "id": "live-profile-preview-control",
+          "title": "Live profile repaired control",
+          "route": "./targets/live-profile-preview/fixed/",
+          "displayRoute": "/targets/live-profile-preview/fixed/",
+          "source": "./targets/live-profile-preview/fixed/profile-preview.js",
+          "action": {
+            "summary": "Press the same preview button and wait for the response status.",
+            "triggerSelector": "#load-profile",
+            "readySelector": "#profile-status"
+          },
+          "visibleBehavior": "The same action and JSON response are preserved while its markup-shaped field is displayed as literal text."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Discover the response boundary",
+          "summary": "Identify why initial page traffic and a standalone source file do not prove the complete browser flow.",
+          "instructions": [
+            "Open the review target without pressing its preview button.",
+            "Confirm that the profile JSON has not been requested, then inspect the button's response-to-rendering path.",
+            "Choose the browser evidence needed to connect the API field to the visible preview."
+          ],
+          "concepts": ["browser action", "JSON response", "DOM rendering"],
+          "hint": "The response exists only after the feature is opened, and the important value is one field inside its parsed JSON body.",
+          "demoCue": "Begin with an empty network view, then open the feature to correlate new browser traffic, source and runtime evidence.",
+          "completion": {
+            "type": "choice",
+            "prompt": "What proves the complete data path?",
+            "options": [
+              { "value": "action-response-render", "label": "The browser action, parsed response field and resulting DOM write." },
+              { "value": "page-title", "label": "The account page title by itself." },
+              { "value": "endpoint-name", "label": "The JSON pathname without executing the feature." }
+            ],
+            "answer": "action-response-render"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove response-field reachability",
+          "summary": "Open the review preview and collect deterministic evidence that the response field became DOM markup.",
+          "instructions": [
+            "Start static and runtime analysis on the review target.",
+            "Press Open live profile preview and observe the same-origin JSON request.",
+            "Enter the evidence token shown after the prepared marker becomes a DOM element."
+          ],
+          "concepts": ["response field", "runtime reachability", "HTML sink"],
+          "hint": "The token appears only when the marker from the parsed JSON field exists as an element in the preview.",
+          "demoCue": "Correlate the visible marker with the exact response field and sink instead of treating every response or DOM write as equivalent.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "PROFILE-RESPONSE-MARKUP-RENDERED"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate text-only rendering",
+          "summary": "Repeat the same action and response while confirming that the response field remains literal text.",
+          "instructions": [
+            "Open the repaired target and press the same profile-preview button.",
+            "Confirm that it requests the same JSON document and displays the same response bytes as text.",
+            "Enter the repaired evidence token."
+          ],
+          "concepts": ["paired response", "text rendering", "negative oracle"],
+          "hint": "The endpoint, JSON field and browser action are unchanged; only the final DOM write differs.",
+          "demoCue": "Compare the two small scripts and prove that the user flow survives without interpreting the response field as markup.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "PROFILE-RESPONSE-TEXT-SAFE"
+          }
+        }
+      ]
+    },
+    {
+      "id": "transient-route-notice",
+      "title": "Transient Route Notice",
+      "summary": "Observe a short-lived SPA deep-link value that reaches the DOM after an in-document hash-route change.",
+      "story": "An incident workspace accepts a notice through its client-side route and removes it almost immediately. Compare a transient markup-rendering path with an allow-listed text-only repair while preserving the same action, route parameter and expiry boundary.",
+      "category": "Transient SPA route state",
+      "engines": ["DAST", "SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/transient-route-notice/",
+      "evidenceSummary": "Short-lived hash-query rendering",
+      "targets": {
+        "review": {
+          "id": "transient-route-notice-review",
+          "title": "Transient route notice review target",
+          "route": "./targets/transient-route-notice/vulnerable/",
+          "displayRoute": "/targets/transient-route-notice/vulnerable/",
+          "source": "./targets/transient-route-notice/vulnerable/route-notice.js",
+          "action": {
+            "summary": "Press Open prepared route notice and scan the resulting hash-query route.",
+            "triggerSelector": "#open-route-notice",
+            "readySelector": "#route-status"
+          },
+          "visibleBehavior": "The action changes only the fragment route; its harmless notice becomes markup for 30 ms before expiring."
+        },
+        "repaired": {
+          "id": "transient-route-notice-control",
+          "title": "Transient route notice repaired control",
+          "route": "./targets/transient-route-notice/fixed/",
+          "displayRoute": "/targets/transient-route-notice/fixed/",
+          "source": "./targets/transient-route-notice/fixed/route-notice.js",
+          "action": {
+            "summary": "Press the same button and scan the resulting hash-query route.",
+            "triggerSelector": "#open-route-notice",
+            "readySelector": "#route-status"
+          },
+          "visibleBehavior": "The same known route value maps to constant text for 30 ms; unknown values are rejected without reflection."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Discover the in-document route boundary",
+          "summary": "Identify why an initial response or persistent DOM snapshot can miss the important browser behavior.",
+          "instructions": [
+            "Open the review target and confirm that its initial URL has no route notice.",
+            "Press Open prepared route notice and observe the hash-query change without a document reload.",
+            "Choose the evidence needed to understand the short-lived rendering path."
+          ],
+          "concepts": ["SPA route", "hash query", "transient DOM"],
+          "hint": "The response document does not change; the browser route and DOM change briefly inside the existing page.",
+          "demoCue": "Keep the network and DOM views visible to show that a real browser sees an application transition that a response-only scanner can miss.",
+          "completion": {
+            "type": "choice",
+            "prompt": "What reveals the complete behavior?",
+            "options": [
+              { "value": "route-mutation-observation", "label": "The hash-route mutation and DOM changes observed during the live page transition." },
+              { "value": "initial-response-only", "label": "Only the initial HTML response body." },
+              { "value": "expired-snapshot", "label": "A DOM snapshot taken after the notice has expired." }
+            ],
+            "answer": "route-mutation-observation"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove the transient route flow",
+          "summary": "Trigger the deep link and collect evidence while the route-controlled markup exists only briefly.",
+          "instructions": [
+            "Start browser traffic, static and runtime analysis on the review target.",
+            "Press Open prepared route notice and scan the resulting hash-query parameter.",
+            "Enter the persistent evidence token after the visible notice has expired."
+          ],
+          "concepts": ["active route mutation", "runtime source", "HTML sink"],
+          "hint": "The notice itself lasts 30 ms, but the proof token records that the prepared marker became an element.",
+          "demoCue": "Correlate the SPA attack, static source-to-sink path and runtime hash-query flow around one browser action.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "ROUTE-NOTICE-TRANSIENT-MARKUP"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate allow-listed text rendering",
+          "summary": "Repeat the same route action and expiry while verifying that arbitrary values are not reflected.",
+          "instructions": [
+            "Open the repaired target and press the same route-notice button.",
+            "Confirm that the known value displays as text and an unexpected route value is rejected.",
+            "Enter the repaired evidence token."
+          ],
+          "concepts": ["allow-list", "text rendering", "negative oracle"],
+          "hint": "The action, parameter and 30 ms expiry are unchanged; the application maps one accepted value to constant text.",
+          "demoCue": "Show that the repair preserves the normal SPA workflow while providing a clean active and runtime control.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "ROUTE-NOTICE-TEXT-SAFE"
+          }
+        }
+      ]
+    },
+    {
+      "id": "imported-request-preferences",
+      "title": "Imported Request Preferences",
+      "summary": "Trace a user-imported client configuration into an inherited browser request option, then compare an own-property allow-list repair.",
+      "story": "An account preview imports a small JSON preferences document before loading a same-origin resource. Compare an unsafe object merge that creates an inherited request option with a null-prototype allow-list that preserves the same user action and request.",
+      "category": "Client configuration integrity",
+      "engines": ["SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/imported-request-preferences/",
+      "evidenceSummary": "Imported data changes inherited request options",
+      "targets": {
+        "review": {
+          "id": "imported-request-preferences-review",
+          "title": "Imported preferences review target",
+          "route": "./targets/imported-request-preferences/vulnerable/",
+          "displayRoute": "/targets/imported-request-preferences/vulnerable/",
+          "source": "./targets/imported-request-preferences/vulnerable/request-preferences.js",
+          "action": {
+            "summary": "Press Import and load preview, then inspect the request-options evidence.",
+            "triggerSelector": "#import-preferences",
+            "readySelector": "#preferences-status"
+          },
+          "visibleBehavior": "The imported document leaves the request object with no own credentials key, but its inherited value changes the same-origin preview request."
+        },
+        "repaired": {
+          "id": "imported-request-preferences-control",
+          "title": "Imported preferences repaired control",
+          "route": "./targets/imported-request-preferences/fixed/",
+          "displayRoute": "/targets/imported-request-preferences/fixed/",
+          "source": "./targets/imported-request-preferences/fixed/request-preferences.js",
+          "action": {
+            "summary": "Press the same import button and inspect the repaired request-options evidence.",
+            "triggerSelector": "#import-preferences",
+            "readySelector": "#preferences-status"
+          },
+          "visibleBehavior": "The same input and preview request use a null-prototype object containing only an accepted own credentials option."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover",
+          "number": 1,
+          "title": "Discover the configuration boundary",
+          "summary": "Identify how a harmless-looking imported object can change request behavior without adding an own option key.",
+          "instructions": [
+            "Open the review target and inspect the prepared JSON before importing it.",
+            "Follow the parsed object through the merge and into the preview request options.",
+            "Choose the browser evidence that reveals the complete behavior."
+          ],
+          "concepts": ["JSON input", "object merge", "inherited property"],
+          "hint": "Compare the object's own keys with the value the browser reads through its prototype chain.",
+          "demoCue": "Show the clean list of own request keys first, then the inherited option used by the live request.",
+          "completion": {
+            "type": "choice",
+            "prompt": "What reveals the configuration integrity problem?",
+            "options": [
+              { "value": "own-vs-inherited-request-option", "label": "The difference between own option keys and the inherited value read by the request." },
+              { "value": "preview-copy", "label": "The text returned by the preview endpoint by itself." },
+              { "value": "button-label", "label": "The wording of the import button." }
+            ],
+            "answer": "own-vs-inherited-request-option"
+          }
+        },
+        {
+          "id": "prove",
+          "number": 2,
+          "title": "Prove the inherited request option",
+          "summary": "Import the prepared document and correlate its merge with the resulting same-origin request.",
+          "instructions": [
+            "Start static and runtime analysis on the review target.",
+            "Press Import and load preview and observe the one local JSON request.",
+            "Enter the evidence token shown when the request option exists only through inheritance."
+          ],
+          "concepts": ["runtime merge", "request options", "browser impact"],
+          "hint": "The request object reports no own credentials key even though reading the property returns include.",
+          "demoCue": "Correlate the static merge path, runtime prototype write and the browser request that consumes the inherited field.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Evidence token",
+            "value": "PREFERENCE-INHERITED-REQUEST-OPTION"
+          }
+        },
+        {
+          "id": "fix",
+          "number": 3,
+          "title": "Validate reviewed own properties",
+          "summary": "Repeat the import while proving that inherited, dangerous and unknown keys cannot become request options.",
+          "instructions": [
+            "Open the repaired target and import the same prepared document.",
+            "Confirm that the request options have no prototype and contain only an own reviewed credentials key.",
+            "Try the prepared unknown-key variation, then enter the repaired token."
+          ],
+          "concepts": ["null prototype", "own-property check", "allow-list"],
+          "hint": "The repaired builder copies only accepted own values and supplies a constant safe default.",
+          "demoCue": "Show that the preview still loads while arbitrary and inherited input no longer controls request options.",
+          "completion": {
+            "type": "proof",
+            "prompt": "Remediation token",
+            "value": "PREFERENCE-ALLOWLISTED-REQUEST-OPTION"
+          }
+        }
+      ]
+    }
+  ]
+}

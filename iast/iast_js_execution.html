@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST JS Execution Sinks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 100px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+  
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST JS Execution Module</h1>
+  <p class="note">Triggers eval / Function constructor / Function.apply sinks from <code>iast_js_execution</code>. Prime taint, then execute.</p>
+
+  <div class="card">
+    <label for="payload">Code payload (tainted)</label>
+    <textarea id="payload" placeholder="alert('eval hit')"></textarea>
+    <button id="prime">Prime taint sources</button>
+    <p class="note">Taint is taken from ?payload or the textarea when you click "Prime taint sources".</p>
+  </div>
+
+  <div class="card">
+    <button id="btn-eval">eval(payload)</button>
+    <button id="btn-fn" style="margin-top:8px;">new Function(payload)()</button>
+    <button id="btn-apply" style="margin-top:8px;">Function.apply(null, [payload])</button>
+  </div>
+
+  <script>
+    function getParamPayload() {
+      const params = new URLSearchParams(location.search);
+      const hash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+      return params.get('payload') || hash || '';
+    }
+
+    function taintSources(value) {
+      if (!value) return;
+      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+      localStorage.setItem('iast_payload', value);
+      sessionStorage.setItem('iast_payload', value);
+      window.name = value;
+    }
+
+    const payloadField = document.getElementById('payload');
+    payloadField.value = getParamPayload() || "alert('iast_js_execution')";
+
+    document.getElementById('prime').onclick = () => {
+      taintSources(payloadField.value);
+      alert('Taint sources primed with payload.');
+    };
+
+    document.getElementById('btn-eval').onclick = () => {
+      const code = payloadField.value;
+      if (!code) return;
+      eval(code);
+    };
+
+    document.getElementById('btn-fn').onclick = () => {
+      const code = payloadField.value;
+      if (!code) return;
+      const fn = new Function(code);
+      fn();
+    };
+
+    document.getElementById('btn-apply').onclick = () => {
+      const code = payloadField.value;
+      if (!code) return;
+      Function.apply(null, [code]);
+    };
+  </script>
+</body>
+</html>

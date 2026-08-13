@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Web Message handling</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+  <!-- External scripts -->
+  <script src="js/sources.js"></script>
+  <script src="js/web_message/web_message.js"></script>
+
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+  <script>
+    // --- Trusted helpers used by safe scenarios ---
+    const TRUSTED_ORIGINS = ["https://trusted.example", "https://portal.example"];
+
+    function isTrustedOrigin(origin) {
+      return TRUSTED_ORIGINS.includes(origin);
+    }
+
+    function validateMessagePayload(payload) {
+      if (typeof payload !== "object" || !payload) return {
+        ok: false,
+        reason: "not-object"
+      };
+      if (typeof payload.type !== "string") return {
+        ok: false,
+        reason: "missing-type"
+      };
+      if (payload.type !== "link" && payload.type !== "html") return {
+        ok: false,
+        reason: "unsupported-type"
+      };
+      return {
+        ok: true,
+        value: payload
+      };
+    }
+
+    const MessageSanitizer = {
+      sanitize(value) {
+        const str = String(value ?? "");
+        return str.replace(/[<>&"]/g, ch => ({
+          "<": "&lt;",
+          ">": "&gt;",
+          "&": "&amp;",
+          "\"": "&quot;"
+        } [ch] || ch));
+      }
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — Web Message handling</h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+    <p class="meta">
+      Scenarios below exercise <code>window.postMessage</code> and message event handlers. Unsafe cases demonstrate tainted
+      <code>event.data</code> reaching DOM/code sinks, wildcard targetOrigin usage, and weak origin validation. Safe cards
+      include strict origin allow-lists, payload validation and sanitisation.
+    </p>
+
+
+
+
+
+    <h2 class="section-title">High severity — tainted data reaches execution sinks</h2>
+    <div class="grid">
+      <div class="card" data-severity="high, low" id="wm-unsafe-innerhtml">
+        <div class="card-meta">WM-H1 (High): message handler injects <code>event.data</code> into <code>innerHTML</code> without origin check</div>
+        <pre data-severity="low">(function(){
+  window.addEventListener('message', function handleUnsafeHTML(event) {
+    var payload = event.data;
+    document.getElementById('wm-preview').innerHTML = payload;
+  });
+})();</pre>
+        <div id="wm-preview" class="card-preview">No message received yet.</div>
+        <script>
+          (function() {
+            window.addEventListener('message', function handleUnsafeHTML(event) {
+              var payload = event.data;
+              document.getElementById('wm-preview').innerHTML = payload;
+            });
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, low" id="wm-unsafe-eval">
+        <div class="card-meta">WM-H2 (High): message handler executes payload with <code>eval</code></div>
+        <pre data-severity="low">(function(){
+  window.addEventListener('message', function handleEval(event) {
+    eval(event.data);
+  });
+})();</pre>
+        <script>
+          (function() {
+            window.addEventListener('message', function handleEval(event) {
+              eval(event.data);
+            });
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, low" id="wm-unsafe-location">
+        <div class="card-meta">WM-H3 (High): message payload redirects the top-level location</div>
+        <pre data-severity="low">(function(){
+  window.addEventListener('message', function handleRedirect(event) {
+    window.location = event.data;
+  });
+})();</pre>
+        <script>
+          (function() {
+            window.addEventListener('message', function handleRedirect(event) {
+              if(location.hash != '#redirect') return;
+              window.location = event.data;
+            });
+          })();
+        </script>
+      </div>
+
+
+      <div class="card" data-severity="high, low" id="wm-cookie-write">
+        <div class="card-meta">WM-H4 (High): message payload written into <code>document.cookie</code></div>
+        <pre>(function(){
+  window.addEventListener('message', function cookieSink(event) {
+    document.cookie = "msg_data=" + event.data + "; Path=/";
+  });
+})();</pre>
+        <script>
+          (function() {
+            window.addEventListener('message', function cookieSink(event) {
+              document.cookie = "msg_data=" + event.data + "; Path=/";
+            });
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, low" id="wm-selector-write">
+        <div class="card-meta">WM-H5 (High): message payload written into <code>selector</code></div>
+        <pre>    // inline-script[#2]
+window.addEventListener('message', function dsMessage(e) {
+  var sel = e.data;
+  try {
+    var $target = $(sel);
+    $target.text('updated by message');
+  } catch (err) {
+    console.warn('Selector error', err);
+  }
+});</pre>
+        <script>
+          window.addEventListener('message', function dsMessage(e) {
+            var sel = e.data;
+            try {
+              var $target = $(sel);
+              $target.text('updated by message');
+            } catch (err) {
+              console.warn('Selector error', err);
+            }
+          })
+        </script>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Medium severity — weak validation or configuration issues</h2>
+    <div class="grid">
+      <div class="card" data-severity="medium" id="wm-wildcard-target">
+        <div class="card-meta">WM-M1 (Medium): wildcard <code>targetOrigin</code> when posting messages</div>
+        <pre data-severity="medium">function sendWildcardMessage(payload) {
+  const frame = document.getElementById('message-target');
+  frame.contentWindow.postMessage(payload, '*');
+}</pre>
+        <script>
+          function sendWildcardMessage(payload) {
+            const frame = document.getElementById('message-target');
+            if (frame && frame.contentWindow) {
+              frame.contentWindow.postMessage(payload, '*');
+            }
+          }
+        </script>
+      </div>
+
+      <div class="card" data-severity="medium" id="wm-missing-target">
+        <div class="card-meta">WM-M2 (Medium): postMessage invoked without specifying <code>targetOrigin</code></div>
+        <pre data-severity="medium">function broadcastWithoutTarget(payload) {
+  window.postMessage(payload);
+}</pre>
+        <script>
+          function broadcastWithoutTarget(payload) {
+            window.postMessage(payload);
+          }
+        </script>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">Safe scenarios — strict origin & payload validation</h2>
+    <div class="grid">
+      <div class="card" data-severity="safe" id="wm-safe-equality">
+        <div class="card-meta">WM-S1 (Safe): strict origin equality and textContent rendering</div>
+        <pre>(function(){
+  window.addEventListener('message', function safeEquality(event) {
+    if (!isTrustedOrigin(event.origin)) return;
+    var text = String(event.data);
+    document.getElementById('wm-safe-preview').textContent = text;
+  });
+})();</pre>
+        <div id="wm-safe-preview" class="card-preview">Safe handler output.</div>
+        <script>
+          (function() {
+            window.addEventListener('message', function safeEquality(event) {
+              if (!isTrustedOrigin(event.origin)) return;
+              var text = String(event.data);
+              document.getElementById('wm-safe-preview').textContent = text;
+            });
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="safe" id="wm-safe-structured-card">
+        <div class="card-meta">WM-S2 (Safe): structured payload validation & sanitisation</div>
+        <pre>(function(){
+  window.addEventListener('message', function safeStructured(event) {
+    if (!isTrustedOrigin(event.origin)) return;
+    var result = validateMessagePayload(event.data);
+    if (!result.ok) return;
+    var clean = DOMPurify.sanitize(result.value.content);
+    document.getElementById('wm-safe-structured').innerHTML = clean;
+  });
+})();</pre>
+        <div id="wm-safe-structured" class="card-preview">Sanitised content.</div>
+        <script>
+          (function() {
+            window.addEventListener('message', function safeStructured(event) {
+              if (!isTrustedOrigin(event.origin)) return;
+              var result = validateMessagePayload(event.data);
+              if (!result.ok) return;
+              var clean = DOMPurify.sanitize(result.value.content);
+              document.getElementById('wm-safe-structured').innerHTML = clean;
+            });
+          })();
+        </script>
+      </div>
+    </div>
+
+    <footer>PTK SAST testbed — WebMesage security. <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

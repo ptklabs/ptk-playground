@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Storage security</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">Storage security</h1>
+    </div>
+    <p class="meta">Untrusted data from URL/storage written into Web Storage sinks.</p>
+
+    <div class="card" data-rule="taint" data-severity="high">
+      <div class="card-meta"><strong>INLINE-1 (High): query/session → localStorage + sessionStorage</strong></div>
+      <pre><code>const payload = location.search || sessionStorage.getItem('cached');
+localStorage.setItem('secret', payload);
+sessionStorage.setItem('profilePayload', payload);</code></pre>
+      <script>
+        (function () {
+          const payload = location.search || sessionStorage.getItem('cached');
+          localStorage.setItem('secret', payload);
+          sessionStorage.setItem('profilePayload', payload);
+        })();
+      </script>
+    </div>
+  </div>
+</body>
+</html>

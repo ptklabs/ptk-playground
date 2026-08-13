@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST document.domain Manipulation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .sources { display: grid; gap: 8px; margin-top: 8px; }
+    .sources label { display: flex; gap: 8px; align-items: center; }
+    .sources table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .sources td { padding: 4px 6px; border-bottom: 1px solid #1f2937; vertical-align: top; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    input[type="radio"] { width: auto; padding: 0; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+  
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST document.domain Manipulation</h1>
+  <p class="note">Triggers the <code>document.domain</code> assignment sink with tainted values.</p>
+
+  <div class="card">
+    <label for="domain">document.domain value (tainted)</label>
+    <input id="domain" type="text" placeholder="example.com">
+    <div class="sources">
+      <div class="note">Choose which source to prime before assignment.</div>
+      <label><input type="radio" name="sourceType" value="query" checked> URL query (?domain=...)</label>
+      <label><input type="radio" name="sourceType" value="hash"> URL hash</label>
+      <label><input type="radio" name="sourceType" value="cookie"> document.cookie</label>
+      <label><input type="radio" name="sourceType" value="localStorage"> localStorage</label>
+      <label><input type="radio" name="sourceType" value="sessionStorage"> sessionStorage</label>
+      <label><input type="radio" name="sourceType" value="windowName"> window.name</label>
+      <label><input type="radio" name="sourceType" value="inputOnly"> input only</label>
+      <button id="prime-selected">Prime selected source</button>
+      <button id="prime-all">Prime ALL sources</button>
+      <div id="active-sources"></div>
+    </div>
+    <p class="note">Note: document.domain assignment may fail depending on the current host.</p>
+  </div>
+
+  <div class="card">
+    <button id="btn-domain">document.domain = value</button>
+  </div>
+
+  <script>
+    function getParam(name) {
+      const params = new URLSearchParams(location.search);
+      const hash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+      if (name === 'hash') return hash;
+      return params.get(name) || '';
+    }
+
+    const sources = {
+      inputOnly: { label: 'Input only', value: '' },
+      query: { label: 'URL query ?domain', value: null },
+      hash: { label: 'URL hash', value: null },
+      cookie: { label: 'document.cookie "iast_payload"', value: null },
+      localStorage: { label: 'localStorage["iast_payload"]', value: null },
+      sessionStorage: { label: 'sessionStorage["iast_payload"]', value: null },
+      windowName: { label: 'window.name', value: null }
+    };
+
+    function getSelectedSourceType() {
+      const checked = document.querySelector('input[name="sourceType"]:checked');
+      return checked ? checked.value : 'query';
+    }
+
+    function setSourceValue(type, value) {
+      if (!sources[type]) return;
+      sources[type].value = value;
+      switch (type) {
+        case 'query':
+          break;
+        case 'hash':
+          window.location.hash = 'domain=' + encodeURIComponent(value);
+          break;
+        case 'cookie':
+          document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+          break;
+        case 'localStorage':
+          localStorage.setItem('iast_payload', value);
+          break;
+        case 'sessionStorage':
+          sessionStorage.setItem('iast_payload', value);
+          break;
+        case 'windowName':
+          window.name = value;
+          break;
+        case 'inputOnly':
+        default:
+          break;
+      }
+      renderActiveSources();
+    }
+
+    function primeSelectedSource(value) {
+      const type = getSelectedSourceType();
+      setSourceValue(type, value);
+    }
+
+    function primeAllSources(value) {
+      Object.keys(sources).forEach(type => setSourceValue(type, value));
+    }
+
+    function renderActiveSources() {
+      const rows = Object.keys(sources).map(type => {
+        const { label, value } = sources[type];
+        const display = value == null || value === ''
+          ? '<em>(empty)</em>'
+          : '<code>' + String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
+        return '<tr><td style="width: 35%;"><strong>' + label + '</strong></td><td>' + display + '</td></tr>';
+      });
+      document.getElementById('active-sources').innerHTML =
+        '<h3>Active sources</h3><table><tbody>' + rows.join('') + '</tbody></table>';
+    }
+
+    const domainField = document.getElementById('domain');
+    domainField.value = getParam('domain') || 'example.com';
+
+    document.getElementById('prime-selected').onclick = () => {
+      primeSelectedSource(domainField.value);
+      alert('Selected source primed.');
+    };
+
+    document.getElementById('prime-all').onclick = () => {
+      primeAllSources(domainField.value);
+      alert('All sources primed.');
+    };
+
+    document.getElementById('btn-domain').onclick = () => {
+      try {
+        document.domain = domainField.value;
+        alert('document.domain set (or attempted).');
+      } catch (err) {
+        console.warn('document.domain assignment failed', err);
+        alert('document.domain assignment failed (see console).');
+      }
+    };
+
+    renderActiveSources();
+  </script>
+</body>
+</html>

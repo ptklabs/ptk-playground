@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — insertAdjacentHTML</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <!-- External scripts -->
+  <script src="js/sources.js"></script>
+  <script src="js/insert_adjacent_html/insert_adjacent_html_sink.js"></script>
+  <script src="js/insert_adjacent_html/insert_adjacent_html_external_sources.js"></script>
+
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+  <script>
+    function setHashPayload() {
+      const payload = "<li><strong>hash</strong> → insertAdjacentHTML</li>";
+      location.hash = encodeURIComponent(payload);
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — <code>insertAdjacentHTML</code></h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+    <p class="meta">Use these fixtures to exercise DOM sinks that rely on <code class="inline">insertAdjacentHTML</code>. Inline cases run automatically; external ones are opt-in.</p>
+
+    <div class="controls">
+      <a class="btn secondary" href="?payload=%3Cli%3Eimg+payload%3C/li%3E">Use query payload</a>
+      <button class="btn secondary" type="button" onclick="setHashPayload()">Set hash payload</button>
+    </div>
+
+
+    <!-- Inline scenarios -->
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+
+      <div class="card" data-severity="high" id="il-1">
+        <div class="card-meta">INLINE-1 (High): Query / hash → <code class="inline">insertAdjacentHTML</code></div>
+        <pre>// inline-script[#1]
+(function(){
+  const target = 'inline-insertadjacent-target';
+  function render(payload) {
+    insertAdjacentHtmlSink(payload, target);
+  }
+  const params = new URLSearchParams(location.search);
+  if (params.has('payload')) render(params.get('payload'));
+  if (location.hash) {
+    try { render(decodeURIComponent(location.hash.slice(1))); }
+    catch (err) { render(location.hash.slice(1)); }
+  }
+})();</pre>
+        <ul class="render-target" id="inline-insertadjacent-target">
+          <li>Waiting for payload…</li>
+        </ul>
+        <script>
+          (function() {
+            const target = 'inline-insertadjacent-target';
+
+            function render(payload) {
+              if (payload == null) return;
+              insertAdjacentHtmlSink(payload, target);
+            }
+            const params = new URLSearchParams(location.search);
+            if (params.has('payload')) render(params.get('payload'));
+            if (location.hash) {
+              try {
+                render(decodeURIComponent(location.hash.slice(1)));
+              } catch (err) {
+                render(location.hash.slice(1));
+              }
+            }
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high" id="il-2">
+        <div class="card-meta">INLINE-2 (High): Field value → <code class="inline">insertAdjacentHTML</code></div>
+        <pre>// inline-script[#2]
+function inlineInsertAdjacentFromField(fieldId, targetId) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  insertAdjacentHtmlSink(el.value, targetId);
+}</pre>
+        <div class="field">
+          <input id="inline_insertadjacent_payload" type="text" value="<li><img src=x onerror=alert('inline')></li>" />
+          <button class="btn" type="button" onclick="inlineInsertAdjacentFromField('inline_insertadjacent_payload', 'inline-insertadjacent-target')">Insert inline field</button>
+        </div>
+        <script>
+          function inlineInsertAdjacentFromField(fieldId, targetId) {
+            const el = document.getElementById(fieldId);
+            if (!el) return;
+            insertAdjacentHtmlSink(el.value, targetId);
+          }
+        </script>
+      </div>
+
+      <div class="card" data-severity="safe" id="il-3">
+        <div class="card-meta">INLINE-3 (Safe): Encode before inserting</div>
+        <pre>// inline-script[#3]
+(function(){
+  const params = new URLSearchParams(location.search);
+  const safe = params.get('safe');
+  const target = document.getElementById('inline-safe-target');
+  if (!target || !safe) return;
+  target.textContent = safe;
+})();</pre>
+        <div class="render-target" id="inline-safe-target">Waiting for safe payload…</div>
+        <script>
+          (function() {
+            const params = new URLSearchParams(location.search);
+            const safe = params.get('safe');
+            const target = document.getElementById('inline-safe-target');
+            if (!target || !safe) return;
+            target.textContent = safe;
+          })();
+        </script>
+      </div>
+
+    </div>
+
+    <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="card-meta"><strong>Direct DOM sources</strong></div>
+        <pre data-severity="high">onclick="extInsertAdjacentFromHash()"</pre>
+        <div class="controls">
+          <button class="btn " type="button" onclick="extInsertAdjacentFromHash()">EXT: location.hash</button>
+        </div>
+        <pre data-severity="high">onclick="extInsertAdjacentFromSearch()"</pre>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extInsertAdjacentFromSearch()">EXT: URLSearchParams</button>
+        </div>
+        <pre data-severity="high">onclick="extInsertAdjacentFromWindowName()"</pre>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extInsertAdjacentFromWindowName()">EXT: window.name</button>
+        </div>
+        <pre data-severity="high">onclick="extInsertAdjacentFromReferrer()"</pre>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extInsertAdjacentFromReferrer()">EXT: document.referrer</button>
+        </div>
+
+        <ul class="render-target" id="external-insertadjacent-target">
+          <li>External DOM source target</li>
+        </ul>
+      </div>
+
+      <div class="card" >
+        <div class="card-meta"><strong>Storage &amp; cookies</strong></div>
+        <pre data-severity="high, low">onclick="extInsertAdjacentFromCookie()"</pre>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extInsertAdjacentFromCookie()">EXT: document.cookie</button>
+        </div>
+        <pre data-severity="high,low">onclick="extInsertAdjacentFromLocalStorage()"</pre>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extInsertAdjacentFromLocalStorage()">EXT: localStorage</button>
+        </div>
+        <pre data-severity="high, low">onclick="extInsertAdjacentFromSessionStorage()"</pre>
+        <div class="controls">
+          <button class="btn" type="button" onclick="extInsertAdjacentFromSessionStorage()">EXT: sessionStorage</button>
+        </div>
+        <ul class="render-target" id="external-insertadjacent-storage">
+          <li>External storage target</li>
+        </ul>
+      </div>
+
+
+    </div>
+
+    <footer>PTK SAST testbed — insertAdjacentHTML (inline + external). <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

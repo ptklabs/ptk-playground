@@ -1,0 +1,9 @@
+{
+  "html": "<img src=x onerror=\"console.log('ptk-response-html')\">",
+  "htmlFragment": "<svg onload=\"console.log('ptk-response-fragment')\"></svg>",
+  "contextualFragment": "<div class='fragment'>response-fragment</div>",
+  "safeUrl": "https://example.org/ptk-response-target?iast=1",
+  "javascriptUrl": "javascript:console.log('ptk-response-js-url')",
+  "formAction": "/submit?iat=response-field",
+  "formJavascriptAction": "javascript:console.log('ptk-response-form-js')"
+}

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Live Profile Preview · Repaired Target</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A repaired action-driven profile preview that preserves a same-origin JSON workflow.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script defer src="./profile-preview.js"></script>
+</head>
+<body data-playground-target="live-profile-preview-control" data-target-variant="fixed">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">LAB</span><span>Browser Security Playground</span></a><nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/live-profile-preview/">Mission</a><a href="./profile-preview.js">View source</a><a href="../vulnerable/">Review target</a></nav></div></header>
+
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../campaigns/live-profile-preview/">Live profile preview</a><span aria-hidden="true">/</span><span>Repaired target</span></nav>
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Action-loaded API response</p><h1 id="target-title">Open the repaired account preview.</h1><p class="target-hero__lede">The same browser action requests the same JSON document while the response summary remains text.</p></div><dl class="target-facts" aria-label="Target facts"><div><dt>Variant</dt><dd>Repaired</dd></div><div><dt>Request</dt><dd>After action</dd></div><div><dt>Format</dt><dd>JSON</dd></div></dl></section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled training target.</strong> The response and user journey match the review target; only its rendering operation is repaired.</p></aside>
+
+    <section class="widget-stage" aria-labelledby="preview-title">
+      <div class="widget-card"><div class="widget-card__heading"><div><p class="eyebrow">Account workspace</p><h2 id="preview-title">Customer profile</h2></div><span class="status-pill">On demand</span></div><p>No profile request is made until the preview is opened.</p><div class="widget-actions"><button id="load-profile" class="button" type="button">Open live profile preview</button><button id="reset-profile" class="button button--secondary" type="button">Reset preview</button></div><div id="profile-preview" class="support-thread" aria-live="polite">Profile preview is closed.</div></div>
+      <aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Neutral proof</p><h2 id="proof-title">Browser evidence</h2><p>The same response bytes are displayed without becoming DOM markup.</p><output id="profile-status" class="proof-token" aria-live="polite">PROFILE-PREVIEW-IDLE</output></aside>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Direct control · Same action and JSON · No campaign coupling.</p><nav aria-label="Target links"><a href="../vulnerable/">Compare the review target</a></nav></div></footer>
+</body>
+</html>

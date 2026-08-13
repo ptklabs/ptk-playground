@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Session-bound order search · Browser Security Target</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A focused session-bound POST request target with review and repaired server behavior.">
+  <link rel="stylesheet" href="/assets/css/playground.css">
+  <script type="module" src="/targets/session-bound-order-search/order-search.js"></script>
+</head>
+<body data-playground-target="session-bound-order-search">
+  <main class="page-shell target-shell">
+    <section class="engine-hero">
+      <p class="eyebrow">Session-bound request target</p>
+      <h1>Search the current account's orders.</h1>
+      <p class="engine-hero__lede">This page establishes a scoped HTTP-only session and sends a same-origin form-encoded POST request. The review and repaired routes keep the same browser workflow.</p>
+    </section>
+
+    <section class="target-card" aria-labelledby="order-search-title">
+      <p class="eyebrow">Order console</p>
+      <h2 id="order-search-title">Find an order</h2>
+      <form id="order-search-form">
+        <div class="field">
+          <label for="order-query">Product name</label>
+          <input id="order-query" name="query" value="wireless headphones" maxlength="256" required>
+        </div>
+        <div class="hero__actions">
+          <button class="button" type="submit">Search orders</button>
+          <button class="button button--secondary" id="prepared-diagnostic" type="button">Run prepared diagnostic</button>
+        </div>
+      </form>
+      <p id="order-search-result" class="target-proof" role="status" aria-live="polite">Ready to search in the current session.</p>
+    </section>
+
+    <aside class="notice notice--warning">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Training target.</strong> Use the prepared diagnostic only in this local fixture environment.</p>
+    </aside>
+  </main>
+</body>
+</html>

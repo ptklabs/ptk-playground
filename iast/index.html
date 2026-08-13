@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST cases · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OWASP PTK in-browser IAST source-to-sink fixtures for manual and automated testing.">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+</head>
+<body data-page="engine" data-engine="iast">
+  <a class="skip-link" href="#main">Skip to IAST catalogue</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground suites"><a href="../campaigns/">Campaigns</a><a href="../demo/">Demo</a><a href="../scanner/">Scanner quick start</a><a href="../sast/">SAST</a><a href="./" aria-current="page">IAST</a><a href="../passive/">Passive DAST</a><a href="../#catalogue">All cases</a></nav>
+    </div>
+  </header>
+  <main id="main" class="page-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>IAST</span></nav>
+    <section class="engine-hero">
+      <p class="eyebrow">Runtime analysis</p>
+      <h1>Execute one source-to-sink path and inspect the evidence.</h1>
+      <p class="engine-hero__lede">IAST instruments browser APIs while the page runs. Choose a source, trigger the relevant sink, and compare the runtime finding with the visible browser action.</p>
+    </section>
+    <aside class="notice">
+      <span class="notice__icon" aria-hidden="true">i</span>
+      <p><strong>Opening a page is not always enough.</strong> Most IAST cases require a declared interaction. Broad source/sink matrices remain advanced labs; automation canaries are labelled separately.</p>
+    </aside>
+    <section class="info-panel automation-boundary" aria-labelledby="fixture-boundary-title">
+      <h2 id="fixture-boundary-title">Fixtures stay independent from PTK internals</h2>
+      <p>These pages expose generic browser behaviours only. PTK-specific rule selection, finding assertions and automation orchestration stay in the maintained test harness.</p>
+    </section>
+    <section class="section" aria-labelledby="catalogue-title">
+      <div class="section-heading"><div><p class="eyebrow">Catalogue</p><h2 id="catalogue-title">IAST cases</h2><p><span data-case-count="iast">—</span> entries including advanced labs, support fixtures and minimal automation canaries.</p></div></div>
+      <div class="catalogue-panel">
+        <div class="filter-bar" aria-label="IAST case filters">
+          <div class="field"><label for="case-search">Search</label><input id="case-search" data-filter="search" type="search" placeholder="postMessage, storage, XPath…"></div>
+          <div class="field"><label for="mode-filter">Mode</label><select id="mode-filter" data-filter="mode"><option value="">All modes</option><option value="manual">Manual</option><option value="advanced">Advanced lab</option><option value="automation">Automation</option></select></div>
+        </div>
+        <p class="catalogue-summary"><span data-catalogue-summary>Loading catalogue…</span></p>
+        <div class="case-grid" data-case-catalogue data-engine="iast" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST fixtures · controlled browser source-to-sink flows for authorised testing.</p><nav aria-label="Project links"><a href="../">Playground</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a><a href="https://github.com/ptklabs/ptk-agent">PTK Agent</a></nav></div></footer>
+</body>
+</html>

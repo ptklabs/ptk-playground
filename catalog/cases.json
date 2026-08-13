@@ -1,0 +1,1210 @@
+{
+  "schema": "owasp-ptk-playground-catalog/v1",
+  "version": 1,
+  "cases": [
+    {
+      "id": "sast.cookie",
+      "engine": "sast",
+      "title": "Cookie security",
+      "description": "Cookie mutations, leakage vectors, and safe configurations across inline and external scripts.",
+      "category": "Cookies",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/cookie.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.document-write",
+      "engine": "sast",
+      "title": "`document.write` / `writeln`",
+      "description": "Direct writes, cross-source payloads, dynamic wrappers, and delegated event handlers.",
+      "category": "HTML sinks",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/document_write.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.inner-html",
+      "engine": "sast",
+      "title": "`innerHTML`",
+      "description": "Inline cases plus external triggers for DOM sources, storage, and template-style builders.",
+      "category": "HTML sinks",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/inner_html.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.insert-adjacent-html",
+      "engine": "sast",
+      "title": "`insertAdjacentHTML`",
+      "description": "Coverage for positional inserts, storage sources, and delegated handlers feeding raw markup.",
+      "category": "HTML sinks",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/insert_adjacent_html.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.append-child",
+      "engine": "sast",
+      "title": "`appendChild`",
+      "description": "Demonstrates DOM node construction from untrusted strings and safer text-node alternatives.",
+      "category": "DOM APIs",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/append_child.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.eval",
+      "engine": "sast",
+      "title": "`eval` family",
+      "description": "Classic `eval`, storage-driven payloads, string wrappers, and allowlisted JSON execution.",
+      "category": "Dynamic execution",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/eval.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.function-constructor",
+      "engine": "sast",
+      "title": "`new Function()`",
+      "description": "Function constructor flows from multiple sources, builder patterns, and structured safe handling.",
+      "category": "Dynamic execution",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/function_constructor.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.javascript-injection-taint",
+      "engine": "sast",
+      "title": "JavaScript injection (taint)",
+      "description": "Exercises every `javascript-injection-taint` sink: string timers, execScript, jQuery globalEval/getScript, execCommand, createContextualFragment, crypto.generateCRMFRequest, and script.text.",
+      "category": "Dynamic execution",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/javascript_injection_taint.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.open-redirect",
+      "engine": "sast",
+      "title": "Open redirects",
+      "description": "Open redirect sink with optional navigation, URL builders, and allowlist-focused mitigations.",
+      "category": "Navigation",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/open_redirect.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.link-manipulation",
+      "engine": "sast",
+      "title": "Link manipulation",
+      "description": "Anchor `href` tampering, delegated setters, storage sources, and safe allowlisted normalisation.",
+      "category": "Navigation",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/link_manipulation.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.web-message",
+      "engine": "sast",
+      "title": "Web message handling",
+      "description": "postMessage usage, origin validation pitfalls, wildcard targetOrigin, and structured payload hardening.",
+      "category": "Messaging",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/web_message.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.dom-selector",
+      "engine": "sast",
+      "title": "DOM selector injection",
+      "description": "CSS selector taint flows, wildcard postMessage helpers, weak origin checks, and escaped allow-list examples.",
+      "category": "Selectors",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/dom_selector.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.client-injection",
+      "engine": "sast",
+      "title": "Client-side JSON / SQL / XPath",
+      "description": "eval-based JSON parsing, WebSQL concatenation, XPath with raw user input, plus safe validation patterns.",
+      "category": "Data sinks",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/client_injection.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.ajax-request-header",
+      "engine": "sast",
+      "title": "Ajax request headers",
+      "description": "XHR header manipulation, wildcard postMessage listeners, and header allow-list examples.",
+      "category": "Ajax",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/ajax_request_header.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.dom-data-manipulation",
+      "engine": "sast",
+      "title": "DOM data manipulation",
+      "description": "formAction/target/method/value/placeholder, style/cssText/background*, document.title, history state, createHTMLDocument.",
+      "category": "DOM data manipulation",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/dom_data_manipulation.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.secrets",
+      "engine": "sast",
+      "title": "Secrets fixture",
+      "description": "Comment and string literals containing fake secrets to test token-detection rules and heuristics.",
+      "category": "Static analysis",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/secrets.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.service-worker-cache-poisoning",
+      "engine": "sast",
+      "title": "Cache poisoning",
+      "description": "Fetch handlers writing attacker-controlled requests into caches and redirecting with untrusted URLs.",
+      "category": "Service Worker",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/service_worker_cache_poisoning.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.client-template-injection",
+      "engine": "sast",
+      "title": "Client template injection",
+      "description": "Dynamic templates compiled from tainted sources and injected into the DOM.",
+      "category": "Templates",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/client_template_injection.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.jwt-client-misuse",
+      "engine": "sast",
+      "title": "JWT client misuse",
+      "description": "Tokens sourced from URL/cookies written to storage and headers without validation.",
+      "category": "Auth tokens",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/jwt_client_misuse.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.storage-security",
+      "engine": "sast",
+      "title": "Storage security",
+      "description": "Untrusted data persisted into localStorage/sessionStorage/IndexedDB sinks.",
+      "category": "Storage",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/storage_security.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.prototype-pollution-client",
+      "engine": "sast",
+      "title": "Prototype pollution",
+      "description": "Client-side prototype mutation via untrusted data flowing into __proto__/setPrototypeOf/assign.",
+      "category": "Prototype",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/prototype_pollution_client.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.dom-clobbering",
+      "engine": "sast",
+      "title": "DOM clobbering",
+      "description": "id/name collisions crafted through tainted HTML/attributes to shadow globals.",
+      "category": "DOM",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./sast/dom_clobbering.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.hash-html-rendering",
+      "engine": "sast",
+      "title": "Hash to HTML rendering",
+      "description": "A focused canary that passes a URL fragment to an HTML-rendering DOM API.",
+      "category": "Focused canary",
+      "mode": [
+        "manual",
+        "automation"
+      ],
+      "route": "./sast/cases/dom_xss_hash_innerhtml_vulnerable.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "sast.hash-text-rendering-control",
+      "engine": "sast",
+      "title": "Hash to text rendering control",
+      "description": "A separate safe control that passes the same URL-fragment source to a text-only DOM API.",
+      "category": "Focused canary",
+      "mode": [
+        "manual",
+        "automation"
+      ],
+      "route": "./sast/cases/dom_xss_hash_textcontent_safe.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "passive.header-disclosure-present",
+      "engine": "dast-passive",
+      "title": "Response disclosure header",
+      "description": "An HTTPS response with a secure baseline plus one technology disclosure header.",
+      "category": "Focused canary",
+      "mode": [
+        "manual",
+        "automation"
+      ],
+      "route": "/passive/cases/headers/powered-by.html",
+      "routeLabel": "/passive/cases/headers/powered-by.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "https",
+      "defaultPort": 3443
+    },
+    {
+      "id": "passive.header-disclosure-control",
+      "engine": "dast-passive",
+      "title": "Secure response header control",
+      "description": "The matching HTTPS control response without the technology disclosure header.",
+      "category": "Focused canary",
+      "mode": [
+        "manual",
+        "automation"
+      ],
+      "route": "/passive/cases/headers/secure-control.html",
+      "routeLabel": "/passive/cases/headers/secure-control.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "https",
+      "defaultPort": 3443
+    },
+    {
+      "id": "passive.passive-fixtures-headers-weak-security",
+      "engine": "dast-passive",
+      "title": "Headers, CORS, cache, and trust boundaries",
+      "description": "Weak security headers, cookies, CSP trust, cache posture, wildcard postMessage, origin allowlists, and an insecure `ws://` literal from an HTTPS response.",
+      "category": "HTTPS",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/passive/fixtures/headers/weak-security.html",
+      "routeLabel": "/passive/fixtures/headers/weak-security.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "https",
+      "defaultPort": 3443
+    },
+    {
+      "id": "passive.passive-assets-client-config-js",
+      "engine": "dast-passive",
+      "title": "Client config and secret-like values",
+      "description": "Representative key, token, webhook, DSN, and private-material patterns embedded in a JavaScript asset.",
+      "category": "JS asset",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/passive/assets/client-config.js",
+      "routeLabel": "/passive/assets/client-config.js",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.passive-fixtures-errors-stacktraces",
+      "engine": "dast-passive",
+      "title": "Errors, stack traces, and internal hints",
+      "description": "Node, Java, .NET, Python, and PHP traces together with internal IPs, service names, cluster DNS, and environment hints.",
+      "category": "HTML",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/passive/fixtures/errors/stacktraces.html",
+      "routeLabel": "/passive/fixtures/errors/stacktraces.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.passive-swagger-ui-index",
+      "engine": "dast-passive",
+      "title": "Swagger, OpenAPI, ReDoc, and GraphQL",
+      "description": "API documentation, GraphQL consoles, specs, persisted-query shapes, and GraphQL schema/error terms.",
+      "category": "API docs",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/passive/swagger-ui/index.html",
+      "routeLabel": "/passive/swagger-ui/index.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.well-known-openid-configuration",
+      "engine": "dast-passive",
+      "title": ".well-known and metadata files",
+      "description": "Security metadata, OIDC/OAuth configuration, JWKS, change-password, robots, humans, and mobile-association files.",
+      "category": "Metadata",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/.well-known/openid-configuration",
+      "routeLabel": "/.well-known/openid-configuration",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.passive-checkout-payment",
+      "engine": "dast-passive",
+      "title": "Forms, workflows, and high-risk parameters",
+      "description": "Hidden redirect, role, tenant, token, callback, and finance/support fields plus sensitive form actions and dangerous query names.",
+      "category": "Workflow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/passive/checkout/payment.html",
+      "routeLabel": "/passive/checkout/payment.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.orgs-acme-workspaces-red-team-settings",
+      "engine": "dast-passive",
+      "title": "Tenant-boundary surfaces",
+      "description": "Tenant routes, scope headers/cookies, tenant slug fields, and switch-org or switch-tenant workflow hints.",
+      "category": "Tenant",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/orgs/acme/workspaces/red-team/settings.html",
+      "routeLabel": "/orgs/acme/workspaces/red-team/settings.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.passive-realtime-overview",
+      "engine": "dast-passive",
+      "title": "Realtime and upgrade surfaces",
+      "description": "Socket.IO, SockJS, SSE, WebSocket upgrade paths, realtime literals, and token placement patterns.",
+      "category": "Realtime",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/passive/realtime/overview.html",
+      "routeLabel": "/passive/realtime/overview.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.wp-admin-index",
+      "engine": "dast-passive",
+      "title": "Framework and console surfaces",
+      "description": "WordPress, Drupal, DWR, database consoles, product consoles, queue dashboards, and debug/admin routes.",
+      "category": "Frameworks",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/wp-admin/index.html",
+      "routeLabel": "/wp-admin/index.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "passive.passive-fixtures-data-sensitive-data",
+      "engine": "dast-passive",
+      "title": "Sensitive data and serialized indicators",
+      "description": "Credit cards, SSNs, serialized-object markers, unsafe blobs, and helper links that place secrets in URLs.",
+      "category": "Data",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "/passive/fixtures/data/sensitive-data.html",
+      "routeLabel": "/passive/fixtures/data/sensitive-data.html",
+      "requirements": [
+        "route-server"
+      ],
+      "protocol": "http",
+      "defaultPort": 3080
+    },
+    {
+      "id": "iast.iast-dom-xss",
+      "engine": "iast",
+      "title": "DOM XSS sinks",
+      "description": "innerHTML, outerHTML, insertAdjacentHTML, document.write, inline events, and DOM mutations.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_dom_xss.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.angularjs-expression-parser",
+      "engine": "iast",
+      "title": "AngularJS expression parsing",
+      "description": "A focused canary where a benign form-controlled expression is parsed by a local AngularJS runtime.",
+      "category": "Focused canary",
+      "mode": [
+        "manual",
+        "automation"
+      ],
+      "route": "./iast/iast_angularjs_expression_minimal.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-js-execution",
+      "engine": "iast",
+      "title": "JS execution sinks",
+      "description": "`eval()`, `Function`, and apply/call helpers with tainted payloads.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_js_execution.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-open-redirect",
+      "engine": "iast",
+      "title": "Open redirects",
+      "description": "`window.open`, `navigation.navigate`, and source-scoped redirect sinks.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_open_redirect.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-route-controlled-navigation",
+      "engine": "iast",
+      "title": "Route controlled navigation",
+      "description": "`pushState`, `replaceState`, and `navigation.navigate` using route-derived sources.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_route_controlled_navigation.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-form-submission-hijack",
+      "engine": "iast",
+      "title": "Form submission hijack",
+      "description": "Form action/formAction target hijack and dangerous `javascript:`/`data:` form schemes.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_form_submission_hijack.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-response-field-reachability",
+      "engine": "iast",
+      "title": "Response field reachability",
+      "description": "Response-derived DOM reachability and response-driven form target coverage.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_response_field_reachability.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-prototype-pollution-impact",
+      "engine": "iast",
+      "title": "Prototype pollution impact",
+      "description": "Controlled prototype writes plus `fetch(init)` impact validation.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_prototype_pollution_impact.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-dom-url-navigation",
+      "engine": "iast",
+      "title": "DOM URL navigation",
+      "description": "`location.*`, history navigation, and href/src/action/formaction manipulation.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_dom_url_navigation.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-dynamic-script-loading",
+      "engine": "iast",
+      "title": "Dynamic script loading",
+      "description": "Assign attacker-controlled URLs to `<script>` elements.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_dynamic_script_loading.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-dom-xss-secondary-sources",
+      "engine": "iast",
+      "title": "DOM XSS secondary sources",
+      "description": "Cookie, storage, window.name, hash route, postMessage, and referrer driven DOM XSS.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_dom_xss_secondary_sources.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-storage-taint-to-exec",
+      "engine": "iast",
+      "title": "Storage taint to execution",
+      "description": "Secondary-source taint reaching `eval`, `Function`, and string timers.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_storage_taint_to_exec.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-websocket-url-poisoning",
+      "engine": "iast",
+      "title": "WebSocket URL poisoning",
+      "description": "Tainted route/query/storage/message values passed to `new WebSocket(url)`.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_websocket_url_poisoning.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-file-reader-sensitive-flows",
+      "engine": "iast",
+      "title": "FileReader sensitive flows",
+      "description": "Tainted File metadata used through `readAsText`, `readAsDataURL`, and `readAsArrayBuffer`.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_file_reader_sensitive_flows.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-xpath-injection",
+      "engine": "iast",
+      "title": "XPath injection",
+      "description": "`document.evaluate()` with tainted XPath expressions.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_xpath_injection.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-client-sql-injection",
+      "engine": "iast",
+      "title": "Client SQL injection",
+      "description": "`openDatabase` and `executeSql` coverage for tainted client-side SQL flows.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_client_sql_injection.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-dom-clobbering",
+      "engine": "iast",
+      "title": "DOM clobbering",
+      "description": "Named-property clobbering via attacker-controlled `id`/`name` values.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_dom_clobbering.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-dom-parser-xss",
+      "engine": "iast",
+      "title": "DOM parser XSS",
+      "description": "`DOMParser`, contextual fragments, and `setHTMLUnsafe` parser-like sinks.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_dom_parser_xss.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-client-json-parsing",
+      "engine": "iast",
+      "title": "Client JSON parsing",
+      "description": "`JSON.parse` sink coverage for tainted JSON payloads.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_client_json_parsing.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-document-domain-manipulation",
+      "engine": "iast",
+      "title": "document.domain",
+      "description": "`document.domain` assignments with tainted inputs.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_document_domain_manipulation.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-client-http-exfiltration",
+      "engine": "iast",
+      "title": "Client HTTP exfiltration",
+      "description": "`fetch`, XHR, `sendBeacon`, and image beacons with tainted values.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_client_http_exfiltration.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-storage-token-leaks",
+      "engine": "iast",
+      "title": "Storage token leaks",
+      "description": "localStorage, sessionStorage, and cookie persistence of sensitive data.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_storage_token_leaks.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-postmessage-misuse",
+      "engine": "iast",
+      "title": "postMessage misuse",
+      "description": "Wildcard and cross-origin `postMessage` flows.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_postmessage_misuse.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-iframe-navigation",
+      "engine": "iast",
+      "title": "IFrame navigation",
+      "description": "`iframe.src` and `iframe.srcdoc` flows.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_iframe_navigation.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-timer-js-execution",
+      "engine": "iast",
+      "title": "Timer-based execution",
+      "description": "`setTimeout`/`setInterval` string execution sinks.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_timer_js_execution.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-realtime-exfiltration",
+      "engine": "iast",
+      "title": "Realtime exfiltration",
+      "description": "WebSocket and RTCDataChannel send sinks.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_realtime_exfiltration.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-debug-logging-leaks",
+      "engine": "iast",
+      "title": "Debug logging leaks",
+      "description": "`console.log` and `console.error` on tainted secrets.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_debug_logging_leaks.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-clipboard-exfiltration",
+      "engine": "iast",
+      "title": "Clipboard writes",
+      "description": "`navigator.clipboard.writeText` exfiltration.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_clipboard_exfiltration.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-web-messaging-channels",
+      "engine": "iast",
+      "title": "Broadcast/Message channels",
+      "description": "BroadcastChannel and MessageChannel postMessage flows.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_web_messaging_channels.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-worker-script-loading",
+      "engine": "iast",
+      "title": "Worker registrations",
+      "description": "ServiceWorker and Worker constructor flows pointing at tainted script URLs.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_worker_script_loading.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-blob-object-url-execution",
+      "engine": "iast",
+      "title": "Blob object URL execution",
+      "description": "Blob and object-URL payloads flowing into script, iframe, worker, and window-opening sinks.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_blob_object_url_execution.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-inbound-channel-trust",
+      "engine": "iast",
+      "title": "Inbound channel trust",
+      "description": "BroadcastChannel, MessagePort, and Worker messages driving DOM, code, and navigation sinks.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_inbound_channel_trust.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-form-submit-csrf",
+      "engine": "iast",
+      "title": "Form submit trust",
+      "description": "`submit()` and `requestSubmit()` executing tainted form targets.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_form_submit_csrf.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-indexeddb-cache-storage",
+      "engine": "iast",
+      "title": "IndexedDB and CacheStorage",
+      "description": "Persisted browser state replayed into execution and request-shaping sinks.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_indexeddb_cache_storage.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-trusted-types-and-sanitizer-misuse",
+      "engine": "iast",
+      "title": "Trusted Types and sanitizers",
+      "description": "Trusted Types callbacks and dangerous DOMPurify configuration with tainted input.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_trusted_types_and_sanitizer_misuse.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-csrf-like-requests",
+      "engine": "iast",
+      "title": "CSRF-like requests",
+      "description": "Credentialed cross-site fetches lacking CSRF material.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_csrf_like_requests.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-session-material-cross-boundary-exfiltration",
+      "engine": "iast",
+      "title": "Session material cross-boundary",
+      "description": "Headers, beacons, WebSocket/WebRTC, and postMessage reuse of session-like values.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_session_material_cross_boundary_exfiltration.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-storage-backed-request-reuse",
+      "engine": "iast",
+      "title": "Storage-backed request reuse",
+      "description": "Stored URLs and headers reused in `fetch` and XHR.",
+      "category": "Runtime flow",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_storage_backed_request_reuse.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-referrer-helper",
+      "engine": "iast",
+      "title": "Referrer helper",
+      "description": "Open another fixture with a controlled `document.referrer`.",
+      "category": "Helper",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_referrer_helper.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.iast-runtime",
+      "engine": "iast",
+      "title": "Runtime playground",
+      "description": "Combined exploratory playground mirroring juice-shop style sinks.",
+      "category": "Playground",
+      "mode": [
+        "manual",
+        "advanced"
+      ],
+      "route": "./iast/iast_runtime.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.dangerous-url-schemes-minimal",
+      "engine": "iast",
+      "title": "Dangerous URL schemes — minimal automation case",
+      "description": "Minimal deterministic URL-attribute scenario used by IAST hook automation.",
+      "category": "Automation canary",
+      "mode": [
+        "automation"
+      ],
+      "route": "./iast/iast_dangerous_url_schemes_minimal.html",
+      "requirements": [
+        "static-server"
+      ]
+    },
+    {
+      "id": "iast.postmessage-form-hijack-minimal",
+      "engine": "iast",
+      "title": "postMessage form hijack — minimal automation case",
+      "description": "Minimal deterministic postMessage-to-form-action scenario used by IAST hook automation.",
+      "category": "Automation canary",
+      "mode": [
+        "automation"
+      ],
+      "route": "./iast/iast_postmessage_form_hijack_minimal.html",
+      "requirements": [
+        "static-server"
+      ]
+    }
+  ]
+}

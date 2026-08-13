@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Browser-security campaigns and deterministic fixtures for OWASP PTK SCA, SAST, IAST and DAST testing.">
+  <link rel="stylesheet" href="./assets/css/playground.css">
+  <script type="module" src="./assets/js/playground.js"></script>
+</head>
+<body data-page="home">
+  <a class="skip-link" href="#main">Skip to playground</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="./" aria-current="page">
+        <span class="brand__mark" aria-hidden="true">PTK</span>
+        <span>OWASP PTK Playground</span>
+      </a>
+      <nav class="site-nav" aria-label="Playground suites">
+        <a href="./campaigns/">Campaigns</a>
+        <a href="./demo/">Demo</a>
+        <a href="./scanner/">Scanner quick start</a>
+        <a href="./sast/">SAST</a>
+        <a href="./iast/">IAST</a>
+        <a href="./passive/">Passive DAST</a>
+        <a href="#catalogue">All cases</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Learn · explore · validate</p>
+        <h1>Browser security testing you can see and reproduce.</h1>
+        <p class="hero__lede">
+          Follow realistic browser-security missions, explore focused source-and-sink labs,
+          or validate deterministic browser automation with PTK Auto and PTK Agent.
+        </p>
+        <div class="hero__actions">
+          <a class="button" href="./demo/">Run the 12-minute demo</a>
+          <a class="button button--secondary" href="./campaigns/">Explore campaigns</a>
+          <a class="button button--secondary" href="./scanner/">Open scanner targets</a>
+        </div>
+      </div>
+      <aside class="hero__panel" aria-label="Current playground coverage">
+        <h2>Current public corpus</h2>
+        <p>Existing fixtures are being separated into guided cases, advanced labs and deterministic canaries.</p>
+        <dl>
+          <dt>SAST cases</dt><dd data-case-count="sast">—</dd>
+          <dt>IAST cases</dt><dd data-case-count="iast">—</dd>
+          <dt>Passive groups</dt><dd data-case-count="dast-passive">—</dd>
+          <dt>Total entries</dt><dd data-case-count>—</dd>
+        </dl>
+      </aside>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Use only on systems you are authorised to test.</strong> Playground links stay within this fixture corpus; passive protocol cases require the local route-aware server.</p>
+    </aside>
+
+    <section class="section" aria-labelledby="featured-campaign-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Featured campaigns</p>
+          <h2 id="featured-campaign-title">Application stories backed by exact controls.</h2>
+          <p>Connect browser code, response metadata and session-bound traffic to focused review and repaired controls.</p>
+        </div>
+      </div>
+      <div class="mission-grid">
+        <article class="mission-card">
+          <p class="eyebrow">Browser trust boundaries</p>
+          <h2>Third-Party Support Widget</h2>
+          <p>Connect a loaded dependency, static message handler and live DOM behavior, then validate the repaired implementation.</p>
+          <div class="badge-row"><span class="badge">SCA</span><span class="badge">SAST</span><span class="badge badge--primary">IAST</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>Direct targets</dt><dd>2</dd><dt>External requests</dt><dd>0</dd></dl>
+          <a class="button" href="./campaigns/support-widget/">Start support-widget mission</a>
+        </article>
+        <article class="mission-card">
+          <p class="eyebrow">HTTP response evidence</p>
+          <h2>Deployment Response Boundary</h2>
+          <p>Compare identical page content and prove a technology disclosure that exists only in browser-observed response metadata.</p>
+          <div class="badge-row"><span class="badge badge--mixed">DAST</span><span class="badge">Paired control</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>Response targets</dt><dd>2</dd><dt>Runtime</dt><dd>Local server</dd></dl>
+          <a class="button" href="./campaigns/deployment-response-boundary/">Start response-boundary mission</a>
+        </article>
+        <article class="mission-card">
+          <p class="eyebrow">Authenticated browser traffic</p>
+          <h2>Session-Bound Order Search</h2>
+          <p>Capture a form-encoded POST with scoped browser session state, prove its server-side weakness and compare the repaired API.</p>
+          <div class="badge-row"><span class="badge badge--mixed">DAST</span><span class="badge">Paired API control</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>POST targets</dt><dd>2</dd><dt>Runtime</dt><dd>Local server</dd></dl>
+          <a class="button" href="./campaigns/session-bound-order-search/">Start order-search mission</a>
+        </article>
+        <article class="mission-card">
+          <p class="eyebrow">Action-loaded dependencies</p>
+          <h2>On-Demand Analytics</h2>
+          <p>Start with a quiet page, open a browser feature and observe the client dependency that appears only after the action.</p>
+          <div class="badge-row"><span class="badge badge--primary">SCA</span><span class="badge">Paired dependency</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>Direct targets</dt><dd>2</dd><dt>External requests</dt><dd>0</dd></dl>
+          <a class="button" href="./campaigns/on-demand-analytics/">Start analytics mission</a>
+        </article>
+        <article class="mission-card">
+          <p class="eyebrow">Persistent browser state</p>
+          <h2>Saved Workspace</h2>
+          <p>Save an announcement, follow navigation into a child dashboard and trace origin-scoped state into its DOM rendering path.</p>
+          <div class="badge-row"><span class="badge">SAST</span><span class="badge badge--primary">IAST</span><span class="badge">Two documents</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>Direct journeys</dt><dd>2</dd><dt>External requests</dt><dd>0</dd></dl>
+          <a class="button" href="./campaigns/saved-workspace/">Start saved-workspace mission</a>
+        </article>
+        <article class="mission-card">
+          <p class="eyebrow">Action-loaded response data</p>
+          <h2>Live Profile Preview</h2>
+          <p>Open an application feature, observe its new JSON request and trace one response field into the visible DOM path.</p>
+          <div class="badge-row"><span class="badge">SAST</span><span class="badge badge--primary">IAST</span><span class="badge">Browser action</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>Direct targets</dt><dd>2</dd><dt>External requests</dt><dd>0</dd></dl>
+          <a class="button" href="./campaigns/live-profile-preview/">Start profile-preview mission</a>
+        </article>
+        <article class="mission-card">
+          <p class="eyebrow">Transient SPA route state</p>
+          <h2>Transient Route Notice</h2>
+          <p>Change a hash-query route without reloading, observe its short-lived DOM evidence and compare an allow-listed text repair.</p>
+          <div class="badge-row"><span class="badge badge--mixed">DAST</span><span class="badge">SAST</span><span class="badge badge--primary">IAST</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>Direct targets</dt><dd>2</dd><dt>Evidence lifetime</dt><dd>30 ms</dd></dl>
+          <a class="button" href="./campaigns/transient-route-notice/">Start route-notice mission</a>
+        </article>
+        <article class="mission-card">
+          <p class="eyebrow">Client configuration integrity</p>
+          <h2>Imported Request Preferences</h2>
+          <p>Import a JSON configuration, trace an inherited option into a live browser request and compare a null-prototype allow-list repair.</p>
+          <div class="badge-row"><span class="badge">SAST</span><span class="badge badge--primary">IAST</span><span class="badge">Browser request</span></div>
+          <dl class="mission-card__facts"><dt>Objectives</dt><dd>3</dd><dt>Direct targets</dt><dd>2</dd><dt>External requests</dt><dd>0</dd></dl>
+          <a class="button" href="./campaigns/imported-request-preferences/">Start request-preferences mission</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="modes-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Choose a workflow</p>
+          <h2 id="modes-title">One corpus, four useful workflows</h2>
+        </div>
+      </div>
+      <div class="mode-grid mode-grid--four">
+        <article class="mode-card">
+          <span class="badge badge--primary">Campaign</span>
+          <h3>Progressive missions</h3>
+          <p>Discover, prove and repair one realistic browser-security story at a time.</p>
+        </article>
+        <article class="mode-card">
+          <span class="badge badge--mixed">Explorer</span>
+          <h3>Everything visible</h3>
+          <p>Open every objective, source, hint, target and repaired comparison without unlocks.</p>
+        </article>
+        <article class="mode-card">
+          <span class="badge">Demo</span>
+          <h3>Presenter path</h3>
+          <p>Use concise cues to demonstrate why browser context connects otherwise separate evidence.</p>
+          <p><a href="./demo/">Open the curated demo</a></p>
+        </article>
+        <article class="mode-card">
+          <span class="badge">Scanner</span>
+          <h3>Direct targets</h3>
+          <p>Use stable routes and neutral metadata without gameplay or product-specific integration.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="quick-start" class="section" aria-labelledby="quick-start-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Quick start</p>
+          <h2 id="quick-start-title">Try one engine at a time</h2>
+          <p>SAST reads code without executing it. IAST needs a source-to-sink action. Passive DAST needs browser-visible traffic and response context.</p>
+        </div>
+      </div>
+      <div class="engine-grid">
+        <a class="engine-card" href="./sast/inner_html.html">
+          <div class="badge-row"><span class="badge badge--primary">SAST</span><span class="badge">Static</span></div>
+          <h3>Inspect DOM XSS code</h3>
+          <p>Open an existing innerHTML lab and run SAST to inspect inline and external source-to-sink evidence.</p>
+          <div class="engine-card__footer"><span>Open SAST case</span><span aria-hidden="true">→</span></div>
+        </a>
+        <a class="engine-card" href="./iast/iast_dom_xss.html">
+          <div class="badge-row"><span class="badge badge--primary">IAST</span><span class="badge">Runtime</span></div>
+          <h3>Trigger a DOM XSS flow</h3>
+          <p>Prime one browser source, trigger one DOM sink and inspect the runtime source-to-sink evidence in PTK.</p>
+          <div class="engine-card__footer"><span>Open IAST case</span><span aria-hidden="true">→</span></div>
+        </a>
+        <a class="engine-card" href="./passive/">
+          <div class="badge-row"><span class="badge badge--mixed">Passive DAST</span><span class="badge">Route server</span></div>
+          <h3>Observe response posture</h3>
+          <p>Start the local route-aware server and inspect headers, cookies, API metadata and browser-visible recon signals.</p>
+          <div class="engine-card__footer"><span>Open passive catalogue</span><span aria-hidden="true">→</span></div>
+        </a>
+        <a class="engine-card" href="./campaigns/session-bound-order-search/">
+          <div class="badge-row"><span class="badge badge--mixed">Active DAST</span><span class="badge">Session-bound POST</span></div>
+          <h3>Replay browser traffic safely</h3>
+          <p>Establish scoped session state, submit a real form request and compare deterministic vulnerable and repaired server behavior.</p>
+          <div class="engine-card__footer"><span>Open active DAST mission</span><span aria-hidden="true">→</span></div>
+        </a>
+        <a class="engine-card" href="./campaigns/on-demand-analytics/">
+          <div class="badge-row"><span class="badge badge--primary">SCA</span><span class="badge">Dynamic load</span></div>
+          <h3>Reveal an action-loaded component</h3>
+          <p>Compare initial traffic with the dependency requested only after an application user opens a dormant feature.</p>
+          <div class="engine-card__footer"><span>Open SCA mission</span><span aria-hidden="true">→</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="engines-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Browse by engine</p>
+          <h2 id="engines-title">Understand what PTK is measuring</h2>
+        </div>
+      </div>
+      <div class="engine-grid">
+        <a class="engine-card" href="./sast/">
+          <div class="badge-row"><span class="badge badge--primary">SAST</span></div>
+          <h3>Client-side static analysis</h3>
+          <p>Review JavaScript and HTML patterns without requiring the vulnerable path to execute.</p>
+          <div class="engine-card__footer"><span><span data-case-count="sast">—</span> catalogue entries</span><span aria-hidden="true">→</span></div>
+        </a>
+        <a class="engine-card" href="./iast/">
+          <div class="badge-row"><span class="badge badge--primary">IAST</span><span class="badge">Runtime</span></div>
+          <h3>In-browser runtime analysis</h3>
+          <p>Execute controlled source-to-sink flows and verify evidence from browser instrumentation.</p>
+          <div class="engine-card__footer"><span><span data-case-count="iast">—</span> catalogue entries</span><span aria-hidden="true">→</span></div>
+        </a>
+        <a class="engine-card" href="./passive/">
+          <div class="badge-row"><span class="badge badge--mixed">Passive DAST</span></div>
+          <h3>Traffic and attack-surface signals</h3>
+          <p>Exercise headers, content types, exact routes and other observations that static hosting cannot reproduce.</p>
+          <div class="engine-card__footer"><span><span data-case-count="dast-passive">—</span> fixture groups</span><span aria-hidden="true">→</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section id="automation" class="section" aria-labelledby="automation-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Automation</p>
+          <h2 id="automation-title">Stable fixtures, external orchestration</h2>
+          <p>The public pages expose generic browser behaviour. PTK-specific rulepack loading, assertions and expected findings remain in the maintained test harness.</p>
+        </div>
+      </div>
+      <div class="info-panel automation-boundary">
+        <p><strong>PTK Auto is controlled by PTK Agent.</strong> Automation setup, scan policy and expected-result assertions stay in the maintained test workflow instead of being embedded in deliberately vulnerable pages.</p>
+        <div class="hero__actions">
+          <a class="button" href="./scanner/">Scanner quick start</a>
+          <a class="button button--secondary" href="https://www.npmjs.com/package/pentestkit">PTK Agent on npm</a>
+          <a class="button button--secondary" href="https://github.com/ptklabs/ptk-agent">Automation documentation</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="catalogue" class="section" aria-labelledby="catalogue-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Full catalogue</p>
+          <h2 id="catalogue-title">Find a fixture</h2>
+          <p>Legacy combined pages are labelled as mixed advanced labs until they are split into deterministic guided cases.</p>
+        </div>
+      </div>
+      <div class="catalogue-panel">
+        <div class="filter-bar" aria-label="Case filters">
+          <div class="field"><label for="case-search">Search</label><input id="case-search" data-filter="search" type="search" placeholder="DOM XSS, storage, headers…"></div>
+          <div class="field"><label for="engine-filter">Engine</label><select id="engine-filter" data-filter="engine"><option value="">All engines</option><option value="sast">SAST</option><option value="iast">IAST</option><option value="dast-passive">Passive DAST</option></select></div>
+          <div class="field"><label for="mode-filter">Mode</label><select id="mode-filter" data-filter="mode"><option value="">All modes</option><option value="manual">Manual</option><option value="advanced">Advanced lab</option><option value="automation">Automation</option></select></div>
+        </div>
+        <p class="catalogue-summary"><span data-catalogue-summary>Loading catalogue…</span></p>
+        <div class="case-grid" data-case-catalogue aria-live="polite"></div>
+        <div class="catalogue-more">
+          <button class="button button--secondary" type="button" data-show-all-cases hidden>Show all cases</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p>OWASP PTK Playground · Deliberately vulnerable fixtures for authorised testing.</p>
+      <nav aria-label="Project links">
+        <a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a>
+        <a href="https://github.com/ptklabs/ptk-playground">Source</a>
+        <a href="https://github.com/DenisPodgurskii/pentestkit/tree/master/docs/guide">Pentester guide</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

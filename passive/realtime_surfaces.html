@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: realtime surfaces</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Realtime surface fixture</h1>
+    <p class="meta">
+      This page carries browser-visible realtime literals and client code while the fixture server exposes actual SSE, Socket.IO,
+      SockJS, and WebSocket upgrade routes.
+    </p>
+    <div class="fixture">
+      <h2>Client literals</h2>
+      <pre><code>const socketIoPath = "/socket.io/?EIO=4&amp;transport=websocket";
+const sockJsPath = "/sockjs/echo";
+const websocketUrl = "ws://localhost:3080/passive/realtime/ws?authToken=ptk-realtime-token";
+const sseUrl = "/passive/realtime/events";
+const realtimeConfig = {
+  callbackUri: "https://hooks.example.test/realtime",
+  authToken: "rt_abcdefghijklmnop"
+};</code></pre>
+      <p>
+        Manual endpoints:
+        <a href="/socket.io/?EIO=4&transport=websocket">Socket.IO</a>,
+        <a href="/sockjs/echo">SockJS</a>,
+        <a href="/passive/realtime/events">SSE</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

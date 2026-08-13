@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: stack traces and internal hints</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Stack traces and internal environment hints</h1>
+    <p class="meta">
+      This route intentionally aggregates multiple backend disclosure patterns so passive recon can validate stack-trace,
+      internal-path, and environment-hint modules from one page load.
+    </p>
+    <div class="fixture">
+      <h2>Representative disclosures</h2>
+      <pre>TypeError: cannot read property 'id' of undefined
+    at renderOrder (/srv/app/node_modules/orders/view.js:41:19)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+java.lang.RuntimeException: OrderService failed
+    at com.example.orders.OrderService.fetch(OrderService.java:88)
+
+Traceback (most recent call last):
+  File "/var/www/app/api.py", line 142, in get_invoice
+    raise RuntimeError("backend mismatch")
+
+Fatal error: Uncaught Error in /home/ptk/releases/current/index.php on line 55
+Warning: include(/opt/internal/bootstrap.php): failed to open stream
+
+System.InvalidOperationException: Request failed in C:\\inetpub\\wwwroot\\Orders\\Checkout.cshtml:line 54
+
+staging environment active
+localhost redis.internal
+10.42.7.18 connected to metadata.google.internal
+rabbitmq.service.internal
+checkout-api.svc.cluster.local
+https://ptk-bucket.s3.amazonaws.com/private/report.csv
+KUBERNETES_SERVICE_HOST=10.43.0.1</pre>
+    </div>
+  </div>
+</body>
+</html>

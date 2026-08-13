@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Ajax request header manipulation</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+  <script src="js/sources.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/ajax_request_header/ajax_request_header.js"></script>
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — Ajax request header manipulation</h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+    <p class="meta">
+      Scenarios highlight unsafe ways to construct Ajax requests: copying attacker data into headers, evaluating payloads,
+      and wiring <code>postMessage</code> listeners without origin checks. Safe cards show header name/value allow-lists
+      prior to issuing requests.
+    </p>
+
+
+
+    <div class="log" id="ajax-log">Logs will appear here.</div>
+    <iframe id="ajax-message-frame" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+
+    <h2 class="section-title">High severity — direct header manipulation</h2>
+    <div class="grid">
+      <div class="card" data-severity="high" id="arh-setrequestheader">
+        <div class="card-meta">ARH-H1 (High): <code>location.hash</code> copied into <code>setRequestHeader</code></div>
+        <pre>// inline-script[#1]
+(function(){
+  var sel = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/log');
+  xhr.setRequestHeader('X-From-Hash', sel);
+})();</pre>
+        <script>
+          (function() {
+            var sel = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/log');
+            xhr.setRequestHeader('X-From-Hash', sel);
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high" id="arh-copy-cookie">
+        <div class="card-meta">ARH-H2 (High): Copying <code>document.cookie</code> into custom header for fetch()</div>
+        <pre>// inline-script[#2]
+fetch('/api/echo', {
+  method: 'POST',
+  headers: {
+    'Cookie': document.cookie
+  }
+});</pre>
+        <script>
+          fetch('/api/echo', {
+            method: 'POST',
+            headers: {
+              'Cookie': document.cookie
+            }
+          });
+        </script>
+      </div>
+
+      <div class="card" data-severity="high" id="arh-global-eval">
+        <div class="card-meta">ARH-H3 (High): <code>$.globalEval</code> of tainted payload before XHR.send()</div>
+        <pre>// inline-script[#3]
+(function(evt){
+  var payload = evt.data;
+  $.globalEval(payload);
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/forward');
+  xhr.send(payload);
+})({"data": document.cookie});</pre>
+        <script>
+          (function(evt) {
+            var payload = evt.data;
+            $.globalEval(payload);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/forward');
+            xhr.send(payload);
+          })({"data": document.cookie});
+        </script>
+      </div>
+    </div>
+
+    <h2 class="section-title">Medium severity — weak validation & listeners</h2>
+    <div class="grid">
+      <div class="card" data-severity="medium" id="arh-message-listener">
+        <div class="card-meta">ARH-M1 (Medium): <code>postMessage</code> listener building headers without origin check</div>
+        <pre>// inline-script[#4]
+ (function(evt) {
+  var data = evt.data || {};
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/message');
+  if (data && data.header) xhr.setRequestHeader(data.header, data.value || '1');
+  xhr.send('sink');
+})({"data": window.name});</pre>
+        <script>
+          (function(evt) {
+            var data = evt.data || {};
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/message');
+            if (data && data.header) xhr.setRequestHeader(data.header, data.value || '1');
+            xhr.send('sink');
+          })({"data": window.name});
+        </script>
+      </div>
+
+      <div class="card" data-severity="medium" id="arh-xhr-open">
+        <div class="card-meta">ARH-M2 (Medium): <code>XMLHttpRequest.open</code> fed with tainted URL param</div>
+        <pre>// inline-script[#5]
+(function(){
+  var qs = new URLSearchParams(location.search);
+  var url = qs.get('redir') || '/api/data';
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.send();
+})();</pre>
+        <script>
+          (function() {
+            var qs = new URLSearchParams(location.search);
+            var url = qs.get('redir') || '/api/data';
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.send();
+          })();
+        </script>
+      </div>
+    </div>
+
+    <h2 class="section-title">Safe scenarios — header name/value validation</h2>
+    <div class="grid">
+      <div class="card" data-severity="safe" id="arh-safe-whitelist">
+        <div class="card-meta">ARH-S1 (Safe): header name allow-list & regex validation</div>
+        <pre>// inline-script[#6]
+const allowedHeaders = ['X-Trace', 'X-Debug'];
+function sendSafeHeader(name, value) {
+  if (!allowedHeaders.includes(name)) return;
+  if (!/^[-a-z0-9]{1,32}$/i.test(value)) return;
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/safe');
+  xhr.setRequestHeader(name, value);
+  xhr.send('ok');
+}</pre>
+        <script>
+          const allowedHeaders = ['X-Trace', 'X-Debug'];
+
+          function sendSafeHeader(name, value) {
+            if (!allowedHeaders.includes(name)) return;
+            if (!/^[-a-z0-9]{1,32}$/i.test(value)) return;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/safe');
+            xhr.setRequestHeader(name, value);
+            xhr.send('ok');
+          }
+        </script>
+      </div>
+
+    </div>
+
+    <footer>
+      Use the controls to mutate headers and postMessage payloads. The log panel captures simulated XHR interactions; inspect
+      DevTools network output to observe requests fired by each scenario.
+    </footer>
+  </div>
+
+</body>
+
+</html>

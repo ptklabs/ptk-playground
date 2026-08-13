@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Service Worker cache poisoning</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">Service Worker cache poisoning</h1>
+    </div>
+    <p class="meta">Fetch handlers that trust <code>event.request.url</code> and write attacker-controlled requests into caches or redirects.</p>
+
+    <div class="card" data-rule="taint" data-severity="high">
+      <div class="card-meta"><strong>INLINE-1 (High): request URL controls cache + redirect</strong></div>
+      <pre><code>self.addEventListener('fetch', (event) => {
+  const url = event.request.url;
+  event.respondWith(
+    caches.open('demo-cache').then((cache) => cache.put(url, new Response('ok')))
+  );
+  return Response.redirect(url);
+});</code></pre>
+      <script>
+        (function () {
+          self.addEventListener('fetch', (event) => {
+            const url = event.request.url;
+            event.respondWith(
+              caches.open('demo-cache').then((cache) => {
+                return cache.put(url, new Response('ok'));
+              })
+            );
+            return Response.redirect(url);
+          });
+        })();
+      </script>
+    </div>
+  </div>
+</body>
+</html>

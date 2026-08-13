@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Transient Route Notice · Review Target</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short-lived SPA route notice that interprets a hash-query value as markup.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script defer src="./route-notice.js"></script>
+</head>
+<body data-playground-target="transient-route-notice-review" data-target-variant="vulnerable">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">LAB</span><span>Browser Security Playground</span></a><nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/transient-route-notice/">Mission</a><a href="./route-notice.js">View source</a><a href="../fixed/">Repaired target</a></nav></div></header>
+
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../campaigns/transient-route-notice/">Transient route notice</a><span aria-hidden="true">/</span><span>Review target</span></nav>
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Client-side route state</p><h1 id="target-title">Open an incident deep link.</h1><p class="target-hero__lede">The browser updates only its hash route. The prepared notice appears briefly and then expires without a document reload.</p><div class="hero__actions"><button id="open-route-notice" class="button" type="button">Open prepared route notice</button><button id="reset-route-notice" class="button button--secondary" type="button">Reset route</button></div></div><dl class="target-facts" aria-label="Target facts"><div><dt>Variant</dt><dd>Review</dd></div><div><dt>Route</dt><dd>Hash query</dd></div><div><dt>Lifetime</dt><dd>30 ms</dd></div></dl></section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled training target.</strong> The prepared notice is harmless markup and creates no external request.</p></aside>
+
+    <section class="widget-stage" aria-labelledby="notice-title">
+      <div class="widget-card"><div class="widget-card__heading"><div><p class="eyebrow">Incident workspace</p><h2 id="notice-title">Route notice</h2></div><span class="status-pill">SPA</span></div><p>The initial URL contains no notice. Use the action above to change only the fragment route.</p><div id="route-notice" class="support-thread" aria-live="polite">No route notice is open.</div></div>
+      <aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Neutral proof</p><h2 id="proof-title">Browser evidence</h2><p>The evidence token persists after the short-lived notice has disappeared.</p><output id="route-status" class="proof-token" aria-live="polite">ROUTE-NOTICE-IDLE</output></aside>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Direct target · Hash-query route · No campaign coupling.</p><nav aria-label="Target links"><a href="../fixed/">Compare the repaired target</a></nav></div></footer>
+</body>
+</html>

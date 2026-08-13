@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Passive DAST fixtures · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Route-aware HTTP and HTTPS fixtures for OWASP PTK passive DAST and attack-surface testing.">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+</head>
+<body data-page="engine" data-engine="dast-passive">
+  <a class="skip-link" href="#main">Skip to passive DAST catalogue</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground suites"><a href="../campaigns/">Campaigns</a><a href="../demo/">Demo</a><a href="../scanner/">Scanner quick start</a><a href="../sast/">SAST</a><a href="../iast/">IAST</a><a href="./" aria-current="page">Passive DAST</a><a href="../#catalogue">All cases</a></nav>
+    </div>
+  </header>
+  <main id="main" class="page-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>Passive DAST</span></nav>
+    <section class="engine-hero">
+      <p class="eyebrow">Browser-observable traffic</p>
+      <h1>Inspect headers, routes and response context—not just static files.</h1>
+      <p class="engine-hero__lede">These fixtures cover security headers, cookies, API descriptions, well-known metadata, stack traces, client configuration, workflows, realtime routes and other passive attack-surface signals.</p>
+      <div class="status-line"><span class="status-dot" data-passive-status-dot aria-hidden="true"></span><span data-passive-status>Checking server mode…</span></div>
+      <p data-passive-detail>Checking whether this page is running through the route-aware fixture server.</p>
+    </section>
+    <aside class="notice notice--warning">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>GitHub Pages is catalogue-only.</strong> Static hosting cannot reproduce response headers, exact root routes, downloads, SSE, WebSocket upgrades or HTTPS-specific behavior. The public page no longer redirects case clicks to your localhost.</p>
+    </aside>
+    <section id="local-server" class="info-panel" aria-labelledby="server-title">
+      <h2 id="server-title">Start the runnable fixture server</h2>
+      <p>From the workspace root, start the dedicated server and then open its passive page. A self-signed HTTPS endpoint is created when OpenSSL is available.</p>
+      <code class="command">node passive/server.mjs</code>
+      <p>Default pages: <code>http://localhost:3080/passive/</code> and <code>https://localhost:3443/passive/</code>.</p>
+    </section>
+    <section class="section" aria-labelledby="catalogue-title">
+      <div class="section-heading"><div><p class="eyebrow">Route catalogue</p><h2 id="catalogue-title">Passive fixture groups</h2><p><span data-case-count="dast-passive">—</span> public groups backed by a larger set of exact server routes.</p></div></div>
+      <div class="catalogue-panel">
+        <div class="filter-bar" aria-label="Passive case filters">
+          <div class="field"><label for="case-search">Search</label><input id="case-search" data-filter="search" type="search" placeholder="headers, GraphQL, tenant…"></div>
+          <div class="field"><label for="mode-filter">Mode</label><select id="mode-filter" data-filter="mode"><option value="">All modes</option><option value="manual">Manual</option><option value="advanced">Advanced lab</option><option value="automation">Automation</option></select></div>
+        </div>
+        <p class="catalogue-summary"><span data-catalogue-summary>Loading catalogue…</span></p>
+        <div class="case-grid" data-case-catalogue data-engine="dast-passive" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>Passive DAST fixtures · local route-aware HTTP/HTTPS behavior for authorised testing.</p><nav aria-label="Project links"><a href="../">Playground</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a><a href="https://github.com/ptklabs/ptk-playground">Source</a></nav></div></footer>
+</body>
+</html>

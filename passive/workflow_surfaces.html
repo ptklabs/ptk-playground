@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: workflow and hidden-field leads</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Workflow, hidden-field, and finance surfaces</h1>
+    <p class="meta">
+      This route is designed to surface risky hidden inputs, high-value form actions, file-upload flows, and finance/support workflows.
+    </p>
+    <div class="fixture">
+      <h2>Checkout and support forms</h2>
+      <form action="/support/tickets/create" method="post">
+        <input type="hidden" name="next" value="/backoffice/approve?ticket=991" />
+        <input type="hidden" name="tenantId" value="tenant_acme" />
+        <input type="hidden" name="role" value="billing-admin" />
+        <input type="hidden" name="resetToken" value="rst_live_123456" />
+        <input type="hidden" name="callbackUrl" value="https://hooks.example.test/ptk" />
+        <input type="hidden" name="invoiceId" value="inv_1001" />
+        <input type="hidden" name="amount" value="149.99" />
+        <input type="hidden" name="currency" value="USD" />
+        <input type="hidden" name="supportReason" value="refund-review" />
+        <label>Email <input type="email" name="email" value="billing@example.test" /></label>
+        <label>Attachment <input type="file" name="attachment" /></label>
+      </form>
+      <p>High-risk query example:
+        <a href="/passive/fixtures/params/high-risk.html?next=/admin&url=http://localhost/admin&id=101&uploadId=upload_12&tenantId=tenant_acme&role=owner&state=st_123&webhookUrl=https://hooks.example.test/ptk">
+          parameter-lead route
+        </a>
+      </p>
+      <pre><code>&lt;form action="/checkout/payment/confirm" method="post" enctype="multipart/form-data"&gt;
+  &lt;input type="hidden" name="returnUrl" value="/account/license/renewal"&gt;
+  &lt;input type="hidden" name="ownerId" value="usr_42"&gt;
+  &lt;input type="hidden" name="notifyUrl" value="https://hooks.example.test/order"&gt;
+  &lt;input type="hidden" name="isAdmin" value="true"&gt;
+  &lt;input type="hidden" name="documentId" value="doc_7788"&gt;
+&lt;/form&gt;</code></pre>
+    </div>
+  </div>
+</body>
+</html>

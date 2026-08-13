@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — appendChild()</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <!-- External scripts -->
+  <script src="js/sources.js"></script>
+  <script src="js/append_child/append_child_sink.js"></script>
+  <script src="js/append_child/append_child_external_sources.js"></script>
+
+
+  <script>
+    function setHashPayload() {
+      const payload = "%3Cscript%3Ealert('qs')%3C/script%3E";
+      location.hash = payload;
+    }
+  </script>
+
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — <code>appendChild()</code></h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">13</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">5</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">1</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total"></strong></span>
+    </div>
+    <p class="meta">Payloads are converted into DOM nodes via <code class="inline">appendChild</code>, using <code class="inline">innerHTML</code> under the hood to keep the sink realistic.</p>
+    <p class="meta"><strong>NOTE:</strong> This is the case where we can expect 4 additional findings for DOM-based JavaScript Injection (taint flow).
+      It happens due to <strong><code class="inline">createContextualFragment</code></strong> and <strong><code class="inline">appendChild</code></strong> combination being modelled as 2 separate sinks in the SAST engine.
+      In a real-world scenario, these 2 calls always happen together, so the findings are effectively duplicates. We keep both findings here to demonstrate the issue.</p>
+    <p class="meta">The <code class="inline">appendChildUtils.appendChildSink</code> utility function used in these test cases is defined as follows:
+    <pre>
+  function appendChildSink(payload, targetId) {
+    var target = ensureTarget(targetId);
+    const fragment = document.createRange().createContextualFragment(payload);
+    target.appendChild(fragment);
+  }
+  </pre>
+
+    </p>
+
+
+    <div class="controls">
+      <a class="btn secondary" href="?payload=%3Cscript%3Ealert('qs')%3C/script%3E">Use query payload</a>
+      <button class="btn secondary" type="button" onclick="setHashPayload()">Set hash payload</button>
+    </div>
+
+    <!-- Inline scenarios -->
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+
+      <div class="card" data-severity="high, low" id="il-1">
+        <div class="card-meta">INLINE-1 (High): Query/hash → <code class="inline">appendChild</code></div>
+        <pre data-severity="low">// inline-script[#1]
+(function(){
+  const target = 'inline-appendchild-target';
+  function render(payload) {
+    appendChildUtils.clear(target);
+    appendChildUtils.appendChildSink(payload, target);
+  }
+  const params = new URLSearchParams(location.search);
+  if (params.has('payload')) render(params.get('payload'));
+  if (location.hash) {
+    try { render(decodeURIComponent(location.hash.slice(1))); }
+    catch (err) { render(location.hash.slice(1)); }
+  }
+  window.addEventListener('hashchange', () => {
+    if (!location.hash) return;
+    try { render(decodeURIComponent(location.hash.slice(1))); }
+    catch (err) { render(location.hash.slice(1)); }
+  });
+})();</pre>
+        <div class="render-target" id="inline-appendchild-target">Waiting for payload…</div>
+        <script>
+          (function() {
+            const target = 'inline-appendchild-target';
+
+            function render(payload) {
+              if (payload == null) return;
+              appendChildUtils.clear(target);
+              appendChildUtils.appendChildSink(payload, target);
+            }
+            const params = new URLSearchParams(location.search);
+            if (params.has('payload')) render(params.get('payload'));
+            if (location.hash) {
+              try {
+                render(decodeURIComponent(location.hash.slice(1)));
+              } catch (err) {
+                render(location.hash.slice(1));
+              }
+            }
+            window.addEventListener('hashchange', () => {
+              if (!location.hash) return;
+              try {
+                render(decodeURIComponent(location.hash.slice(1)));
+              } catch (err) {
+                render(location.hash.slice(1));
+              }
+            });
+          })();
+        </script>
+      </div>
+
+
+      <div class="card" data-severity="high, low" id="append-inline-2">
+        <div class="card-meta">INLINE-2 (High): Field → <code class="inline">appendChild</code></div>
+        <pre>// inline-script[#2]
+function inlineAppendChildFromField(fieldId, targetId) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  appendChildUtils.appendChildSink(el.value, targetId);
+}</pre>
+        <div class="field">
+          <input id="inline_appendchild_payload" type="text" value="<div onclick=alert('inline')>Click me</div>" />
+          <button class="btn" type="button" onclick="inlineAppendChildFromField('inline_appendchild_payload', 'inline-appendchild-target')">Append inline field</button>
+        </div>
+        <script>
+          function inlineAppendChildFromField(fieldId, targetId) {
+            const el = document.getElementById(fieldId);
+            if (!el) return;
+            appendChildUtils.appendChildSink(el.value, targetId);
+          }
+        </script>
+      </div>
+
+
+
+      <div class="card" data-severity="high, low" id="append-inline-3">
+        <div class="card-meta">INLINE-3 (High): jQuery → <code class="inline">append</code></div>
+        <pre>// inline-script[#2]
+function jQueryAppend(fieldId, targetId) {
+  $(`#${targetId}`).append(document.getElementById(fieldId).value);
+}</pre>
+        <div class="field">
+          <input id="inline_appendchild_jquery_payload" type="text" value="<div onclick=alert('inline')>Click me</div>" />
+          <button class="btn" type="button" onclick="inlineAppendChildFromField('inline_appendchild_jquery_payload', 'inline-appendchild-target')">Append inline field</button>
+        </div>
+        <script>
+          function jQueryAppend(fieldId, targetId) {
+            $(`#${targetId}`).append(document.getElementById(fieldId).value);
+          }
+        </script>
+      </div>
+
+      <div class="card" data-severity="safe" id="il-3">
+        <div class="card-meta">INLINE-4 (Safe): Create element + <code class="inline">textContent</code></div>
+        <pre>// inline-script[#3]
+(function(){
+  const params = new URLSearchParams(location.search);
+  const safe = params.get('safe');
+  const target = document.getElementById('inline-safe-target');
+  if (!target || !safe) return;
+  const span = document.createElement('span');
+  span.textContent = safe;
+  target.appendChild(span);
+})();</pre>
+        <div class="render-target" id="inline-safe-target">Waiting for safe payload…</div>
+        <script>
+          (function() {
+            const params = new URLSearchParams(location.search);
+            const safe = params.get('safe');
+            const target = document.getElementById('inline-safe-target');
+            if (!target || !safe) return;
+            const span = document.createElement('span');
+            span.textContent = safe;
+            target.appendChild(span);
+          })();
+        </script>
+      </div>
+
+    </div>
+
+    <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+      <div class="card" data-severity="high, low">
+        <div class="card-meta"><strong>Direct DOM sources</strong></div>
+        <pre>onclick="extAppendChildFromLocalStorage()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" type="button" onclick="extAppendChildFromLocalStorage()">EXT: URLSearchParams</button>
+        </div>
+        <div class="render-target" id="external-appendchild-target">External DOM source target</div>
+      </div>
+
+    </div>
+
+    <footer>PTK SAST testbed — appendChild() (inline + external). <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

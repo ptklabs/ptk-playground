@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Client SQL Injection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    textarea, button, input { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 96px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Client SQL Injection</h1>
+  <p class="note">Exercises <code>openDatabase()</code> and <code>tx.executeSql()</code>. Browsers may block WebSQL; the hooks should still be hit where available.</p>
+
+  <div class="card">
+    <label for="db-name">Database name</label>
+    <input id="db-name" type="text" value="iast-db">
+    <label for="statement">SQL statement</label>
+    <textarea id="statement">SELECT * FROM users WHERE email = 'test@example.org'</textarea>
+    <button id="prime">Prime taint sources</button>
+    <button id="btn-open">openDatabase(name)</button>
+    <button id="btn-sql">tx.executeSql(statement)</button>
+  </div>
+
+  <script>
+    function primeSources(name, statement) {
+      document.cookie = 'iast_payload=' + encodeURIComponent(name) + '; path=/';
+      localStorage.setItem('iast_payload', statement);
+      sessionStorage.setItem('iast_payload', statement);
+      window.name = statement;
+    }
+
+    const dbNameField = document.getElementById('db-name');
+    const statementField = document.getElementById('statement');
+
+    document.getElementById('prime').onclick = () => {
+      primeSources(dbNameField.value, statementField.value);
+      alert('Client SQL payload primed.');
+    };
+
+    document.getElementById('btn-open').onclick = () => {
+      if (typeof window.openDatabase !== 'function') {
+        alert('openDatabase is unavailable in this browser.');
+        return;
+      }
+      try {
+        window.openDatabase(dbNameField.value, '1.0', 'iast db', 2 * 1024 * 1024);
+      } catch (err) {
+        console.warn('openDatabase failed:', err);
+      }
+    };
+
+    document.getElementById('btn-sql').onclick = () => {
+      if (typeof window.openDatabase !== 'function') {
+        alert('openDatabase is unavailable in this browser.');
+        return;
+      }
+      try {
+        const db = window.openDatabase('iast-sql', '1.0', 'iast db', 2 * 1024 * 1024);
+        db.transaction((tx) => {
+          tx.executeSql(statementField.value, [], () => {}, () => false);
+        });
+      } catch (err) {
+        console.warn('executeSql failed:', err);
+      }
+    };
+  </script>
+</body>
+</html>

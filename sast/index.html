@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SAST cases · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OWASP PTK client-side SAST fixtures and advanced DOM security labs.">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+</head>
+<body data-page="engine" data-engine="sast">
+  <a class="skip-link" href="#main">Skip to SAST catalogue</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground suites">
+        <a href="../campaigns/">Campaigns</a><a href="../demo/">Demo</a><a href="../scanner/">Scanner quick start</a><a href="./" aria-current="page">SAST</a><a href="../iast/">IAST</a><a href="../passive/">Passive DAST</a><a href="../#catalogue">All cases</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="page-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>SAST</span></nav>
+    <section class="engine-hero">
+      <p class="eyebrow">Static analysis</p>
+      <h1>Find vulnerable client-side code without executing it.</h1>
+      <p class="engine-hero__lede">These pages exercise DOM sinks, dynamic execution, navigation, messaging, storage and browser API patterns. Existing combined pages are advanced labs; focused guided canaries will be added without breaking their URLs.</p>
+    </section>
+    <aside class="notice">
+      <span class="notice__icon" aria-hidden="true">i</span>
+      <p><strong>SAST reads every collected code path.</strong> A broad page can intentionally produce many findings even when you click only one control. Use filters to choose a family; exact-count automation belongs to isolated canaries.</p>
+    </aside>
+    <section class="section" aria-labelledby="catalogue-title">
+      <div class="section-heading"><div><p class="eyebrow">Catalogue</p><h2 id="catalogue-title">SAST cases</h2><p><span data-case-count="sast">—</span> current public entries. Combined legacy labs contain several source and sink families; focused canaries are labelled separately.</p></div></div>
+      <div class="catalogue-panel">
+        <div class="filter-bar" aria-label="SAST case filters">
+          <div class="field"><label for="case-search">Search</label><input id="case-search" data-filter="search" type="search" placeholder="innerHTML, selector, JWT…"></div>
+          <div class="field"><label for="mode-filter">Mode</label><select id="mode-filter" data-filter="mode"><option value="">All modes</option><option value="manual">Manual</option><option value="advanced">Advanced lab</option><option value="automation">Automation</option></select></div>
+        </div>
+        <p class="catalogue-summary"><span data-catalogue-summary>Loading catalogue…</span></p>
+        <div class="case-grid" data-case-catalogue data-engine="sast" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST fixtures · deliberate vulnerable and safe-control code for authorised testing.</p><nav aria-label="Project links"><a href="../">Playground</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a><a href="https://github.com/DenisPodgurskii/pentestkit/tree/master/docs/guide">Guide</a></nav></div></footer>
+</body>
+</html>

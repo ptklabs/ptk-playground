@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Saved Workspace · Review Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A child dashboard route that restores origin-scoped browser state.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script defer src="./dashboard.js"></script>
+</head>
+<body data-playground-target="saved-workspace-review-dashboard" data-target-variant="vulnerable">
+  <a class="skip-link" href="#main">Skip to dashboard</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">LAB</span><span>Browser Security Playground</span></a><nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/saved-workspace/">Mission</a><a href="./dashboard.js">View source</a><a href="../fixed/">Repaired target</a></nav></div></header>
+
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="./">Saved workspace setup</a><span aria-hidden="true">/</span><span>Review dashboard</span></nav>
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Child application route</p><h1 id="target-title">Team workspace dashboard</h1><p class="target-hero__lede">This new document restores the announcement saved by the settings page.</p></div><dl class="target-facts" aria-label="Target facts"><div><dt>Document</dt><dd>Dashboard</dd></div><div><dt>Source</dt><dd>Saved state</dd></div><div><dt>Variant</dt><dd>Review</dd></div></dl></section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled training target.</strong> The dashboard renders only the harmless value prepared by the setup route.</p></aside>
+
+    <section class="widget-stage" aria-labelledby="announcement-title">
+      <div class="widget-card"><div class="widget-card__heading"><div><p class="eyebrow">Saved announcement</p><h2 id="announcement-title">Workspace update</h2></div><span class="status-pill">Restored</span></div><div id="announcement-preview" class="support-thread" aria-live="polite">Loading saved announcement…</div><div class="widget-actions"><button id="clear-announcement" class="button button--secondary" type="button">Clear and return</button></div></div>
+      <aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Neutral proof</p><h2 id="proof-title">Browser evidence</h2><p>The token confirms that the saved markup crossed navigation and became a DOM element in this document.</p><output id="announcement-status" class="proof-token" aria-live="polite">Restoring browser state…</output></aside>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Child target route · Origin-scoped state · No campaign coupling.</p><nav aria-label="Target links"><a href="./">Return to setup</a></nav></div></footer>
+</body>
+</html>

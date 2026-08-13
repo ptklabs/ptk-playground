@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scanner Quick Start · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Scanner-neutral paired browser-security targets for SCA, SAST, IAST and DAST validation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+</head>
+<body data-page="scanner">
+  <a class="skip-link" href="#main">Skip to scanner targets</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation">
+        <a href="../campaigns/">Campaigns</a>
+        <a href="../demo/">Demo</a>
+        <a href="./" aria-current="page">Scanner quick start</a>
+        <a href="../sast/">SAST</a>
+        <a href="../iast/">IAST</a>
+        <a href="../passive/">Passive DAST</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <section class="engine-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>Scanner quick start</span></nav>
+      <p class="eyebrow">Stable targets · paired controls</p>
+      <h1>Point a browser scanner at focused, reproducible routes.</h1>
+      <p class="engine-hero__lede">Use review and repaired targets to compare browser-visible findings across SCA, SAST, IAST and DAST. The directory is scanner-neutral and contains no detection rules, payloads or expected finding assertions.</p>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Use only on systems you are authorised to test.</strong> Every target link below stays within this deliberately vulnerable fixture corpus.</p>
+    </aside>
+
+    <section id="scanner-server" class="section" aria-labelledby="runtime-title">
+      <div class="section-heading"><div><p class="eyebrow">Runtime</p><h2 id="runtime-title">Static targets and browser-server targets</h2><p>Static targets open on any web server. Response metadata and session-bound requests require the included route-aware server.</p></div></div>
+      <div class="info-panel scanner-runtime-panel">
+        <div class="runtime-status"><span class="status-dot" data-scanner-status-dot aria-hidden="true"></span><div><strong data-scanner-status>Static catalogue mode</strong><p data-scanner-status-detail>Route-aware targets remain disabled until this page is opened through the local server.</p></div></div>
+        <div class="scanner-command"><span>Start from the repository root</span><code>node passive/server.mjs</code></div>
+        <p>Then open <code>http://127.0.0.1:3080/scanner/</code>. HTTPS target routes use the local test certificate on port 3443.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="directory-title">
+      <div class="section-heading"><div><p class="eyebrow">Target directory</p><h2 id="directory-title">Choose evidence and runtime</h2><p>Each mission keeps its review target beside a repaired negative control so scanner results can be compared without mixing unrelated cases.</p></div></div>
+      <div class="catalogue-panel">
+        <div class="filter-bar" aria-label="Scanner target filters">
+          <div class="field"><label for="scanner-search">Search</label><input id="scanner-search" data-scanner-filter="search" type="search" placeholder="dependency, response, session…"></div>
+          <div class="field"><label for="scanner-engine">Evidence family</label><select id="scanner-engine" data-scanner-filter="engine"><option value="">All evidence</option><option value="SCA">SCA</option><option value="SAST">SAST</option><option value="IAST">IAST</option><option value="DAST">DAST</option></select></div>
+          <div class="field"><label for="scanner-runtime">Runtime</label><select id="scanner-runtime" data-scanner-filter="runtime"><option value="">All runtimes</option><option value="static">Static hosting</option><option value="route-aware-server">Route-aware server</option></select></div>
+        </div>
+        <p class="catalogue-summary"><span data-scanner-summary>Loading target directory…</span><a href="../catalog/scanner-targets.json">Machine-readable catalogue</a></p>
+        <div class="scanner-directory" data-scanner-directory aria-live="polite"><p class="empty-state">Loading scanner targets…</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Scanner-neutral fixtures · Review and repaired controls.</p><nav aria-label="Project links"><a href="../campaigns/">Guided campaigns</a><a href="../catalog/scanner-targets.json">Target catalogue</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
+</body>
+</html>

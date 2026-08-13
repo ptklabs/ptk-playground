@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: framework and console surfaces</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Framework and console surface fixture</h1>
+    <p class="meta">
+      This page aggregates framework fingerprints while the route aliases provide the high-signal path patterns passive recon expects.
+    </p>
+    <div class="fixture">
+      <pre><code>wordpress /wp-content/ uploads
+Drupal.settings = window.drupalSettings || {};
+DWREngine._execute("/dwr/call/plaincall/OrderService.get.dwr");
+Grafana admin console
+Jenkins build queue
+phpMyAdmin / Adminer / pgAdmin
+Bull Board queue dashboard
+Jolokia and rails/info consoles</code></pre>
+      <p>
+        Representative links:
+        <a href="/wp-admin/index.html">WordPress</a>,
+        <a href="/drupal/core/install.php">Drupal</a>,
+        <a href="/dwr/engine.js">DWR</a>,
+        <a href="/grafana/">Grafana</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

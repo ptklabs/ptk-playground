@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST XPath Injection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 96px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST XPath Injection</h1>
+  <p class="note">Exercises <code>document.evaluate()</code> with controlled XPath expressions.</p>
+
+  <div class="card">
+    <label for="payload">XPath payload</label>
+    <textarea id="payload">//*[@id='items']//*[contains(@class,'item')]</textarea>
+    <button id="prime">Prime taint sources</button>
+    <button id="btn-evaluate">document.evaluate(payload)</button>
+  </div>
+
+  <script>
+    function primeSources(value) {
+      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+      localStorage.setItem('iast_payload', value);
+      sessionStorage.setItem('iast_payload', value);
+      window.name = value;
+    }
+
+    const payloadField = document.getElementById('payload');
+
+    document.getElementById('prime').onclick = () => {
+      primeSources(payloadField.value);
+      alert('XPath payload primed.');
+    };
+
+    document.getElementById('btn-evaluate').onclick = () => {
+      try {
+        document.evaluate(payloadField.value, document, null, XPathResult.ANY_TYPE, null);
+      } catch (err) {
+        console.warn('XPath evaluation failed:', err);
+      }
+    };
+  </script>
+</body>
+</html>

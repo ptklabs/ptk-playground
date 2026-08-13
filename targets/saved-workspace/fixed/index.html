@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Saved Workspace · Repaired Setup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A repaired browser target for state persisted across same-origin navigation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script defer src="../workspace-editor.js"></script>
+</head>
+<body data-playground-target="saved-workspace-control" data-target-variant="fixed" data-storage-key="ptk_saved_workspace_announcement_control">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">LAB</span><span>Browser Security Playground</span></a><nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/saved-workspace/">Mission</a><a href="./dashboard.js">View dashboard source</a><a href="../vulnerable/">Review target</a></nav></div></header>
+
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../campaigns/saved-workspace/">Saved workspace</a><span aria-hidden="true">/</span><span>Repaired setup</span></nav>
+    <section class="target-hero" aria-labelledby="target-title">
+      <div><p class="eyebrow">Persistent browser-state control</p><h1 id="target-title">Save a workspace announcement.</h1><p class="target-hero__lede">The same application workflow stores the announcement and restores it on a separate dashboard document.</p></div>
+      <dl class="target-facts" aria-label="Target facts"><div><dt>Variant</dt><dd>Repaired</dd></div><div><dt>State</dt><dd>Local storage</dd></div><div><dt>Journey</dt><dd>Two documents</dd></div></dl>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled training target.</strong> The prepared value is harmless markup and remains on this same-origin fixture.</p></aside>
+
+    <section class="widget-stage" aria-labelledby="editor-title">
+      <div class="widget-card">
+        <div class="widget-card__heading"><div><p class="eyebrow">Workspace settings</p><h2 id="editor-title">Dashboard announcement</h2></div><span class="status-pill status-pill--safe">Repaired</span></div>
+        <form id="workspace-form" class="workspace-form">
+          <label for="workspace-announcement">Announcement content</label>
+          <textarea id="workspace-announcement" name="announcement" rows="4">&lt;strong data-workspace-marker=&quot;true&quot;&gt;Quarterly review is ready&lt;/strong&gt;</textarea>
+          <div class="widget-actions"><button id="save-announcement" class="button" type="submit">Save and open dashboard</button><button id="clear-workspace" class="button button--secondary" type="button">Reset saved state</button></div>
+        </form>
+      </div>
+      <aside class="proof-panel proof-panel--safe" aria-labelledby="journey-title"><p class="eyebrow">Browser journey</p><h2 id="journey-title">State crosses navigation safely</h2><p>The save action and child route remain identical in shape. The dashboard changes how it writes the restored value.</p><code class="proof-token">/targets/saved-workspace/fixed/dashboard.html</code></aside>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Direct target · Same-origin browser state · No campaign coupling.</p><nav aria-label="Target links"><a href="../vulnerable/">Compare the review target</a></nav></div></footer>
+</body>
+</html>

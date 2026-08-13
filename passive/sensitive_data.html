@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Passive fixture: sensitive data exposure</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/passive/css/index.css" type="text/css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Sensitive data exposure fixture</h1>
+    <p class="meta">
+      This route intentionally contains regulated-looking identifiers and helper links that place secret-like values in URLs.
+    </p>
+    <div class="fixture">
+      <p>Demo payment profile:</p>
+      <pre>Visa: 4111 1111 1111 1111
+SSN: 123-45-6789
+Order helper:
+/passive/fixtures/tokens/url-leaks.html?access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.signature&id_token=idtok_12345678&api_key=AIza0123456789abcdef0123456789abcdef</pre>
+    </div>
+  </div>
+</body>
+</html>

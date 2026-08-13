@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST PostMessage Form Hijack Minimal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 24px; }
+    .stack { display: grid; gap: 10px; max-width: 560px; }
+    input, button { padding: 10px; }
+  </style>
+</head>
+<body>
+  <div class="stack">
+    <input id="payload" type="text" value="/orders/ptk-postmessage">
+    <form id="target-form" method="GET">
+      <button id="submit-btn" type="submit">Submit</button>
+    </form>
+    <button id="btn-message-action" type="button">postMessage -> form.action</button>
+  </div>
+
+  <script>
+    const payloadInput = document.getElementById('payload');
+
+    window.addEventListener('message', (event) => {
+      if (typeof event.data !== 'string' || !event.data) return;
+      setTimeout(() => {
+        document.getElementById('target-form').setAttribute('action', event.data);
+      }, 0);
+    });
+
+    document.getElementById('btn-message-action').addEventListener('click', () => {
+      window.postMessage(payloadInput.value, '*');
+    });
+  </script>
+</body>
+</html>
