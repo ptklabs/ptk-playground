@@ -74,8 +74,29 @@ test('playground desktop and mobile smoke stays local and renders the focused ca
         const response = await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'networkidle' })
         assert.equal(response.status(), 200, `${viewport.name}:${pathname}`)
         assert.equal(await page.locator('main').count(), 1, `${viewport.name}:${pathname} main`)
-        const dimensions = await page.evaluate(() => ({ width: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth }))
-        assert.ok(dimensions.scrollWidth <= dimensions.width + 1, `${viewport.name}:${pathname} has horizontal overflow`)
+        const dimensions = await page.evaluate(() => {
+          const width = document.documentElement.clientWidth
+          const offenders = [...document.querySelectorAll('body *')]
+            .map((element) => {
+              const rect = element.getBoundingClientRect()
+              const className = String(element.className || '').trim().split(/\s+/).filter(Boolean).join('.')
+              return {
+                selector: element.id
+                  ? `${element.tagName.toLowerCase()}#${element.id}`
+                  : `${element.tagName.toLowerCase()}${className ? `.${className}` : ''}`,
+                left: Math.round(rect.left * 100) / 100,
+                right: Math.round(rect.right * 100) / 100,
+                width: Math.round(rect.width * 100) / 100
+              }
+            })
+            .filter((element) => element.left < -1 || element.right > width + 1)
+            .slice(0, 8)
+          return { width, scrollWidth: document.documentElement.scrollWidth, offenders }
+        })
+        assert.ok(
+          dimensions.scrollWidth <= dimensions.width + 1,
+          `${viewport.name}:${pathname} has horizontal overflow: ${JSON.stringify(dimensions)}`
+        )
       }
 
       assert.equal(await page.goto(`${baseUrl}/campaigns/`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
