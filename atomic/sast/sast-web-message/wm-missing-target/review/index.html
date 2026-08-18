@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WM-M2 (Medium): postMessage invoked without specifying targetOrigin · OWASP PTK Playground</title>
+  <link rel="stylesheet" href="../../../../../assets/css/playground.css">
+</head>
+<body class="target-page engine-page engine-page--sast">
+  <a class="skip-link" href="#workbench">Skip to case</a>
+  <header class="site-header atomic-site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../../../../../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Atomic target navigation"><a href="../../../../../sast/web_message.html">Case family</a><a href="../../../../../explore/?engine=SAST">Explore SAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell target-shell atomic-shell" data-atomic-sast-id="sast.atomic.sast-web-message.wm-missing-target" data-variant="review">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../../../sast/">SAST</a><span aria-hidden="true">/</span><a href="../../../../../sast/web_message.html">Case family</a><span aria-hidden="true">/</span><span>Review target</span></nav>
+    <section class="atomic-hero atomic-hero--review">
+      <div class="atomic-hero__copy">
+        <div class="atomic-kicker"><span class="atomic-engine-badge">SAST</span><span class="atomic-state-badge">Review target</span></div>
+        <h1>WM-M2 (Medium): postMessage invoked without specifying targetOrigin</h1>
+        <p>A single browser-code flow is isolated from the combined compatibility lab so its source, operation and result are easy to review.</p>
+      </div>
+      <div class="atomic-hero__actions">
+        <a class="button" href="../fixed/">Open repaired control</a>
+        <a class="button button--secondary" href="../../../../..//sast/web_message.advanced.html#wm-missing-target">Open Advanced source</a>
+      </div>
+    </section>
+
+    <ol class="atomic-steps" aria-label="How to use this SAST case">
+      <li><span>1</span><div><strong>Start SAST</strong><p>Scan this document. Static analysis should review the code path without requiring the action.</p></div></li>
+      <li><span>2</span><div><strong>Inspect the prepared flow</strong><p>Review or edit the harmless input, then run the case to see its browser behavior.</p></div></li>
+      <li><span>3</span><div><strong>Compare the pair</strong><p>Open the repaired control and confirm the code boundary—not the intended interaction—changes.</p></div></li>
+    </ol>
+
+    <section id="workbench" class="atomic-workbench" aria-label="SAST scenario workbench">
+      <article class="atomic-panel atomic-panel--input">
+        <div class="atomic-panel__heading"><div><p class="eyebrow">Prepared flow</p><h2>Input and action</h2></div><span class="atomic-panel__step">01</span></div>
+        <label class="atomic-field-label" for="case-input">Harmless test value</label>
+        <textarea class="atomic-input" id="case-input" rows="4" spellcheck="false"></textarea>
+        <p class="atomic-help">The value is intentionally visible and editable. It demonstrates the data flow without using a destructive payload.</p>
+        <div class="atomic-action-row">
+          <button class="button" id="run-case" type="button">Run focused case</button>
+          <a class="button button--secondary" id="case-link" href="#output" hidden>Open prepared link</a>
+        </div>
+      </article>
+
+      <article class="atomic-panel atomic-panel--evidence">
+        <div class="atomic-panel__heading"><div><p class="eyebrow">Browser proof</p><h2>Visible evidence</h2></div><span class="atomic-panel__step">02</span></div>
+        <div class="atomic-output" id="output" data-empty-label="The visible result will appear here."></div>
+        <iframe class="atomic-preview" id="preview" title="Document output preview" hidden></iframe>
+        <p class="atomic-evidence-status" id="evidence" data-state="ready"><span aria-hidden="true"></span>Ready to run</p>
+      </article>
+    </section>
+
+    <aside class="atomic-pair-note atomic-pair-note--review">
+      <div><p class="eyebrow">Paired verification</p><h2>A finding needs a clean comparison</h2><p>After reviewing this page, open the repaired control and verify that the same user-facing action no longer crosses the unsafe boundary.</p></div>
+      <a class="button button--secondary" href="../fixed/">Open repaired control</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST atomic target · scanner-neutral and locally reproducible.</p><nav aria-label="Project links"><a href="../../../../../sast/web_message.html">Case family</a><a href="../../../../../explore/?engine=SAST">Explore SAST</a></nav></div></footer>
+  <script src="./case.js"></script>
+</body>
+</html>

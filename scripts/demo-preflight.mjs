@@ -110,13 +110,14 @@ try {
     httpsAvailable: true
   });
 
-  const [demoPage, scannerPage, demoCatalogResponse, scannerCatalogResponse] = await Promise.all([
+  const [playPage, compatibilityDemoPage, scannerPage, demoCatalogResponse, scannerCatalogResponse] = await Promise.all([
+    request(`${httpOrigin}/play/?playlist=browser-context-demo`),
     request(`${httpOrigin}/demo/`),
     request(`${httpOrigin}/scanner/`),
     request(`${httpOrigin}/catalog/demo.json`),
     request(`${httpOrigin}/catalog/scanner-targets.json`)
   ]);
-  for (const [label, response] of Object.entries({ demoPage, scannerPage, demoCatalogResponse, scannerCatalogResponse })) {
+  for (const [label, response] of Object.entries({ playPage, compatibilityDemoPage, scannerPage, demoCatalogResponse, scannerCatalogResponse })) {
     assert.equal(response.status, 200, `${label} must return HTTP 200`);
   }
 
@@ -179,7 +180,8 @@ try {
   assert.equal(JSON.parse(repairedResult.body).ok, true);
 
   console.log("OWASP PTK Playground demo preflight: PASS");
-  console.log(`  Local demo: ${httpOrigin}/demo/`);
+  console.log(`  Local presentation: ${httpOrigin}/play/?playlist=browser-context-demo`);
+  console.log(`  Compatibility demo: ${httpOrigin}/demo/`);
   console.log(`  Scanner directory: ${httpOrigin}/scanner/`);
   console.log(`  HTTPS active target: ${httpsOrigin}/targets/session-bound-order-search/vulnerable/`);
   console.log("  Engines represented: DAST, SAST, IAST, SCA");

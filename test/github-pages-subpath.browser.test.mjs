@@ -13,6 +13,7 @@ const port = 41745
 const prefix = '/ptk-playground/'
 const origin = `http://${host}:${port}`
 const baseUrl = `${origin}${prefix}`
+const canonical = JSON.parse(fs.readFileSync(path.join(playgroundRoot, 'catalog/challenges.json'), 'utf8'))
 
 function contentType(filePath) {
   const extension = path.extname(filePath).toLowerCase()
@@ -77,12 +78,23 @@ test('GitHub Pages project subpath loads catalogues, campaigns and direct static
 
     for (const pathname of [
       '',
+      'play/',
+      'explore/',
       'campaigns/',
       'demo/',
       'scanner/',
       'campaigns/support-widget/',
+      'campaigns/history-order-router/',
+      'campaigns/lazy-route-module/',
+      'campaigns/same-origin-child-tab/',
       'targets/support-widget/vulnerable/',
       'targets/support-widget/fixed/',
+      'targets/history-order-router/vulnerable/',
+      'targets/history-order-router/fixed/',
+      'targets/lazy-route-module/vulnerable/',
+      'targets/lazy-route-module/fixed/',
+      'targets/same-origin-child-tab/vulnerable/',
+      'targets/same-origin-child-tab/fixed/',
       'sast/',
       'iast/',
       'passive/'
@@ -96,12 +108,36 @@ test('GitHub Pages project subpath loads catalogues, campaigns and direct static
     }
 
     await page.goto(`${baseUrl}campaigns/`, { waitUntil: 'networkidle' })
-    assert.equal(await page.locator('[data-mission-card]').count(), 8)
+    assert.equal(await page.locator('[data-mission-card]').count(), 11)
     assert.equal(await page.locator('[data-product-preview]').count(), 3)
     assert.equal(await page.locator('[data-product-preview="saved-workspace"] a').getAttribute('href'), `${baseUrl}campaigns/saved-workspace/`)
     assert.equal(await page.locator('[data-product-preview="session-bound-order-search"] a').count(), 0)
     await page.goto(`${baseUrl}scanner/`, { waitUntil: 'networkidle' })
-    assert.equal(await page.locator('[data-scanner-target]').count(), 16)
+    assert.equal(await page.locator('[data-scanner-target]').count(), 22)
+    await page.goto(`${baseUrl}play/`, { waitUntil: 'networkidle' })
+    assert.equal(await page.locator('[data-challenge-id]').count(), 3)
+    assert.equal(await page.locator('[data-playlist-list] .playlist-option').count(), 7)
+    const localDastLinks = page.getByRole('link', { name: 'Run locally for DAST' })
+    assert.equal(await localDastLinks.count(), 2)
+    assert.equal(
+      await localDastLinks.first().getAttribute('href'),
+      'https://github.com/ptklabs/ptk-playground#run-the-complete-local-demo-with-docker'
+    )
+    await page.goto(`${baseUrl}sast/append_child.html`, { waitUntil: 'networkidle' })
+    assert.equal(await page.locator('.family-case-card').count(), 4)
+    const focusedSastHref = await page.locator('.family-case-card .button').first().getAttribute('href')
+    assert.ok(focusedSastHref.startsWith('../atomic/sast/'))
+    assert.equal(await page.goto(new URL(focusedSastHref, page.url()).href, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
+    await page.goto(`${baseUrl}iast/iast_dom_clobbering.html`, { waitUntil: 'networkidle' })
+    assert.equal(await page.locator('.family-case-card').count(), 2)
+    await page.goto(`${baseUrl}explore/`, { waitUntil: 'networkidle' })
+    assert.equal(await page.locator('[data-challenge-id]').count(), Math.min(24, canonical.summary.challenges))
+    assert.equal(await page.locator('[data-explore-more]:visible').count(), 1)
+    const generatedSast = canonical.challenges.find((challenge) => challenge.id.startsWith('sast.atomic.'))
+    assert.ok(generatedSast)
+    const generatedPath = generatedSast.targets.review.route.replace(/^\.\//, '')
+    assert.equal(await page.goto(`${baseUrl}${generatedPath}`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
+    assert.equal(await page.locator('[data-variant="review"]').count(), 1)
     assert.deepEqual(failedLocalResponses, [])
     assert.deepEqual(errors, [])
   } finally {

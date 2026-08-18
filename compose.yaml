@@ -1,0 +1,21 @@
+services:
+  playground:
+    build:
+      context: .
+    image: ptk-playground:local
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    ports:
+      - "127.0.0.1:3080:3080"
+      - "127.0.0.1:3443:3443"
+    environment:
+      PTK_PLAYGROUND_HOST: 0.0.0.0
+      PTK_PASSIVE_HTTP_PORT: 3080
+      PTK_PASSIVE_HTTPS_PORT: 3443
+    stop_grace_period: 5s

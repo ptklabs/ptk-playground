@@ -1,187 +1,88 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — Ajax request header manipulation</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-
-  <script src="js/sources.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="js/ajax_request_header/ajax_request_header.js"></script>
-  <script src="js/summary.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', updateSummary);
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajax request header manipulation · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for Ajax request header manipulation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — Ajax request header manipulation</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/ajax_request_header.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-    <p class="meta">
-      Scenarios highlight unsafe ways to construct Ajax requests: copying attacker data into headers, evaluating payloads,
-      and wiring <code>postMessage</code> listeners without origin checks. Safe cards show header name/value allow-lists
-      prior to issuing requests.
-    </p>
-
-
-
-    <div class="log" id="ajax-log">Logs will appear here.</div>
-    <iframe id="ajax-message-frame" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
-
-    <h2 class="section-title">High severity — direct header manipulation</h2>
-    <div class="grid">
-      <div class="card" data-severity="high" id="arh-setrequestheader">
-        <div class="card-meta">ARH-H1 (High): <code>location.hash</code> copied into <code>setRequestHeader</code></div>
-        <pre>// inline-script[#1]
-(function(){
-  var sel = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/api/log');
-  xhr.setRequestHeader('X-From-Hash', sel);
-})();</pre>
-        <script>
-          (function() {
-            var sel = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/log');
-            xhr.setRequestHeader('X-From-Hash', sel);
-          })();
-        </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>Ajax request header manipulation</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>Ajax request header manipulation</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>5</strong> focused cases</span><span><strong>5</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-ajax-request-header.arh-setrequestheader">
+        <div class="family-case-card__meta"><span>Case 01</span><span>xhr request header</span></div>
+        <h2>ARH-H1 (High): location.hash</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-ajax-request-header/arh-setrequestheader/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-ajax-request-header/arh-setrequestheader/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-ajax-request-header.arh-copy-cookie">
+        <div class="family-case-card__meta"><span>Case 02</span><span>xhr request header</span></div>
+        <h2>ARH-H2 (High): Copying document.cookie</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-ajax-request-header/arh-copy-cookie/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-ajax-request-header/arh-copy-cookie/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-ajax-request-header.arh-global-eval">
+        <div class="family-case-card__meta"><span>Case 03</span><span>global eval</span></div>
+        <h2>ARH-H3 (High): $.globalEval</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-ajax-request-header/arh-global-eval/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-ajax-request-header/arh-global-eval/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-ajax-request-header.arh-message-listener">
+        <div class="family-case-card__meta"><span>Case 04</span><span>message to html</span></div>
+        <h2>ARH-M1 (Medium): postMessage</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-ajax-request-header/arh-message-listener/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-ajax-request-header/arh-message-listener/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-ajax-request-header.arh-xhr-open">
+        <div class="family-case-card__meta"><span>Case 05</span><span>xhr open url</span></div>
+        <h2>ARH-M2 (Medium): XMLHttpRequest.open</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-ajax-request-header/arh-xhr-open/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-ajax-request-header/arh-xhr-open/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-      <div class="card" data-severity="high" id="arh-copy-cookie">
-        <div class="card-meta">ARH-H2 (High): Copying <code>document.cookie</code> into custom header for fetch()</div>
-        <pre>// inline-script[#2]
-fetch('/api/echo', {
-  method: 'POST',
-  headers: {
-    'Cookie': document.cookie
-  }
-});</pre>
-        <script>
-          fetch('/api/echo', {
-            method: 'POST',
-            headers: {
-              'Cookie': document.cookie
-            }
-          });
-        </script>
-      </div>
-
-      <div class="card" data-severity="high" id="arh-global-eval">
-        <div class="card-meta">ARH-H3 (High): <code>$.globalEval</code> of tainted payload before XHR.send()</div>
-        <pre>// inline-script[#3]
-(function(evt){
-  var payload = evt.data;
-  $.globalEval(payload);
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/api/forward');
-  xhr.send(payload);
-})({"data": document.cookie});</pre>
-        <script>
-          (function(evt) {
-            var payload = evt.data;
-            $.globalEval(payload);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/forward');
-            xhr.send(payload);
-          })({"data": document.cookie});
-        </script>
-      </div>
-    </div>
-
-    <h2 class="section-title">Medium severity — weak validation & listeners</h2>
-    <div class="grid">
-      <div class="card" data-severity="medium" id="arh-message-listener">
-        <div class="card-meta">ARH-M1 (Medium): <code>postMessage</code> listener building headers without origin check</div>
-        <pre>// inline-script[#4]
- (function(evt) {
-  var data = evt.data || {};
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/api/message');
-  if (data && data.header) xhr.setRequestHeader(data.header, data.value || '1');
-  xhr.send('sink');
-})({"data": window.name});</pre>
-        <script>
-          (function(evt) {
-            var data = evt.data || {};
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/message');
-            if (data && data.header) xhr.setRequestHeader(data.header, data.value || '1');
-            xhr.send('sink');
-          })({"data": window.name});
-        </script>
-      </div>
-
-      <div class="card" data-severity="medium" id="arh-xhr-open">
-        <div class="card-meta">ARH-M2 (Medium): <code>XMLHttpRequest.open</code> fed with tainted URL param</div>
-        <pre>// inline-script[#5]
-(function(){
-  var qs = new URLSearchParams(location.search);
-  var url = qs.get('redir') || '/api/data';
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-  xhr.send();
-})();</pre>
-        <script>
-          (function() {
-            var qs = new URLSearchParams(location.search);
-            var url = qs.get('redir') || '/api/data';
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.send();
-          })();
-        </script>
-      </div>
-    </div>
-
-    <h2 class="section-title">Safe scenarios — header name/value validation</h2>
-    <div class="grid">
-      <div class="card" data-severity="safe" id="arh-safe-whitelist">
-        <div class="card-meta">ARH-S1 (Safe): header name allow-list & regex validation</div>
-        <pre>// inline-script[#6]
-const allowedHeaders = ['X-Trace', 'X-Debug'];
-function sendSafeHeader(name, value) {
-  if (!allowedHeaders.includes(name)) return;
-  if (!/^[-a-z0-9]{1,32}$/i.test(value)) return;
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', '/api/safe');
-  xhr.setRequestHeader(name, value);
-  xhr.send('ok');
-}</pre>
-        <script>
-          const allowedHeaders = ['X-Trace', 'X-Debug'];
-
-          function sendSafeHeader(name, value) {
-            if (!allowedHeaders.includes(name)) return;
-            if (!/^[-a-z0-9]{1,32}$/i.test(value)) return;
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/api/safe');
-            xhr.setRequestHeader(name, value);
-            xhr.send('ok');
-          }
-        </script>
-      </div>
-
-    </div>
-
-    <footer>
-      Use the controls to mutate headers and postMessage payloads. The log panel captures simulated XHR interactions; inspect
-      DevTools network output to observe requests fired by each scenario.
-    </footer>
-  </div>
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./ajax_request_header.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

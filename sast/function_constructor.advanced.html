@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Function constructor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <!-- External scripts -->
+  <script src="js/function_constructor/function_constructor_sink.js"></script>
+  <script src="js/function_constructor/function_constructor_external_sources.js"></script>
+
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+  <script>
+    function setHashPayload() {
+      const payload = "alert('Function constructor from hash')";
+      location.hash = encodeURIComponent(payload);
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — <code>new Function(...)</code></h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+    <p class="meta">The Function constructor evaluates string arguments as full scripts. These fixtures combine inline and external triggers for security testing.</p>
+
+    <div class="controls">
+      <a class="btn secondary" href="?payload=alert('query')">Use query payload</a>
+      <button class="btn secondary" type="button" onclick="setHashPayload()">Set hash payload</button>
+    </div>
+
+
+    <!-- Inline scenarios -->
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+
+      <div class="card" data-severity="high" id="il-1">
+        <div class="card-meta">INLINE-1 (High): Query/hash → <code class="inline">new Function()</code></div>
+        <pre>// inline-script[#1]
+(function(){
+  function execute(payload) {
+    if (!payload) return;
+    functionConstructorSink(payload, 'inline-log');
+  }
+  const params = new URLSearchParams(location.search);
+  if (params.has('payload')) execute(params.get('payload'));
+})();</pre>
+        <div class="log" id="inline-log">Execution log will appear here.</div>
+        <script>
+          (function() {
+            function execute(payload) {
+              if (!payload) return;
+              functionConstructorSink(payload, 'inline-log');
+            }
+            const params = new URLSearchParams(location.search);
+            if (params.has('payload')) execute(params.get('payload'));
+          })();
+        </script>
+      </div>
+
+      <div class="card" data-severity="high" id="il-2">
+        <div class="card-meta">INLINE-2 (High): Field value → <code class="inline">new Function()</code></div>
+        <pre>// inline-script[#2]
+function inlineFunctionConstructor(fieldId, logId) {
+  const el = document.getElementById(fieldId);
+  if (!el) return;
+  functionConstructorSink(el.value, logId);
+}</pre>
+        <script>
+          function inlineFunctionConstructor(fieldId, logId) {
+            const el = document.getElementById(fieldId);
+            if (!el) return;
+            functionConstructorSink(el.value, logId);
+          }
+        </script>
+        <div class="field">
+          <input id="inline_function_payload" type="text" value="alert('inline field')" />
+          <button class="btn" type="button" onclick="inlineFunctionConstructor('inline_function_payload', 'inline-log')">Execute inline field</button>
+        </div>
+      </div>
+
+      <div class="card" data-severity="high, low" id="il-3">
+        <div class="card-meta">INLINE-3 (High):location.hash</div>
+        <pre>// inline-script[#3]
+(function() {
+  function execute(payload) {
+    if (!payload) return;
+    var fn = new Function(payload);
+    fn();
+  }
+  if (location.hash) {
+    try {
+      execute(decodeURIComponent(location.hash.slice(1)));
+    } catch (err) {
+      execute(location.hash.slice(1));
+    }
+  }
+})();</pre>
+        <div class="log" id="inline-safe-log">Safe allowlist log…</div>
+        <script>
+          (function() {
+            function execute(payload) {
+              if (!payload) return;
+              var fn = new Function(payload);
+              fn();
+            }
+            if (location.hash) {
+              try {
+                execute(decodeURIComponent(location.hash.slice(1)));
+              } catch (err) {
+                execute(location.hash.slice(1));
+              }
+            }
+          })();
+        </script>
+      </div>
+
+    </div>
+
+    <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+
+      <div class="card">
+        <div class="card-meta"><strong>Insecure sets : user-controlled values, weak attributes</strong></div>
+        <pre>onclick="extFunctionConstructorFromHash()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high, low" onclick="extFunctionConstructorFromHash()">EXT: from hash (no attributes) - High</button>
+        </div>
+        <pre>onclick="extFunctionConstructorFromSearch()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="extFunctionConstructorFromSearch()">EXT: from hash (no attributes) - High</button>
+        </div>
+        <pre>onclick="extFunctionConstructorFromWindowName()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="extFunctionConstructorFromWindowName()">EXT: from hash (no attributes) - High</button>
+        </div>
+        <pre>onclick="extFunctionConstructorFromReferrer()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="extFunctionConstructorFromReferrer()">EXT: from hash (no attributes) - High</button>
+        </div>
+        <pre>onclick="extFunctionConstructorFromCookie()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="extFunctionConstructorFromCookie()">EXT: from hash (no attributes) - High</button>
+        </div>
+        <pre>onclick="extFunctionConstructorFromLocalStorage()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="extFunctionConstructorFromLocalStorage()">EXT: from hash (no attributes) - High</button>
+        </div>
+        <pre>onclick="extFunctionConstructorFromSessionStorage()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high" onclick="extFunctionConstructorFromSessionStorage()">EXT: from hash (no attributes) - High</button>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>PTK SAST testbed — Function constructor (inline + external). <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+
+
+</body>
+
+</html>

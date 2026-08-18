@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Related Child Tab · Review Child</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A same-origin child application that receives a workspace message and loads browser-only context.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script defer src="./child-runtime.js"></script>
+</head>
+<body data-playground-target="same-origin-child-tab-review-child" data-target-variant="vulnerable">
+  <a class="skip-link" href="#main">Skip to child workspace</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">CHILD</span><span>Related Browser Context</span></a><nav class="site-nav" aria-label="Child navigation"><a href="./">Launcher</a><a href="./child-runtime.js">View source</a><a href="../fixed/child.html">Repaired child</a></nav></div></header>
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="./">Launcher</a><span aria-hidden="true">/</span><span>Review child</span></nav>
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Same-origin child application</p><h1 id="target-title">Support workspace</h1><p class="target-hero__lede">This document is opened by the launcher, loads its own dependency and context request, then receives the prepared message.</p></div><dl class="target-facts" aria-label="Child facts"><div><dt>Variant</dt><dd>Review</dd></div><div><dt>Opener</dt><dd>Same origin</dd></div><div><dt>Dependency</dt><dd>Child only</dd></div></dl></section>
+    <section class="widget-stage" aria-labelledby="message-title"><div class="widget-card"><div class="widget-card__heading"><div><p class="eyebrow">Incoming workspace message</p><h2 id="message-title">Child output</h2></div><span class="status-pill">postMessage</span></div><div id="child-message-output" class="support-thread" aria-live="polite">Waiting for the launcher…</div><p id="child-api-status">Loading child context…</p><p id="child-dependency-status">Loading child dependency…</p></div><aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Neutral proof</p><h2 id="proof-title">Child evidence</h2><output id="child-runtime-status" class="proof-token" aria-live="polite">RELATED-CHILD-STARTING</output></aside></section>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>Child target · Own runtime evidence · Same-origin opener journey.</p></div></footer>
+</body>
+</html>

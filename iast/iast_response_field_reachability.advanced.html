@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Response Field Reachability</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    button, input { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .sink-box { min-height: 64px; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; }
+    code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 6px; }
+    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Response Field Reachability</h1>
+  <p class="note">Fetches a same-origin JSON document, registers response-field taint sources, then routes those values into DOM sinks and form targets.</p>
+
+  <div class="card">
+    <label for="response-url">Response JSON URL</label>
+    <input id="response-url" type="text" value="./data/response-fields.json">
+    <button id="btn-load">Load response payload</button>
+    <p id="status" class="note">No response loaded yet.</p>
+  </div>
+
+  <div class="card grid">
+    <div>
+      <h3>DOM sinks</h3>
+      <button id="btn-inner">response.html → innerHTML</button>
+      <button id="btn-outer">response.html → outerHTML</button>
+      <button id="btn-adjacent">response.htmlFragment → insertAdjacentHTML</button>
+      <button id="btn-write">response.html → document.write</button>
+      <button id="btn-mutation">response.htmlFragment → appendChild(fragment)</button>
+      <button id="btn-parser">response.html → DOMParser.parseFromString</button>
+      <button id="btn-fragment">response.contextualFragment → Range.createContextualFragment</button>
+      <div id="inner-target" class="sink-box" style="margin-top:8px;">(DOM target)</div>
+    </div>
+
+    <div>
+      <h3>Form targets</h3>
+      <form id="response-form" method="GET">
+        <button id="response-submit" type="submit">Submit form</button>
+      </form>
+      <button id="btn-action">response.formAction → form.action</button>
+      <button id="btn-formaction">response.formAction → button.formAction</button>
+      <button id="btn-action-js">response.formJavascriptAction → form.action</button>
+      <button id="btn-formaction-js">response.formJavascriptAction → button.formAction</button>
+      <div id="action-preview" class="sink-box" style="margin-top:8px;">(form target preview)</div>
+    </div>
+  </div>
+
+  <script>
+    let responsePayload = null;
+
+    async function loadPayload() {
+      const url = document.getElementById('response-url').value || './data/response-fields.json';
+      const res = await fetch(url, { credentials: 'same-origin' });
+      responsePayload = await res.json();
+      document.getElementById('status').textContent =
+        'Loaded response payload fields: ' + Object.keys(responsePayload).join(', ');
+      return responsePayload;
+    }
+
+    function ensurePayload() {
+      if (!responsePayload) {
+        throw new Error('Load the response payload first.');
+      }
+      return responsePayload;
+    }
+
+    document.getElementById('btn-load').onclick = async () => {
+      try {
+        await loadPayload();
+      } catch (err) {
+        console.warn('Failed to load payload', err);
+        document.getElementById('status').textContent = 'Load failed: ' + (err && err.message ? err.message : err);
+      }
+    };
+
+    document.getElementById('btn-inner').onclick = () => {
+      const payload = ensurePayload();
+      document.getElementById('inner-target').innerHTML = payload.html;
+    };
+
+    document.getElementById('btn-outer').onclick = () => {
+      const payload = ensurePayload();
+      document.getElementById('inner-target').outerHTML = '<div id="inner-target" class="sink-box">' + payload.html + '</div>';
+    };
+
+    document.getElementById('btn-adjacent').onclick = () => {
+      const payload = ensurePayload();
+      document.getElementById('inner-target').insertAdjacentHTML('beforeend', payload.htmlFragment);
+    };
+
+    document.getElementById('btn-write').onclick = () => {
+      const payload = ensurePayload();
+      document.open();
+      document.write(payload.html);
+      document.close();
+    };
+
+    document.getElementById('btn-mutation').onclick = () => {
+      const payload = ensurePayload();
+      const frag = document.createRange().createContextualFragment(payload.htmlFragment);
+      document.getElementById('inner-target').appendChild(frag);
+    };
+
+    document.getElementById('btn-parser').onclick = () => {
+      const payload = ensurePayload();
+      const doc = new DOMParser().parseFromString(payload.html, 'text/html');
+      document.getElementById('inner-target').textContent = doc.body.innerHTML;
+    };
+
+    document.getElementById('btn-fragment').onclick = () => {
+      const payload = ensurePayload();
+      const frag = document.createRange().createContextualFragment(payload.contextualFragment);
+      const host = document.getElementById('inner-target');
+      host.replaceChildren();
+      host.appendChild(frag);
+    };
+
+    function updateFormPreview() {
+      const form = document.getElementById('response-form');
+      const btn = document.getElementById('response-submit');
+      document.getElementById('action-preview').textContent =
+        'form.action=' + (form.getAttribute('action') || form.action || '(empty)') + '\n' +
+        'button.formAction=' + (btn.getAttribute('formaction') || btn.formAction || '(empty)');
+    }
+
+    document.getElementById('btn-action').onclick = () => {
+      const payload = ensurePayload();
+      document.getElementById('response-form').action = payload.formAction;
+      updateFormPreview();
+    };
+
+    document.getElementById('btn-formaction').onclick = () => {
+      const payload = ensurePayload();
+      document.getElementById('response-submit').formAction = payload.formAction;
+      updateFormPreview();
+    };
+
+    document.getElementById('btn-action-js').onclick = () => {
+      const payload = ensurePayload();
+      document.getElementById('response-form').action = payload.formJavascriptAction;
+      updateFormPreview();
+    };
+
+    document.getElementById('btn-formaction-js').onclick = () => {
+      const payload = ensurePayload();
+      document.getElementById('response-submit').formAction = payload.formJavascriptAction;
+      updateFormPreview();
+    };
+  </script>
+</body>
+</html>

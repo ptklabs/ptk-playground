@@ -2,85 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST DOM Parser XSS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    textarea { min-height: 110px; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .sink-box { min-height: 64px; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; }
-    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-  </style>
+  <title>DOM Parser XSS · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for DOM Parser XSS.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST DOM Parser XSS</h1>
-  <p class="note">Exercises parser-like DOM sinks with controlled runtime input.</p>
-
-  <div class="card">
-    <label for="payload">HTML payload</label>
-    <textarea id="payload"><img src=x onerror="console.log('ptk-dom-parser')"></textarea>
-    <button id="prime">Prime taint sources</button>
-  </div>
-
-  <div class="card">
-    <button id="btn-domparser">DOMParser.parseFromString</button>
-    <button id="btn-range">Range.createContextualFragment</button>
-    <button id="btn-sethtmlunsafe">Element.setHTMLUnsafe (if supported)</button>
-    <button id="btn-shadow-sethtmlunsafe">ShadowRoot.setHTMLUnsafe (if supported)</button>
-    <div id="result" class="sink-box" style="margin-top:8px;">(awaiting parser sink)</div>
-  </div>
-
-  <script>
-    function primeSources(value) {
-      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
-      localStorage.setItem('iast_payload', value);
-      sessionStorage.setItem('iast_payload', value);
-      window.name = value;
-    }
-
-    const payloadField = document.getElementById('payload');
-    const result = document.getElementById('result');
-
-    document.getElementById('prime').onclick = () => {
-      primeSources(payloadField.value);
-      alert('Parser payload primed.');
-    };
-
-    document.getElementById('btn-domparser').onclick = () => {
-      const doc = new DOMParser().parseFromString(payloadField.value, 'text/html');
-      result.textContent = doc.body.innerHTML;
-    };
-
-    document.getElementById('btn-range').onclick = () => {
-      const frag = document.createRange().createContextualFragment(payloadField.value);
-      result.replaceChildren(frag);
-    };
-
-    document.getElementById('btn-sethtmlunsafe').onclick = () => {
-      if (typeof result.setHTMLUnsafe !== 'function') {
-        result.textContent = 'Element.setHTMLUnsafe is not supported in this browser.';
-        return;
-      }
-      result.setHTMLUnsafe(payloadField.value);
-    };
-
-    document.getElementById('btn-shadow-sethtmlunsafe').onclick = () => {
-      const host = document.createElement('div');
-      result.replaceChildren(host);
-      const shadow = host.attachShadow({ mode: 'open' });
-      if (typeof shadow.setHTMLUnsafe !== 'function') {
-        result.textContent = 'ShadowRoot.setHTMLUnsafe is not supported in this browser.';
-        return;
-      }
-      shadow.setHTMLUnsafe(payloadField.value);
-    };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_dom_parser_xss.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>DOM Parser XSS</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>DOM Parser XSS</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>4</strong> focused cases</span><span><strong>4</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-parser-xss.btn-domparser">
+        <div class="family-case-card__meta"><span>Case 01</span><span>dom parser</span></div>
+        <h2>DOMParser.parseFromString</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-parser-xss/btn-domparser/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-parser-xss/btn-domparser/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-parser-xss.btn-range">
+        <div class="family-case-card__meta"><span>Case 02</span><span>dom parser</span></div>
+        <h2>Range.createContextualFragment</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-parser-xss/btn-range/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-parser-xss/btn-range/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-parser-xss.btn-sethtmlunsafe">
+        <div class="family-case-card__meta"><span>Case 03</span><span>dom parser</span></div>
+        <h2>Element.setHTMLUnsafe (if supported)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-parser-xss/btn-sethtmlunsafe/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-parser-xss/btn-sethtmlunsafe/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-parser-xss.btn-shadow-sethtmlunsafe">
+        <div class="family-case-card__meta"><span>Case 04</span><span>dom parser</span></div>
+        <h2>ShadowRoot.setHTMLUnsafe (if supported)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-parser-xss/btn-shadow-sethtmlunsafe/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-parser-xss/btn-shadow-sethtmlunsafe/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_dom_parser_xss.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

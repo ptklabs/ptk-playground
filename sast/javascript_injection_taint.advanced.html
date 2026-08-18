@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — JavaScript injection (taint)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+  <script src="js/sources.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/summary.js"></script>
+  <script>
+    function seedJavascriptInjectionPayloads() {
+      const defaults = {
+        execScript: "console.log('execScript storage payload')",
+        globalEval: "console.log('globalEval payload', document.cookie)",
+        fragment: "<img src=\"x\" onerror=\"console.log('fragment')\">",
+        scriptText: "console.log('inline script text from storage');"
+      };
+      if (!sessionStorage.getItem('jsiExecScriptPayload')) {
+        sessionStorage.setItem('jsiExecScriptPayload', defaults.execScript);
+      }
+      if (!localStorage.getItem('jsiGlobalEvalPayload')) {
+        localStorage.setItem('jsiGlobalEvalPayload', defaults.globalEval);
+      }
+      if (!sessionStorage.getItem('jsiFragmentPayload')) {
+        sessionStorage.setItem('jsiFragmentPayload', defaults.fragment);
+      }
+      if (!localStorage.getItem('jsiScriptTextPayload')) {
+        localStorage.setItem('jsiScriptTextPayload', defaults.scriptText);
+      }
+    }
+
+    function setDemoHashPayload() {
+      const sample = "console.log('hash-payload via location.hash')";
+      location.hash = encodeURIComponent(sample);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      seedJavascriptInjectionPayloads();
+      updateSummary();
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — JavaScript injection (taint)</h1>
+    </div>
+
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+
+    <p class="meta">
+      This fixture exercises every sink from the <code>javascript-injection-taint</code> rule: string-based timers / eval /
+      <code>new Function</code>, <code>window.execScript</code>, jQuery <code>globalEval/getScript</code>,
+      <code>document.execCommand</code>, <code>Range.createContextualFragment</code>, <code>crypto.generateCRMFRequest</code>,
+      and assignments to <code>script.textContent</code>. Each card wires attacker-controlled DOM data (hash/search/inputs/storage)
+      into the relevant sink without validation.
+    </p>
+
+    <div class="controls">
+      <button class="btn secondary" type="button" onclick="setDemoHashPayload()">Set demo hash payload</button>
+      <button class="btn secondary" type="button" onclick="localStorage.setItem('jsiGlobalEvalPayload', 'console.log(\'globalEval from storage\')')">Seed localStorage payload</button>
+    </div>
+
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+
+      <div class="card" data-rule="taint" data-severity="high" id="jsi-timer">
+        <div class="card-meta"><strong>JSI-H1 (High): Hash/query → string timer (<code>eval:constructor</code>)</strong></div>
+        <pre>// inline-script[#1]
+function runTimerFromHash() {
+  var field = document.getElementById('jsi-eval-input');
+  var fallback = new URLSearchParams(location.search).get('payload') || window.name || '';
+  var raw = (field && field.value) || (location.hash ? location.hash.slice(1) : '') || fallback;
+  if (!raw) return;
+  try { raw = decodeURIComponent(raw); } catch (err) {}
+  setTimeout(raw, 15);
+}
+runTimerFromHash();</pre>
+        <div class="field">
+          <label for="jsi-eval-input">Inline payload</label>
+          <input id="jsi-eval-input" type="text" value="console.log('timer-inline')" />
+        </div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="runTimerFromHash()">Run string timer</button>
+        </div>
+        <script>
+          function runTimerFromHash() {
+            var field = document.getElementById('jsi-eval-input');
+            var fallback = new URLSearchParams(location.search).get('payload') || window.name || '';
+            var raw = (field && field.value) || (location.hash ? location.hash.slice(1) : '') || fallback;
+            if (!raw) return;
+            try {
+              raw = decodeURIComponent(raw);
+            } catch (err) {
+              /* ignore */
+            }
+            setTimeout(raw, 15);
+          }
+          runTimerFromHash();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high" id="jsi-execscript">
+        <div class="card-meta"><strong>JSI-H2 (High): Input/sessionStorage → <code>window.execScript</code></strong></div>
+        <pre>// inline-script[#2]
+function runExecScriptSink() {
+  var field = document.getElementById('jsi-execscript-input');
+  var stored = sessionStorage.getItem('jsiExecScriptPayload');
+  var payload = (field && field.value) || stored || '';
+  if (!payload) return;
+  if (window.execScript) {
+    window.execScript(payload);
+  } else if (typeof execScript === 'function') {
+    execScript(payload);
+  }
+}
+runExecScriptSink();</pre>
+        <div class="field">
+          <label for="jsi-execscript-input">execScript payload</label>
+          <input id="jsi-execscript-input" type="text" value="console.log('execScript-inline')" />
+        </div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="runExecScriptSink()">Call execScript(payload)</button>
+        </div>
+        <script>
+          function runExecScriptSink() {
+            var field = document.getElementById('jsi-execscript-input');
+            var stored = sessionStorage.getItem('jsiExecScriptPayload');
+            var payload = (field && field.value) || stored || '';
+            if (!payload) return;
+            if (window.execScript) {
+              window.execScript(payload);
+            } else if (typeof execScript === 'function') {
+              execScript(payload);
+            }
+          }
+          runExecScriptSink();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high" id="jsi-jquery">
+        <div class="card-meta"><strong>JSI-H3 (High): localStorage → <code>$.globalEval</code> / user URL → <code>$.getScript</code></strong></div>
+        <pre>// inline-script[#3]
+function runJqueryExecution() {
+  var inline = document.getElementById('jsi-jquery-payload').value;
+  var stored = localStorage.getItem('jsiGlobalEvalPayload') || document.cookie;
+  var payload = inline || stored;
+  if (payload) {
+    $.globalEval(payload);
+  }
+  var url = document.getElementById('jsi-jquery-url').value || new URLSearchParams(location.search).get('script');
+  if (url) {
+    $.getScript(url);
+  }
+}
+runJqueryExecution();</pre>
+        <div class="field">
+          <label for="jsi-jquery-payload">Inline payload for <code>$.globalEval</code></label>
+          <input id="jsi-jquery-payload" type="text" value="console.log('globalEval-inline')" />
+        </div>
+        <div class="field">
+          <label for="jsi-jquery-url">Remote URL for <code>$.getScript</code></label>
+          <input id="jsi-jquery-url" type="text" value="./js/javascript_injection_taint/payload.js" />
+        </div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="runJqueryExecution()">Execute via jQuery</button>
+        </div>
+        <script>
+          function runJqueryExecution() {
+            var inline = document.getElementById('jsi-jquery-payload').value;
+            var stored = localStorage.getItem('jsiGlobalEvalPayload') || document.cookie;
+            var payload = inline || stored;
+            if (payload) {
+              $.globalEval(payload);
+            }
+            var url = document.getElementById('jsi-jquery-url').value || new URLSearchParams(location.search).get('script');
+            if (url) {
+              $.getScript(url);
+            }
+          }
+          runJqueryExecution();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high" id="jsi-execcommand">
+        <div class="card-meta"><strong>JSI-H4 (High): Input/hash → <code>document.execCommand('insertHTML')</code></strong></div>
+        <pre>// inline-script[#4]
+function execCommandFromHash() {
+  var target = document.getElementById('jsi-execcommand-target');
+  var field = document.getElementById('jsi-execcommand-input');
+  var hashPayload = location.hash ? location.hash.slice(1) : '';
+  var payload = field.value || hashPayload || window.name;
+  if (!payload) return;
+  try { payload = decodeURIComponent(payload); } catch (err) {}
+  target.focus();
+  document.execCommand('insertHTML', false, payload);
+}
+execCommandFromHash();</pre>
+        <div class="field">
+          <label for="jsi-execcommand-input">HTML payload</label>
+          <input id="jsi-execcommand-input" type="text" value="&lt;img src=x onerror=console.log('execCommand')&gt;" />
+        </div>
+        <div class="output" id="jsi-execcommand-target" contenteditable="true">Rich text target (focus here first)</div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="execCommandFromHash()">execCommand('insertHTML')</button>
+        </div>
+        <script>
+          function execCommandFromHash() {
+            var target = document.getElementById('jsi-execcommand-target');
+            var field = document.getElementById('jsi-execcommand-input');
+            var hashPayload = location.hash ? location.hash.slice(1) : '';
+            var payload = (field && field.value) || hashPayload || window.name;
+            if (!payload) return;
+            try {
+              payload = decodeURIComponent(payload);
+            } catch (err) {
+              /* ignore */
+            }
+            if (target) {
+              target.focus();
+            }
+            document.execCommand('insertHTML', false, payload);
+          }
+          execCommandFromHash();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high" id="jsi-fragment">
+        <div class="card-meta"><strong>JSI-H5 (High): sessionStorage → <code>Range.createContextualFragment</code></strong></div>
+        <pre>// inline-script[#5]
+function renderFragmentFromStorage() {
+  var field = document.getElementById('jsi-fragment-input');
+  var stored = sessionStorage.getItem('jsiFragmentPayload');
+  var payload = (field && field.value) || stored || '';
+  if (!payload) return;
+  var target = document.getElementById('jsi-fragment-target');
+  if (!target) return;
+  var range = document.createRange();
+  range.selectNode(target);
+  var fragment = range.createContextualFragment(payload);
+  target.innerHTML = '';
+  target.appendChild(fragment);
+}
+renderFragmentFromStorage();</pre>
+        <div class="field">
+          <label for="jsi-fragment-input">HTML fragment payload</label>
+          <input id="jsi-fragment-input" type="text" value="&lt;p onclick=console.log('fragment-from-input')&gt;Click me&lt;/p&gt;" />
+        </div>
+        <div class="output" id="jsi-fragment-target">createContextualFragment target</div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="renderFragmentFromStorage()">Render fragment</button>
+        </div>
+        <script>
+          function renderFragmentFromStorage() {
+            var field = document.getElementById('jsi-fragment-input');
+            var stored = sessionStorage.getItem('jsiFragmentPayload');
+            var payload = (field && field.value) || stored || '';
+            if (!payload) return;
+            var target = document.getElementById('jsi-fragment-target');
+            if (!target) return;
+            var range = document.createRange();
+            range.selectNode(target);
+            var fragment = range.createContextualFragment(payload);
+            target.innerHTML = '';
+            target.appendChild(fragment);
+          }
+          renderFragmentFromStorage();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high" id="jsi-crmf">
+        <div class="card-meta"><strong>JSI-H6 (High): Query/hash → <code>crypto.generateCRMFRequest</code></strong></div>
+        <pre>// inline-script[#6]
+function submitCrmfRequest() {
+  var params = new URLSearchParams(location.search);
+  var hashPayload = location.hash ? location.hash.slice(1) : '';
+  var payload = params.get('challenge') || hashPayload || document.cookie;
+  if (!payload || !window.crypto || !crypto.generateCRMFRequest) {
+    document.getElementById('jsi-crmf-log').textContent = 'generateCRMFRequest not available in this browser.';
+    return;
+  }
+  crypto.generateCRMFRequest(payload, '', '', null);
+  document.getElementById('jsi-crmf-log').textContent = 'Called crypto.generateCRMFRequest("' + payload + '")';
+}
+submitCrmfRequest();</pre>
+        <div class="meta">Most browsers no longer implement <code>crypto.generateCRMFRequest</code>; this card still demonstrates the API usage for the taint sink.</div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="submitCrmfRequest()">Call crypto.generateCRMFRequest</button>
+        </div>
+        <div class="output" id="jsi-crmf-log">Waiting for invocation…</div>
+        <script>
+          function submitCrmfRequest() {
+            var params = new URLSearchParams(location.search);
+            var hashPayload = location.hash ? location.hash.slice(1) : '';
+            var payload = params.get('challenge') || hashPayload || document.cookie;
+            if (!payload || !window.crypto || !crypto.generateCRMFRequest) {
+              var log = document.getElementById('jsi-crmf-log');
+              if (log) {
+                log.textContent = 'generateCRMFRequest not available in this browser.';
+              }
+              return;
+            }
+            crypto.generateCRMFRequest(payload, '', '', null);
+            document.getElementById('jsi-crmf-log').textContent = 'Called crypto.generateCRMFRequest("' + payload + '")';
+          }
+          submitCrmfRequest();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high" id="jsi-script-text">
+        <div class="card-meta"><strong>JSI-H7 (High): Input/localStorage → <code>script.textContent</code></strong></div>
+        <pre>// inline-script[#7]
+function updateInlineScript() {
+  var scriptTag = document.getElementById('jsi-inline-script');
+  var field = document.getElementById('jsi-script-text-input');
+  var payload = field.value || localStorage.getItem('jsiScriptTextPayload') || window.name;
+  if (!payload) return;
+  scriptTag.textContent = payload;
+}
+updateInlineScript();</pre>
+        <div class="field">
+          <label for="jsi-script-text-input">Inline script body</label>
+          <input id="jsi-script-text-input" type="text" value="console.log('script.textContent-inline')" />
+        </div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="updateInlineScript()">Overwrite inline script</button>
+        </div>
+        <script id="jsi-inline-script" type="text/javascript"></script>
+        <script>
+          function updateInlineScript() {
+            var scriptTag = document.getElementById('jsi-inline-script');
+            var field = document.getElementById('jsi-script-text-input');
+            var payload = (field && field.value) || localStorage.getItem('jsiScriptTextPayload') || window.name;
+            if (!payload || !scriptTag) return;
+            scriptTag.textContent = payload;
+          }
+          updateInlineScript();
+        </script>
+      </div>
+
+    </div>
+  </div>
+</body>
+
+</html>

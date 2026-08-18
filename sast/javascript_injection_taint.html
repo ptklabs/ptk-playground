@@ -1,356 +1,106 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — JavaScript injection (taint)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-
-  <script src="js/sources.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="js/summary.js"></script>
-  <script>
-    function seedJavascriptInjectionPayloads() {
-      const defaults = {
-        execScript: "console.log('execScript storage payload')",
-        globalEval: "console.log('globalEval payload', document.cookie)",
-        fragment: "<img src=\"x\" onerror=\"console.log('fragment')\">",
-        scriptText: "console.log('inline script text from storage');"
-      };
-      if (!sessionStorage.getItem('jsiExecScriptPayload')) {
-        sessionStorage.setItem('jsiExecScriptPayload', defaults.execScript);
-      }
-      if (!localStorage.getItem('jsiGlobalEvalPayload')) {
-        localStorage.setItem('jsiGlobalEvalPayload', defaults.globalEval);
-      }
-      if (!sessionStorage.getItem('jsiFragmentPayload')) {
-        sessionStorage.setItem('jsiFragmentPayload', defaults.fragment);
-      }
-      if (!localStorage.getItem('jsiScriptTextPayload')) {
-        localStorage.setItem('jsiScriptTextPayload', defaults.scriptText);
-      }
-    }
-
-    function setDemoHashPayload() {
-      const sample = "console.log('hash-payload via location.hash')";
-      location.hash = encodeURIComponent(sample);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      seedJavascriptInjectionPayloads();
-      updateSummary();
-    });
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JavaScript injection (taint) · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for JavaScript injection (taint).">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — JavaScript injection (taint)</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/javascript_injection_taint.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-
-    <p class="meta">
-      This fixture exercises every sink from the <code>javascript-injection-taint</code> rule: string-based timers / eval /
-      <code>new Function</code>, <code>window.execScript</code>, jQuery <code>globalEval/getScript</code>,
-      <code>document.execCommand</code>, <code>Range.createContextualFragment</code>, <code>crypto.generateCRMFRequest</code>,
-      and assignments to <code>script.textContent</code>. Each card wires attacker-controlled DOM data (hash/search/inputs/storage)
-      into the relevant sink without validation.
-    </p>
-
-    <div class="controls">
-      <button class="btn secondary" type="button" onclick="setDemoHashPayload()">Set demo hash payload</button>
-      <button class="btn secondary" type="button" onclick="localStorage.setItem('jsiGlobalEvalPayload', 'console.log(\'globalEval from storage\')')">Seed localStorage payload</button>
-    </div>
-
-    <h2 class="section-title">Inline scenarios</h2>
-    <div class="grid">
-
-      <div class="card" data-rule="taint" data-severity="high" id="jsi-timer">
-        <div class="card-meta"><strong>JSI-H1 (High): Hash/query → string timer (<code>eval:constructor</code>)</strong></div>
-        <pre>// inline-script[#1]
-function runTimerFromHash() {
-  var field = document.getElementById('jsi-eval-input');
-  var fallback = new URLSearchParams(location.search).get('payload') || window.name || '';
-  var raw = (field && field.value) || (location.hash ? location.hash.slice(1) : '') || fallback;
-  if (!raw) return;
-  try { raw = decodeURIComponent(raw); } catch (err) {}
-  setTimeout(raw, 15);
-}
-runTimerFromHash();</pre>
-        <div class="field">
-          <label for="jsi-eval-input">Inline payload</label>
-          <input id="jsi-eval-input" type="text" value="console.log('timer-inline')" />
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>JavaScript injection (taint)</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>JavaScript injection (taint)</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>7</strong> focused cases</span><span><strong>7</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-javascript-injection-taint.jsi-timer">
+        <div class="family-case-card__meta"><span>Case 01</span><span>script text</span></div>
+        <h2>JSI-H1 (High): Hash/query → string timer ( eval:constructor</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-javascript-injection-taint/jsi-timer/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-javascript-injection-taint/jsi-timer/fixed/">Open repaired control</a>
         </div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="runTimerFromHash()">Run string timer</button>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-javascript-injection-taint.jsi-execscript">
+        <div class="family-case-card__meta"><span>Case 02</span><span>exec script</span></div>
+        <h2>JSI-H2 (High): Input/sessionStorage → window.execScript</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-javascript-injection-taint/jsi-execscript/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-javascript-injection-taint/jsi-execscript/fixed/">Open repaired control</a>
         </div>
-        <script>
-          function runTimerFromHash() {
-            var field = document.getElementById('jsi-eval-input');
-            var fallback = new URLSearchParams(location.search).get('payload') || window.name || '';
-            var raw = (field && field.value) || (location.hash ? location.hash.slice(1) : '') || fallback;
-            if (!raw) return;
-            try {
-              raw = decodeURIComponent(raw);
-            } catch (err) {
-              /* ignore */
-            }
-            setTimeout(raw, 15);
-          }
-          runTimerFromHash();
-        </script>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-javascript-injection-taint.jsi-jquery">
+        <div class="family-case-card__meta"><span>Case 03</span><span>jquery html</span></div>
+        <h2>JSI-H3 (High): localStorage → $.globalEval</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-javascript-injection-taint/jsi-jquery/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-javascript-injection-taint/jsi-jquery/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-javascript-injection-taint.jsi-execcommand">
+        <div class="family-case-card__meta"><span>Case 04</span><span>exec command insert html</span></div>
+        <h2>JSI-H4 (High): Input/hash → document.execCommand(&#39;insertHTML&#39;)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-javascript-injection-taint/jsi-execcommand/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-javascript-injection-taint/jsi-execcommand/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-javascript-injection-taint.jsi-fragment">
+        <div class="family-case-card__meta"><span>Case 05</span><span>insert adjacent html</span></div>
+        <h2>JSI-H5 (High): sessionStorage → Range.createContextualFragment</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-javascript-injection-taint/jsi-fragment/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-javascript-injection-taint/jsi-fragment/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-javascript-injection-taint.jsi-crmf">
+        <div class="family-case-card__meta"><span>Case 06</span><span>crmf request</span></div>
+        <h2>JSI-H6 (High): Query/hash → crypto.generateCRMFRequest</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-javascript-injection-taint/jsi-crmf/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-javascript-injection-taint/jsi-crmf/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-javascript-injection-taint.jsi-script-text">
+        <div class="family-case-card__meta"><span>Case 07</span><span>script text</span></div>
+        <h2>JSI-H7 (High): Input/localStorage → script.textContent</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-javascript-injection-taint/jsi-script-text/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-javascript-injection-taint/jsi-script-text/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="jsi-execscript">
-        <div class="card-meta"><strong>JSI-H2 (High): Input/sessionStorage → <code>window.execScript</code></strong></div>
-        <pre>// inline-script[#2]
-function runExecScriptSink() {
-  var field = document.getElementById('jsi-execscript-input');
-  var stored = sessionStorage.getItem('jsiExecScriptPayload');
-  var payload = (field && field.value) || stored || '';
-  if (!payload) return;
-  if (window.execScript) {
-    window.execScript(payload);
-  } else if (typeof execScript === 'function') {
-    execScript(payload);
-  }
-}
-runExecScriptSink();</pre>
-        <div class="field">
-          <label for="jsi-execscript-input">execScript payload</label>
-          <input id="jsi-execscript-input" type="text" value="console.log('execScript-inline')" />
-        </div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="runExecScriptSink()">Call execScript(payload)</button>
-        </div>
-        <script>
-          function runExecScriptSink() {
-            var field = document.getElementById('jsi-execscript-input');
-            var stored = sessionStorage.getItem('jsiExecScriptPayload');
-            var payload = (field && field.value) || stored || '';
-            if (!payload) return;
-            if (window.execScript) {
-              window.execScript(payload);
-            } else if (typeof execScript === 'function') {
-              execScript(payload);
-            }
-          }
-          runExecScriptSink();
-        </script>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="jsi-jquery">
-        <div class="card-meta"><strong>JSI-H3 (High): localStorage → <code>$.globalEval</code> / user URL → <code>$.getScript</code></strong></div>
-        <pre>// inline-script[#3]
-function runJqueryExecution() {
-  var inline = document.getElementById('jsi-jquery-payload').value;
-  var stored = localStorage.getItem('jsiGlobalEvalPayload') || document.cookie;
-  var payload = inline || stored;
-  if (payload) {
-    $.globalEval(payload);
-  }
-  var url = document.getElementById('jsi-jquery-url').value || new URLSearchParams(location.search).get('script');
-  if (url) {
-    $.getScript(url);
-  }
-}
-runJqueryExecution();</pre>
-        <div class="field">
-          <label for="jsi-jquery-payload">Inline payload for <code>$.globalEval</code></label>
-          <input id="jsi-jquery-payload" type="text" value="console.log('globalEval-inline')" />
-        </div>
-        <div class="field">
-          <label for="jsi-jquery-url">Remote URL for <code>$.getScript</code></label>
-          <input id="jsi-jquery-url" type="text" value="./js/javascript_injection_taint/payload.js" />
-        </div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="runJqueryExecution()">Execute via jQuery</button>
-        </div>
-        <script>
-          function runJqueryExecution() {
-            var inline = document.getElementById('jsi-jquery-payload').value;
-            var stored = localStorage.getItem('jsiGlobalEvalPayload') || document.cookie;
-            var payload = inline || stored;
-            if (payload) {
-              $.globalEval(payload);
-            }
-            var url = document.getElementById('jsi-jquery-url').value || new URLSearchParams(location.search).get('script');
-            if (url) {
-              $.getScript(url);
-            }
-          }
-          runJqueryExecution();
-        </script>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="jsi-execcommand">
-        <div class="card-meta"><strong>JSI-H4 (High): Input/hash → <code>document.execCommand('insertHTML')</code></strong></div>
-        <pre>// inline-script[#4]
-function execCommandFromHash() {
-  var target = document.getElementById('jsi-execcommand-target');
-  var field = document.getElementById('jsi-execcommand-input');
-  var hashPayload = location.hash ? location.hash.slice(1) : '';
-  var payload = field.value || hashPayload || window.name;
-  if (!payload) return;
-  try { payload = decodeURIComponent(payload); } catch (err) {}
-  target.focus();
-  document.execCommand('insertHTML', false, payload);
-}
-execCommandFromHash();</pre>
-        <div class="field">
-          <label for="jsi-execcommand-input">HTML payload</label>
-          <input id="jsi-execcommand-input" type="text" value="&lt;img src=x onerror=console.log('execCommand')&gt;" />
-        </div>
-        <div class="output" id="jsi-execcommand-target" contenteditable="true">Rich text target (focus here first)</div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="execCommandFromHash()">execCommand('insertHTML')</button>
-        </div>
-        <script>
-          function execCommandFromHash() {
-            var target = document.getElementById('jsi-execcommand-target');
-            var field = document.getElementById('jsi-execcommand-input');
-            var hashPayload = location.hash ? location.hash.slice(1) : '';
-            var payload = (field && field.value) || hashPayload || window.name;
-            if (!payload) return;
-            try {
-              payload = decodeURIComponent(payload);
-            } catch (err) {
-              /* ignore */
-            }
-            if (target) {
-              target.focus();
-            }
-            document.execCommand('insertHTML', false, payload);
-          }
-          execCommandFromHash();
-        </script>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="jsi-fragment">
-        <div class="card-meta"><strong>JSI-H5 (High): sessionStorage → <code>Range.createContextualFragment</code></strong></div>
-        <pre>// inline-script[#5]
-function renderFragmentFromStorage() {
-  var field = document.getElementById('jsi-fragment-input');
-  var stored = sessionStorage.getItem('jsiFragmentPayload');
-  var payload = (field && field.value) || stored || '';
-  if (!payload) return;
-  var target = document.getElementById('jsi-fragment-target');
-  if (!target) return;
-  var range = document.createRange();
-  range.selectNode(target);
-  var fragment = range.createContextualFragment(payload);
-  target.innerHTML = '';
-  target.appendChild(fragment);
-}
-renderFragmentFromStorage();</pre>
-        <div class="field">
-          <label for="jsi-fragment-input">HTML fragment payload</label>
-          <input id="jsi-fragment-input" type="text" value="&lt;p onclick=console.log('fragment-from-input')&gt;Click me&lt;/p&gt;" />
-        </div>
-        <div class="output" id="jsi-fragment-target">createContextualFragment target</div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="renderFragmentFromStorage()">Render fragment</button>
-        </div>
-        <script>
-          function renderFragmentFromStorage() {
-            var field = document.getElementById('jsi-fragment-input');
-            var stored = sessionStorage.getItem('jsiFragmentPayload');
-            var payload = (field && field.value) || stored || '';
-            if (!payload) return;
-            var target = document.getElementById('jsi-fragment-target');
-            if (!target) return;
-            var range = document.createRange();
-            range.selectNode(target);
-            var fragment = range.createContextualFragment(payload);
-            target.innerHTML = '';
-            target.appendChild(fragment);
-          }
-          renderFragmentFromStorage();
-        </script>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="jsi-crmf">
-        <div class="card-meta"><strong>JSI-H6 (High): Query/hash → <code>crypto.generateCRMFRequest</code></strong></div>
-        <pre>// inline-script[#6]
-function submitCrmfRequest() {
-  var params = new URLSearchParams(location.search);
-  var hashPayload = location.hash ? location.hash.slice(1) : '';
-  var payload = params.get('challenge') || hashPayload || document.cookie;
-  if (!payload || !window.crypto || !crypto.generateCRMFRequest) {
-    document.getElementById('jsi-crmf-log').textContent = 'generateCRMFRequest not available in this browser.';
-    return;
-  }
-  crypto.generateCRMFRequest(payload, '', '', null);
-  document.getElementById('jsi-crmf-log').textContent = 'Called crypto.generateCRMFRequest("' + payload + '")';
-}
-submitCrmfRequest();</pre>
-        <div class="meta">Most browsers no longer implement <code>crypto.generateCRMFRequest</code>; this card still demonstrates the API usage for the taint sink.</div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="submitCrmfRequest()">Call crypto.generateCRMFRequest</button>
-        </div>
-        <div class="output" id="jsi-crmf-log">Waiting for invocation…</div>
-        <script>
-          function submitCrmfRequest() {
-            var params = new URLSearchParams(location.search);
-            var hashPayload = location.hash ? location.hash.slice(1) : '';
-            var payload = params.get('challenge') || hashPayload || document.cookie;
-            if (!payload || !window.crypto || !crypto.generateCRMFRequest) {
-              var log = document.getElementById('jsi-crmf-log');
-              if (log) {
-                log.textContent = 'generateCRMFRequest not available in this browser.';
-              }
-              return;
-            }
-            crypto.generateCRMFRequest(payload, '', '', null);
-            document.getElementById('jsi-crmf-log').textContent = 'Called crypto.generateCRMFRequest("' + payload + '")';
-          }
-          submitCrmfRequest();
-        </script>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="jsi-script-text">
-        <div class="card-meta"><strong>JSI-H7 (High): Input/localStorage → <code>script.textContent</code></strong></div>
-        <pre>// inline-script[#7]
-function updateInlineScript() {
-  var scriptTag = document.getElementById('jsi-inline-script');
-  var field = document.getElementById('jsi-script-text-input');
-  var payload = field.value || localStorage.getItem('jsiScriptTextPayload') || window.name;
-  if (!payload) return;
-  scriptTag.textContent = payload;
-}
-updateInlineScript();</pre>
-        <div class="field">
-          <label for="jsi-script-text-input">Inline script body</label>
-          <input id="jsi-script-text-input" type="text" value="console.log('script.textContent-inline')" />
-        </div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="updateInlineScript()">Overwrite inline script</button>
-        </div>
-        <script id="jsi-inline-script" type="text/javascript"></script>
-        <script>
-          function updateInlineScript() {
-            var scriptTag = document.getElementById('jsi-inline-script');
-            var field = document.getElementById('jsi-script-text-input');
-            var payload = (field && field.value) || localStorage.getItem('jsiScriptTextPayload') || window.name;
-            if (!payload || !scriptTag) return;
-            scriptTag.textContent = payload;
-          }
-          updateInlineScript();
-        </script>
-      </div>
-
-    </div>
-  </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./javascript_injection_taint.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

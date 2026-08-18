@@ -1,191 +1,124 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — insertAdjacentHTML</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-  <!-- External scripts -->
-  <script src="js/sources.js"></script>
-  <script src="js/insert_adjacent_html/insert_adjacent_html_sink.js"></script>
-  <script src="js/insert_adjacent_html/insert_adjacent_html_external_sources.js"></script>
-
-  <script src="js/summary.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', updateSummary);
-  </script>
-  <script>
-    function setHashPayload() {
-      const payload = "<li><strong>hash</strong> → insertAdjacentHTML</li>";
-      location.hash = encodeURIComponent(payload);
-    }
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>insertAdjacentHTML · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for insertAdjacentHTML.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — <code>insertAdjacentHTML</code></h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/insert_adjacent_html.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-    <p class="meta">Use these fixtures to exercise DOM sinks that rely on <code class="inline">insertAdjacentHTML</code>. Inline cases run automatically; external ones are opt-in.</p>
-
-    <div class="controls">
-      <a class="btn secondary" href="?payload=%3Cli%3Eimg+payload%3C/li%3E">Use query payload</a>
-      <button class="btn secondary" type="button" onclick="setHashPayload()">Set hash payload</button>
-    </div>
-
-
-    <!-- Inline scenarios -->
-    <h2 class="section-title">Inline scenarios</h2>
-    <div class="grid">
-
-      <div class="card" data-severity="high" id="il-1">
-        <div class="card-meta">INLINE-1 (High): Query / hash → <code class="inline">insertAdjacentHTML</code></div>
-        <pre>// inline-script[#1]
-(function(){
-  const target = 'inline-insertadjacent-target';
-  function render(payload) {
-    insertAdjacentHtmlSink(payload, target);
-  }
-  const params = new URLSearchParams(location.search);
-  if (params.has('payload')) render(params.get('payload'));
-  if (location.hash) {
-    try { render(decodeURIComponent(location.hash.slice(1))); }
-    catch (err) { render(location.hash.slice(1)); }
-  }
-})();</pre>
-        <ul class="render-target" id="inline-insertadjacent-target">
-          <li>Waiting for payload…</li>
-        </ul>
-        <script>
-          (function() {
-            const target = 'inline-insertadjacent-target';
-
-            function render(payload) {
-              if (payload == null) return;
-              insertAdjacentHtmlSink(payload, target);
-            }
-            const params = new URLSearchParams(location.search);
-            if (params.has('payload')) render(params.get('payload'));
-            if (location.hash) {
-              try {
-                render(decodeURIComponent(location.hash.slice(1)));
-              } catch (err) {
-                render(location.hash.slice(1));
-              }
-            }
-          })();
-        </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>insertAdjacentHTML</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>insertAdjacentHTML</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>9</strong> focused cases</span><span><strong>9</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.il-1">
+        <div class="family-case-card__meta"><span>Case 01</span><span>insert adjacent html</span></div>
+        <h2>INLINE-1 (High): Query / hash → insertAdjacentHTML</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/il-1/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/il-1/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.il-2">
+        <div class="family-case-card__meta"><span>Case 02</span><span>insert adjacent html</span></div>
+        <h2>INLINE-2 (High): Field value → insertAdjacentHTML</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/il-2/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/il-2/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.button-3-ext-location-hash">
+        <div class="family-case-card__meta"><span>Case 03</span><span>insert adjacent html</span></div>
+        <h2>EXT: location.hash</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/button-3-ext-location-hash/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/button-3-ext-location-hash/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.button-4-ext-urlsearchparams">
+        <div class="family-case-card__meta"><span>Case 04</span><span>insert adjacent html</span></div>
+        <h2>EXT: URLSearchParams</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/button-4-ext-urlsearchparams/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/button-4-ext-urlsearchparams/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.button-5-ext-window-name">
+        <div class="family-case-card__meta"><span>Case 05</span><span>insert adjacent html</span></div>
+        <h2>EXT: window.name</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/button-5-ext-window-name/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/button-5-ext-window-name/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.button-6-ext-document-referrer">
+        <div class="family-case-card__meta"><span>Case 06</span><span>insert adjacent html</span></div>
+        <h2>EXT: document.referrer</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/button-6-ext-document-referrer/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/button-6-ext-document-referrer/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.button-7-ext-document-cookie">
+        <div class="family-case-card__meta"><span>Case 07</span><span>insert adjacent html</span></div>
+        <h2>EXT: document.cookie</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/button-7-ext-document-cookie/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/button-7-ext-document-cookie/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.button-8-ext-localstorage">
+        <div class="family-case-card__meta"><span>Case 08</span><span>insert adjacent html</span></div>
+        <h2>EXT: localStorage</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/button-8-ext-localstorage/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/button-8-ext-localstorage/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-insert-adjacent-html.button-9-ext-sessionstorage">
+        <div class="family-case-card__meta"><span>Case 09</span><span>insert adjacent html</span></div>
+        <h2>EXT: sessionStorage</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-insert-adjacent-html/button-9-ext-sessionstorage/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-insert-adjacent-html/button-9-ext-sessionstorage/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-      <div class="card" data-severity="high" id="il-2">
-        <div class="card-meta">INLINE-2 (High): Field value → <code class="inline">insertAdjacentHTML</code></div>
-        <pre>// inline-script[#2]
-function inlineInsertAdjacentFromField(fieldId, targetId) {
-  const el = document.getElementById(fieldId);
-  if (!el) return;
-  insertAdjacentHtmlSink(el.value, targetId);
-}</pre>
-        <div class="field">
-          <input id="inline_insertadjacent_payload" type="text" value="<li><img src=x onerror=alert('inline')></li>" />
-          <button class="btn" type="button" onclick="inlineInsertAdjacentFromField('inline_insertadjacent_payload', 'inline-insertadjacent-target')">Insert inline field</button>
-        </div>
-        <script>
-          function inlineInsertAdjacentFromField(fieldId, targetId) {
-            const el = document.getElementById(fieldId);
-            if (!el) return;
-            insertAdjacentHtmlSink(el.value, targetId);
-          }
-        </script>
-      </div>
-
-      <div class="card" data-severity="safe" id="il-3">
-        <div class="card-meta">INLINE-3 (Safe): Encode before inserting</div>
-        <pre>// inline-script[#3]
-(function(){
-  const params = new URLSearchParams(location.search);
-  const safe = params.get('safe');
-  const target = document.getElementById('inline-safe-target');
-  if (!target || !safe) return;
-  target.textContent = safe;
-})();</pre>
-        <div class="render-target" id="inline-safe-target">Waiting for safe payload…</div>
-        <script>
-          (function() {
-            const params = new URLSearchParams(location.search);
-            const safe = params.get('safe');
-            const target = document.getElementById('inline-safe-target');
-            if (!target || !safe) return;
-            target.textContent = safe;
-          })();
-        </script>
-      </div>
-
-    </div>
-
-    <!-- External scenarios -->
-    <h2 class="section-title">External scenarios (click to run)</h2>
-    <div class="grid">
-
-      <div class="card">
-        <div class="card-meta"><strong>Direct DOM sources</strong></div>
-        <pre data-severity="high">onclick="extInsertAdjacentFromHash()"</pre>
-        <div class="controls">
-          <button class="btn " type="button" onclick="extInsertAdjacentFromHash()">EXT: location.hash</button>
-        </div>
-        <pre data-severity="high">onclick="extInsertAdjacentFromSearch()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extInsertAdjacentFromSearch()">EXT: URLSearchParams</button>
-        </div>
-        <pre data-severity="high">onclick="extInsertAdjacentFromWindowName()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extInsertAdjacentFromWindowName()">EXT: window.name</button>
-        </div>
-        <pre data-severity="high">onclick="extInsertAdjacentFromReferrer()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extInsertAdjacentFromReferrer()">EXT: document.referrer</button>
-        </div>
-
-        <ul class="render-target" id="external-insertadjacent-target">
-          <li>External DOM source target</li>
-        </ul>
-      </div>
-
-      <div class="card" >
-        <div class="card-meta"><strong>Storage &amp; cookies</strong></div>
-        <pre data-severity="high, low">onclick="extInsertAdjacentFromCookie()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extInsertAdjacentFromCookie()">EXT: document.cookie</button>
-        </div>
-        <pre data-severity="high,low">onclick="extInsertAdjacentFromLocalStorage()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extInsertAdjacentFromLocalStorage()">EXT: localStorage</button>
-        </div>
-        <pre data-severity="high, low">onclick="extInsertAdjacentFromSessionStorage()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extInsertAdjacentFromSessionStorage()">EXT: sessionStorage</button>
-        </div>
-        <ul class="render-target" id="external-insertadjacent-storage">
-          <li>External storage target</li>
-        </ul>
-      </div>
-
-
-    </div>
-
-    <footer>PTK SAST testbed — insertAdjacentHTML (inline + external). <a class="back" href="index.html">Back to index</a></footer>
-  </div>
-
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./insert_adjacent_html.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

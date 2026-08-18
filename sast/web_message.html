@@ -1,267 +1,79 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — Web Message handling</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-
-  <!-- External scripts -->
-  <script src="js/sources.js"></script>
-  <script src="js/web_message/web_message.js"></script>
-
-  <script src="js/summary.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', updateSummary);
-  </script>
-  <script>
-    // --- Trusted helpers used by safe scenarios ---
-    const TRUSTED_ORIGINS = ["https://trusted.example", "https://portal.example"];
-
-    function isTrustedOrigin(origin) {
-      return TRUSTED_ORIGINS.includes(origin);
-    }
-
-    function validateMessagePayload(payload) {
-      if (typeof payload !== "object" || !payload) return {
-        ok: false,
-        reason: "not-object"
-      };
-      if (typeof payload.type !== "string") return {
-        ok: false,
-        reason: "missing-type"
-      };
-      if (payload.type !== "link" && payload.type !== "html") return {
-        ok: false,
-        reason: "unsupported-type"
-      };
-      return {
-        ok: true,
-        value: payload
-      };
-    }
-
-    const MessageSanitizer = {
-      sanitize(value) {
-        const str = String(value ?? "");
-        return str.replace(/[<>&"]/g, ch => ({
-          "<": "&lt;",
-          ">": "&gt;",
-          "&": "&amp;",
-          "\"": "&quot;"
-        } [ch] || ch));
-      }
-    };
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Web Message handling · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for Web Message handling.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — Web Message handling</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/web_message.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-    <p class="meta">
-      Scenarios below exercise <code>window.postMessage</code> and message event handlers. Unsafe cases demonstrate tainted
-      <code>event.data</code> reaching DOM/code sinks, wildcard targetOrigin usage, and weak origin validation. Safe cards
-      include strict origin allow-lists, payload validation and sanitisation.
-    </p>
-
-
-
-
-
-    <h2 class="section-title">High severity — tainted data reaches execution sinks</h2>
-    <div class="grid">
-      <div class="card" data-severity="high, low" id="wm-unsafe-innerhtml">
-        <div class="card-meta">WM-H1 (High): message handler injects <code>event.data</code> into <code>innerHTML</code> without origin check</div>
-        <pre data-severity="low">(function(){
-  window.addEventListener('message', function handleUnsafeHTML(event) {
-    var payload = event.data;
-    document.getElementById('wm-preview').innerHTML = payload;
-  });
-})();</pre>
-        <div id="wm-preview" class="card-preview">No message received yet.</div>
-        <script>
-          (function() {
-            window.addEventListener('message', function handleUnsafeHTML(event) {
-              var payload = event.data;
-              document.getElementById('wm-preview').innerHTML = payload;
-            });
-          })();
-        </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>Web Message handling</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>Web Message handling</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>4</strong> focused cases</span><span><strong>4</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-web-message.wm-cookie-write">
+        <div class="family-case-card__meta"><span>Case 01</span><span>message to cookie</span></div>
+        <h2>WM-H4 (High): message payload written into document.cookie</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-web-message/wm-cookie-write/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-web-message/wm-cookie-write/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-web-message.wm-selector-write">
+        <div class="family-case-card__meta"><span>Case 02</span><span>message to selector</span></div>
+        <h2>WM-H5 (High): message payload written into selector</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-web-message/wm-selector-write/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-web-message/wm-selector-write/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-web-message.wm-wildcard-target">
+        <div class="family-case-card__meta"><span>Case 03</span><span>postmessage wildcard target</span></div>
+        <h2>WM-M1 (Medium): wildcard targetOrigin</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-web-message/wm-wildcard-target/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-web-message/wm-wildcard-target/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-web-message.wm-missing-target">
+        <div class="family-case-card__meta"><span>Case 04</span><span>postmessage missing target</span></div>
+        <h2>WM-M2 (Medium): postMessage invoked without specifying targetOrigin</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-web-message/wm-missing-target/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-web-message/wm-missing-target/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-      <div class="card" data-severity="high, low" id="wm-unsafe-eval">
-        <div class="card-meta">WM-H2 (High): message handler executes payload with <code>eval</code></div>
-        <pre data-severity="low">(function(){
-  window.addEventListener('message', function handleEval(event) {
-    eval(event.data);
-  });
-})();</pre>
-        <script>
-          (function() {
-            window.addEventListener('message', function handleEval(event) {
-              eval(event.data);
-            });
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="high, low" id="wm-unsafe-location">
-        <div class="card-meta">WM-H3 (High): message payload redirects the top-level location</div>
-        <pre data-severity="low">(function(){
-  window.addEventListener('message', function handleRedirect(event) {
-    window.location = event.data;
-  });
-})();</pre>
-        <script>
-          (function() {
-            window.addEventListener('message', function handleRedirect(event) {
-              if(location.hash != '#redirect') return;
-              window.location = event.data;
-            });
-          })();
-        </script>
-      </div>
-
-
-      <div class="card" data-severity="high, low" id="wm-cookie-write">
-        <div class="card-meta">WM-H4 (High): message payload written into <code>document.cookie</code></div>
-        <pre>(function(){
-  window.addEventListener('message', function cookieSink(event) {
-    document.cookie = "msg_data=" + event.data + "; Path=/";
-  });
-})();</pre>
-        <script>
-          (function() {
-            window.addEventListener('message', function cookieSink(event) {
-              document.cookie = "msg_data=" + event.data + "; Path=/";
-            });
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="high, low" id="wm-selector-write">
-        <div class="card-meta">WM-H5 (High): message payload written into <code>selector</code></div>
-        <pre>    // inline-script[#2]
-window.addEventListener('message', function dsMessage(e) {
-  var sel = e.data;
-  try {
-    var $target = $(sel);
-    $target.text('updated by message');
-  } catch (err) {
-    console.warn('Selector error', err);
-  }
-});</pre>
-        <script>
-          window.addEventListener('message', function dsMessage(e) {
-            var sel = e.data;
-            try {
-              var $target = $(sel);
-              $target.text('updated by message');
-            } catch (err) {
-              console.warn('Selector error', err);
-            }
-          })
-        </script>
-      </div>
-
-    </div>
-
-    <h2 class="section-title">Medium severity — weak validation or configuration issues</h2>
-    <div class="grid">
-      <div class="card" data-severity="medium" id="wm-wildcard-target">
-        <div class="card-meta">WM-M1 (Medium): wildcard <code>targetOrigin</code> when posting messages</div>
-        <pre data-severity="medium">function sendWildcardMessage(payload) {
-  const frame = document.getElementById('message-target');
-  frame.contentWindow.postMessage(payload, '*');
-}</pre>
-        <script>
-          function sendWildcardMessage(payload) {
-            const frame = document.getElementById('message-target');
-            if (frame && frame.contentWindow) {
-              frame.contentWindow.postMessage(payload, '*');
-            }
-          }
-        </script>
-      </div>
-
-      <div class="card" data-severity="medium" id="wm-missing-target">
-        <div class="card-meta">WM-M2 (Medium): postMessage invoked without specifying <code>targetOrigin</code></div>
-        <pre data-severity="medium">function broadcastWithoutTarget(payload) {
-  window.postMessage(payload);
-}</pre>
-        <script>
-          function broadcastWithoutTarget(payload) {
-            window.postMessage(payload);
-          }
-        </script>
-      </div>
-
-    </div>
-
-    <h2 class="section-title">Safe scenarios — strict origin & payload validation</h2>
-    <div class="grid">
-      <div class="card" data-severity="safe" id="wm-safe-equality">
-        <div class="card-meta">WM-S1 (Safe): strict origin equality and textContent rendering</div>
-        <pre>(function(){
-  window.addEventListener('message', function safeEquality(event) {
-    if (!isTrustedOrigin(event.origin)) return;
-    var text = String(event.data);
-    document.getElementById('wm-safe-preview').textContent = text;
-  });
-})();</pre>
-        <div id="wm-safe-preview" class="card-preview">Safe handler output.</div>
-        <script>
-          (function() {
-            window.addEventListener('message', function safeEquality(event) {
-              if (!isTrustedOrigin(event.origin)) return;
-              var text = String(event.data);
-              document.getElementById('wm-safe-preview').textContent = text;
-            });
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="safe" id="wm-safe-structured-card">
-        <div class="card-meta">WM-S2 (Safe): structured payload validation & sanitisation</div>
-        <pre>(function(){
-  window.addEventListener('message', function safeStructured(event) {
-    if (!isTrustedOrigin(event.origin)) return;
-    var result = validateMessagePayload(event.data);
-    if (!result.ok) return;
-    var clean = DOMPurify.sanitize(result.value.content);
-    document.getElementById('wm-safe-structured').innerHTML = clean;
-  });
-})();</pre>
-        <div id="wm-safe-structured" class="card-preview">Sanitised content.</div>
-        <script>
-          (function() {
-            window.addEventListener('message', function safeStructured(event) {
-              if (!isTrustedOrigin(event.origin)) return;
-              var result = validateMessagePayload(event.data);
-              if (!result.ok) return;
-              var clean = DOMPurify.sanitize(result.value.content);
-              document.getElementById('wm-safe-structured').innerHTML = clean;
-            });
-          })();
-        </script>
-      </div>
-    </div>
-
-    <footer>PTK SAST testbed — WebMesage security. <a class="back" href="index.html">Back to index</a></footer>
-  </div>
-
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./web_message.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

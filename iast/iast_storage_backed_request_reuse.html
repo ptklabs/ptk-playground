@@ -2,82 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Storage-backed Request Reuse</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
-  </style>
+  <title>Storage-backed Request Reuse · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Storage-backed Request Reuse.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Storage-backed Request Reuse</h1>
-  <p class="note">Covers reuse of storage-backed request URLs and headers in fetch and XHR.</p>
-  <div class="card">
-    <label for="storedUrl">Stored request URL</label>
-    <input id="storedUrl" type="text" value="https://example.org/stored-request?ptk=1">
-    <label for="storedHeader">Stored request header</label>
-    <input id="storedHeader" type="text" value="Bearer storage-backed-token">
-    <label for="sourceType">Storage source</label>
-    <select id="sourceType">
-      <option value="cookie">cookie</option>
-      <option value="localStorage">localStorage</option>
-      <option value="sessionStorage">sessionStorage</option>
-      <option value="windowName">window.name</option>
-    </select>
-    <button id="prime">Prime storage source</button>
-    <p id="status" class="note">No source primed yet.</p>
-  </div>
-  <div class="card">
-    <button id="btn-fetch-url">fetch(storedUrl)</button>
-    <button id="btn-xhr-url">xhr.open(storedUrl)</button>
-    <button id="btn-fetch-header">fetch with stored Authorization header</button>
-    <button id="btn-xhr-header">xhr.setRequestHeader(stored Authorization)</button>
-  </div>
-  <script>
-    const urlField = document.getElementById('storedUrl');
-    const headerField = document.getElementById('storedHeader');
-    const status = document.getElementById('status');
-    function currentValue(key, fallback) {
-      const selected = document.getElementById('sourceType').value;
-      if (selected === 'cookie') { const m = document.cookie.match(new RegExp('(?:^|; )' + key + '=([^;]+)')); return m ? decodeURIComponent(m[1]) : fallback; }
-      if (selected === 'localStorage') return localStorage.getItem(key) || fallback;
-      if (selected === 'sessionStorage') return sessionStorage.getItem(key) || fallback;
-      if (selected === 'windowName') {
-        try { const parsed = JSON.parse(window.name || '{}'); return parsed[key] || fallback; } catch (_) { return fallback; }
-      }
-      return fallback;
-    }
-    document.getElementById('prime').onclick = () => {
-      const selected = document.getElementById('sourceType').value;
-      const url = urlField.value;
-      const header = headerField.value;
-      if (selected === 'cookie') {
-        document.cookie = 'iast_request_url=' + encodeURIComponent(url) + '; path=/';
-        document.cookie = 'iast_request_header=' + encodeURIComponent(header) + '; path=/';
-      }
-      if (selected === 'localStorage') {
-        localStorage.setItem('iast_request_url', url);
-        localStorage.setItem('iast_request_header', header);
-      }
-      if (selected === 'sessionStorage') {
-        sessionStorage.setItem('iast_request_url', url);
-        sessionStorage.setItem('iast_request_header', header);
-      }
-      if (selected === 'windowName') {
-        window.name = JSON.stringify({ iast_request_url: url, iast_request_header: header });
-      }
-      status.textContent = 'Primed storage source: ' + selected;
-    };
-    document.getElementById('btn-fetch-url').onclick = () => fetch(currentValue('iast_request_url', urlField.value)).catch(() => {});
-    document.getElementById('btn-xhr-url').onclick = () => { const xhr = new XMLHttpRequest(); xhr.open('GET', currentValue('iast_request_url', urlField.value)); xhr.send(); };
-    document.getElementById('btn-fetch-header').onclick = () => fetch(urlField.value, { headers: { Authorization: currentValue('iast_request_header', headerField.value) } }).catch(() => {});
-    document.getElementById('btn-xhr-header').onclick = () => { const xhr = new XMLHttpRequest(); xhr.open('GET', urlField.value); xhr.setRequestHeader('Authorization', currentValue('iast_request_header', headerField.value)); xhr.send(); };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_storage_backed_request_reuse.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Storage-backed Request Reuse</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Storage-backed Request Reuse</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>4</strong> focused cases</span><span><strong>4</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-backed-request-reuse.btn-fetch-url">
+        <div class="family-case-card__meta"><span>Case 01</span><span>storage request</span></div>
+        <h2>fetch(storedUrl)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-url/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-url/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-backed-request-reuse.btn-xhr-url">
+        <div class="family-case-card__meta"><span>Case 02</span><span>storage request</span></div>
+        <h2>xhr.open(storedUrl)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-url/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-url/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-backed-request-reuse.btn-fetch-header">
+        <div class="family-case-card__meta"><span>Case 03</span><span>storage request</span></div>
+        <h2>fetch with stored Authorization header</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-header/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-header/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-backed-request-reuse.btn-xhr-header">
+        <div class="family-case-card__meta"><span>Case 04</span><span>storage request</span></div>
+        <h2>xhr.setRequestHeader(stored Authorization)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-header/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-header/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_storage_backed_request_reuse.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

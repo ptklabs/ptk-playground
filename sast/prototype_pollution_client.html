@@ -1,32 +1,52 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — Prototype pollution (client)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client-side prototype pollution · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for Client-side prototype pollution.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">Client-side prototype pollution</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/prototype_pollution_client.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <p class="meta">Prototype mutation using tainted data.</p>
-
-    <div class="card" data-rule="taint" data-severity="high">
-      <div class="card-meta"><strong>INLINE-1 (High): location/search → Object.setPrototypeOf</strong></div>
-      <pre><code>const protoPayload = location.search || '{"admin":true}';
-const parsed = JSON.parse(protoPayload || '{}');
-Object.setPrototypeOf({}, parsed);</code></pre>
-      <script>
-        (function () {
-          const protoPayload = location.search || '{"admin":true}';
-          const parsed = JSON.parse(protoPayload || '{}');
-          Object.setPrototypeOf({}, parsed);
-        })();
-      </script>
-    </div>
-  </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>Client-side prototype pollution</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>Client-side prototype pollution</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>1</strong> focused cases</span><span><strong>1</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-prototype-pollution-client.page">
+        <div class="family-case-card__meta"><span>Case 01</span><span>object merge</span></div>
+        <h2>Client-side prototype pollution</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-prototype-pollution-client/page/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-prototype-pollution-client/page/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./prototype_pollution_client.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

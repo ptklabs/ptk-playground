@@ -1,8 +1,10 @@
 import assert from 'node:assert/strict'
+import { execFileSync } from 'node:child_process'
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import test from 'node:test'
+import vm from 'node:vm'
 import { fileURLToPath } from 'node:url'
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -26,10 +28,447 @@ const catalog = readJson('catalog/cases.json')
 const missions = readJson('catalog/missions.json')
 const scannerTargets = readJson('catalog/scanner-targets.json')
 const demo = readJson('catalog/demo.json')
+const sourceLedger = readJson('catalog/source-ledger.json')
+const legacyRoutes = readJson('catalog/legacy-routes.json')
+const canonicalChallenges = readJson('catalog/challenges.json')
+const canonicalFamilies = readJson('catalog/families.json')
+const canonicalPlaylists = readJson('catalog/playlists.json')
+const atomicSast = readJson('catalog/sast-atomic.json')
+const atomicIast = readJson('catalog/iast-atomic.json')
+const dastContracts = readJson('catalog/dast-contracts.json')
+const scaDependencies = readJson('catalog/sca-dependencies.json')
+const generatedScannerTargets = readJson('catalog/generated/scanner-targets.json')
+const generatedCounts = readJson('catalog/generated/counts.json')
 
 function sha256(relativePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(path.join(repoRoot, relativePath))).digest('hex')
 }
+
+function assertAtomicWorkbench(markup, engine, variant) {
+  assert.match(markup, new RegExp(`class="target-page engine-page engine-page--${engine.toLowerCase()}"`))
+  assert.match(markup, new RegExp(`data-variant="${variant}"`))
+  assert.match(markup, /class="site-header atomic-site-header"/)
+  assert.match(markup, /class="atomic-hero atomic-hero--(?:review|fixed)"/)
+  assert.match(markup, /class="atomic-steps"/)
+  assert.match(markup, /class="atomic-workbench"/)
+  assert.match(markup, /class="atomic-panel atomic-panel--input"/)
+  assert.match(markup, /class="atomic-panel atomic-panel--evidence"/)
+  assert.match(markup, /class="atomic-pair-note atomic-pair-note--(?:review|fixed)"/)
+  assert.match(markup, /Open Advanced source/)
+  assert.match(markup, variant === 'review' ? /Open repaired control/ : /Open review target/)
+}
+
+test('full-corpus source ledger is current and accounts for every selected source file', () => {
+  assert.equal(sourceLedger.schema, 'owasp-ptk-playground-source-ledger/v1')
+  assert.equal(sourceLedger.version, 1)
+  assert.equal(sourceLedger.referenceCorpus.commit, '76cabc61a9552186588a6bf11a9ec680eea73e02')
+  assert.deepEqual(sourceLedger.inventoryRoots, [
+    'sast',
+    'iast',
+    'passive',
+    'campaigns',
+    'demo',
+    'scanner',
+    'play',
+    'explore',
+    'atomic',
+    'targets',
+    'assets/css',
+    'assets/js',
+    'assets/vendor'
+  ])
+
+  execFileSync(process.execPath, ['scripts/build-corpus-ledger.mjs', '--check'], {
+    cwd: repoRoot,
+    stdio: 'pipe'
+  })
+  execFileSync(process.execPath, ['scripts/build-canonical-catalog.mjs', '--check'], {
+    cwd: repoRoot,
+    stdio: 'pipe'
+  })
+
+  const discoveredPaths = sourceLedger.inventoryRoots
+    .flatMap((relativeRoot) => walk(path.join(repoRoot, relativeRoot)))
+    .map((absolute) => path.relative(repoRoot, absolute).split(path.sep).join('/'))
+    .filter((relative) => !/(?:^|\/)\.DS_Store$/.test(relative))
+    .sort()
+  const ledgerPaths = sourceLedger.sources.map((source) => source.path)
+
+  assert.deepEqual(ledgerPaths, discoveredPaths)
+  assert.equal(sourceLedger.summary.sourceFiles, sourceLedger.sources.length)
+  assert.equal(new Set(ledgerPaths).size, ledgerPaths.length)
+  assert.equal(new Set(sourceLedger.sources.map((source) => source.id)).size, sourceLedger.sources.length)
+  assert.equal(sourceLedger.summary.migrationComplete, true, 'every authored assertion should have an atomic target or runtime contract')
+  assert.equal(sourceLedger.summary.authoredSourceFiles + sourceLedger.summary.generatedAtomicFiles, sourceLedger.summary.sourceFiles)
+
+  const dispositions = new Set([
+    'migrate-atomic',
+    'retain-aggregate',
+    'helper-only',
+    'index-only'
+  ])
+  let scenarioCount = 0
+  for (const source of sourceLedger.sources) {
+    assert.match(source.sha256, /^[a-f0-9]{64}$/)
+    assert.equal(source.sha256, sha256(source.path), `stale source hash: ${source.path}`)
+    assert.ok(dispositions.has(source.disposition), `unknown disposition: ${source.path}`)
+    assert.ok(['reviewed', 'pending-manual'].includes(source.reviewStatus), `invalid review status: ${source.path}`)
+    if (source.role === 'legacy-aggregate') {
+      assert.equal(source.disposition, 'retain-aggregate')
+      assert.equal(source.reviewStatus, 'reviewed')
+      assert.ok(source.scenarios?.length > 0, `legacy aggregate has no scenario candidate: ${source.path}`)
+    }
+    for (const scenario of source.scenarios || []) {
+      assert.ok(scenario.id.startsWith('source.'))
+      assert.ok(scenario.label)
+      assert.ok(scenario.locator)
+      assert.ok(['reviewed', 'pending-manual'].includes(scenario.reviewStatus))
+      scenarioCount += 1
+    }
+  }
+  assert.equal(sourceLedger.summary.scenarios.total, scenarioCount)
+  assert.equal(sourceLedger.summary.scenarios.pendingManual, 0)
+  assert.equal(sourceLedger.summary.scenarios.reviewed, sourceLedger.summary.scenarios.total)
+  assert.equal(sourceLedger.summary.scenarios.absorbedTriggers, 33)
+  assert.equal(sourceLedger.summary.scenarios.reviewedMarkers, sourceLedger.summary.scenarios.total + 33)
+  assert.equal(sourceLedger.summary.scenarios.retainedAggregateAssertions, 0)
+
+  for (const uncatalogued of [
+    'sast/append_child copy.html',
+    'sast/dom_data_manipulation copy.html',
+    'sast/test.html'
+  ]) {
+    const source = sourceLedger.sources.find((entry) => entry.canonicalPath === uncatalogued)
+    assert.ok(source, `uncatalogued historical source is missing: ${uncatalogued}`)
+    assert.equal(source.role, 'legacy-aggregate')
+    assert.equal(source.path, uncatalogued.replace(/\.html$/, '.advanced.html'))
+    assert.ok(!source.catalogCaseIds, `${uncatalogued} was silently assigned to a catalogue case`)
+  }
+})
+
+test('SAST and IAST family URLs list unique atomics while retaining combined Advanced labs', () => {
+  const atomics = [...atomicSast.challenges, ...atomicIast.challenges]
+  const advancedSources = sourceLedger.sources.filter((source) =>
+    source.role === 'legacy-aggregate' && source.canonicalPath && /^(?:sast|iast)\//.test(source.canonicalPath)
+  )
+  assert.equal(advancedSources.length, 64)
+
+  for (const source of advancedSources) {
+    const directory = sourceLedger.sources.find((candidate) => candidate.path === source.canonicalPath)
+    assert.ok(directory, `family directory is absent: ${source.canonicalPath}`)
+    assert.equal(directory.role, 'family-directory')
+    assert.ok(!directory.scenarios, `family directory contains executable scenarios: ${source.canonicalPath}`)
+    const markup = read(source.canonicalPath)
+    assert.match(markup, /data-family-directory=/)
+    assert.match(markup, new RegExp(path.basename(source.path).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+
+    const challenges = atomics.filter((challenge) => challenge.sourcePath === source.canonicalPath)
+    const assertions = (source.scenarios || []).filter((scenario) => scenario.role === 'assertion')
+    assert.equal(challenges.length, assertions.length, `family count drift: ${source.canonicalPath}`)
+    assert.equal(new Set(challenges.map((challenge) => challenge.sourceScenarioId)).size, challenges.length)
+    for (const challenge of challenges) {
+      assert.ok(markup.includes(`href="../${challenge.reviewRoute.replace(/^\.\//, '')}"`), `review link is absent: ${challenge.id}`)
+      assert.ok(markup.includes(`href="../${challenge.repairedRoute.replace(/^\.\//, '')}"`), `control link is absent: ${challenge.id}`)
+    }
+  }
+
+  const appendCases = atomicSast.challenges.filter((challenge) => challenge.sourcePath === 'sast/append_child.html')
+  assert.equal(appendCases.length, 4)
+  assert.ok(!appendCases.some((challenge) => /button-[23]-/.test(challenge.id)), 'nested appendChild trigger was counted twice')
+  const appendSource = advancedSources.find((source) => source.canonicalPath === 'sast/append_child.html')
+  assert.equal(appendSource.scenarios.flatMap((scenario) => scenario.absorbedTriggers || []).length, 2)
+  const clobberCases = atomicIast.challenges.filter((challenge) => challenge.sourcePath === 'iast/iast_dom_clobbering.html')
+  assert.equal(clobberCases.length, 2, 'standalone IAST DOM-clobbering actions must remain distinct')
+})
+
+test('every classified historical IAST assertion has a separate generated review and repaired target', () => {
+  assert.equal(atomicIast.schema, 'owasp-ptk-playground-atomic-iast/v1')
+  const expected = sourceLedger.sources
+    .filter((source) => source.role === 'legacy-aggregate' && source.path.startsWith('iast/'))
+    .flatMap((source) => (source.scenarios || []).filter((scenario) => scenario.role === 'assertion'))
+  assert.equal(atomicIast.summary.challenges, expected.length)
+  assert.equal(atomicIast.summary.pairedTargets, expected.length * 2)
+  assert.ok(new Set(atomicIast.challenges.map((entry) => entry.operationKind)).size >= 35)
+  assert.ok(atomicIast.challenges.every((entry) => entry.operationKind && entry.operationKind !== 'runtime-boundary'))
+  assert.deepEqual(atomicIast.challenges.map((entry) => entry.sourceScenarioId).sort(), expected.map((entry) => entry.id).sort())
+  for (const challenge of atomicIast.challenges) {
+    const reviewDirectory = challenge.reviewRoute.replace(/^\.\//, '')
+    const repairedDirectory = challenge.repairedRoute.replace(/^\.\//, '')
+    const reviewScript = read(`${reviewDirectory}case.js`)
+    const repairedScript = read(`${repairedDirectory}case.js`)
+    assertAtomicWorkbench(read(`${reviewDirectory}index.html`), 'IAST', 'review')
+    assertAtomicWorkbench(read(`${repairedDirectory}index.html`), 'IAST', 'fixed')
+    assert.notEqual(reviewScript, repairedScript, `review/control scripts are identical: ${challenge.id}`)
+    assert.doesNotThrow(() => new vm.Script(reviewScript, { filename: `${challenge.id}:review` }))
+    assert.doesNotThrow(() => new vm.Script(repairedScript, { filename: `${challenge.id}:fixed` }))
+    assert.doesNotMatch(reviewScript + repairedScript, /https?:\/\//i, `generated IAST case has an external URL: ${challenge.id}`)
+  }
+})
+
+test('DAST contract catalogue classifies every route-aware endpoint and keeps active requests bounded', () => {
+  assert.equal(dastContracts.schema, 'owasp-ptk-playground-dast-contracts/v1')
+  const runtimeRoutes = legacyRoutes.routes.filter((route) => route.kinds.includes('route-aware-runtime')).map((route) => route.path).sort()
+  assert.deepEqual(dastContracts.contracts.map((contract) => contract.route).sort(), runtimeRoutes)
+  assert.equal(dastContracts.summary.runtimeRoutes, runtimeRoutes.length)
+  assert.equal(dastContracts.summary.runtimeRoutes, dastContracts.summary.securityTargets + dastContracts.summary.infrastructureRoutes)
+  for (const contract of dastContracts.contracts) {
+    assert.ok(contract.route.startsWith('/') && !contract.route.startsWith('//'))
+    assert.ok(['assertion', 'control', 'infrastructure'].includes(contract.role))
+    assert.ok(['security-target', 'runtime-support'].includes(contract.disposition))
+    assert.equal(contract.runtime.loopbackOnly, true)
+    assert.ok(contract.methods.length > 0)
+    if (contract.controlRoute) {
+      assert.notEqual(contract.route, contract.controlRoute)
+      assert.ok(dastContracts.contracts.some((candidate) => candidate.route === contract.controlRoute && candidate.role === 'control'))
+    }
+  }
+  const active = dastContracts.contracts.find((contract) => contract.route === '/targets/session-bound-order-search/vulnerable/api/search')
+  assert.deepEqual(active.methods, ['POST'])
+  assert.equal(active.runtime.protocol, 'https')
+  assert.equal(active.controlRoute, '/targets/session-bound-order-search/fixed/api/search')
+  assert.match(read('passive/server.mjs'), /request_body_too_large/)
+})
+
+test('SCA catalogue pins every public dependency and provides a paired browser control', () => {
+  assert.equal(scaDependencies.schema, 'owasp-ptk-playground-sca-dependencies/v1')
+  assert.equal(scaDependencies.summary.packages, scaDependencies.packages.length)
+  assert.equal(scaDependencies.summary.scenarios, scaDependencies.scenarios.length)
+  assert.equal(scaDependencies.summary.pairedControls, scaDependencies.scenarios.length)
+  for (const dependency of scaDependencies.packages) {
+    assert.ok(fs.existsSync(path.join(repoRoot, dependency.provenanceFile.replace(/^\.\//, ''))))
+    assert.ok(fs.existsSync(path.join(repoRoot, dependency.licenseFile.replace(/^\.\//, ''))))
+  }
+  for (const scenario of scaDependencies.scenarios) {
+    assert.ok(scenario.review.targetRoute.startsWith('./'))
+    assert.ok(scenario.repaired.targetRoute.startsWith('./'))
+    assert.ok(fs.existsSync(path.join(repoRoot, scenario.review.targetRoute.replace(/^\.\//, ''), 'index.html')))
+    assert.ok(fs.existsSync(path.join(repoRoot, scenario.repaired.targetRoute.replace(/^\.\//, ''), 'index.html')))
+    const reviewResource = scenario.review.resourceRoute.replace(/^\.\//, '')
+    assert.equal(sha256(reviewResource), scenario.review.sha256)
+    if (scenario.repaired.resourceRoute) assert.equal(sha256(scenario.repaired.resourceRoute.replace(/^\.\//, '')), scenario.repaired.sha256)
+  }
+  const angularReview = read('targets/angular-expression-dependency/review/index.html')
+  const angularControl = read('targets/angular-expression-dependency/fixed/index.html')
+  assert.match(angularReview, /assets\/vendor\/angularjs\/angular\.min\.js/)
+  assert.doesNotMatch(angularControl, /assets\/vendor\/angularjs\/angular\.min\.js/)
+})
+
+test('every classified historical SAST assertion has a separate generated review and repaired target', () => {
+  assert.equal(atomicSast.schema, 'owasp-ptk-playground-atomic-sast/v1')
+  assert.equal(atomicSast.version, 1)
+  const expected = sourceLedger.sources
+    .filter((source) => source.role === 'legacy-aggregate' && source.path.startsWith('sast/'))
+    .flatMap((source) => (source.scenarios || []).filter((scenario) => scenario.role === 'assertion'))
+  assert.equal(atomicSast.summary.challenges, expected.length)
+  assert.equal(atomicSast.summary.pairedTargets, expected.length * 2)
+  assert.ok(new Set(atomicSast.challenges.map((entry) => entry.operationKind)).size >= 30)
+  assert.ok(atomicSast.challenges.every((entry) => entry.operationKind))
+  assert.equal(new Set(atomicSast.challenges.map((entry) => entry.id)).size, atomicSast.challenges.length)
+  assert.deepEqual(
+    atomicSast.challenges.map((entry) => entry.sourceScenarioId).sort(),
+    expected.map((scenario) => scenario.id).sort()
+  )
+
+  for (const challenge of atomicSast.challenges) {
+    assert.ok(challenge.reviewRoute.startsWith('./atomic/sast/'))
+    assert.ok(challenge.repairedRoute.startsWith('./atomic/sast/'))
+    assert.notEqual(challenge.reviewRoute, challenge.repairedRoute)
+    const reviewDirectory = challenge.reviewRoute.replace(/^\.\//, '')
+    const repairedDirectory = challenge.repairedRoute.replace(/^\.\//, '')
+    const reviewHtml = read(`${reviewDirectory}index.html`)
+    const repairedHtml = read(`${repairedDirectory}index.html`)
+    const reviewScript = read(`${reviewDirectory}case.js`)
+    const repairedScript = read(`${repairedDirectory}case.js`)
+    assertAtomicWorkbench(reviewHtml, 'SAST', 'review')
+    assertAtomicWorkbench(repairedHtml, 'SAST', 'fixed')
+    assert.equal((reviewHtml.match(/<script\b/g) || []).length, 1)
+    assert.equal((repairedHtml.match(/<script\b/g) || []).length, 1)
+    assert.notEqual(reviewScript, repairedScript, `review/control scripts are identical: ${challenge.id}`)
+    assert.doesNotMatch(reviewHtml + repairedHtml + reviewScript + repairedScript, /<script[^>]+src=["']https?:|import\s*\([^)]*https?:/i)
+    assert.doesNotThrow(() => new vm.Script(reviewScript, { filename: `${challenge.id}:review` }))
+    assert.doesNotThrow(() => new vm.Script(repairedScript, { filename: `${challenge.id}:fixed` }))
+  }
+
+
+  const requestHeader = atomicSast.challenges.find((entry) => entry.id.includes('arh-setrequestheader'))
+  assert.ok(requestHeader)
+  const requestHeaderMarkup = read(`${requestHeader.reviewRoute.replace(/^\.\//, '')}index.html`)
+  assert.match(requestHeaderMarkup, /id="case-link"[^>]+hidden/)
+  assert.match(requestHeaderMarkup, /id="preview"[^>]+hidden/)
+})
+
+test('canonical registry accounts for the full legacy catalogue and uncatalogued aggregate sources', () => {
+  assert.equal(canonicalChallenges.schema, 'owasp-ptk-playground-challenges/v1')
+  assert.equal(canonicalChallenges.version, 1)
+  assert.equal(canonicalChallenges.migrationStatus, 'full-corpus-fixtures-complete')
+  assert.equal(canonicalChallenges.summary.legacyCatalogueCases, catalog.cases.length)
+  assert.equal(canonicalChallenges.summary.sourceLedgerFiles, sourceLedger.sources.length)
+  assert.equal(canonicalChallenges.summary.authoredSourceFiles, sourceLedger.summary.authoredSourceFiles)
+  assert.equal(canonicalChallenges.summary.generatedAtomicSast, atomicSast.summary.challenges)
+  assert.equal(canonicalChallenges.summary.generatedAtomicIast, atomicIast.summary.challenges)
+  assert.equal(canonicalChallenges.summary.dastRuntimeRoutes, dastContracts.summary.runtimeRoutes)
+  assert.equal(canonicalChallenges.summary.scaScenarios, scaDependencies.summary.scenarios)
+  assert.equal(canonicalChallenges.summary.classifiedScenarioMarkers, sourceLedger.summary.scenarios.reviewedMarkers)
+  assert.equal(canonicalChallenges.summary.retainedAggregateAssertions, sourceLedger.summary.scenarios.retainedAggregateAssertions)
+  assert.equal(canonicalChallenges.summary.pendingScenarioReview, sourceLedger.summary.scenarios.pendingManual)
+  assert.equal(canonicalChallenges.summary.challenges, canonicalChallenges.challenges.length)
+
+  const challengeIds = new Set()
+  const representedCaseIds = []
+  const representedSourceIds = new Set()
+  for (const challenge of canonicalChallenges.challenges) {
+    assert.ok(challenge.id && !challengeIds.has(challenge.id), `duplicate canonical challenge: ${challenge.id}`)
+    challengeIds.add(challenge.id)
+    assert.ok(['atomic-challenge', 'atomic-observation', 'advanced-lab'].includes(challenge.kind), `unknown challenge kind: ${challenge.id}`)
+    assert.ok(challenge.title && challenge.summary && challenge.category)
+    assert.ok(Array.isArray(challenge.engines) && challenge.engines.length > 0)
+    assert.ok(challenge.familyId)
+    assert.ok(challenge.targets?.review?.route, `challenge has no review route: ${challenge.id}`)
+    assert.ok(
+      challenge.targets.review.route.startsWith('./') || challenge.targets.review.route.startsWith('/'),
+      `challenge route is not local: ${challenge.id}`
+    )
+    assert.ok(!challenge.targets.review.route.startsWith('//'))
+    for (const legacyCaseId of challenge.provenance.legacyCaseIds || []) representedCaseIds.push(legacyCaseId)
+    for (const sourceId of challenge.provenance.sourceIds || []) representedSourceIds.add(sourceId)
+  }
+  for (const entry of atomicSast.challenges) {
+    const canonical = canonicalChallenges.challenges.find((challenge) => challenge.id === entry.id)
+    assert.ok(canonical, `generated SAST challenge is absent from canonical registry: ${entry.id}`)
+    assert.equal(canonical.kind, 'atomic-challenge')
+    assert.equal(canonical.targets.review.route, entry.reviewRoute)
+    assert.equal(canonical.targets.repaired.route, entry.repairedRoute)
+  }
+
+  const atomicBySource = new Map()
+  for (const challenge of canonicalChallenges.challenges.filter((entry) => entry.kind !== 'advanced-lab')) {
+    for (const sourceId of challenge.provenance.sourceIds || []) {
+      const ids = atomicBySource.get(sourceId) || []
+      ids.push(challenge.id)
+      atomicBySource.set(sourceId, ids)
+    }
+  }
+  for (const challenge of canonicalChallenges.challenges.filter((entry) => entry.kind === 'advanced-lab')) {
+    assert.equal(challenge.migrationStatus, 'compatibility-lab', `stale Advanced status: ${challenge.id}`)
+    assert.doesNotMatch(challenge.summary, /awaiting complete|pending (?:split|classification)/i)
+    const expected = [...new Set((challenge.provenance.sourceIds || []).flatMap((sourceId) => atomicBySource.get(sourceId) || []))].sort()
+    assert.deepEqual(challenge.provenance.derivedChallengeIds, expected, `Advanced child mapping drift: ${challenge.id}`)
+  }
+
+  for (const mission of missions.missions) {
+    const challenge = canonicalChallenges.challenges.find((entry) => entry.id === mission.id)
+    assert.deepEqual(challenge.guidance, {
+      route: mission.route,
+      objectiveCount: mission.objectives.length,
+      supportsProgress: true,
+      supportsHints: true,
+      supportsProofTokens: mission.objectives.some((objective) => objective.completion?.type === 'proof')
+    })
+  }
+
+  assert.deepEqual(representedCaseIds.sort(), catalog.cases.map((entry) => entry.id).sort())
+  for (const source of sourceLedger.sources.filter((entry) => entry.role === 'legacy-aggregate')) {
+    assert.ok(representedSourceIds.has(source.id), `legacy source is absent from canonical registry: ${source.path}`)
+  }
+  for (const expected of [
+    'legacy.sast-append-child-copy',
+    'legacy.sast-dom-data-manipulation-copy',
+    'legacy.sast-test'
+  ]) {
+    assert.ok(challengeIds.has(expected), `uncatalogued source challenge is absent: ${expected}`)
+  }
+})
+
+test('canonical families and playlists reference challenges without copying challenge contracts', () => {
+  assert.equal(canonicalFamilies.schema, 'owasp-ptk-playground-families/v1')
+  assert.equal(canonicalPlaylists.schema, 'owasp-ptk-playground-playlists/v1')
+  const challengesById = new Map(canonicalChallenges.challenges.map((challenge) => [challenge.id, challenge]))
+  const familyIds = new Set()
+  const familyMembership = new Map()
+
+  for (const family of canonicalFamilies.families) {
+    assert.ok(family.id && !familyIds.has(family.id), `duplicate family: ${family.id}`)
+    familyIds.add(family.id)
+    assert.ok(family.title)
+    assert.ok(Array.isArray(family.challengeIds) && family.challengeIds.length > 0)
+    for (const challengeId of family.challengeIds) {
+      assert.ok(challengesById.has(challengeId), `family references unknown challenge: ${challengeId}`)
+      assert.ok(!familyMembership.has(challengeId), `challenge appears in multiple families: ${challengeId}`)
+      familyMembership.set(challengeId, family.id)
+    }
+  }
+  for (const challenge of canonicalChallenges.challenges) {
+    assert.equal(familyMembership.get(challenge.id), challenge.familyId, `challenge family mismatch: ${challenge.id}`)
+  }
+
+  const playlistIds = new Set()
+  for (const playlist of canonicalPlaylists.playlists) {
+    assert.ok(playlist.id && !playlistIds.has(playlist.id), `duplicate playlist: ${playlist.id}`)
+    playlistIds.add(playlist.id)
+    assert.ok(playlist.title && playlist.summary)
+    assert.ok(Array.isArray(playlist.challengeIds) && playlist.challengeIds.length > 0)
+    assert.deepEqual(
+      Object.keys(playlist).sort(),
+      ['challengeIds', 'durationMinutes', 'id', 'summary', 'title'].filter((field) => playlist[field] !== undefined).sort(),
+      `playlist duplicates challenge data: ${playlist.id}`
+    )
+    for (const challengeId of playlist.challengeIds) {
+      assert.ok(challengesById.has(challengeId), `playlist references unknown challenge: ${challengeId}`)
+    }
+  }
+  assert.deepEqual(
+    canonicalPlaylists.playlists.find((playlist) => playlist.id === 'browser-context-demo').challengeIds,
+    demo.chapters.map((chapter) => chapter.missionId)
+  )
+})
+
+test('generated scanner feed is a complete neutral projection of canonical targets', () => {
+  assert.equal(generatedScannerTargets.schema, 'owasp-ptk-playground-scanner-targets/v2')
+  assert.equal(generatedScannerTargets.generatedFrom, 'catalog/challenges.json')
+  const expectedTargets = canonicalChallenges.challenges.reduce((total, challenge) => total + (challenge.targets.repaired ? 2 : 1), 0)
+  assert.equal(generatedScannerTargets.summary.challenges, canonicalChallenges.challenges.length)
+  assert.equal(generatedScannerTargets.summary.targets, expectedTargets)
+  assert.equal(generatedScannerTargets.targets.length, expectedTargets)
+  assert.equal(new Set(generatedScannerTargets.targets.map((target) => target.id)).size, generatedScannerTargets.targets.length)
+  for (const target of generatedScannerTargets.targets) {
+    assert.ok(['review', 'repaired'].includes(target.variant))
+    assert.ok(canonicalChallenges.challenges.some((challenge) => challenge.id === target.challengeId))
+    assert.ok(target.route.startsWith('./') || target.route.startsWith('/'))
+    assert.ok(!target.route.startsWith('//'))
+    assert.ok(target.engines.length > 0)
+    assert.ok(!Object.hasOwn(target, 'productPreview'))
+  }
+  assert.equal(generatedCounts.schema, 'owasp-ptk-playground-counts/v1')
+  assert.equal(generatedCounts.targets, expectedTargets)
+  assert.equal(generatedCounts.migration.sourceMigrationComplete, true)
+  assert.equal(generatedCounts.migration.pendingScenarioReview, 0)
+  assert.equal(generatedCounts.migration.retainedAggregateAssertions, 0)
+})
+
+test('frozen route inventory accounts for static, catalogue, mission and runtime routes', () => {
+  assert.equal(legacyRoutes.schema, 'owasp-ptk-playground-legacy-routes/v1')
+  assert.equal(legacyRoutes.version, 1)
+  assert.equal(legacyRoutes.summary.routes, legacyRoutes.routes.length)
+  assert.equal(new Set(legacyRoutes.routes.map((entry) => entry.path)).size, legacyRoutes.routes.length)
+  assert.ok(legacyRoutes.summary.runtimeRoutes > 0)
+
+  for (const route of legacyRoutes.routes) {
+    assert.ok(route.path.startsWith('/') && !route.path.startsWith('//'), `non-local frozen route: ${route.path}`)
+    assert.ok(route.kinds.length > 0, `frozen route has no kind: ${route.path}`)
+    assert.ok(route.owners.length > 0, `frozen route has no owner: ${route.path}`)
+  }
+
+  for (const expected of [
+    '/sast/inner_html.html',
+    '/iast/iast_dom_xss.html',
+    '/passive/cases/headers/powered-by.html',
+    '/targets/support-widget/vulnerable/',
+    '/targets/session-bound-order-search/vulnerable/api/search',
+    '/campaigns/transient-route-notice/'
+  ]) {
+    assert.ok(legacyRoutes.routes.some((route) => route.path === expected), `frozen route is missing: ${expected}`)
+  }
+})
 
 test('public catalogue has unique, local, minimally valid cases', () => {
   assert.equal(catalog.schema, 'owasp-ptk-playground-catalog/v1')
@@ -76,6 +515,17 @@ test('public catalogue contains no executable PTK rulepack fields', () => {
   inspect(missions, 'missions')
   inspect(scannerTargets, 'scannerTargets')
   inspect(demo, 'demo')
+  inspect(canonicalChallenges, 'canonicalChallenges')
+  inspect(canonicalFamilies, 'canonicalFamilies')
+  inspect(canonicalPlaylists, 'canonicalPlaylists')
+  inspect(sourceLedger, 'sourceLedger')
+  inspect(legacyRoutes, 'legacyRoutes')
+  inspect(atomicSast, 'atomicSast')
+  inspect(atomicIast, 'atomicIast')
+  inspect(dastContracts, 'dastContracts')
+  inspect(scaDependencies, 'scaDependencies')
+  inspect(generatedScannerTargets, 'generatedScannerTargets')
+  inspect(generatedCounts, 'generatedCounts')
 })
 
 test('curated demo references existing missions and covers every evidence family once as a coherent journey', () => {
@@ -145,7 +595,7 @@ test('scanner target catalogue is a minimal, exact projection of public missions
   assert.deepEqual(scannerTargets.missions, projected)
   const serialized = JSON.stringify(scannerTargets)
   assert.doesNotMatch(serialized, /completion|objectives|answer|payload|matcher|ruleId|policyId/)
-  assert.equal(scannerTargets.missions.reduce((total, mission) => total + mission.targets.length, 0), 16)
+  assert.equal(scannerTargets.missions.reduce((total, mission) => total + mission.targets.length, 0), 22)
 })
 
 test('public mission catalogue is local and has paired target contracts', () => {
@@ -242,19 +692,28 @@ test('public product preview terminology is confined to the approved presentatio
     'catalog/missions.json',
     'catalog/scanner-targets.json',
     'catalog/demo.json',
+    'catalog/challenges.json',
+    'catalog/families.json',
+    'catalog/playlists.json',
+    'catalog/source-ledger.json',
+    'catalog/legacy-routes.json',
     'campaigns/index.html',
     'demo/index.html',
     'scanner/index.html',
+    'play/index.html',
+    'explore/index.html',
     ...missions.missions.map((mission) => `${mission.route.replace(/^\.\//, '')}index.html`),
     'assets/js/playground.js',
+    'assets/js/catalogue-app.js',
     'assets/css/playground.css'
   ]
   const previewPresentationFiles = new Set([
     'README.md',
-    'index.html',
     'campaigns/index.html',
     'catalog/missions.json',
-    'assets/js/playground.js'
+    'catalog/challenges.json',
+    'assets/js/playground.js',
+    'assets/js/catalogue-app.js'
   ])
   for (const file of publicFiles) {
     if (file !== 'assets/js/playground.js') {
@@ -273,7 +732,7 @@ test('public product preview terminology is confined to the approved presentatio
       .replace(/<style\b[\s\S]*?<\/style>/gi, '')
       .replace(/<pre\b[\s\S]*?<\/pre>/gi, '')
     assert.doesNotMatch(visibleMarkup, /\bportal\b/i, `${relative} exposes Portal terminology in visible text`)
-    if (!['index.html', 'campaigns/index.html'].includes(relative)) {
+    if (relative !== 'campaigns/index.html') {
       assert.doesNotMatch(visibleMarkup, /\bpro\b/i, `${relative} exposes product-preview terminology in visible text`)
     }
   }
@@ -318,11 +777,51 @@ test('public index pages use the shared self-hosted shell', () => {
     assert.doesNotMatch(html, /<link[^>]+href=["']https?:\/\//i, `${page} must not load remote styles`)
   }
   assert.doesNotMatch(read('assets/js/playground.js'), /\.innerHTML\s*=/, 'catalogue renderer must not reinterpret text as HTML')
+  assert.doesNotMatch(read('assets/js/catalogue-app.js'), /\.innerHTML\s*=/, 'canonical renderer must not reinterpret text as HTML')
   assert.match(read('demo/index.html'), /data-page="demo"/)
-  assert.match(read('index.html'), /href="\.\/demo\/"/)
+  assert.match(read('index.html'), /href="\.\/play\/"/)
+  assert.match(read('index.html'), /href="\.\/explore\/"/)
   for (const mission of missions.missions) {
-    assert.match(read(`${mission.route.replace(/^\.\//, '')}index.html`), /href="\.\.\/\.\.\/demo\/"/)
+    assert.match(read(`${mission.route.replace(/^\.\//, '')}index.html`), /href="\.\.\/\.\.\/play\//)
   }
+})
+
+test('home page stays focused while compatibility and preview surfaces remain available elsewhere', () => {
+  const home = read('index.html')
+  assert.doesNotMatch(home, /Conference-ready path|Show the browser as the source of truth|Open legacy presenter view/)
+  assert.doesNotMatch(home, /PTK Pro|product-preview|data-product-preview-list/)
+  assert.doesNotMatch(home, /href="\.\/campaigns\/"|href="\.\/scanner\/"/)
+  assert.match(home, /href="\.\/play\/"/)
+  assert.match(home, /href="\.\/explore\/"/)
+  assert.ok(fs.existsSync(path.join(repoRoot, 'campaigns/index.html')))
+  assert.ok(fs.existsSync(path.join(repoRoot, 'scanner/index.html')))
+})
+
+test('Play and Explore render from canonical catalogues rather than handwritten case cards', () => {
+  const play = read('play/index.html')
+  const explore = read('explore/index.html')
+  const renderer = read('assets/js/catalogue-app.js')
+
+  for (const [name, page] of [['Play', play], ['Explore', explore]]) {
+    assert.match(page, /assets\/js\/catalogue-app\.js/, `${name} does not load the canonical renderer`)
+    assert.doesNotMatch(page, /data-challenge-id=/, `${name} hardcodes canonical challenge cards`)
+    assert.doesNotMatch(page, /<script[^>]+src=["']https?:\/\//i, `${name} executes remote code`)
+    assert.doesNotMatch(page, /Legacy missions|Compatibility target view/, `${name} promotes a compatibility directory`)
+    assert.match(page, /https:\/\/github\.com\/ptklabs\/ptk-playground#run-the-complete-local-demo-with-docker/)
+  }
+  assert.match(renderer, /text: 'Run locally for DAST'/)
+  assert.match(renderer, /https:\/\/github\.com\/ptklabs\/ptk-playground#run-the-complete-local-demo-with-docker/)
+  assert.match(play, /data-playlist-list/)
+  assert.match(play, /data-playlist-challenges/)
+  assert.match(explore, /data-explore-results/)
+  assert.match(explore, /data-explore-engine/)
+  assert.match(renderer, /catalog\/challenges\.json/)
+  assert.match(renderer, /catalog\/families\.json/)
+  assert.match(renderer, /catalog\/playlists\.json/)
+  assert.match(renderer, /Start guided mission/)
+  assert.match(renderer, /derivedChallengeIds/)
+  assert.match(renderer, /if \(!runtime\) return null/)
+  assert.doesNotMatch(renderer, /PTK_AGENT|chrome\.runtime|browser\.runtime/)
 })
 
 test('fixture markup has no duplicate static element IDs', () => {
@@ -345,11 +844,11 @@ test('fixture markup has no duplicate static element IDs', () => {
 
 test('known legacy remote fixture dependencies are bounded and cannot grow silently', () => {
   const known = new Set([
-    'sast/ajax_request_header.html|https://code.jquery.com/jquery-3.7.1.min.js',
-    'sast/client_template_injection.html|https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js',
-    'sast/dom_selector.html|https://code.jquery.com/jquery-3.7.1.min.js',
-    'sast/javascript_injection_taint.html|https://code.jquery.com/jquery-3.7.1.min.js',
-    'sast/link_manipulation.html|https://code.jquery.com/jquery-3.7.1.min.js'
+    'sast/ajax_request_header.advanced.html|https://code.jquery.com/jquery-3.7.1.min.js',
+    'sast/client_template_injection.advanced.html|https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js',
+    'sast/dom_selector.advanced.html|https://code.jquery.com/jquery-3.7.1.min.js',
+    'sast/javascript_injection_taint.advanced.html|https://code.jquery.com/jquery-3.7.1.min.js',
+    'sast/link_manipulation.advanced.html|https://code.jquery.com/jquery-3.7.1.min.js'
   ])
   const actual = new Set()
   for (const file of walk(repoRoot).filter((entry) => entry.endsWith('.html'))) {
@@ -639,6 +1138,68 @@ test('imported-request-preferences mission preserves one local request and rejec
   }
 })
 
+test('SPA deep-dive missions preserve browser journeys and exact paired controls', () => {
+  const missionById = new Map(missions.missions.map((mission) => [mission.id, mission]))
+  const spaPlaylist = canonicalPlaylists.playlists.find((playlist) => playlist.id === 'spa-deep-dive')
+  assert.deepEqual(spaPlaylist.challengeIds, [
+    'history-order-router',
+    'lazy-route-module',
+    'same-origin-child-tab'
+  ])
+
+  const historyMission = missionById.get('history-order-router')
+  assert.deepEqual(historyMission.engines, ['DAST', 'SAST', 'IAST'])
+  assert.equal(historyMission.targets.review.request.contentType, 'application/json')
+  const historyReview = read('targets/history-order-router/vulnerable/history-order-router.js')
+  const historyControl = read('targets/history-order-router/fixed/history-order-router.js')
+  assert.match(historyReview, /history\.pushState/)
+  assert.match(historyReview, /view\.innerHTML\s*=/)
+  assert.match(historyControl, /history\.pushState/)
+  assert.match(historyControl, /view\.textContent\s*=/)
+  assert.doesNotMatch(historyControl, /\.innerHTML\s*=/)
+
+  const lazyMission = missionById.get('lazy-route-module')
+  assert.deepEqual(lazyMission.engines, ['SCA', 'SAST', 'IAST'])
+  const lazyShell = read('targets/lazy-route-module/vulnerable/lazy-route-app.js')
+  const lazyReview = read('targets/lazy-route-module/vulnerable/analytics-route.js')
+  const lazyControl = read('targets/lazy-route-module/fixed/analytics-route.js')
+  assert.match(lazyShell, /import\('\.\/analytics-route\.js'\)/)
+  assert.match(lazyReview, /jquery-3\.4\.1\.min\.js/)
+  assert.match(lazyReview, /workspace\.innerHTML\s*=/)
+  assert.match(lazyControl, /jquery-3\.7\.1\.min\.js/)
+  assert.match(lazyControl, /workspace\.textContent\s*=/)
+  assert.doesNotMatch(lazyControl, /\.innerHTML\s*=/)
+
+  const childMission = missionById.get('same-origin-child-tab')
+  assert.deepEqual(childMission.engines, ['DAST', 'SCA', 'SAST', 'IAST'])
+  const childReview = read('targets/same-origin-child-tab/vulnerable/child-runtime.js')
+  const childControl = read('targets/same-origin-child-tab/fixed/child-runtime.js')
+  const externalControl = read('targets/same-origin-child-tab/control/index.html')
+  assert.match(childReview, /jquery-3\.4\.1\.min\.js/)
+  assert.match(childReview, /output\.innerHTML\s*=/)
+  assert.doesNotMatch(childReview, /event\.origin\s*!==/)
+  assert.match(childControl, /jquery-3\.7\.1\.min\.js/)
+  assert.match(childControl, /event\.origin\s*!==\s*window\.location\.origin/)
+  assert.match(childControl, /event\.source\s*!==\s*window\.opener/)
+  assert.match(childControl, /output\.textContent\s*=/)
+  assert.doesNotMatch(childControl, /\.innerHTML\s*=/)
+  assert.doesNotMatch(externalControl, /<script\b/i)
+  assert.match(externalControl, /receives no message, session value, dependency, or application request/i)
+
+  const historyContract = dastContracts.contracts.find((contract) => contract.route === '/targets/history-order-router/vulnerable/api/order')
+  const childContract = dastContracts.contracts.find((contract) => contract.route === '/targets/same-origin-child-tab/vulnerable/api/context')
+  assert.deepEqual(historyContract.methods, ['POST'])
+  assert.equal(historyContract.runtime.protocol, 'http')
+  assert.equal(historyContract.controlRoute, '/targets/history-order-router/fixed/api/order')
+  assert.deepEqual(childContract.methods, ['GET'])
+  assert.equal(childContract.controlRoute, '/targets/same-origin-child-tab/fixed/api/context')
+  const runtime = read('passive/server.mjs')
+  assert.match(runtime, /ptk_history_order_session=active/)
+  assert.match(runtime, /ptk_child_context_session=active/)
+  assert.match(runtime, /readBoundedBody\(req, 2048\)/)
+  assert.match(runtime, /X-Powered-By": "PTK Child Context Canary"/)
+})
+
 test('catalogue renderer does not expose passive localhost links in catalogue mode', () => {
   const source = read('assets/js/playground.js')
   assert.match(source, /if \(!passiveStatus\) return null/)
@@ -651,10 +1212,18 @@ test('route-aware passive server serves the shared playground shell and catalogu
   for (const route of [
     '/assets/css/playground.css',
     '/assets/js/playground.js',
+    '/assets/js/catalogue-app.js',
     '/catalog/cases.json',
     '/catalog/missions.json',
     '/catalog/scanner-targets.json',
     '/catalog/demo.json',
+    '/catalog/challenges.json',
+    '/catalog/families.json',
+    '/catalog/playlists.json',
+    '/catalog/source-ledger.json',
+    '/catalog/legacy-routes.json',
+    '/play/',
+    '/explore/',
     '/demo/',
     '/scanner/',
     '/campaigns/deployment-response-boundary/',
@@ -693,4 +1262,42 @@ test('route-aware passive server serves the shared playground shell and catalogu
   ]) {
     assert.ok(source.includes(`"${route}"`), `passive server is missing ${route}`)
   }
+})
+
+test('local demo container preserves the bounded route-aware security contract', () => {
+  const dockerfile = read('Dockerfile')
+  const compose = read('compose.yaml')
+  const dockerignore = read('.dockerignore')
+  const workflow = read('.github/workflows/validate.yml')
+  const smoke = read('scripts/container-smoke.mjs')
+  const preflight = read('scripts/demo-preflight.mjs')
+  const packageJson = readJson('package.json')
+
+  assert.match(dockerfile, /^FROM node:22-bookworm-slim/m)
+  assert.match(dockerfile, /apt-get install --yes --no-install-recommends openssl/)
+  assert.match(dockerfile, /PTK_PLAYGROUND_HOST=0\.0\.0\.0/)
+  assert.match(dockerfile, /^USER node$/m)
+  assert.match(dockerfile, /^EXPOSE 3080 3443$/m)
+  assert.match(dockerfile, /HEALTHCHECK[^\n]*\\\n\s*CMD \["node"/)
+  assert.doesNotMatch(dockerfile, /npm (?:ci|install)|playwright/i)
+
+  assert.match(compose, /read_only:\s*true/)
+  assert.match(compose, /127\.0\.0\.1:3080:3080/)
+  assert.match(compose, /127\.0\.0\.1:3443:3443/)
+  assert.match(compose, /no-new-privileges:true/)
+  assert.match(compose, /cap_drop:\s*\n\s*- ALL/)
+  assert.match(compose, /\/tmp:size=16m,mode=1777/)
+
+  for (const excluded of ['.git', '.github', 'node_modules', 'test', 'scripts', '.env', '**/.DS_Store', '**/._*', '**/__MACOSX']) {
+    assert.ok(dockerignore.split('\n').includes(excluded), `.dockerignore must exclude ${excluded}`)
+  }
+
+  assert.equal(packageJson.scripts['demo:container:smoke'], 'node scripts/container-smoke.mjs')
+  assert.match(smoke, /https:\/\/127\.0\.0\.1:3443/)
+  assert.match(smoke, /spa-deep-dive/)
+  assert.match(smoke, /ORDER_QUERY_SYNTAX/)
+  assert.match(preflight, /play\/\?playlist=browser-context-demo/)
+  assert.match(workflow, /docker build --tag ptk-playground:ci/)
+  assert.match(workflow, /--publish 127\.0\.0\.1:3080:3080/)
+  assert.match(workflow, /npm run demo:container:smoke/)
 })

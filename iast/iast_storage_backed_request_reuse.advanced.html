@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Storage-backed Request Reuse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Storage-backed Request Reuse</h1>
+  <p class="note">Covers reuse of storage-backed request URLs and headers in fetch and XHR.</p>
+  <div class="card">
+    <label for="storedUrl">Stored request URL</label>
+    <input id="storedUrl" type="text" value="https://example.org/stored-request?ptk=1">
+    <label for="storedHeader">Stored request header</label>
+    <input id="storedHeader" type="text" value="Bearer storage-backed-token">
+    <label for="sourceType">Storage source</label>
+    <select id="sourceType">
+      <option value="cookie">cookie</option>
+      <option value="localStorage">localStorage</option>
+      <option value="sessionStorage">sessionStorage</option>
+      <option value="windowName">window.name</option>
+    </select>
+    <button id="prime">Prime storage source</button>
+    <p id="status" class="note">No source primed yet.</p>
+  </div>
+  <div class="card">
+    <button id="btn-fetch-url">fetch(storedUrl)</button>
+    <button id="btn-xhr-url">xhr.open(storedUrl)</button>
+    <button id="btn-fetch-header">fetch with stored Authorization header</button>
+    <button id="btn-xhr-header">xhr.setRequestHeader(stored Authorization)</button>
+  </div>
+  <script>
+    const urlField = document.getElementById('storedUrl');
+    const headerField = document.getElementById('storedHeader');
+    const status = document.getElementById('status');
+    function currentValue(key, fallback) {
+      const selected = document.getElementById('sourceType').value;
+      if (selected === 'cookie') { const m = document.cookie.match(new RegExp('(?:^|; )' + key + '=([^;]+)')); return m ? decodeURIComponent(m[1]) : fallback; }
+      if (selected === 'localStorage') return localStorage.getItem(key) || fallback;
+      if (selected === 'sessionStorage') return sessionStorage.getItem(key) || fallback;
+      if (selected === 'windowName') {
+        try { const parsed = JSON.parse(window.name || '{}'); return parsed[key] || fallback; } catch (_) { return fallback; }
+      }
+      return fallback;
+    }
+    document.getElementById('prime').onclick = () => {
+      const selected = document.getElementById('sourceType').value;
+      const url = urlField.value;
+      const header = headerField.value;
+      if (selected === 'cookie') {
+        document.cookie = 'iast_request_url=' + encodeURIComponent(url) + '; path=/';
+        document.cookie = 'iast_request_header=' + encodeURIComponent(header) + '; path=/';
+      }
+      if (selected === 'localStorage') {
+        localStorage.setItem('iast_request_url', url);
+        localStorage.setItem('iast_request_header', header);
+      }
+      if (selected === 'sessionStorage') {
+        sessionStorage.setItem('iast_request_url', url);
+        sessionStorage.setItem('iast_request_header', header);
+      }
+      if (selected === 'windowName') {
+        window.name = JSON.stringify({ iast_request_url: url, iast_request_header: header });
+      }
+      status.textContent = 'Primed storage source: ' + selected;
+    };
+    document.getElementById('btn-fetch-url').onclick = () => fetch(currentValue('iast_request_url', urlField.value)).catch(() => {});
+    document.getElementById('btn-xhr-url').onclick = () => { const xhr = new XMLHttpRequest(); xhr.open('GET', currentValue('iast_request_url', urlField.value)); xhr.send(); };
+    document.getElementById('btn-fetch-header').onclick = () => fetch(urlField.value, { headers: { Authorization: currentValue('iast_request_header', headerField.value) } }).catch(() => {});
+    document.getElementById('btn-xhr-header').onclick = () => { const xhr = new XMLHttpRequest(); xhr.open('GET', urlField.value); xhr.setRequestHeader('Authorization', currentValue('iast_request_header', headerField.value)); xhr.send(); };
+  </script>
+</body>
+</html>

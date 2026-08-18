@@ -2,376 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST DOM XSS Module</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      color-scheme: light dark;
-    }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 24px;
-      background: #0f172a;
-      color: #e2e8f0;
-      line-height: 1.5;
-    }
-    h1, h2, h3, h4 {
-      color: #f8fafc;
-    }
-    p {
-      margin-bottom: 0.75rem;
-    }
-    section {
-      margin-bottom: 32px;
-    }
-    textarea, input[type="text"] {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid #1f2937;
-      padding: 10px;
-      background: #0b1220;
-      color: #e2e8f0;
-      font-size: 14px;
-      font-family: 'SFMono-Regular','Consolas','Liberation Mono',monospace;
-    }
-    textarea {
-      min-height: 80px;
-    }
-    label {
-      display: block;
-      margin: 8px 0 4px;
-      font-weight: 600;
-    }
-    .action-button,
-    .sink-trigger {
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 10px 16px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      margin: 8px 8px 8px 0;
-    }
-    .action-button:hover,
-    .sink-trigger:hover {
-      background: #1d4ed8;
-    }
-    .note {
-      color: #94a3b8;
-      font-size: 0.95rem;
-    }
-    .sink-block {
-      border: 1px solid #1f2937;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      background: #111827;
-    }
-    .sink-box {
-      border: 1px dashed #1f2937;
-      border-radius: 8px;
-      padding: 8px;
-      background: #0b1220;
-      min-height: 64px;
-      color: #e2e8f0;
-    }
-    .sink-block h3 {
-      margin-top: 0;
-    }
-    #source-selector label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-right: 16px;
-      font-weight: 500;
-    }
-    #source-selector {
-      margin: 12px 0 16px;
-    }
-    #active-sources-status table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-    }
-    #active-sources-status td {
-      border-bottom: 1px solid #1f2937;
-      padding: 6px 4px;
-      vertical-align: top;
-    }
-    #active-sources-status code {
-      background: #1f2937;
-      padding: 2px 4px;
-      border-radius: 4px;
-    }
-    hr {
-      border: none;
-      border-top: 1px solid #1f2937;
-      margin: 32px 0;
-    }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>DOM XSS Module · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for DOM XSS Module.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST DOM XSS Module</h1>
-  <p>
-    This page lets you test IAST taint tracking from specific <strong>sources</strong>
-    (URL query, hash, cookie, storage, window.name, textarea) into various DOM
-    <strong>sinks</strong> (innerHTML, outerHTML, insertAdjacentHTML, document.write,
-    DOM mutations, inline event handlers).
-  </p>
-
-  <section id="iast-sources">
-    <h2>1. Choose and prime taint source</h2>
-
-    <label for="payload-input"><strong>Payload</strong></label>
-    <textarea id="payload-input" placeholder='<img src=x onerror=alert(1)>'></textarea>
-
-    <div id="source-selector">
-      <p><strong>Active source type:</strong></p>
-      <label><input type="radio" name="sourceType" value="query" checked> URL query (?payload=...)</label>
-      <label><input type="radio" name="sourceType" value="hash"> URL hash (#payload=...)</label>
-      <label><input type="radio" name="sourceType" value="cookie"> document.cookie</label>
-      <label><input type="radio" name="sourceType" value="localStorage"> localStorage</label>
-      <label><input type="radio" name="sourceType" value="sessionStorage"> sessionStorage</label>
-      <label><input type="radio" name="sourceType" value="windowName"> window.name</label>
-      <label><input type="radio" name="sourceType" value="textareaOnly"> textarea only (in-memory)</label>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_dom_xss.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
     </div>
-
-    <button id="prime-source-btn" class="action-button">Prime selected source with payload</button>
-    <button id="prime-all-sources-btn" class="action-button">Prime ALL sources with payload</button>
-
-    <div id="active-sources-status"></div>
-
-    <p class="note">
-      The IAST engine should show which source was used in each finding, e.g.
-      <code>hash:param:payload</code>, <code>query:param:payload</code>,
-      <code>cookie:iast_payload</code>, etc. Use this page to verify that your taint tracking
-      correctly attributes each DOM sink to the selected source type.
-    </p>
-  </section>
-
-  <hr>
-
-  <section id="iast-sinks">
-    <h2>2. Trigger DOM sinks with selected source</h2>
-    <p class="note">
-      For each sink, click a button to inject the currently selected source value
-      into that sink. The IAST engine should show which source and sink were used.
-    </p>
-
-    <div class="sink-block">
-      <h3>innerHTML</h3>
-      <div id="innerHTML-target" class="sink-box" style="min-height: 80px; background:#0b1220; border-radius: 8px; padding: 8px;">
-        (awaiting payload)
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>DOM XSS Module</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>DOM XSS Module</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>7</strong> focused cases</span><span><strong>7</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-xss.innerhtml">
+        <div class="family-case-card__meta"><span>Case 01</span><span>dom xss</span></div>
+        <h2>Set innerHTML from selected source</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-xss/innerhtml/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-xss/innerhtml/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-xss.outerhtml">
+        <div class="family-case-card__meta"><span>Case 02</span><span>dom xss</span></div>
+        <h2>Set outerHTML from selected source</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-xss/outerhtml/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-xss/outerhtml/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-xss.insertadjacenthtml">
+        <div class="family-case-card__meta"><span>Case 03</span><span>dom xss</span></div>
+        <h2>insertAdjacentHTML from selected source</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-xss/insertadjacenthtml/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-xss/insertadjacenthtml/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-xss.documentwrite">
+        <div class="family-case-card__meta"><span>Case 04</span><span>dom xss</span></div>
+        <h2>document.write(selected source)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-xss/documentwrite/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-xss/documentwrite/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-xss.appendchild">
+        <div class="family-case-card__meta"><span>Case 05</span><span>dom xss</span></div>
+        <h2>appendChild(fragment with selected source)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-xss/appendchild/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-xss/appendchild/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-xss.inline-event-target">
+        <div class="family-case-card__meta"><span>Case 06</span><span>dom xss</span></div>
+        <h2>Click after setAttribute(&#39;onclick&#39;, payload)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-xss/inline-event-target/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-xss/inline-event-target/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-dom-xss.inlineevent">
+        <div class="family-case-card__meta"><span>Case 07</span><span>dom xss</span></div>
+        <h2>Wire onclick from selected source</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-dom-xss/inlineevent/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-dom-xss/inlineevent/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-      <button data-sink="innerHTML" class="sink-trigger">Set innerHTML from selected source</button>
-    </div>
-
-    <div class="sink-block">
-      <h3>outerHTML</h3>
-      <div id="outerHTML-target" class="sink-box" style="min-height: 80px; background:#0b1220; border-radius: 8px; padding: 8px;">
-        Replace this element
-      </div>
-      <button data-sink="outerHTML" class="sink-trigger">Set outerHTML from selected source</button>
-    </div>
-
-    <div class="sink-block">
-      <h3>insertAdjacentHTML</h3>
-      <div id="insertAdjacentHTML-target" class="sink-box" style="min-height: 80px; background:#0b1220; border-radius: 8px; padding: 8px;"></div>
-      <button data-sink="insertAdjacentHTML" class="sink-trigger">insertAdjacentHTML from selected source</button>
-    </div>
-
-    <div class="sink-block">
-      <h3>document.write</h3>
-      <p class="note">Opens a new document.write with the payload in this window.</p>
-      <button data-sink="documentWrite" class="sink-trigger">document.write(selected source)</button>
-    </div>
-
-    <div class="sink-block">
-      <h3>DOM Mutation (appendChild)</h3>
-      <div id="appendChild-target" class="sink-box" style="min-height: 80px; background:#0b1220; border-radius: 8px; padding: 8px;"></div>
-      <button data-sink="appendChild" class="sink-trigger">appendChild(fragment with selected source)</button>
-    </div>
-
-    <div class="sink-block">
-      <h3>Inline Event</h3>
-      <button id="inline-event-target" class="action-button" style="width: 100%; margin-bottom: 12px;">
-        Click after setAttribute('onclick', payload)
-      </button>
-      <button data-sink="inlineEvent" class="sink-trigger">Wire onclick from selected source</button>
-    </div>
-  </section>
-
-  <script>
-    (function () {
-      const payloadInput = document.getElementById('payload-input');
-      const primeSourceBtn = document.getElementById('prime-source-btn');
-      const primeAllSourcesBtn = document.getElementById('prime-all-sources-btn');
-      const activeSourcesStatus = document.getElementById('active-sources-status');
-      const sinkButtons = document.querySelectorAll('.sink-trigger');
-
-      const sources = {
-        textareaOnly: { label: 'Textarea payload', value: '' },
-        query: { label: 'URL query ?payload', value: null },
-        hash: { label: 'URL hash #payload', value: null },
-        cookie: { label: 'document.cookie "iast_payload"', value: null },
-        localStorage: { label: 'localStorage["iast_payload"]', value: null },
-        sessionStorage: { label: 'sessionStorage["iast_payload"]', value: null },
-        windowName: { label: 'window.name', value: null }
-      };
-
-      function getSelectedSourceType() {
-        const checked = document.querySelector('input[name="sourceType"]:checked');
-        return checked ? checked.value : 'query';
-      }
-
-      function setSourceValue(type, value) {
-        if (!sources[type]) return;
-        sources[type].value = value;
-
-        switch (type) {
-          case 'query':
-            break;
-          case 'hash':
-            window.location.hash = 'payload=' + encodeURIComponent(value);
-            break;
-          case 'cookie':
-            document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
-            break;
-          case 'localStorage':
-            localStorage.setItem('iast_payload', value);
-            break;
-          case 'sessionStorage':
-            sessionStorage.setItem('iast_payload', value);
-            break;
-          case 'windowName':
-            window.name = value;
-            break;
-          case 'textareaOnly':
-          default:
-            break;
-        }
-
-        renderActiveSources();
-      }
-
-      function primeSelectedSource() {
-        const value = payloadInput.value;
-        const type = getSelectedSourceType();
-        setSourceValue(type, value);
-      }
-
-      function primeAllSources() {
-        const value = payloadInput.value;
-        Object.keys(sources).forEach(type => setSourceValue(type, value));
-      }
-
-      function escapeHtml(str) {
-        return String(str)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-      }
-
-      function renderActiveSources() {
-        const rows = Object.keys(sources).map(type => {
-          const { label, value } = sources[type];
-          const display = value == null || value === ''
-            ? '<em>(empty)</em>'
-            : '<code>' + escapeHtml(value) + '</code>';
-          return '<tr><td style="width: 35%;"><strong>' + label + '</strong></td><td>' + display + '</td></tr>';
-        });
-        activeSourcesStatus.innerHTML =
-          '<h3>Active sources</h3>' +
-          '<table><tbody>' + rows.join('') + '</tbody></table>';
-      }
-
-      function resolveSelectedSourceValue() {
-        const type = getSelectedSourceType();
-        const source = sources[type];
-        if (!source || source.value == null || source.value === '') {
-          return payloadInput.value;
-        }
-        return source.value;
-      }
-
-      function triggerSink(sinkId) {
-        const value = resolveSelectedSourceValue();
-        const selectedSource = getSelectedSourceType();
-        console.log('Triggering sink', sinkId, 'with source', selectedSource, 'value:', value);
-
-        switch (sinkId) {
-          case 'innerHTML': {
-            const target = document.getElementById('innerHTML-target');
-            target.innerHTML = value;
-            break;
-          }
-          case 'outerHTML': {
-            const target = document.getElementById('outerHTML-target');
-            target.outerHTML = value;
-            break;
-          }
-          case 'insertAdjacentHTML': {
-            const target = document.getElementById('insertAdjacentHTML-target');
-            target.insertAdjacentHTML('beforeend', value);
-            break;
-          }
-          case 'documentWrite': {
-            document.open();
-            document.write(value);
-            document.close();
-            break;
-          }
-        case 'appendChild': {
-          const target = document.getElementById('appendChild-target');
-          const frag = document.createRange().createContextualFragment(value);
-          target.appendChild(frag);
-          break;
-        }
-          case 'inlineEvent': {
-            const btn = document.getElementById('inline-event-target');
-            btn.setAttribute('onclick', value);
-            btn.textContent = 'Inline handler wired – click me to execute';
-            break;
-          }
-        }
-      }
-
-      function readInitialPayload() {
-        const params = new URLSearchParams(window.location.search);
-        const hashRaw = window.location.hash ? decodeURIComponent(window.location.hash.slice(1)) : '';
-        return params.get('payload') || hashRaw || '';
-      }
-
-      payloadInput.value = readInitialPayload() || '<img src=x onerror=alert(`dom_xss`)>';
-
-      primeSourceBtn.addEventListener('click', primeSelectedSource);
-      primeAllSourcesBtn.addEventListener('click', primeAllSources);
-      sinkButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-          const sinkId = this.getAttribute('data-sink');
-          triggerSink(sinkId);
-        });
-      });
-
-      renderActiveSources();
-    })();
-  </script>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_dom_xss.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

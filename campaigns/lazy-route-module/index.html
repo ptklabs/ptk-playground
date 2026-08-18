@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Lazy Analytics Route · Browser Security Campaign</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reveal a route module and browser dependency that do not exist before the SPA action.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../assets/css/playground.css">
+  <script type="module" src="../../assets/js/playground.js"></script>
+</head>
+<body data-page="mission" data-mission-id="lazy-route-module">
+  <a class="skip-link" href="#main">Skip to mission</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a><nav class="site-nav" aria-label="Mission navigation"><a href="../../play/?playlist=spa-deep-dive">Play</a><a href="../../explore/">Explore</a><a href="../../sast/">SAST</a><a href="../../iast/">IAST</a><a href="../../explore/?engine=SCA">SCA</a></nav></div></header>
+  <main id="main" class="page-shell mission-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../">Playground</a><span aria-hidden="true">/</span><a href="../">Campaigns</a><span aria-hidden="true">/</span><span>Lazy analytics route</span></nav>
+    <section class="mission-hero" aria-labelledby="mission-title"><div><p class="eyebrow">SPA Deep Dive 02</p><h1 id="mission-title" data-mission-title>Lazy Analytics Route</h1><p class="mission-hero__lede" data-mission-story>Loading mission story…</p><div class="badge-row" data-mission-engines aria-label="Evidence families"></div></div><aside class="mission-progress" aria-labelledby="progress-title"><p class="eyebrow">Mission progress</p><h2 id="progress-title"><span data-progress-count>0</span> of <span data-progress-total>3</span> objectives</h2><div class="progress-track" role="progressbar" aria-label="Mission completion" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" data-progress-track><span data-progress-bar></span></div><button class="button button--secondary" type="button" data-reset-mission>Reset mission</button></aside></section>
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled browser target.</strong> Both the route chunk and dependency are pinned local fixtures and load only after the prepared action.</p></aside>
+    <section class="mission-mode-panel" aria-labelledby="mode-title"><div><p class="eyebrow">View</p><h2 id="mode-title">Choose how to use this mission</h2><p data-mode-description>Complete objectives in order and use the visible evidence tokens to progress.</p></div><div class="mode-switch" role="group" aria-label="Mission view"><button type="button" data-mission-mode="campaign" aria-pressed="true">Campaign</button><button type="button" data-mission-mode="explorer" aria-pressed="false">Explorer</button><button type="button" data-mission-mode="demo" aria-pressed="false">Demo</button><button type="button" data-mission-mode="scanner" aria-pressed="false">Scanner</button></div></section>
+    <section class="section mission-objectives-section" aria-labelledby="objectives-title"><div class="section-heading"><div><p class="eyebrow">Discover · Prove · Fix</p><h2 id="objectives-title">Mission objectives</h2></div></div><div class="objective-grid" data-mission-objectives aria-live="polite"><p class="empty-state">Loading objectives…</p></div></section>
+    <section class="section scanner-panel" data-scanner-panel hidden aria-labelledby="scanner-title"><div class="section-heading"><div><p class="eyebrow">Scanner mode</p><h2 id="scanner-title">Direct lazy-route targets</h2><p>Observe initial traffic, trigger the route, and compare the newly requested module and dependency.</p></div></div><div class="scanner-target-grid" data-scanner-targets></div></section>
+    <p class="mission-announcement visually-hidden" aria-live="polite" data-mission-announcement></p>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>Paired SPA targets · Local modules · Action-timed evidence.</p><nav aria-label="Mission links"><a href="../../play/">SPA Deep Dive</a><a href="../">All campaigns</a></nav></div></footer>
+</body>
+</html>

@@ -1,0 +1,21 @@
+const input = document.querySelector('#case-input')
+const output = document.querySelector('#output')
+const evidence = document.querySelector('#evidence')
+
+input.value = "ptk-runtime-evidence"
+
+document.querySelector('#run-case').addEventListener('click', async () => {
+  evidence.dataset.state = 'running'
+  evidence.textContent = 'Running…'
+  try {
+    const socketUrl = new URL('/passive/realtime/ws', location.href);
+    socketUrl.protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const socket = new WebSocket(socketUrl);
+    socket.addEventListener('open', () => { socket.send(input.value); socket.close(); });
+    evidence.textContent = 'Value queued for WebSocket';
+    evidence.dataset.state = 'complete'
+  } catch (error) {
+    evidence.dataset.state = 'boundary'
+    evidence.textContent = 'Operation reached the browser boundary: ' + error.name
+  }
+})

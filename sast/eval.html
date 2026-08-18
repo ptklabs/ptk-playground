@@ -1,252 +1,142 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — eval()</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-
-
-  <!-- External script includes -->
-  <script src="js/sources.js"></script>
-  <script src="js/eval/eval_sink.js"></script>
-  <script src="js/eval/eval_external_sources.js"></script>
-  <script src="js/summary.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', updateSummary);
-  </script>
-  <script>
-    // helper to inject a sample hash payload without reloading
-    function setHashPayload() {
-      const sample = "alert('hash-inline')";
-      location.hash = encodeURIComponent(sample);
-    }
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>eval family sinks · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for eval family sinks.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — <code>eval</code> family sinks</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/eval.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-    <p class="meta">This page mixes inline <code class="inline">eval</code>-style sinks with external helper scripts. Inline scenarios execute automatically; external ones are opt-in via buttons.</p>
-
-    <div class="controls">
-      <a class="btn secondary" href="?payload=alert(1)">Use query payload</a>
-      <button class="btn secondary" type="button" onclick="setHashPayload()">Set hash payload</button>
-    </div>
-
-    <!-- Inline scenarios -->
-    <h2 class="section-title">Inline scenarios</h2>
-    <div class="grid">
-
-      <div class="card" data-severity="high, low" id="il-1">
-        <div class="card-meta">INLINE-1 (High): Direct hash → <code class="inline">eval()</code></div>
-        <pre>// inline-script[#1]
-(function(){
-  function run() {
-    if (!location.hash) return;
-    var raw = location.hash.slice(1);
-    var payload;
-    try { payload = decodeURIComponent(raw); }
-    catch (err) { payload = raw; }
-    if (payload) eval(payload);
-  }
-  run();
-  window.addEventListener('hashchange', run);
-})();</pre>
-        <script>
-          (function() {
-            function run() {
-              if (!location.hash) return;
-              var raw = location.hash.slice(1);
-              var payload;
-              try {
-                payload = decodeURIComponent(raw);
-              } catch (err) {
-                payload = raw;
-              }
-              if (payload) eval(payload);
-            }
-            run();
-            window.addEventListener('hashchange', run);
-          })();
-        </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>eval family sinks</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>eval family sinks</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>11</strong> focused cases</span><span><strong>11</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.il-1">
+        <div class="family-case-card__meta"><span>Case 01</span><span>eval</span></div>
+        <h2>INLINE-1 (High): Direct hash → eval()</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/il-1/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/il-1/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.il-5">
+        <div class="family-case-card__meta"><span>Case 02</span><span>eval</span></div>
+        <h2>INLINE-2 (High): Query param payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/il-5/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/il-5/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.il-3">
+        <div class="family-case-card__meta"><span>Case 03</span><span>eval</span></div>
+        <h2>INLINE-3 (High): User-provided field → eval()</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/il-3/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/il-3/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.il-2">
+        <div class="family-case-card__meta"><span>Case 04</span><span>eval</span></div>
+        <h2>INLINE-5 (High): Query param payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/il-2/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/il-2/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.button-3-ext-location-hash">
+        <div class="family-case-card__meta"><span>Case 05</span><span>eval</span></div>
+        <h2>EXT: location.hash</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/button-3-ext-location-hash/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/button-3-ext-location-hash/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.button-4-ext-urlsearchparams">
+        <div class="family-case-card__meta"><span>Case 06</span><span>eval</span></div>
+        <h2>EXT: URLSearchParams</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/button-4-ext-urlsearchparams/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/button-4-ext-urlsearchparams/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.button-5-ext-window-name">
+        <div class="family-case-card__meta"><span>Case 07</span><span>eval</span></div>
+        <h2>EXT: window.name</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/button-5-ext-window-name/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/button-5-ext-window-name/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.button-6-ext-document-referrer">
+        <div class="family-case-card__meta"><span>Case 08</span><span>eval</span></div>
+        <h2>EXT: document.referrer</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/button-6-ext-document-referrer/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/button-6-ext-document-referrer/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.button-7-ext-document-cookie">
+        <div class="family-case-card__meta"><span>Case 09</span><span>eval</span></div>
+        <h2>EXT: document.cookie</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/button-7-ext-document-cookie/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/button-7-ext-document-cookie/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.button-8-ext-localstorage">
+        <div class="family-case-card__meta"><span>Case 10</span><span>eval</span></div>
+        <h2>EXT: localStorage</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/button-8-ext-localstorage/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/button-8-ext-localstorage/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-eval.button-9-ext-sessionstorage">
+        <div class="family-case-card__meta"><span>Case 11</span><span>eval</span></div>
+        <h2>EXT: sessionStorage</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-eval/button-9-ext-sessionstorage/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-eval/button-9-ext-sessionstorage/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-      <div class="card" data-severity="high, low" id="il-5">
-        <div class="card-meta">INLINE-2 (High): Query param <code class="inline">payload</code> → <code class="inline">eval()</code></div>
-        <pre>// inline-script[#2]
-(function(){
-  var params = new URLSearchParams(location.search);
-  var payload = params.get('payload');
-  if (payload) {
-    eval(payload);
-  }
-})();</pre>
-        <script>
-          (function() {
-            var params = new URLSearchParams(location.search);
-            var payload = params.get('payload');
-            if (payload) {
-              eval(payload);
-            }
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="high, low" id="il-3">
-        <div class="card-meta">INLINE-3 (High): User-provided field → <code class="inline">eval()</code></div>
-        <pre>// inline-script[#3]
-function inlineEvalFromField(fieldId) {
-  var el = document.getElementById(fieldId);
-  if (!el) return;
-  eval(el.value);
-}</pre>
-        <div class="field">
-          <input id="inline_eval_payload" type="text" value="alert('inline-field')" />
-          <button class="btn" type="button" onclick="inlineEvalFromField('inline_eval_payload')">Run inline eval(field)</button>
-        </div>
-        <script>
-          function inlineEvalFromField(fieldId) {
-            var el = document.getElementById(fieldId);
-            if (!el) return;
-            eval(el.value);
-          }
-        </script>
-      </div>
-
-      <div class="card" data-severity="safe, medium" id="il-4">
-        <div class="card-meta">INLINE-4 (Safe): JSON allowlist instead of <code class="inline">eval</code></div>
-        <pre>// inline-script[#4]
-(function(){
-  var params = new URLSearchParams(location.search);
-  var payload = params.get('calc');
-  if (!payload) return;
-  try {
-    var parsed = JSON.parse(payload);
-    var allowed = {
-      add: function(a,b){ return Number(a) + Number(b); },
-      ping: function(){ return "pong"; }
-    };
-    var fn = allowed[parsed.fn];
-    var args = Array.isArray(parsed.args) ? parsed.args : [];
-    if (typeof fn === 'function') {
-      var result = fn.apply(null, args);
-      document.getElementById('safe-inline-result').textContent = String(result);
-    }
-  } catch (err) {
-    document.getElementById('safe-inline-result').textContent = "Rejected";
-  }
-})();</pre>
-        <div class="meta">Pass <code class="inline">?calc={"fn":"add","args":[2,5]}</code> to see the result rendered below.</div>
-        <div class="output" id="safe-inline-result">Awaiting payload…</div>
-        <script>
-          (function() {
-            var params = new URLSearchParams(location.search);
-            var payload = params.get('calc');
-            if (!payload) return;
-            try {
-              var parsed = JSON.parse(payload);
-              var allowed = {
-                add: function(a, b) {
-                  return Number(a) + Number(b);
-                },
-                ping: function() {
-                  return "pong";
-                }
-              };
-              var fn = allowed[parsed.fn];
-              var args = Array.isArray(parsed.args) ? parsed.args : [];
-              if (typeof fn === 'function') {
-                var result = fn.apply(null, args);
-                document.getElementById('safe-inline-result').textContent = String(result);
-              }
-            } catch (err) {
-              document.getElementById('safe-inline-result').textContent = "Rejected";
-            }
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="high, low" id="il-2">
-        <div class="card-meta">INLINE-5 (High): Query param <code class="inline">payload</code> → <code class="inline">eval()</code></div>
-        <pre>// inline-script[#2]
-(function(){
-  var params = new URLSearchParams(location.search);
-  var payload = params.get('payload');
-  if (payload) {
-    evalSink(payload,'evalSink');
-  }
-})();</pre>
-        <script>
-          (function() {
-            var params = new URLSearchParams(location.search);
-            var payload = params.get('payload');
-            if (payload) {
-              evalSink(payload, 'evalSink');
-            }
-          })();
-        </script>
-      </div>
-
-    </div>
-
-    <!-- External scenarios -->
-    <h2 class="section-title">External scenarios (click to run)</h2>
-    <div class="grid">
-
-      <div class="card">
-        <div class="card-meta"><strong>Direct DOM sources → eval()</strong></div>
-        <pre data-severity="high, low">onclick="extEvalFromHash()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extEvalFromHash()">EXT: location.hash</button>
-        </div>
-        <pre data-severity="high, low">onclick="extEvalFromSearch()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extEvalFromSearch()">EXT: URLSearchParams</button>
-        </div>
-        <pre data-severity="high">onclick="extEvalFromWindowName()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extEvalFromWindowName()">EXT: window.name</button>
-        </div>
-        <pre data-severity="high">onclick="extEvalFromReferrer()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extEvalFromReferrer()">EXT: document.referrer</button>
-        </div>
-        <pre data-severity="high">onclick="extEvalFromCookie()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extEvalFromCookie()">EXT: document.cookie</button>
-        </div>
-        <pre data-severity="high">onclick="extEvalFromLocalStorage()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extEvalFromLocalStorage()">EXT: localStorage</button>
-        </div>
-        <pre data-severity="high">onclick="extEvalFromSessionStorage()"</pre>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extEvalFromSessionStorage()">EXT: sessionStorage</button>
-        </div>
-        <p class="meta">Implementations live in <code class="inline">js/eval/eval_external_sources.js</code>.</p>
-      </div>
-
-
-
-
-
-    </div>
-
-    <footer>PTK SAST testbed — eval() family (inline + external). <a class="back" href="index.html">Back to index</a></footer>
-  </div>
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./eval.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

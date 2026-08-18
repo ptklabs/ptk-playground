@@ -1,356 +1,115 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
-  <title>IAST Runtime Playground</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #101218;
-      --card: #1b1f2a;
-      --muted: #8a94a7;
-      --accent: #1dccaa;
-      --border: #2a3142;
-      --danger: #ff4f81;
-      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background: var(--bg);
-      color: #f3f5fb;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 32px 20px 64px;
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(1.6rem, 3vw, 2.3rem);
-    }
-
-    p.lead {
-      margin: 0 0 24px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
-    }
-
-    .panel h2 {
-      margin: 0 0 12px;
-      font-size: 1.2rem;
-    }
-
-    .callout {
-      border-left: 4px solid var(--accent);
-    }
-
-    code {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-size: 0.95em;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-    }
-
-    .sink-card {
-      padding: 16px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.02);
-      min-height: 140px;
-    }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 999px;
-      padding: 4px 10px;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    input,
-    textarea,
-    button {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.04);
-      color: #fff;
-      font-size: 0.95rem;
-      padding: 10px 12px;
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    button {
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.15s ease, transform 0.15s ease;
-      border: none;
-      background: linear-gradient(135deg, #5a5de6, #7f52ff);
-    }
-
-    button.secondary {
-      background: rgba(255, 255, 255, 0.07);
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    .payload {
-      word-break: break-all;
-      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-      font-size: 0.9rem;
-      line-height: 1.4;
-    }
-
-    .examples {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .examples button {
-      width: auto;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .link-preview {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      word-break: break-all;
-      min-height: 42px;
-      font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-      font-size: 0.85rem;
-    }
-
-    .note {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>Runtime Playground · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Runtime Playground.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <main class="container">
-    <header class="panel">
-      <h1>IAST Runtime Playground</h1>
-      <p class="lead">
-        This page wires common DOM sinks to attacker-controlled sources so the PTK IAST agent can observe taint flowing
-        through <code>innerHTML</code>, <code>insertAdjacentHTML</code>, inline event handlers, and navigation APIs.
-        Load it inside the monitored tab, trigger the flows below, and watch the background scan aggregate findings.
-      </p>
-    </header>
-
-    <section class="panel callout">
-      <h2>Quick start</h2>
-      <ol>
-        <li>Launch a PTK IAST background scan against this page.</li>
-        <li>Pass a payload via <code>?msg=&lt;payload&gt;</code>, <code>#hashPayload</code>, or the controls below.</li>
-        <li>Observe the DOM updates and confirm findings show up under the IAST report.</li>
-      </ol>
-      <p class="note">The agent automatically taints URL/query/hash/cookies/storage/window.name, so you only need to
-        provide the payloads.</p>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_runtime.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Runtime Playground</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Runtime Playground</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>8</strong> focused cases</span><span><strong>8</strong> repaired controls</span></div>
     </section>
-
-    <section id="auto-sinks" class="panel">
-      <h2>Auto-reflected sources</h2>
-      <p class="note">Populate <code>?msg=</code>, <code>#hash=</code>, <code>document.cookie</code> name
-        <code>iast_payload</code>, <code>localStorage['iast_payload']</code>, or <code>sessionStorage</code>. Each
-        source is rendered unsafely to trigger <code>innerHTML</code>/<code>insertAdjacentHTML</code> sinks.
-      </p>
-      <div class="grid" id="auto-grid"></div>
-    </section>
-
-    <section class="panel">
-      <h2>Manual payloads</h2>
-      <p class="note">Enter any HTML/JS payload and push it through various sinks. Actions below will also stash the
-        payload inside cookies and storage to exercise the agent’s source tracking.</p>
-      <textarea id="payload" placeholder="<img src=x onerror=alert(document.domain)>"></textarea>
-      <div class="examples" style="margin:12px 0;">
-        <button type="button" data-example="<img src=x onerror='alert(`IAST`)'>">Inline event</button>
-        <button type="button" data-example="<svg onload=fetch(`//example.org`).then(r=>r.text())>">Fetch chain</button>
-        <button type="button" data-example="javascript:alert('open_redirect')">javascript: URL</button>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.button-1-inline-event">
+        <div class="family-case-card__meta"><span>Case 01</span><span>runtime dom boundary</span></div>
+        <h2>&quot;&gt;Inline event</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/button-1-inline-event/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/button-1-inline-event/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.button-2-r-text-fetch-chain">
+        <div class="family-case-card__meta"><span>Case 02</span><span>runtime dom boundary</span></div>
+        <h2>r.text())&gt;&quot;&gt;Fetch chain</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/button-2-r-text-fetch-chain/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/button-2-r-text-fetch-chain/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.button-3-javascript-url">
+        <div class="family-case-card__meta"><span>Case 03</span><span>runtime dom boundary</span></div>
+        <h2>javascript: URL</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/button-3-javascript-url/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/button-3-javascript-url/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.inner-html">
+        <div class="family-case-card__meta"><span>Case 04</span><span>runtime dom boundary</span></div>
+        <h2>Send to innerHTML sink</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/inner-html/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/inner-html/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.adjacent-html">
+        <div class="family-case-card__meta"><span>Case 05</span><span>runtime dom boundary</span></div>
+        <h2>Send to insertAdjacentHTML</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/adjacent-html/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/adjacent-html/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.inline-event">
+        <div class="family-case-card__meta"><span>Case 06</span><span>runtime dom boundary</span></div>
+        <h2>Convert to inline event handler</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/inline-event/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/inline-event/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.link-href">
+        <div class="family-case-card__meta"><span>Case 07</span><span>runtime dom boundary</span></div>
+        <h2>Rewrite link/navigation target</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/link-href/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/link-href/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-runtime.inline-event-target">
+        <div class="family-case-card__meta"><span>Case 08</span><span>runtime dom boundary</span></div>
+        <h2>Click me after wiring inline event</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-runtime/inline-event-target/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-runtime/inline-event-target/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-      <div class="grid">
-        <button id="inner-html">Send to innerHTML sink</button>
-        <button id="adjacent-html" class="secondary">Send to insertAdjacentHTML</button>
-        <button id="inline-event">Convert to inline event handler</button>
-        <button id="link-href" class="secondary">Rewrite link/navigation target</button>
-      </div>
     </section>
-
-    <section class="panel">
-      <h2>Sink output</h2>
-      <div class="grid">
-        <div class="sink-card">
-          <div class="chip">innerHTML</div>
-          <div id="manual-inner" class="payload" data-sink="manual-inner">(awaiting payload)</div>
-        </div>
-        <div class="sink-card">
-          <div class="chip">insertAdjacentHTML</div>
-          <div id="manual-adjacent" class="payload" data-sink="manual-adjacent">(awaiting payload)</div>
-        </div>
-        <div class="sink-card">
-          <div class="chip">Inline event</div>
-          <button id="inline-event-target" class="secondary" style="margin-top:6px;">Click me after wiring inline event</button>
-          <p class="note" style="margin-top:12px;">Current handler is injected directly through
-            <code>setAttribute('onclick', payload)</code>.
-          </p>
-        </div>
-        <div class="sink-card">
-          <div class="chip">Link/navigation</div>
-          <a id="link-target" href="#" target="_blank" rel="noreferrer noopener">Navigation target</a>
-          <div class="link-preview" id="link-preview">(no payload)</div>
-        </div>
-      </div>
-    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_runtime.advanced.html">Open Advanced combined lab</a>
+    </aside>
   </main>
-
-  <script>
-    function getCookie(name) {
-      return document.cookie.split(";").map(v => v.trim()).find(v => v.startsWith(name + "="))?.split("=")[1];
-    }
-
-    function decodeValue(value) {
-      if (!value) return "";
-      try {
-        return decodeURIComponent(value);
-      } catch (err) {
-        return value;
-      }
-    }
-
-    function recordSource(label, rawValue) {
-      if (!rawValue) return;
-      const value = decodeValue(rawValue);
-      const grid = document.getElementById("auto-grid");
-      const card = document.createElement("div");
-      card.className = "sink-card";
-      card.innerHTML = `
-        <div class="chip">${label}</div>
-        <div class="payload">
-          <strong>${label} payload</strong>
-          <div class="payload-value">${value}</div>
-        </div>`;
-      // Trigger a sink path via insertAdjacentHTML
-      grid.insertAdjacentHTML("beforeend", card.outerHTML);
-    }
-
-    function bootstrapSources() {
-      const params = new URLSearchParams(window.location.search);
-      recordSource("Query (?msg)", params.get("msg"));
-      recordSource("Hash (#hash)", window.location.hash ? window.location.hash.substring(1) : "");
-      recordSource("Cookie", getCookie("iast_payload"));
-      recordSource("localStorage", localStorage.getItem("iast_payload"));
-      recordSource("sessionStorage", sessionStorage.getItem("iast_payload"));
-      recordSource("window.name", window.name);
-    }
-
-    function persistPayload(value) {
-      if (!value) return;
-      document.cookie = `iast_payload=${encodeURIComponent(value)}; path=/`;
-      localStorage.setItem("iast_payload", value);
-      sessionStorage.setItem("iast_payload", value);
-      window.name = value;
-    }
-
-    function wireManualActions() {
-      const payloadField = document.getElementById("payload");
-      const innerSink = document.getElementById("manual-inner");
-      const adjacentSink = document.getElementById("manual-adjacent");
-      const inlineTarget = document.getElementById("inline-event-target");
-      const linkTarget = document.getElementById("link-target");
-      const linkPreview = document.getElementById("link-preview");
-
-      document.querySelectorAll("[data-example]").forEach(button => {
-        button.addEventListener("click", () => {
-          payloadField.value = button.getAttribute("data-example");
-        });
-      });
-
-      document.getElementById("inner-html").addEventListener("click", () => {
-        const value = payloadField.value;
-        if (!value) return;
-        persistPayload(value);
-        innerSink.innerHTML = value;
-      });
-
-      document.getElementById("adjacent-html").addEventListener("click", () => {
-        const value = payloadField.value;
-        if (!value) return;
-        persistPayload(value);
-        adjacentSink.insertAdjacentHTML("beforeend", `<div class="payload-fragment">${value}</div>`);
-      });
-
-      document.getElementById("inline-event").addEventListener("click", () => {
-        const value = payloadField.value;
-        if (!value) return;
-        persistPayload(value);
-        inlineTarget.setAttribute("onclick", value);
-        inlineTarget.textContent = "Inline onclick wired – click to execute payload";
-      });
-
-      document.getElementById("link-href").addEventListener("click", () => {
-        const value = payloadField.value;
-        if (!value) return;
-        persistPayload(value);
-        linkTarget.href = value;
-        linkTarget.textContent = "Navigate using user payload";
-        linkPreview.innerHTML = value;
-      });
-    }
-
-    bootstrapSources();
-    wireManualActions();
-  </script>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

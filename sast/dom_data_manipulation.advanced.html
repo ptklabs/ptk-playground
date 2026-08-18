@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — DOM data manipulation sinks</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+  <!-- External scripts -->
+  <script src="js/sources.js"></script>
+  <script src="js/summary.js"></script>
+  <script>
+    window.__PTK_DEMO_NO_NAV__ = true;
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!localStorage.getItem('buttonStyle')) {
+        localStorage.setItem('buttonStyle', "background:#c00;color:#fff;border:0;box-shadow:0 0 8px rgba(0,0,0,0.25)");
+      }
+      if (!localStorage.getItem('cardCss')) {
+        localStorage.setItem('cardCss', "background:#fee;border:2px dashed #c00;padding:1rem");
+      }
+      if (!localStorage.getItem('outerHTMLPayload')) {
+        localStorage.setItem('outerHTMLPayload', '<section id="inline-outer-zone"><strong>Replaced via outerHTML</strong></section>');
+      }
+      updateSummary();
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — DOM data manipulation sinks</h1>
+    </div>
+
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">2</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">1</strong></span>
+      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">3</strong></span>
+    </div>
+
+    <p class="meta">
+      These scenarios intentionally wire tainted DOM inputs (hash, query, cookies, storage, history, window.name) into the
+      specific sinks covered by <code>dom-data-manipulation-taint</code>: form metadata (action/target/method/formAction/value/placeholder),
+      inline styles (style/cssText/background), document title, history state, and <code>createHTMLDocument</code>. Script/Eval/handler
+      sinks are intentionally omitted so that this page only exercises the dom-data-manipulation module.
+    </p>
+
+    <h2 class="section-title">Inline scenarios</h2>
+    <div class="grid">
+
+      <div class="card" data-rule="taint" data-severity="high" id="inline-card-forms">
+        <div class="card-meta"><strong>INLINE-1 (High): DOM/storage → form metadata/value/placeholder</strong></div>
+        <pre>// inline-script[#1]
+function inlineRewriteFormMetadata() {
+  const form = document.getElementById('inline-profile-form');
+  const input = document.getElementById('inline-profile-input');
+  const submitBtn = document.getElementById('inline-submit-btn');
+  const destField = document.getElementById('inline-user-url');
+  const methodField = document.getElementById('inline-method-source');
+  const placeholderField = document.getElementById('inline-placeholder-source');
+
+  const dest = destField.value || location.hash.slice(1) || getCookieByName('ptk_dest') || '/api/profile';
+  const method = methodField.value || new URLSearchParams(location.search).get('method') || 'post';
+  const placeholder = placeholderField.value || window.name || 'Enter value';
+  const storedPayload = sessionStorage.getItem('profilePayload') || document.cookie || 'stored=value';
+
+  form.target = window.name || '_self';
+  form.method = method;
+  input.value = storedPayload;
+  input.placeholder = placeholder;
+  submitBtn.formAction = `${dest}?submit=1`;
+}
+inlineRewriteFormMetadata();</pre>
+        <div class="field">
+          <label for="inline-user-url">Form action/target source</label>
+          <input id="inline-user-url" type="text" value="" placeholder="hash/cookie fallback" />
+        </div>
+        <div class="field">
+          <label for="inline-method-source">HTTP method source</label>
+          <input id="inline-method-source" type="text" value="" placeholder="defaults to ?method= query" />
+        </div>
+        <div class="field">
+          <label for="inline-placeholder-source">Placeholder source</label>
+          <input id="inline-placeholder-source" type="text" value="" placeholder="window.name fallback" />
+        </div>
+        <form id="inline-profile-form">
+          <input id="inline-profile-input" type="text" placeholder="Set via inlineRewriteFormMetadata" />
+          <button id="inline-submit-btn" class="btn" type="button">Submit profile</button>
+        </form>
+        <script>
+          function inlineRewriteFormMetadata() {
+            const form = document.getElementById('inline-profile-form');
+            const input = document.getElementById('inline-profile-input');
+            const submitBtn = document.getElementById('inline-submit-btn');
+            const destField = document.getElementById('inline-user-url');
+            const methodField = document.getElementById('inline-method-source');
+            const placeholderField = document.getElementById('inline-placeholder-source');
+
+            const dest = destField.value || location.hash.slice(1) || getCookieByName('ptk_dest') || '/api/profile';
+            const method = methodField.value || new URLSearchParams(location.search).get('method') || 'post';
+            const placeholder = placeholderField.value || window.name || 'Enter value';
+            const storedPayload = sessionStorage.getItem('profilePayload') || document.cookie || 'stored=value';
+
+            form.target = window.name || '_self';
+            form.method = method;
+            input.value = storedPayload;
+            input.placeholder = placeholder;
+            submitBtn.formAction = `${dest}?submit=1`;
+          }
+          inlineRewriteFormMetadata();
+        </script>
+        <div class="controls">
+          <button class="btn" type="button" onclick="inlineRewriteFormMetadata()">Apply tainted metadata</button>
+        </div>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="medium" id="inline-card-style">
+        <div class="card-meta"><strong>INLINE-2 (Medium): localStorage/hash → <code>style</code>/<code>cssText</code>/<code>background</code></strong></div>
+        <pre>// inline-script[#2]
+function inlineApplyTaintedStyles() {
+  const button = document.getElementById('inline-style-button');
+  const card = document.getElementById('inline-themed-card');
+  const cssField = document.getElementById('inline-style-source');
+  const imageField = document.getElementById('inline-style-image');
+  const storedButtonStyle = localStorage.getItem('buttonStyle');
+  const storedCardCss = localStorage.getItem('cardCss');
+
+  button.setAttribute('style', cssField.value || storedButtonStyle || "background:#444;color:#fff;");
+  card.style.cssText = storedCardCss || "background:#fee;border:2px dashed #c00;padding:1rem;";
+  card.style.backgroundImage = `url(${imageField.value || location.hash.slice(1) || window.name })`;
+}
+inlineApplyTaintedStyles();</pre>
+        <div class="field">
+          <label for="inline-style-source">Button style text</label>
+          <input id="inline-style-source" type="text" placeholder="background:lime;color:#000;" />
+        </div>
+        <div class="field">
+          <label for="inline-style-image">Background image URL</label>
+          <input id="inline-style-image" type="text" placeholder="hash/window.name fallback" />
+        </div>
+        <div class="controls">
+          <button id="inline-style-button" class="btn" type="button" onclick="inlineApplyTaintedStyles()">Apply tainted styles</button>
+        </div>
+        <div class="render-target" id="inline-themed-card">Awaiting themed card CSS…</div>
+        <script>
+          function inlineApplyTaintedStyles() {
+            const button = document.getElementById('inline-style-button');
+            const card = document.getElementById('inline-themed-card');
+            const cssField = document.getElementById('inline-style-source');
+            const imageField = document.getElementById('inline-style-image');
+            const storedButtonStyle = localStorage.getItem('buttonStyle');
+            const storedCardCss = localStorage.getItem('cardCss');
+
+            button.setAttribute('style', cssField.value || storedButtonStyle || "background:#444;color:#fff;");
+            card.style.cssText = storedCardCss || "background:#fee;border:2px dashed #c00;padding:1rem;";
+            card.style.backgroundImage = `url(${imageField.value || location.hash.slice(1) || window.name})`;
+          }
+          inlineApplyTaintedStyles();
+        </script>
+      </div>
+
+      <div class="card" data-rule="taint" data-severity="high" id="inline-card-history">
+        <div class="card-meta"><strong>INLINE-3 (High): Cookies/hash → history/title/<code>createHTMLDocument</code></strong></div>
+        <pre>// inline-script[#3]
+function inlineMutateHistory(run = false) {
+  if (!run) return;
+  const sourceField = document.getElementById('inline-history-source');
+  const payload = sourceField.value || document.cookie || location.hash.slice(1) || "history-demo";
+
+  history.pushState({ jump: payload }, payload, payload);
+  document.title = payload;
+  document.implementation.createHTMLDocument(payload);
+}
+inlineMutateHistory(false);</pre>
+        <div class="field">
+          <label for="inline-history-source">History/title payload</label>
+          <input id="inline-history-source" type="text" placeholder="cookie/hash fallback" />
+        </div>
+        <div class="controls">
+          <button class="btn" type="button" onclick="inlineMutateHistory(true)">Mutate history/title</button>
+        </div>
+        <div class="meta">Only dom-data-manipulation sinks are touched: document.title, history.pushState, createHTMLDocument.</div>
+        <script>
+          function inlineMutateHistory(run = false) {
+            if (!run) return;
+            const sourceField = document.getElementById('inline-history-source');
+            const payload = sourceField.value || document.cookie || location.hash.slice(1) || "history-demo";
+
+            history.pushState({ jump: payload }, payload, payload);
+            document.title = payload;
+            document.implementation.createHTMLDocument(payload);
+          }
+          inlineMutateHistory(false);
+        </script>
+      </div>
+
+    </div>
+
+    <footer>PTK SAST testbed — DOM data-manipulation sinks. <a class="back" href="index.html">Back to index</a></footer>
+  </div>
+</body>
+
+</html>

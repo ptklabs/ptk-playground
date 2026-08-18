@@ -7,7 +7,11 @@
       "title": "Third-Party Support Widget",
       "summary": "Review a browser support feature that combines cross-window messaging, DOM rendering and a loaded client dependency.",
       "category": "Browser trust boundaries",
-      "engines": ["SCA", "SAST", "IAST"],
+      "engines": [
+        "SCA",
+        "SAST",
+        "IAST"
+      ],
       "route": "./campaigns/support-widget/",
       "targets": [
         {
@@ -17,7 +21,10 @@
           "route": "./targets/support-widget/vulnerable/",
           "displayRoute": "/targets/support-widget/vulnerable/",
           "visibleBehavior": "The prepared strong element is interpreted and rendered as markup.",
-          "dependency": { "name": "jQuery", "version": "3.4.1" }
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.4.1"
+          }
         },
         {
           "variant": "repaired",
@@ -26,7 +33,10 @@
           "route": "./targets/support-widget/fixed/",
           "displayRoute": "/targets/support-widget/fixed/",
           "visibleBehavior": "The same markup-shaped value is displayed literally as text.",
-          "dependency": { "name": "jQuery", "version": "3.7.1" }
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.7.1"
+          }
         }
       ]
     },
@@ -35,7 +45,9 @@
       "title": "Deployment Response Boundary",
       "summary": "Compare two visually identical deployments whose security difference exists only in browser-observed response metadata.",
       "category": "HTTP response evidence",
-      "engines": ["DAST"],
+      "engines": [
+        "DAST"
+      ],
       "route": "./campaigns/deployment-response-boundary/",
       "targets": [
         {
@@ -45,7 +57,11 @@
           "route": "./passive/cases/headers/powered-by.html",
           "displayRoute": "/passive/cases/headers/powered-by.html",
           "visibleBehavior": "The page matches the repaired control, but inspecting its response reveals a technology disclosure header.",
-          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 }
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          }
         },
         {
           "variant": "repaired",
@@ -54,7 +70,11 @@
           "route": "./passive/cases/headers/secure-control.html",
           "displayRoute": "/passive/cases/headers/secure-control.html",
           "visibleBehavior": "The same page and security baseline are returned without the technology disclosure header.",
-          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 }
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          }
         }
       ]
     },
@@ -63,7 +83,9 @@
       "title": "Session-Bound Order Search",
       "summary": "Capture and test a same-origin POST request that only exists after the browser establishes scoped session state.",
       "category": "Authenticated browser traffic",
-      "engines": ["DAST"],
+      "engines": [
+        "DAST"
+      ],
       "route": "./campaigns/session-bound-order-search/",
       "targets": [
         {
@@ -73,12 +95,18 @@
           "route": "./targets/session-bound-order-search/vulnerable/",
           "displayRoute": "/targets/session-bound-order-search/vulnerable/",
           "visibleBehavior": "A normal order search succeeds; the harmless prepared diagnostic exposes a database-query error.",
-          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 },
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          },
           "request": {
             "method": "POST",
             "route": "/targets/session-bound-order-search/vulnerable/api/search",
             "contentType": "application/x-www-form-urlencoded",
-            "parameterNames": ["query"],
+            "parameterNames": [
+              "query"
+            ],
             "setup": "Open the review page to establish its scoped session and submit the search form."
           }
         },
@@ -89,12 +117,18 @@
           "route": "./targets/session-bound-order-search/fixed/",
           "displayRoute": "/targets/session-bound-order-search/fixed/",
           "visibleBehavior": "The same normal and diagnostic searches complete without exposing a database-query error.",
-          "runtime": { "kind": "route-aware-server", "protocol": "https", "port": 3443 },
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "https",
+            "port": 3443
+          },
           "request": {
             "method": "POST",
             "route": "/targets/session-bound-order-search/fixed/api/search",
             "contentType": "application/x-www-form-urlencoded",
-            "parameterNames": ["query"],
+            "parameterNames": [
+              "query"
+            ],
             "setup": "Open the repaired page to establish its scoped session and submit the same search form."
           }
         }
@@ -105,7 +139,9 @@
       "title": "On-Demand Analytics",
       "summary": "Observe a client dependency that does not exist in initial page traffic and appears only after a browser action opens an application feature.",
       "category": "Action-loaded dependencies",
-      "engines": ["SCA"],
+      "engines": [
+        "SCA"
+      ],
       "route": "./campaigns/on-demand-analytics/",
       "targets": [
         {
@@ -115,7 +151,10 @@
           "route": "./targets/on-demand-analytics/vulnerable/",
           "displayRoute": "/targets/on-demand-analytics/vulnerable/",
           "visibleBehavior": "The initial page is dependency-free; opening the workspace requests and runs the pinned review dependency.",
-          "dependency": { "name": "jQuery", "version": "3.4.1" }
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.4.1"
+          }
         },
         {
           "variant": "repaired",
@@ -124,7 +163,10 @@
           "route": "./targets/on-demand-analytics/fixed/",
           "displayRoute": "/targets/on-demand-analytics/fixed/",
           "visibleBehavior": "The same action and analytics result are preserved while the browser loads the reviewed dependency version.",
-          "dependency": { "name": "jQuery", "version": "3.7.1" }
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.7.1"
+          }
         }
       ]
     },
@@ -133,7 +175,10 @@
       "title": "Saved Workspace",
       "summary": "Follow user-controlled browser state from a settings page into a separate same-origin dashboard document.",
       "category": "Persistent browser state",
-      "engines": ["SAST", "IAST"],
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
       "route": "./campaigns/saved-workspace/",
       "targets": [
         {
@@ -171,7 +216,10 @@
       "title": "Live Profile Preview",
       "summary": "Follow a same-origin JSON response field into a DOM rendering path that exists only after a browser action.",
       "category": "Action-loaded response data",
-      "engines": ["SAST", "IAST"],
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
       "route": "./campaigns/live-profile-preview/",
       "targets": [
         {
@@ -207,7 +255,11 @@
       "title": "Transient Route Notice",
       "summary": "Observe a short-lived SPA deep-link value that reaches the DOM after an in-document hash-route change.",
       "category": "Transient SPA route state",
-      "engines": ["DAST", "SAST", "IAST"],
+      "engines": [
+        "DAST",
+        "SAST",
+        "IAST"
+      ],
       "route": "./campaigns/transient-route-notice/",
       "targets": [
         {
@@ -243,7 +295,10 @@
       "title": "Imported Request Preferences",
       "summary": "Trace a user-imported client configuration into an inherited browser request option, then compare an own-property allow-list repair.",
       "category": "Client configuration integrity",
-      "engines": ["SAST", "IAST"],
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
       "route": "./campaigns/imported-request-preferences/",
       "targets": [
         {
@@ -270,6 +325,183 @@
             "summary": "Press the same import button and inspect the repaired request-options evidence.",
             "triggerSelector": "#import-preferences",
             "readySelector": "#preferences-status"
+          }
+        }
+      ]
+    },
+    {
+      "id": "history-order-router",
+      "title": "History Order Router",
+      "summary": "Follow an in-document History API transition into a browser-created authenticated JSON request.",
+      "category": "SPA navigation and authenticated traffic",
+      "engines": [
+        "DAST",
+        "SAST",
+        "IAST"
+      ],
+      "route": "./campaigns/history-order-router/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "history-order-router-review",
+          "title": "History order router review target",
+          "route": "./targets/history-order-router/vulnerable/",
+          "displayRoute": "/targets/history-order-router/vulnerable/",
+          "visibleBehavior": "The document stays loaded while route-controlled markup is interpreted and a browser-session JSON request is emitted.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          },
+          "request": {
+            "method": "POST",
+            "route": "/targets/history-order-router/vulnerable/api/order",
+            "contentType": "application/json",
+            "parameterNames": [
+              "orderId"
+            ],
+            "setup": "Open the review page to establish its scoped session, then press Open prepared order."
+          },
+          "action": {
+            "summary": "Press Open prepared order and observe the route, DOM and JSON request.",
+            "triggerSelector": "#open-order-route",
+            "readySelector": "#order-route-status"
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "history-order-router-control",
+          "title": "History order router repaired control",
+          "route": "./targets/history-order-router/fixed/",
+          "displayRoute": "/targets/history-order-router/fixed/",
+          "visibleBehavior": "The same route and request use an allow-listed identifier, constant text, and a clean API response.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          },
+          "request": {
+            "method": "POST",
+            "route": "/targets/history-order-router/fixed/api/order",
+            "contentType": "application/json",
+            "parameterNames": [
+              "orderId"
+            ],
+            "setup": "Open the repaired page to establish its scoped session, then press Open prepared order."
+          },
+          "action": {
+            "summary": "Press the same order action and observe the reviewed route and JSON request.",
+            "triggerSelector": "#open-order-route",
+            "readySelector": "#order-route-status"
+          }
+        }
+      ]
+    },
+    {
+      "id": "lazy-route-module",
+      "title": "Lazy Analytics Route",
+      "summary": "Reveal an SPA route module and dependency that do not exist in browser traffic before the user action.",
+      "category": "Lazy SPA modules and dependencies",
+      "engines": [
+        "SCA",
+        "SAST",
+        "IAST"
+      ],
+      "route": "./campaigns/lazy-route-module/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "lazy-route-module-review",
+          "title": "Lazy analytics route review target",
+          "route": "./targets/lazy-route-module/vulnerable/",
+          "displayRoute": "/targets/lazy-route-module/vulnerable/",
+          "visibleBehavior": "The route action imports a new module, loads jQuery 3.4.1, and interprets the prepared route summary as markup.",
+          "action": {
+            "summary": "Observe initial traffic, then press Open analytics route.",
+            "triggerSelector": "#open-analytics-route",
+            "readySelector": "#analytics-route-status"
+          },
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.4.1"
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "lazy-route-module-control",
+          "title": "Lazy analytics route repaired control",
+          "route": "./targets/lazy-route-module/fixed/",
+          "displayRoute": "/targets/lazy-route-module/fixed/",
+          "visibleBehavior": "The same lazy route loads jQuery 3.7.1 and renders an allow-listed summary as text.",
+          "action": {
+            "summary": "Observe initial traffic, then press the same analytics action.",
+            "triggerSelector": "#open-analytics-route",
+            "readySelector": "#analytics-route-status"
+          },
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.7.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "same-origin-child-tab",
+      "title": "Related Child Tab",
+      "summary": "Continue analysis in a causally related same-origin tab while preserving an explicit different-origin scope boundary.",
+      "category": "Related browser contexts and scope",
+      "engines": [
+        "DAST",
+        "SCA",
+        "SAST",
+        "IAST"
+      ],
+      "route": "./campaigns/same-origin-child-tab/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "same-origin-child-tab-review",
+          "title": "Related child-tab review journey",
+          "route": "./targets/same-origin-child-tab/vulnerable/",
+          "displayRoute": "/targets/same-origin-child-tab/vulnerable/",
+          "visibleBehavior": "The related child loads jQuery 3.4.1, accepts the workspace message as HTML, and receives a response metadata disclosure locally.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          },
+          "journey": {
+            "summary": "Open the prepared child and inspect evidence in the new same-origin tab.",
+            "entrySelector": "#open-related-child",
+            "childRoute": "/targets/same-origin-child-tab/vulnerable/child.html",
+            "childReadySelector": "#child-runtime-status"
+          },
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.4.1"
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "same-origin-child-tab-control",
+          "title": "Related child-tab repaired journey",
+          "route": "./targets/same-origin-child-tab/fixed/",
+          "displayRoute": "/targets/same-origin-child-tab/fixed/",
+          "visibleBehavior": "The related child validates its opener, loads jQuery 3.7.1, renders text, and receives a clean local response.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          },
+          "journey": {
+            "summary": "Open the paired child and inspect evidence in the new same-origin tab.",
+            "entrySelector": "#open-related-child",
+            "childRoute": "/targets/same-origin-child-tab/fixed/child.html",
+            "childReadySelector": "#child-runtime-status"
+          },
+          "dependency": {
+            "name": "jQuery",
+            "version": "3.7.1"
           }
         }
       ]

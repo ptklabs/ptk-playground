@@ -2,167 +2,78 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Storage Token Leaks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    .sources { display: grid; gap: 8px; margin-top: 8px; }
-    .sources label { display: flex; gap: 8px; align-items: center; }
-    .sources table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    .sources td { padding: 4px 6px; border-bottom: 1px solid #1f2937; vertical-align: top; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    input[type="radio"] { width: auto; padding: 0; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>Storage Token Leaks Module · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Storage Token Leaks Module.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Storage Token Leaks Module</h1>
-  <p class="note">Triggers storage sinks (localStorage, sessionStorage, document.cookie) with tainted values.</p>
-
-  <div class="card">
-    <label for="token">Token / sensitive value (tainted)</label>
-    <input id="token" type="text" placeholder="secret_token_value">
-    <div class="sources">
-      <div class="note">Choose which source to prime for the storage value.</div>
-      <label><input type="radio" name="sourceType" value="query" checked> URL query (?token=...)</label>
-      <label><input type="radio" name="sourceType" value="hash"> URL hash</label>
-      <label><input type="radio" name="sourceType" value="cookie"> document.cookie</label>
-      <label><input type="radio" name="sourceType" value="localStorage"> localStorage</label>
-      <label><input type="radio" name="sourceType" value="sessionStorage"> sessionStorage</label>
-      <label><input type="radio" name="sourceType" value="windowName"> window.name</label>
-      <label><input type="radio" name="sourceType" value="inputOnly"> input only</label>
-      <button id="prime-selected">Prime selected source</button>
-      <button id="prime-all">Prime ALL sources</button>
-      <div id="active-sources"></div>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_storage_token_leaks.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
     </div>
-    <p class="note">Taint is read from ?token=... or the input when you click "Prime taint sources".</p>
-  </div>
-
-  <div class="card">
-    <button id="btn-local">localStorage.setItem('leak', token)</button>
-    <button id="btn-session" style="margin-top:8px;">sessionStorage.setItem('leak', token)</button>
-    <button id="btn-cookie" style="margin-top:8px;">document.cookie = token</button>
-    <button id="btn-cookie-safe" style="margin-top:8px;">document.cookie = token; Secure; SameSite=Strict</button>
-  </div>
-
-  <script>
-    function getParamToken() {
-      const params = new URLSearchParams(location.search);
-      const hash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-      return params.get('token') || hash || '';
-    }
-
-    const sources = {
-      inputOnly: { label: 'Input only', value: '' },
-      query: { label: 'URL query ?token', value: null },
-      hash: { label: 'URL hash', value: null },
-      cookie: { label: 'document.cookie "iast_payload"', value: null },
-      localStorage: { label: 'localStorage["iast_payload"]', value: null },
-      sessionStorage: { label: 'sessionStorage["iast_payload"]', value: null },
-      windowName: { label: 'window.name', value: null }
-    };
-
-    function getSelectedSourceType() {
-      const checked = document.querySelector('input[name="sourceType"]:checked');
-      return checked ? checked.value : 'query';
-    }
-
-    function setSourceValue(type, value) {
-      if (!sources[type]) return;
-      sources[type].value = value;
-      switch (type) {
-        case 'query':
-          break;
-        case 'hash':
-          window.location.hash = 'token=' + encodeURIComponent(value);
-          break;
-        case 'cookie':
-          document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
-          break;
-        case 'localStorage':
-          localStorage.setItem('iast_payload', value);
-          break;
-        case 'sessionStorage':
-          sessionStorage.setItem('iast_payload', value);
-          break;
-        case 'windowName':
-          window.name = value;
-          break;
-        case 'inputOnly':
-        default:
-          break;
-      }
-      renderActiveSources();
-    }
-
-    function primeSelectedSource(value) {
-      const type = getSelectedSourceType();
-      setSourceValue(type, value);
-    }
-
-    function primeAllSources(value) {
-      Object.keys(sources).forEach(type => setSourceValue(type, value));
-    }
-
-    function renderActiveSources() {
-      const rows = Object.keys(sources).map(type => {
-        const { label, value } = sources[type];
-        const display = value == null || value === ''
-          ? '<em>(empty)</em>'
-          : '<code>' + String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
-        return '<tr><td style="width: 35%;"><strong>' + label + '</strong></td><td>' + display + '</td></tr>';
-      });
-      document.getElementById('active-sources').innerHTML =
-        '<h3>Active sources</h3><table><tbody>' + rows.join('') + '</tbody></table>';
-    }
-
-    const tokenField = document.getElementById('token');
-    tokenField.value = getParamToken() || "secret_token_value";
-
-    document.getElementById('prime-selected').onclick = () => {
-      primeSelectedSource(tokenField.value);
-      alert('Selected source primed.');
-    };
-
-    document.getElementById('prime-all').onclick = () => {
-      primeAllSources(tokenField.value);
-      alert('All sources primed.');
-    };
-
-    document.getElementById('btn-local').onclick = () => {
-      localStorage.setItem('leak', tokenField.value);
-    };
-
-    document.getElementById('btn-session').onclick = () => {
-      sessionStorage.setItem('leak', tokenField.value);
-    };
-
-    document.getElementById('btn-cookie').onclick = () => {
-      document.cookie = tokenField.value + '; path=/';
-    };
-
-    document.getElementById('btn-cookie-safe').onclick = () => {
-      document.cookie = tokenField.value + '; path=/; Secure; SameSite=Strict';
-    };
-
-    renderActiveSources();
-  </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Storage Token Leaks Module</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Storage Token Leaks Module</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>4</strong> focused cases</span><span><strong>4</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-token-leaks.btn-local">
+        <div class="family-case-card__meta"><span>Case 01</span><span>storage token write</span></div>
+        <h2>localStorage.setItem(&#39;leak&#39;, token)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-token-leaks/btn-local/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-token-leaks/btn-local/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-token-leaks.btn-session">
+        <div class="family-case-card__meta"><span>Case 02</span><span>storage token write</span></div>
+        <h2>sessionStorage.setItem(&#39;leak&#39;, token)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-token-leaks/btn-session/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-token-leaks/btn-session/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-token-leaks.btn-cookie">
+        <div class="family-case-card__meta"><span>Case 03</span><span>storage token write</span></div>
+        <h2>document.cookie = token</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-token-leaks/btn-cookie/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-token-leaks/btn-cookie/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-storage-token-leaks.btn-cookie-safe">
+        <div class="family-case-card__meta"><span>Case 04</span><span>storage token write</span></div>
+        <h2>document.cookie = token; Secure; SameSite=Strict</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-storage-token-leaks/btn-cookie-safe/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-storage-token-leaks/btn-cookie-safe/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_storage_token_leaks.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Debug Logging Leaks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 90px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+  
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Debug Logging Module</h1>
+  <p class="note">Logs tainted data via <code>console.log</code> and <code>console.error</code> to trigger <code>iast_debug_logging_leaks</code>.</p>
+
+  <div class="card">
+    <label for="secret">Sensitive payload</label>
+    <textarea id="secret" placeholder="api_key=TAINT-123"></textarea>
+    <button id="prime">Prime taint sources</button>
+    <p class="note">Sources include ?secret=..., hash fragments, or this textarea when primed.</p>
+  </div>
+
+  <div class="card">
+    <button id="btn-log">console.log(secret)</button>
+    <button id="btn-error">console.error(secret)</button>
+  </div>
+
+  <script>
+    function getPayload() {
+      const params = new URLSearchParams(location.search);
+      return params.get('secret') || (location.hash ? decodeURIComponent(location.hash.slice(1)) : '');
+    }
+
+    function primeSources(value) {
+      if (!value) return;
+      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+      localStorage.setItem('iast_payload', value);
+      sessionStorage.setItem('iast_payload', value);
+      window.name = value;
+    }
+
+    const secretField = document.getElementById('secret');
+    secretField.value = getPayload() || 'api_key=TAINT-123';
+
+    document.getElementById('prime').onclick = () => {
+      primeSources(secretField.value);
+      alert('Taint sources primed for console payload.');
+    };
+
+    document.getElementById('btn-log').onclick = () => {
+      console.log('IAST debug log leak ->', secretField.value);
+    };
+
+    document.getElementById('btn-error').onclick = () => {
+      console.error('IAST debug error leak ->', secretField.value);
+    };
+  </script>
+</body>
+</html>

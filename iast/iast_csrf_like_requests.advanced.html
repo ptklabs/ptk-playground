@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST CSRF-prone Requests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 90px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+  
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST CSRF-like Requests Module</h1>
+  <p class="note">Sends credentialed cross-origin requests without CSRF headers so <code>iast_csrf_like_requests</code> can raise findings.</p>
+
+  <div class="card">
+    <label for="csrf-url">Target URL (cross-origin)</label>
+    <input id="csrf-url" type="text" placeholder="https://example.com/api/transfer">
+    <label for="csrf-method">HTTP method</label>
+    <input id="csrf-method" type="text" value="POST">
+    <label for="csrf-body">Request body</label>
+    <textarea id="csrf-body" placeholder='{"amount":1000,"to":"attacker"}'></textarea>
+    <p class="note">No CSRF token headers or cookies are added on purpose.</p>
+  </div>
+
+  <div class="card">
+    <button id="btn-csrf">Send credentialed fetch()</button>
+    <p class="note">The request uses <code>credentials: 'include'</code> to mirror authenticated cross-site actions.</p>
+  </div>
+
+  <script>
+    function getParam(name) {
+      const params = new URLSearchParams(location.search);
+      return params.get(name) || '';
+    }
+
+    const urlField = document.getElementById('csrf-url');
+    const methodField = document.getElementById('csrf-method');
+    const bodyField = document.getElementById('csrf-body');
+    urlField.value = getParam('url') || 'https://example.com/api/transfer';
+    methodField.value = getParam('method') || 'POST';
+    bodyField.value = getParam('body') || '{"amount":1000,"to":"attacker"}';
+
+    document.getElementById('btn-csrf').onclick = () => {
+      const target = urlField.value;
+      const method = (methodField.value || 'POST').toUpperCase();
+      const body = method === 'GET' ? undefined : bodyField.value;
+      fetch(target, {
+        method,
+        credentials: 'include',
+        mode: 'cors',
+        headers: {},
+        body
+      }).then(() => console.log('CSRF-like request dispatched.')).catch(err => console.warn('Request blocked (expected cross-origin):', err));
+    };
+  </script>
+</body>
+</html>

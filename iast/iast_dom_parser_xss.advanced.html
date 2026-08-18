@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST DOM Parser XSS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 110px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .sink-box { min-height: 64px; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; }
+    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST DOM Parser XSS</h1>
+  <p class="note">Exercises parser-like DOM sinks with controlled runtime input.</p>
+
+  <div class="card">
+    <label for="payload">HTML payload</label>
+    <textarea id="payload"><img src=x onerror="console.log('ptk-dom-parser')"></textarea>
+    <button id="prime">Prime taint sources</button>
+  </div>
+
+  <div class="card">
+    <button id="btn-domparser">DOMParser.parseFromString</button>
+    <button id="btn-range">Range.createContextualFragment</button>
+    <button id="btn-sethtmlunsafe">Element.setHTMLUnsafe (if supported)</button>
+    <button id="btn-shadow-sethtmlunsafe">ShadowRoot.setHTMLUnsafe (if supported)</button>
+    <div id="result" class="sink-box" style="margin-top:8px;">(awaiting parser sink)</div>
+  </div>
+
+  <script>
+    function primeSources(value) {
+      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+      localStorage.setItem('iast_payload', value);
+      sessionStorage.setItem('iast_payload', value);
+      window.name = value;
+    }
+
+    const payloadField = document.getElementById('payload');
+    const result = document.getElementById('result');
+
+    document.getElementById('prime').onclick = () => {
+      primeSources(payloadField.value);
+      alert('Parser payload primed.');
+    };
+
+    document.getElementById('btn-domparser').onclick = () => {
+      const doc = new DOMParser().parseFromString(payloadField.value, 'text/html');
+      result.textContent = doc.body.innerHTML;
+    };
+
+    document.getElementById('btn-range').onclick = () => {
+      const frag = document.createRange().createContextualFragment(payloadField.value);
+      result.replaceChildren(frag);
+    };
+
+    document.getElementById('btn-sethtmlunsafe').onclick = () => {
+      if (typeof result.setHTMLUnsafe !== 'function') {
+        result.textContent = 'Element.setHTMLUnsafe is not supported in this browser.';
+        return;
+      }
+      result.setHTMLUnsafe(payloadField.value);
+    };
+
+    document.getElementById('btn-shadow-sethtmlunsafe').onclick = () => {
+      const host = document.createElement('div');
+      result.replaceChildren(host);
+      const shadow = host.attachShadow({ mode: 'open' });
+      if (typeof shadow.setHTMLUnsafe !== 'function') {
+        result.textContent = 'ShadowRoot.setHTMLUnsafe is not supported in this browser.';
+        return;
+      }
+      shadow.setHTMLUnsafe(payloadField.value);
+    };
+  </script>
+</body>
+</html>

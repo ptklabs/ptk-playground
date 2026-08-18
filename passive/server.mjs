@@ -41,6 +41,20 @@ const orderSearchPageHeaders = Object.freeze({
   "Set-Cookie": "ptk_order_session=active; Path=/targets/session-bound-order-search/; Secure; HttpOnly; SameSite=Strict"
 });
 
+const historyOrderPageHeaders = (isHttps) => ({
+  "Cache-Control": "no-store",
+  "Referrer-Policy": "no-referrer",
+  "X-Content-Type-Options": "nosniff",
+  "Set-Cookie": `ptk_history_order_session=active; Path=/targets/history-order-router/; HttpOnly; SameSite=Strict${isHttps ? "; Secure" : ""}`
+});
+
+const childContextPageHeaders = (isHttps) => ({
+  "Cache-Control": "no-store",
+  "Referrer-Policy": "no-referrer",
+  "X-Content-Type-Options": "nosniff",
+  "Set-Cookie": `ptk_child_context_session=active; Path=/targets/same-origin-child-tab/; HttpOnly; SameSite=Strict${isHttps ? "; Secure" : ""}`
+});
+
 const routeMap = new Map([
   ["/", playgroundFileResponse("index.html")],
   ["/index.html", playgroundFileResponse("index.html")],
@@ -53,6 +67,22 @@ const routeMap = new Map([
   ["/catalog/missions.json", playgroundFileResponse("catalog/missions.json", { contentType: "application/json; charset=utf-8" })],
   ["/catalog/scanner-targets.json", playgroundFileResponse("catalog/scanner-targets.json", { contentType: "application/json; charset=utf-8" })],
   ["/catalog/demo.json", playgroundFileResponse("catalog/demo.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/challenges.json", playgroundFileResponse("catalog/challenges.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/families.json", playgroundFileResponse("catalog/families.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/playlists.json", playgroundFileResponse("catalog/playlists.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/source-ledger.json", playgroundFileResponse("catalog/source-ledger.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/legacy-routes.json", playgroundFileResponse("catalog/legacy-routes.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/sast-atomic.json", playgroundFileResponse("catalog/sast-atomic.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/iast-atomic.json", playgroundFileResponse("catalog/iast-atomic.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/dast-contracts.json", playgroundFileResponse("catalog/dast-contracts.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/sca-dependencies.json", playgroundFileResponse("catalog/sca-dependencies.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/generated/scanner-targets.json", playgroundFileResponse("catalog/generated/scanner-targets.json", { contentType: "application/json; charset=utf-8" })],
+  ["/catalog/generated/counts.json", playgroundFileResponse("catalog/generated/counts.json", { contentType: "application/json; charset=utf-8" })],
+  ["/assets/js/catalogue-app.js", playgroundFileResponse("assets/js/catalogue-app.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/play/", playgroundFileResponse("play/index.html")],
+  ["/play/index.html", playgroundFileResponse("play/index.html")],
+  ["/explore/", playgroundFileResponse("explore/index.html")],
+  ["/explore/index.html", playgroundFileResponse("explore/index.html")],
   ["/demo/", playgroundFileResponse("demo/index.html")],
   ["/demo/index.html", playgroundFileResponse("demo/index.html")],
   ["/scanner/", playgroundFileResponse("scanner/index.html")],
@@ -75,6 +105,12 @@ const routeMap = new Map([
   ["/campaigns/transient-route-notice/index.html", playgroundFileResponse("campaigns/transient-route-notice/index.html")],
   ["/campaigns/imported-request-preferences/", playgroundFileResponse("campaigns/imported-request-preferences/index.html")],
   ["/campaigns/imported-request-preferences/index.html", playgroundFileResponse("campaigns/imported-request-preferences/index.html")],
+  ["/campaigns/history-order-router/", playgroundFileResponse("campaigns/history-order-router/index.html")],
+  ["/campaigns/history-order-router/index.html", playgroundFileResponse("campaigns/history-order-router/index.html")],
+  ["/campaigns/lazy-route-module/", playgroundFileResponse("campaigns/lazy-route-module/index.html")],
+  ["/campaigns/lazy-route-module/index.html", playgroundFileResponse("campaigns/lazy-route-module/index.html")],
+  ["/campaigns/same-origin-child-tab/", playgroundFileResponse("campaigns/same-origin-child-tab/index.html")],
+  ["/campaigns/same-origin-child-tab/index.html", playgroundFileResponse("campaigns/same-origin-child-tab/index.html")],
   ["/targets/support-widget/vulnerable/", playgroundFileResponse("targets/support-widget/vulnerable/index.html")],
   ["/targets/support-widget/vulnerable/index.html", playgroundFileResponse("targets/support-widget/vulnerable/index.html")],
   ["/targets/support-widget/vulnerable/widget.js", playgroundFileResponse("targets/support-widget/vulnerable/widget.js", { contentType: "application/javascript; charset=utf-8" })],
@@ -115,6 +151,37 @@ const routeMap = new Map([
   ["/targets/imported-request-preferences/fixed/", playgroundFileResponse("targets/imported-request-preferences/fixed/index.html")],
   ["/targets/imported-request-preferences/fixed/index.html", playgroundFileResponse("targets/imported-request-preferences/fixed/index.html")],
   ["/targets/imported-request-preferences/fixed/request-preferences.js", playgroundFileResponse("targets/imported-request-preferences/fixed/request-preferences.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/history-order-router/vulnerable/", playgroundFileResponse("targets/history-order-router/vulnerable/index.html", { headers: historyOrderPageHeaders })],
+  ["/targets/history-order-router/vulnerable/index.html", playgroundFileResponse("targets/history-order-router/vulnerable/index.html", { headers: historyOrderPageHeaders })],
+  ["/targets/history-order-router/vulnerable/history-order-router.js", playgroundFileResponse("targets/history-order-router/vulnerable/history-order-router.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/history-order-router/fixed/", playgroundFileResponse("targets/history-order-router/fixed/index.html", { headers: historyOrderPageHeaders })],
+  ["/targets/history-order-router/fixed/index.html", playgroundFileResponse("targets/history-order-router/fixed/index.html", { headers: historyOrderPageHeaders })],
+  ["/targets/history-order-router/fixed/history-order-router.js", playgroundFileResponse("targets/history-order-router/fixed/history-order-router.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/lazy-route-module/vulnerable/", playgroundFileResponse("targets/lazy-route-module/vulnerable/index.html")],
+  ["/targets/lazy-route-module/vulnerable/index.html", playgroundFileResponse("targets/lazy-route-module/vulnerable/index.html")],
+  ["/targets/lazy-route-module/vulnerable/lazy-route-app.js", playgroundFileResponse("targets/lazy-route-module/vulnerable/lazy-route-app.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/lazy-route-module/vulnerable/analytics-route.js", playgroundFileResponse("targets/lazy-route-module/vulnerable/analytics-route.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/lazy-route-module/fixed/", playgroundFileResponse("targets/lazy-route-module/fixed/index.html")],
+  ["/targets/lazy-route-module/fixed/index.html", playgroundFileResponse("targets/lazy-route-module/fixed/index.html")],
+  ["/targets/lazy-route-module/fixed/lazy-route-app.js", playgroundFileResponse("targets/lazy-route-module/fixed/lazy-route-app.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/lazy-route-module/fixed/analytics-route.js", playgroundFileResponse("targets/lazy-route-module/fixed/analytics-route.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/same-origin-child-tab/vulnerable/", playgroundFileResponse("targets/same-origin-child-tab/vulnerable/index.html", { headers: childContextPageHeaders })],
+  ["/targets/same-origin-child-tab/vulnerable/index.html", playgroundFileResponse("targets/same-origin-child-tab/vulnerable/index.html", { headers: childContextPageHeaders })],
+  ["/targets/same-origin-child-tab/vulnerable/child-tab-launcher.js", playgroundFileResponse("targets/same-origin-child-tab/vulnerable/child-tab-launcher.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/same-origin-child-tab/vulnerable/child.html", playgroundFileResponse("targets/same-origin-child-tab/vulnerable/child.html", { headers: childContextPageHeaders })],
+  ["/targets/same-origin-child-tab/vulnerable/child-runtime.js", playgroundFileResponse("targets/same-origin-child-tab/vulnerable/child-runtime.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/same-origin-child-tab/fixed/", playgroundFileResponse("targets/same-origin-child-tab/fixed/index.html", { headers: childContextPageHeaders })],
+  ["/targets/same-origin-child-tab/fixed/index.html", playgroundFileResponse("targets/same-origin-child-tab/fixed/index.html", { headers: childContextPageHeaders })],
+  ["/targets/same-origin-child-tab/fixed/child-tab-launcher.js", playgroundFileResponse("targets/same-origin-child-tab/fixed/child-tab-launcher.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/same-origin-child-tab/fixed/child.html", playgroundFileResponse("targets/same-origin-child-tab/fixed/child.html", { headers: childContextPageHeaders })],
+  ["/targets/same-origin-child-tab/fixed/child-runtime.js", playgroundFileResponse("targets/same-origin-child-tab/fixed/child-runtime.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/same-origin-child-tab/control/", playgroundFileResponse("targets/same-origin-child-tab/control/index.html")],
+  ["/targets/same-origin-child-tab/control/index.html", playgroundFileResponse("targets/same-origin-child-tab/control/index.html")],
+  ["/targets/angular-expression-dependency/review/", playgroundFileResponse("targets/angular-expression-dependency/review/index.html")],
+  ["/targets/angular-expression-dependency/review/index.html", playgroundFileResponse("targets/angular-expression-dependency/review/index.html")],
+  ["/targets/angular-expression-dependency/fixed/", playgroundFileResponse("targets/angular-expression-dependency/fixed/index.html")],
+  ["/targets/angular-expression-dependency/fixed/index.html", playgroundFileResponse("targets/angular-expression-dependency/fixed/index.html")],
+  ["/targets/angular-expression-dependency/expression.js", playgroundFileResponse("targets/angular-expression-dependency/expression.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/assets/vendor/jquery/jquery-3.4.1.min.js", playgroundFileResponse("assets/vendor/jquery/jquery-3.4.1.min.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/assets/vendor/jquery/jquery-3.7.1.min.js", playgroundFileResponse("assets/vendor/jquery/jquery-3.7.1.min.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/passive/header_disclosure_canary.html", fileResponse("header_disclosure_canary.html")],
@@ -158,6 +225,9 @@ const routeMap = new Map([
       "Cache-Control": "public, max-age=600",
       ...(isHttps ? {} : {})
     })
+  })],
+  ["/passive/fixtures/headers/secure-control.html", fileResponse("headers_weak_security.html", {
+    headers: secureHeaderCanaryHeaders
   })],
   ["/passive/fixtures/headers/hsts-over-http.html", fileResponse("headers_weak_security.html", {
     headers: {
@@ -303,7 +373,24 @@ function send(res, statusCode, body, contentType, headers = {}) {
 }
 
 function serveRoute(req, res, { pathname, isHttps }) {
-  const route = routeMap.get(pathname);
+  let route = routeMap.get(pathname);
+  if (!route && pathname.startsWith("/atomic/")) {
+    let decodedPath;
+    try {
+      decodedPath = decodeURIComponent(pathname);
+    } catch {
+      send(res, 400, "Invalid fixture route", "text/plain; charset=utf-8");
+      return;
+    }
+    const normalized = path.posix.normalize(decodedPath);
+    if (normalized.startsWith("/atomic/") && !normalized.includes("/../")) {
+      const relative = normalized.replace(/^\//, "") + (normalized.endsWith("/") ? "index.html" : "");
+      const candidate = path.resolve(playgroundRoot, relative);
+      if (candidate.startsWith(`${path.resolve(playgroundRoot, "atomic")}${path.sep}`) && fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+        route = playgroundFileResponse(relative);
+      }
+    }
+  }
   if (!route) {
     send(res, 404, "Passive fixture route not found", "text/plain; charset=utf-8");
     return;
@@ -349,10 +436,11 @@ function readBoundedBody(req, maxBytes = 8192) {
   });
 }
 
-function jsonResponse(res, statusCode, value) {
+function jsonResponse(res, statusCode, value, headers = {}) {
   send(res, statusCode, JSON.stringify(value), "application/json; charset=utf-8", {
     "Cache-Control": "no-store",
-    "X-Content-Type-Options": "nosniff"
+    "X-Content-Type-Options": "nosniff",
+    ...headers
   });
 }
 
@@ -411,6 +499,83 @@ async function serveOrderSearchApi(req, res, { pathname, isHttps }) {
     count: query === "wireless headphones" ? 1 : 0,
     message: query === "wireless headphones" ? "One matching order" : "No matching orders"
   });
+}
+
+async function serveHistoryOrderApi(req, res, { pathname }) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    jsonResponse(res, 405, { ok: false, code: "METHOD_NOT_ALLOWED" });
+    return;
+  }
+  if (!String(req.headers["content-type"] || "").toLowerCase().startsWith("application/json")) {
+    jsonResponse(res, 415, { ok: false, code: "JSON_REQUIRED" });
+    return;
+  }
+  if (!String(req.headers.cookie || "").split(/;\s*/).includes("ptk_history_order_session=active")) {
+    jsonResponse(res, 401, { ok: false, code: "SESSION_REQUIRED" });
+    return;
+  }
+  if (req.headers["x-playground-request"] !== "history-order-router") {
+    jsonResponse(res, 400, { ok: false, code: "REQUEST_CONTEXT_REQUIRED" });
+    return;
+  }
+
+  let body;
+  try {
+    body = JSON.parse(await readBoundedBody(req, 2048));
+  } catch (error) {
+    const statusCode = error?.code === "request_body_too_large" ? 413 : 400;
+    jsonResponse(res, statusCode, {
+      ok: false,
+      code: statusCode === 413 ? "REQUEST_BODY_TOO_LARGE" : "JSON_INVALID"
+    });
+    return;
+  }
+  const orderId = typeof body?.orderId === "string" ? body.orderId : "";
+  if (!orderId || orderId.length > 128) {
+    jsonResponse(res, 400, { ok: false, code: "ORDER_ID_INVALID" });
+    return;
+  }
+
+  const reviewTarget = pathname.includes("/vulnerable/");
+  if (reviewTarget && /['"]/.test(orderId)) {
+    jsonResponse(res, 500, {
+      ok: false,
+      code: "ORDER_LOOKUP_SYNTAX",
+      message: "SQL syntax error near the supplied order identifier"
+    });
+    return;
+  }
+  if (!/^order-\d{1,8}$/.test(orderId)) {
+    jsonResponse(res, 400, { ok: false, code: "ORDER_ID_FORMAT_REJECTED" });
+    return;
+  }
+  jsonResponse(res, 200, {
+    ok: true,
+    orderId,
+    message: "Order 4815 loaded from the authenticated API."
+  });
+}
+
+function serveChildContextApi(req, res, { pathname }) {
+  if (req.method !== "GET") {
+    res.setHeader("Allow", "GET");
+    jsonResponse(res, 405, { ok: false, code: "METHOD_NOT_ALLOWED" });
+    return;
+  }
+  if (!String(req.headers.cookie || "").split(/;\s*/).includes("ptk_child_context_session=active")) {
+    jsonResponse(res, 401, { ok: false, code: "SESSION_REQUIRED" });
+    return;
+  }
+  if (req.headers["x-playground-request"] !== "child-context") {
+    jsonResponse(res, 400, { ok: false, code: "REQUEST_CONTEXT_REQUIRED" });
+    return;
+  }
+  const reviewTarget = pathname.includes("/vulnerable/");
+  jsonResponse(res, 200, {
+    ok: true,
+    message: "Child context loaded for the related browser session."
+  }, reviewTarget ? { "X-Powered-By": "PTK Child Context Canary" } : {});
 }
 
 function handleUpgrade(req, socket) {
@@ -494,6 +659,14 @@ function createRequestHandler(isHttps) {
     }
     if (/^\/targets\/session-bound-order-search\/(?:vulnerable|fixed)\/api\/search$/.test(url.pathname)) {
       await serveOrderSearchApi(req, res, { pathname: url.pathname, isHttps });
+      return;
+    }
+    if (/^\/targets\/history-order-router\/(?:vulnerable|fixed)\/api\/order$/.test(url.pathname)) {
+      await serveHistoryOrderApi(req, res, { pathname: url.pathname });
+      return;
+    }
+    if (/^\/targets\/same-origin-child-tab\/(?:vulnerable|fixed)\/api\/context$/.test(url.pathname)) {
+      serveChildContextApi(req, res, { pathname: url.pathname });
       return;
     }
     serveRoute(req, res, { pathname: url.pathname, isHttps });

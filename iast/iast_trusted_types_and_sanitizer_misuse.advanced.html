@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Trusted Types and Sanitizer Misuse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 90px; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Trusted Types and Sanitizer Misuse</h1>
+  <p class="note">Exercises <code>iast_trusted_types_and_sanitizer_misuse</code> with dangerous DOMPurify configuration and permissive Trusted Types policy callbacks.</p>
+
+  <div class="card">
+    <label for="payload">Payload</label>
+    <textarea id="payload"><img src=x onerror='console.log(1)'></textarea>
+    <button id="btn-dompurify">DOMPurify.sanitize with dangerous config</button>
+    <button id="btn-create-html">trustedTypes.createPolicy(...).createHTML()</button>
+    <button id="btn-create-script">trustedTypes.createPolicy(...).createScript()</button>
+    <button id="btn-create-script-url">trustedTypes.createPolicy(...).createScriptURL()</button>
+  </div>
+
+  <script>
+    window.DOMPurify = window.DOMPurify || {
+      sanitize(value) {
+        return String(value);
+      }
+    };
+
+    window.trustedTypes = window.trustedTypes || {
+      createPolicy(name, rules) {
+        return Object.assign({}, rules);
+      }
+    };
+
+    function payload() {
+      return document.getElementById('payload').value;
+    }
+
+    document.getElementById('btn-dompurify').onclick = () => {
+      window.DOMPurify.sanitize(payload(), {
+        ADD_TAGS: ['script'],
+        ADD_ATTR: ['onerror'],
+        ALLOW_UNKNOWN_PROTOCOLS: true
+      });
+    };
+
+    document.getElementById('btn-create-html').onclick = () => {
+      const policy = trustedTypes.createPolicy('ptk-html', {
+        createHTML(value) { return String(value); }
+      });
+      policy.createHTML(payload());
+    };
+
+    document.getElementById('btn-create-script').onclick = () => {
+      const policy = trustedTypes.createPolicy('ptk-script', {
+        createScript(value) { return String(value); }
+      });
+      policy.createScript(payload());
+    };
+
+    document.getElementById('btn-create-script-url').onclick = () => {
+      const policy = trustedTypes.createPolicy('ptk-script-url', {
+        createScriptURL(value) { return String(value); }
+      });
+      policy.createScriptURL(payload());
+    };
+  </script>
+</body>
+</html>

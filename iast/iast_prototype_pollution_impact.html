@@ -2,71 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Prototype Pollution Impact</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    textarea, button, input { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    textarea { min-height: 110px; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .log { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; min-height: 68px; }
-    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-  </style>
+  <title>Prototype Pollution Impact · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Prototype Pollution Impact.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Prototype Pollution Impact</h1>
-  <p class="note">Uses a controlled prototype write on <code>__proto__</code>, then passes the polluted object into <code>fetch(init)</code> so the free impact rule and the full write rule can both be validated.</p>
-
-  <div class="card">
-    <label for="pollution-json">Prototype payload JSON</label>
-    <textarea id="pollution-json">{ "__proto__": { "credentials": "include" } }</textarea>
-    <label for="target-url">Fetch target URL</label>
-    <input id="target-url" type="text" value="./data/response-fields.json">
-    <button id="btn-trigger">Object.assign({}, payload) then fetch(url, init)</button>
-    <button id="btn-write">Reflect.set({}, "__proto__", payload.__proto__)</button>
-  </div>
-
-  <div class="card">
-    <div id="log" class="log">(waiting)</div>
-  </div>
-
-  <script>
-    const log = document.getElementById('log');
-
-    document.getElementById('btn-trigger').onclick = async () => {
-      const raw = document.getElementById('pollution-json').value;
-      const targetUrl = document.getElementById('target-url').value || './data/response-fields.json';
-      try {
-        const parsed = JSON.parse(raw);
-        const init = Object.assign({}, parsed);
-        log.textContent =
-          'Own keys on init: ' + JSON.stringify(Object.keys(init)) + '\n' +
-          'Inherited credentials: ' + String(init.credentials);
-        await fetch(targetUrl, init).catch(() => {});
-      } catch (err) {
-        log.textContent = 'Trigger failed: ' + (err && err.message ? err.message : err);
-      }
-    };
-
-    document.getElementById('btn-write').onclick = () => {
-      const raw = document.getElementById('pollution-json').value;
-      try {
-        const parsed = JSON.parse(raw);
-        const target = {};
-        Reflect.set(target, '__proto__', parsed.__proto__);
-        log.textContent =
-          'Reflect.set applied\n' +
-          'Inherited credentials: ' + String(target.credentials);
-      } catch (err) {
-        log.textContent = 'Write failed: ' + (err && err.message ? err.message : err);
-      }
-    };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_prototype_pollution_impact.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Prototype Pollution Impact</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Prototype Pollution Impact</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>2</strong> focused cases</span><span><strong>2</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-prototype-pollution-impact.btn-trigger">
+        <div class="family-case-card__meta"><span>Case 01</span><span>prototype impact</span></div>
+        <h2>Object.assign({}, payload) then fetch(url, init)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-prototype-pollution-impact/btn-trigger/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-prototype-pollution-impact/btn-trigger/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-prototype-pollution-impact.btn-write">
+        <div class="family-case-card__meta"><span>Case 02</span><span>prototype impact</span></div>
+        <h2>Reflect.set({}, &quot;__proto__&quot;, payload.__proto__)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-prototype-pollution-impact/btn-write/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-prototype-pollution-impact/btn-write/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_prototype_pollution_impact.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

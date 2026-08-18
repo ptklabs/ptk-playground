@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>response.htmlFragment → insertAdjacentHTML · OWASP PTK Playground</title>
+  <link rel="stylesheet" href="../../../../../assets/css/playground.css">
+</head>
+<body class="target-page engine-page engine-page--iast">
+  <a class="skip-link" href="#workbench">Skip to case</a>
+  <header class="site-header atomic-site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../../../../../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Atomic target navigation"><a href="../../../../../iast/iast_response_field_reachability.html">Case family</a><a href="../../../../../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell target-shell atomic-shell" data-atomic-iast-id="iast.atomic.iast-iast-response-field-reachability.btn-adjacent" data-variant="review">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../../../iast/">IAST</a><span aria-hidden="true">/</span><a href="../../../../../iast/iast_response_field_reachability.html">Case family</a><span aria-hidden="true">/</span><span>Review target</span></nav>
+    <section class="atomic-hero atomic-hero--review">
+      <div class="atomic-hero__copy">
+        <div class="atomic-kicker"><span class="atomic-engine-badge">IAST</span><span class="atomic-state-badge">Review target</span></div>
+        <h1>response.htmlFragment → insertAdjacentHTML</h1>
+        <p>A single live source-to-operation flow is isolated with deterministic input, action and visible evidence.</p>
+      </div>
+      <div class="atomic-hero__actions">
+        <a class="button" href="../fixed/">Open repaired control</a>
+        <a class="button button--secondary" href="../../../../..//iast/iast_response_field_reachability.advanced.html#btn-adjacent">Open Advanced source</a>
+      </div>
+    </section>
+
+    <ol class="atomic-steps" aria-label="How to use this IAST case">
+      <li><span>1</span><div><strong>Start IAST first</strong><p>Runtime hooks need to be active before you perform the prepared browser action.</p></div></li>
+      <li><span>2</span><div><strong>Run the browser flow</strong><p>Review or edit the harmless input, then trigger this isolated operation once.</p></div></li>
+      <li><span>3</span><div><strong>Compare the pair</strong><p>Open the repaired control and repeat the same action to verify the runtime boundary.</p></div></li>
+    </ol>
+
+    <section id="workbench" class="atomic-workbench" aria-label="IAST scenario workbench">
+      <article class="atomic-panel atomic-panel--input">
+        <div class="atomic-panel__heading"><div><p class="eyebrow">Prepared flow</p><h2>Browser input and action</h2></div><span class="atomic-panel__step">01</span></div>
+        <label class="atomic-field-label" for="case-input">Harmless runtime value</label>
+        <textarea class="atomic-input" id="case-input" rows="4" spellcheck="false"></textarea>
+        <p class="atomic-help">The value is intentionally visible and editable so the source-to-operation path can be reproduced without a destructive payload.</p>
+        <form class="atomic-support-form" id="case-form" method="get" action="./" target="preview" hidden>
+          <input type="hidden" name="ptk" value="form-evidence">
+          <button class="button button--secondary" id="case-submit" type="submit">Run prepared form action</button>
+        </form>
+        <div class="atomic-action-row"><button class="button" id="run-case" type="button">Run focused case</button><a class="button button--secondary" id="case-link" href="#output" hidden>Open prepared link</a></div>
+        <img class="visually-hidden" id="case-image" alt="" width="1" height="1">
+      </article>
+
+      <article class="atomic-panel atomic-panel--evidence">
+        <div class="atomic-panel__heading"><div><p class="eyebrow">Runtime proof</p><h2>Visible evidence</h2></div><span class="atomic-panel__step">02</span></div>
+        <div class="atomic-output" id="output" data-empty-label="The browser result will appear here."></div>
+        <iframe class="atomic-preview" id="preview" name="preview" title="Runtime output preview" hidden></iframe>
+        <p class="atomic-evidence-status" id="evidence" data-state="ready"><span aria-hidden="true"></span>Ready to run</p>
+      </article>
+    </section>
+
+    <aside class="atomic-pair-note atomic-pair-note--review">
+      <div><p class="eyebrow">Paired verification</p><h2>Prove the flow, then challenge it</h2><p>Repeat the same operation on the repaired control. A useful scanner should distinguish the unsafe flow from the behavior-preserving fix.</p></div>
+      <a class="button button--secondary" href="../fixed/">Open repaired control</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST atomic target · scanner-neutral and locally reproducible.</p><nav aria-label="Project links"><a href="../../../../../iast/iast_response_field_reachability.html">Case family</a><a href="../../../../../explore/?engine=IAST">Explore IAST</a></nav></div></footer>
+  <script src="./case.js"></script>
+</body>
+</html>

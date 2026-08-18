@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST DOM XSS Secondary Sources</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; line-height: 1.5; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, textarea, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 88px; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .sink-box { min-height: 64px; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; }
+    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST DOM XSS Secondary Sources</h1>
+  <p class="note">Covers secondary-source DOM XSS rules using cookie, storage, window.name, hash route, postMessage, and referrer-driven setups.</p>
+  <div class="card">
+    <label for="payload">HTML payload</label>
+    <textarea id="payload"><img src=x onerror="window.__ptk_secondary_xss=1"></textarea>
+    <label for="sourceType">Secondary source</label>
+    <select id="sourceType">
+      <option value="cookie">cookie</option>
+      <option value="localStorage">localStorage</option>
+      <option value="sessionStorage">sessionStorage</option>
+      <option value="windowName">window.name</option>
+      <option value="hashRoute">hashRoute</option>
+      <option value="postMessage">postMessage</option>
+      <option value="referrer">referrer (open via helper)</option>
+    </select>
+    <button id="prime">Prime selected secondary source</button>
+    <p id="status" class="note">No secondary source primed yet.</p>
+  </div>
+  <div class="card">
+    <button id="btn-inner">innerHTML</button>
+    <button id="btn-outer">outerHTML</button>
+    <button id="btn-adjacent">insertAdjacentHTML</button>
+    <button id="btn-write">document.write</button>
+    <button id="btn-mutation">appendChild(fragment)</button>
+    <button id="btn-inline">setAttribute('onclick', payload)</button>
+    <button id="btn-srcdoc">iframe.srcdoc = payload</button>
+    <div id="target" class="sink-box" style="margin-top:8px;">(secondary source target)</div>
+    <iframe id="frame" title="secondary-xss-frame" style="width:100%;border:1px solid #1f2937;border-radius:8px;margin-top:8px;background:#0b1220;"></iframe>
+  </div>
+  <script>
+    const payloadField = document.getElementById('payload');
+    const status = document.getElementById('status');
+    const target = document.getElementById('target');
+    const frame = document.getElementById('frame');
+    let lastMessage = null;
+
+    function getCurrentPayload() {
+      const selected = document.getElementById('sourceType').value;
+      const hashText = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+      switch (selected) {
+        case 'cookie': {
+          const m = document.cookie.match(/(?:^|; )iast_payload=([^;]+)/);
+          return m ? decodeURIComponent(m[1]) : payloadField.value;
+        }
+        case 'localStorage':
+          return localStorage.getItem('iast_payload') || payloadField.value;
+        case 'sessionStorage':
+          return sessionStorage.getItem('iast_payload') || payloadField.value;
+        case 'windowName':
+          return window.name || payloadField.value;
+        case 'hashRoute':
+          return hashText || payloadField.value;
+        case 'postMessage':
+          return lastMessage || payloadField.value;
+        case 'referrer':
+          return new URLSearchParams(location.search).get('payload') || payloadField.value;
+        default:
+          return payloadField.value;
+      }
+    }
+
+    document.getElementById('prime').onclick = () => {
+      const payload = payloadField.value;
+      const selected = document.getElementById('sourceType').value;
+      if (selected === 'cookie') document.cookie = 'iast_payload=' + encodeURIComponent(payload) + '; path=/';
+      if (selected === 'localStorage') localStorage.setItem('iast_payload', payload);
+      if (selected === 'sessionStorage') sessionStorage.setItem('iast_payload', payload);
+      if (selected === 'windowName') window.name = payload;
+      if (selected === 'hashRoute') location.hash = encodeURIComponent(payload);
+      if (selected === 'postMessage') window.postMessage(payload, '*');
+      status.textContent = 'Primed secondary source: ' + selected + '. document.referrer=' + (document.referrer || '(empty)');
+    };
+
+    window.addEventListener('message', (event) => {
+      if (typeof event.data === 'string') {
+        lastMessage = event.data;
+        status.textContent = 'Captured postMessage payload.';
+      }
+    });
+
+    document.getElementById('btn-inner').onclick = () => { target.innerHTML = getCurrentPayload(); };
+    document.getElementById('btn-outer').onclick = () => { target.outerHTML = '<div id="target" class="sink-box">' + getCurrentPayload() + '</div>'; };
+    document.getElementById('btn-adjacent').onclick = () => { target.insertAdjacentHTML('beforeend', getCurrentPayload()); };
+    document.getElementById('btn-write').onclick = () => { document.open(); document.write(getCurrentPayload()); document.close(); };
+    document.getElementById('btn-mutation').onclick = () => {
+      const holder = document.createElement('div');
+      holder.innerHTML = getCurrentPayload();
+      while (holder.firstChild) target.appendChild(holder.firstChild);
+    };
+    document.getElementById('btn-inline').onclick = () => {
+      const btn = document.createElement('button');
+      btn.textContent = 'inline target';
+      btn.setAttribute('onclick', getCurrentPayload());
+      target.appendChild(btn);
+    };
+    document.getElementById('btn-srcdoc').onclick = () => { frame.srcdoc = getCurrentPayload(); };
+
+    if (document.referrer) {
+      status.textContent = 'Opened with referrer: ' + document.referrer;
+    }
+  </script>
+</body>
+</html>

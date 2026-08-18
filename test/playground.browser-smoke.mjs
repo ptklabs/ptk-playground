@@ -11,6 +11,7 @@ const playgroundRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url))
 const host = '127.0.0.1'
 const port = 41734
 const baseUrl = `http://${host}:${port}`
+const canonical = JSON.parse(fs.readFileSync(path.join(playgroundRoot, 'catalog/challenges.json'), 'utf8'))
 
 function contentType(filePath) {
   const extension = path.extname(filePath).toLowerCase()
@@ -70,7 +71,7 @@ test('playground desktop and mobile smoke stays local and renders the focused ca
         if (url.origin !== baseUrl) externalRequests.push(request.url())
       })
 
-      for (const pathname of ['/', '/campaigns/', '/demo/', '/scanner/', '/campaigns/support-widget/', '/campaigns/on-demand-analytics/', '/campaigns/saved-workspace/', '/campaigns/live-profile-preview/', '/campaigns/transient-route-notice/', '/campaigns/imported-request-preferences/', '/sast/', '/iast/', '/passive/']) {
+      for (const pathname of ['/', '/play/', '/explore/', '/campaigns/', '/demo/', '/scanner/', '/campaigns/support-widget/', '/campaigns/on-demand-analytics/', '/campaigns/saved-workspace/', '/campaigns/live-profile-preview/', '/campaigns/transient-route-notice/', '/campaigns/imported-request-preferences/', '/campaigns/history-order-router/', '/campaigns/lazy-route-module/', '/campaigns/same-origin-child-tab/', '/targets/history-order-router/vulnerable/', '/targets/lazy-route-module/vulnerable/', '/targets/same-origin-child-tab/vulnerable/', '/sast/', '/sast/append_child.html', '/sast/dom_clobbering.html', '/iast/', '/iast/iast_dom_clobbering.html', '/passive/', '/atomic/sast/sast-ajax-request-header/arh-setrequestheader/review/']) {
         const response = await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'networkidle' })
         assert.equal(response.status(), 200, `${viewport.name}:${pathname}`)
         assert.equal(await page.locator('main').count(), 1, `${viewport.name}:${pathname} main`)
@@ -100,7 +101,7 @@ test('playground desktop and mobile smoke stays local and renders the focused ca
       }
 
       assert.equal(await page.goto(`${baseUrl}/campaigns/`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
-      assert.equal(await page.locator('[data-mission-card]').count(), 8)
+      assert.equal(await page.locator('[data-mission-card]').count(), 11)
       assert.equal(await page.locator('[data-product-preview]').count(), 3)
       assert.equal(await page.locator('[data-product-preview][data-preview-status="validated"]').count(), 2)
       assert.equal(await page.locator('[data-product-preview][data-preview-status="in-progress"]').count(), 1)
@@ -109,9 +110,87 @@ test('playground desktop and mobile smoke stays local and renders the focused ca
       assert.match(await page.locator('.product-preview').textContent(), /PTK Pro — Coming soon/)
       assert.match(await page.locator('[data-product-preview="session-bound-order-search"]').textContent(), /Roadmap only — no preview scan or detection claim/)
 
+      await page.goto(`${baseUrl}/play/`, { waitUntil: 'networkidle' })
+      assert.equal(await page.locator('[data-challenge-id]').count(), 3)
+      assert.equal(await page.getByRole('link', { name: 'Start guided mission' }).count(), 3)
+      assert.equal(await page.locator('[data-playlist-list] .playlist-option').count(), 7)
+      assert.equal(await page.locator('[data-challenge-id="session-bound-order-search"] .challenge-card__preview').count(), 1)
+      assert.match(await page.locator('[data-playlist-title]').textContent(), /browser is the source of truth/i)
+      await page.goto(`${baseUrl}/play/?playlist=current-browser-missions`, { waitUntil: 'networkidle' })
+      assert.equal(await page.locator('[data-challenge-id]').count(), 11)
+      for (const [playlist, expected] of [
+        ['static-to-runtime-evidence', 5],
+        ['browser-state-and-navigation', 4],
+        ['browser-dast-evidence', 3],
+        ['dependency-timing', 3],
+        ['spa-deep-dive', 3]
+      ]) {
+        await page.goto(`${baseUrl}/play/?playlist=${playlist}`, { waitUntil: 'networkidle' })
+        assert.equal(await page.locator('[data-challenge-id]').count(), expected, `${playlist} challenge count`)
+      }
+
+      await page.goto(`${baseUrl}/sast/append_child.html`, { waitUntil: 'networkidle' })
+      assert.equal(await page.locator('[data-family-directory="sast/append_child.html"] .family-case-card').count(), 4)
+      assert.equal(await page.getByRole('link', { name: 'Open Advanced combined lab' }).getAttribute('href'), './append_child.advanced.html')
+      await page.goto(`${baseUrl}/iast/iast_dom_clobbering.html`, { waitUntil: 'networkidle' })
+      assert.equal(await page.locator('[data-family-directory="iast/iast_dom_clobbering.html"] .family-case-card').count(), 2)
+
+      const engineColors = []
+      for (const pathname of ['/sast/', '/iast/', '/passive/']) {
+        await page.goto(`${baseUrl}${pathname}`, { waitUntil: 'networkidle' })
+        engineColors.push(await page.evaluate(() => getComputedStyle(document.body).getPropertyValue('--brand').trim()))
+      }
+      assert.equal(new Set(engineColors).size, 3, 'SAST, IAST and DAST visual identities must remain distinct')
+
+      await page.goto(`${baseUrl}/explore/`, { waitUntil: 'networkidle' })
+      assert.equal(await page.locator('[data-challenge-id]').count(), Math.min(24, canonical.summary.challenges))
+      assert.equal(await page.locator('[data-explore-more]:visible').count(), 1)
+      await page.locator('[data-explore-more]').click()
+      assert.equal(await page.locator('[data-challenge-id]').count(), Math.min(48, canonical.summary.challenges))
+      assert.equal(await page.locator('a[href^="http://localhost:"]').count(), 0)
+      await page.locator('[data-explore-engine]').selectOption('SCA')
+      assert.equal(await page.locator('[data-challenge-id]').count(), canonical.challenges.filter((challenge) => challenge.engines.includes('SCA')).length)
+      await page.locator('[data-explore-engine]').selectOption('')
+      await page.locator('[data-explore-kind]').selectOption('atomic-challenge')
+      assert.equal(await page.locator('[data-challenge-id]').count(), Math.min(24, canonical.summary.atomic))
+
+      const compatibilityLab = canonical.challenges.find((challenge) => challenge.kind === 'advanced-lab' && challenge.provenance.derivedChallengeIds?.length)
+      assert.ok(compatibilityLab)
+      const sourceId = compatibilityLab.provenance.sourceIds[0]
+      const expectedChildren = canonical.challenges.filter((challenge) => (
+        challenge.kind !== 'advanced-lab' && (challenge.provenance.sourceIds || []).includes(sourceId)
+      ))
+      await page.goto(`${baseUrl}/explore/?source=${encodeURIComponent(sourceId)}`, { waitUntil: 'networkidle' })
+      assert.equal(await page.locator('[data-challenge-id]').count(), Math.min(24, expectedChildren.length))
+      assert.match(await page.locator('[data-explore-summary]').textContent(), /focused children of one historical source/)
+
+      const generatedSast = canonical.challenges.find((challenge) => challenge.id.startsWith('sast.atomic.'))
+      assert.ok(generatedSast)
+      const reviewPath = new URL(generatedSast.targets.review.route.replace(/^\.\//, '/'), baseUrl).pathname
+      const fixedPath = new URL(generatedSast.targets.repaired.route.replace(/^\.\//, '/'), baseUrl).pathname
+      assert.equal(await page.goto(`${baseUrl}${reviewPath}`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
+      assert.equal(await page.locator('[data-variant="review"]').count(), 1)
+      assert.equal(await page.goto(`${baseUrl}${fixedPath}`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
+      assert.equal(await page.locator('[data-variant="fixed"]').count(), 1)
+
+      const generatedIast = canonical.challenges.find((challenge) => challenge.id.startsWith('iast.atomic.'))
+      assert.ok(generatedIast)
+      const iastPath = new URL(generatedIast.targets.review.route.replace(/^\.\//, '/'), baseUrl).pathname
+      assert.equal(await page.goto(`${baseUrl}${iastPath}`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
+      assert.equal(await page.locator('[data-atomic-iast-id][data-variant="review"]').count(), 1)
+
+      await page.goto(`${baseUrl}/targets/angular-expression-dependency/review/`, { waitUntil: 'networkidle' })
+      await page.locator('#parse-expression').click()
+      assert.equal(await page.locator('#expression-result').textContent(), 'Result: 3')
+      await page.goto(`${baseUrl}/targets/angular-expression-dependency/fixed/`, { waitUntil: 'networkidle' })
+      await page.locator('#parse-expression').click()
+      assert.equal(await page.locator('#expression-result').textContent(), 'Result: 3')
+
       await page.goto(`${baseUrl}/`, { waitUntil: 'networkidle' })
-      assert.equal(await page.locator('[data-product-preview]').count(), 3)
-      assert.equal(await page.locator('[data-product-preview] .badge--preview').allTextContents().then((values) => values.every((value) => value === 'PTK Pro')), true)
+      assert.equal(await page.locator('[data-product-preview], .product-preview').count(), 0)
+      assert.equal(await page.getByText('PTK Pro', { exact: false }).count(), 0)
+      assert.equal(await page.getByText('Conference-ready path', { exact: true }).count(), 0)
+      assert.equal(await page.locator('footer a[href="./campaigns/"], footer a[href="./scanner/"]').count(), 0)
 
       await page.goto(`${baseUrl}/campaigns/deployment-response-boundary/`, { waitUntil: 'networkidle' })
       assert.equal(await page.locator('[data-route-server-panel]:visible').count(), 1)

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Related Child Tab · Repaired Launcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A repaired launcher preserving the same causally related child-tab workflow.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script defer src="./child-tab-launcher.js"></script>
+</head>
+<body data-playground-target="same-origin-child-tab-control" data-target-variant="fixed">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">SPA</span><span>Browser Security Playground</span></a><nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/same-origin-child-tab/">Mission</a><a href="./child-runtime.js">View child source</a><a href="../vulnerable/">Review target</a></nav></div></header>
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../campaigns/same-origin-child-tab/">Related child tab</a><span aria-hidden="true">/</span><span>Repaired launcher</span></nav>
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Related browser context</p><h1 id="target-title">Open the reviewed support child.</h1><p class="target-hero__lede">The opener relationship, same-origin navigation, dependency timing, and child context request are preserved.</p><div class="hero__actions"><button id="open-related-child" class="button" type="button">Open related child tab</button><button id="open-external-control" class="button button--secondary" type="button" hidden>Open different-origin control</button></div></div><dl class="target-facts" aria-label="Target facts"><div><dt>Variant</dt><dd>Repaired</dd></div><div><dt>Child</dt><dd>Same origin</dd></div><div><dt>Boundary</dt><dd>Opener chain</dd></div></dl></section>
+    <aside class="notice notice--success" aria-label="Repair summary"><span class="notice__icon" aria-hidden="true">✓</span><p><strong>Behavior-preserving control.</strong> The child validates the exact origin and opener before rendering message content as text.</p></aside>
+    <section class="widget-stage" aria-labelledby="launcher-title"><div class="widget-card"><div class="widget-card__heading"><div><p class="eyebrow">Workspace launcher</p><h2 id="launcher-title">Related-tab lifecycle</h2></div><span class="status-pill">Child tab</span></div><p>The evidence appears in the newly opened child rather than in this launcher document.</p></div><aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Launcher status</p><h2 id="proof-title">Browser ownership</h2><output id="child-launcher-status" class="proof-token" aria-live="polite">RELATED-CHILD-IDLE</output><p id="external-control-note">The different-origin control is available only on the local route-aware runtime.</p></aside></section>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>Direct control · Same-origin child · Explicit external control.</p><nav aria-label="Target links"><a href="../vulnerable/">Compare the review journey</a></nav></div></footer>
+</body>
+</html>

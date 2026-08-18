@@ -1,137 +1,79 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — Client-side JSON / SQL / XPath</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-
-
-  <script src="js/sources.js"></script>
-  <script src="js/client_injection/client_injection.js"></script>
-  <script src="js/summary.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', updateSummary);
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client-side JSON / SQL / XPath · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for Client-side JSON / SQL / XPath.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — Client-side JSON / SQL / XPath</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/client_injection.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-low">Low: <strong id="count-low">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-    <p class="meta">
-      Scenarios cover WebSQL, JSON.parse/eval, and XPath helpers that become injectable when driven by attacker strings.
-      Buttons exercise the same helpers with safe validation to contrast behaviour.
-    </p>
-
-
-    <div class="log" id="client-log">Logs will appear here.</div>
-
-    <h2 class="section-title">High severity — direct injection sinks</h2>
-    <div class="grid">
-      <div class="card" data-severity="high, low" id="ci-sql-taint">
-        <div class="card-meta">CI-H1 (High): WebSQL query built via string concatenation from <code>location.hash</code></div>
-        <pre>// inline-script[#1]
-(function(){
-  var name = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-  tx.executeSql("SELECT * FROM users WHERE name='" + name + "'", [], function(){}, onSqlError);
-})();</pre>
-        <script>
-          (function() {
-            var name = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-            tx.executeSql("SELECT * FROM users WHERE name='" + name + "'", [], function() {}, onSqlError);
-          })();
-        </script>
-      </div>
-
-
-      <div class="card" data-severity="high, low" id="ci-xpath-taint">
-        <div class="card-meta">CI-H3 (High): XPath expression built from tainted selector</div>
-        <pre>// inline-script[#3]
-function runTaintedXPath(input) {
-  var expr = "//user[name='" + input + "']";
-  document.evaluate(expr, document, null, XPathResult.ANY_TYPE, null);
-}
-runTaintedXPath(getLocationSearch());</pre>
-        <script>
-          function runTaintedXPath(input) {
-            var expr = "//user[name='" + input + "']";
-            document.evaluate(expr, document, null, XPathResult.ANY_TYPE, null);
-          }
-          runTaintedXPath(getLocationSearch());
-        </script>
-      </div>
-
-      <div class="card" data-severity="high, medium, low" id="ci-json-selector">
-        <div class="card-meta">CI-H4 (High): Parsed JSON controls selectors and payload</div>
-        <pre>// inline-script[#4]
-function applyJsonSelector(jsonText) {
-  try {
-    var data = JSON.parse(jsonText);
-  } catch (err) {
-    console.warn('JSON parse error', err);
-  }
-}
-applyJsonSelector(getLocationSearch())</pre>
-        <script>
-          function applyJsonSelector(jsonText) {
-            try {
-              var data = JSON.parse(jsonText);
-            } catch (err) {
-              console.warn('JSON parse error', err);
-            }
-          }
-          applyJsonSelector(getLocationSearch())
-        </script>
-      </div>
-
-            <div class="card" data-severity="high, low" id="ci-sql-review">
-        <div class="card-meta">CI-H5 (High): Any call to <code>executeSql</code> should be reviewed</div>
-        <pre data-severity="low">// inline-script[#5]
-function runQuery(query, params) {
-  tx.executeSql(query, params || []);
-}
-runQuery(getLocationSearch(), []);</pre>
-        <script>
-          function runQuery(query, params) {
-            tx.executeSql(query, params || []);
-          }
-          runQuery(getLocationSearch(), []);
-        </script>
-      </div>
-    </div>
-
-
-        <!-- External scenarios -->
-    <h2 class="section-title">External scenarios (click to run)</h2>
-    <div class="grid">
-
-      <div class="card" data-rule="taint">
-        <div class="card-meta"><strong>Insecure sets : user-controlled values, weak attributes</strong></div>
-        <pre data-severity="high, low">onclick="runJsonEval()"</pre>
-        <div class="controls">
-          <button class="btn" data-severity="high, low" onclick="runJsonEval()">EXT: eval from JSON.parse (no attributes) - High</button>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>Client-side JSON / SQL / XPath</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>Client-side JSON / SQL / XPath</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>4</strong> focused cases</span><span><strong>4</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-client-injection.ci-sql-taint">
+        <div class="family-case-card__meta"><span>Case 01</span><span>sql string construction</span></div>
+        <h2>CI-H1 (High): WebSQL query built via string concatenation from location.hash</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-client-injection/ci-sql-taint/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-client-injection/ci-sql-taint/fixed/">Open repaired control</a>
         </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-client-injection.ci-xpath-taint">
+        <div class="family-case-card__meta"><span>Case 02</span><span>xpath expression</span></div>
+        <h2>CI-H3 (High): XPath expression built from tainted selector</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-client-injection/ci-xpath-taint/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-client-injection/ci-xpath-taint/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-client-injection.ci-sql-review">
+        <div class="family-case-card__meta"><span>Case 03</span><span>sql string construction</span></div>
+        <h2>CI-H5 (High): Any call to executeSql</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-client-injection/ci-sql-review/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-client-injection/ci-sql-review/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-client-injection.button-1-ext-eval-from-json-parse-no-attributes-high">
+        <div class="family-case-card__meta"><span>Case 04</span><span>json to eval</span></div>
+        <h2>EXT: eval from JSON.parse (no attributes) - High</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-client-injection/button-1-ext-eval-from-json-parse-no-attributes-high/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-client-injection/button-1-ext-eval-from-json-parse-no-attributes-high/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-    </div>
-
-    <footer>
-      The <code>tx</code> helper mimics WebSQL and logs statements above. Use the controls to mutate payloads and compare safe
-      versus unsafe helper behaviour.
-    </footer>
-  </div>
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./client_injection.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

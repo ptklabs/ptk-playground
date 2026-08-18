@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Client template injection</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">Client template injection</h1>
+    </div>
+    <p class="meta">Templates compiled from tainted sources and rendered into HTML sinks.</p>
+
+    <div class="card" data-rule="taint" data-severity="high">
+      <div class="card-meta"><strong>INLINE-1 (High): underscore template from hash → innerHTML</strong></div>
+      <pre><code>const tmpl = _.template(location.hash);
+const output = tmpl({ name: 'user' });
+document.getElementById('tmpl-target').innerHTML = output;</code></pre>
+      <div id="tmpl-target" class="card muted" style="margin-top:10px;">Template output lands here</div>
+      <script>
+        (function () {
+          const tmpl = _.template(location.hash || "<%= name %>");
+          const output = tmpl({ name: 'user' });
+          document.getElementById('tmpl-target').innerHTML = output;
+        })();
+      </script>
+    </div>
+  </div>
+</body>
+</html>

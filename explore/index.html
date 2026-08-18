@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Explore · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore the complete OWASP PTK browser-security challenge and historical lab corpus.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+  <script type="module" src="../assets/js/catalogue-app.js"></script>
+</head>
+<body data-page="explore">
+  <a class="skip-link" href="#main">Skip to catalogue</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation">
+        <a href="../play/">Play</a>
+        <a href="./" aria-current="page">Explore</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <section class="engine-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>Explore</span></nav>
+      <p class="eyebrow">Complete public corpus</p>
+      <h1>Every challenge, control and retained lab.</h1>
+      <p class="engine-hero__lede">Focused paired challenges and broad historical labs share one searchable catalogue. Migration status stays visible so a combined page is never mistaken for an atomic proof. Automation can consume the <a href="../catalog/generated/scanner-targets.json">neutral generated target feed</a> directly.</p>
+    </section>
+
+    <section class="corpus-strip" aria-label="Corpus status">
+      <div><strong data-corpus-count="challenges">—</strong><span>catalogue entries</span></div>
+      <div><strong data-corpus-count="atomic">—</strong><span>focused or paired</span></div>
+      <div><strong data-corpus-count="advanced">—</strong><span>advanced labs</span></div>
+      <div><strong data-corpus-count="sources">—</strong><span>tracked authored files</span></div>
+      <div><strong data-corpus-count="pending">—</strong><span>pending scenario reviews</span></div>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Use only on systems you are authorised to test.</strong> Runtime-only cases remain disabled on static hosting instead of redirecting to an assumed localhost service.</p>
+    </aside>
+
+    <section class="section" aria-labelledby="explore-title">
+      <div class="section-heading"><div><p class="eyebrow">Filter the corpus</p><h2 id="explore-title">Find the browser behaviour you need</h2><p data-explore-summary>Loading catalogue…</p><a href="./" data-explore-source-clear hidden>Clear historical-source filter</a></div></div>
+      <div class="catalogue-panel">
+        <div class="filter-bar filter-bar--explore" aria-label="Challenge filters">
+          <div class="field"><label for="explore-search">Search</label><input id="explore-search" data-explore-search type="search" placeholder="DOM XSS, messages, storage, headers…"></div>
+          <div class="field"><label for="explore-engine">Engine</label><select id="explore-engine" data-explore-engine><option value="">All engines</option><option value="DAST">DAST</option><option value="SAST">SAST</option><option value="IAST">IAST</option><option value="SCA">SCA</option></select></div>
+          <div class="field"><label for="explore-kind">Format</label><select id="explore-kind" data-explore-kind><option value="">All formats</option><option value="atomic-challenge">Paired challenge</option><option value="atomic-observation">Focused observation</option><option value="advanced-lab">Advanced lab</option></select></div>
+          <div class="field"><label for="explore-status">Readiness</label><select id="explore-status" data-explore-status><option value="">All readiness</option><option value="paired">Has repaired control</option><option value="automation">Automation suitable</option><option value="compatibility">Compatibility labs</option></select></div>
+        </div>
+        <div class="challenge-grid" data-explore-results aria-live="polite"><p class="empty-state">Loading complete corpus…</p></div>
+        <div class="catalogue-more"><button class="button button--secondary" type="button" data-explore-more hidden>Show more</button></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Full-corpus catalogue · focused targets and preserved compatibility labs.</p><nav aria-label="Project links"><a href="../">Playground home</a><a href="../play/">Play a guided path</a><a href="https://github.com/ptklabs/ptk-playground#run-the-complete-local-demo-with-docker">Run locally</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a><a href="https://github.com/ptklabs/ptk-playground">Source</a></nav></div></footer>
+</body>
+</html>

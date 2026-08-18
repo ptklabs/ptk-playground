@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST DOM Clobbering</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 96px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST DOM Clobbering</h1>
+  <p class="note">Creates risky <code>id</code>/<code>name</code> DOM properties to demonstrate named-property clobbering behaviour.</p>
+
+  <div class="card">
+    <label for="name-payload">Risky DOM name/id</label>
+    <textarea id="name-payload">location</textarea>
+    <button id="prime">Prime taint sources</button>
+    <button id="btn-form">Create form[name=payload]</button>
+    <button id="btn-anchor">Create a[id=payload]</button>
+    <div id="host"></div>
+  </div>
+
+  <script>
+    function primeSources(value) {
+      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+      localStorage.setItem('iast_payload', value);
+      sessionStorage.setItem('iast_payload', value);
+      window.name = value;
+    }
+
+    const payloadField = document.getElementById('name-payload');
+    const host = document.getElementById('host');
+
+    document.getElementById('prime').onclick = () => {
+      primeSources(payloadField.value);
+      alert('DOM clobbering value primed.');
+    };
+
+    document.getElementById('btn-form').onclick = () => {
+      const form = document.createElement('form');
+      form.setAttribute('name', payloadField.value);
+      form.innerHTML = '<input name="next" value="/dashboard">';
+      host.replaceChildren(form);
+    };
+
+    document.getElementById('btn-anchor').onclick = () => {
+      const anchor = document.createElement('a');
+      anchor.id = payloadField.value;
+      anchor.href = '#clobbered';
+      anchor.textContent = 'clobbered';
+      host.replaceChildren(anchor);
+    };
+  </script>
+</body>
+</html>

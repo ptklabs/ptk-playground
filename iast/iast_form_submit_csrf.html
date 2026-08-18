@@ -2,89 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Form Submit CSRF</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
-  </style>
+  <title>Form Submit and requestSubmit · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Form Submit and requestSubmit.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Form Submit and requestSubmit</h1>
-  <p class="note">Exercises <code>iast_form_submit_csrf</code> by executing tainted form targets through <code>submit()</code> and <code>requestSubmit()</code>.</p>
-
-  <div class="card">
-    <label for="payload">Form target payload</label>
-    <input id="payload" value="https://example.org/form-submit?ptk=1">
-    <label for="sourceType">Source type</label>
-    <select id="sourceType">
-      <option value="query">query</option>
-      <option value="hashQuery">hashQuery</option>
-      <option value="pathname">pathname</option>
-      <option value="postMessage">postMessage</option>
-      <option value="windowName">window.name</option>
-    </select>
-    <button id="prime">Prime selected source</button>
-  </div>
-
-  <div class="card">
-    <form id="target-form" method="POST">
-      <button id="submit-btn" type="submit">Submit form</button>
-    </form>
-    <button id="btn-set-action">Set form.action from source</button>
-    <button id="btn-set-formaction">Set submitter formAction from source</button>
-    <button id="btn-submit">Call form.submit()</button>
-    <button id="btn-request-submit">Call form.requestSubmit(button)</button>
-  </div>
-
-  <script>
-    let lastMessage = null;
-    function selectedValue() {
-      const type = document.getElementById('sourceType').value;
-      const rawHash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-      if (type === 'query') return new URLSearchParams(location.search).get('payload') || document.getElementById('payload').value;
-      if (type === 'hashQuery') return new URLSearchParams(rawHash).get('payload') || document.getElementById('payload').value;
-      if (type === 'pathname') return location.pathname || document.getElementById('payload').value;
-      if (type === 'postMessage') return lastMessage || document.getElementById('payload').value;
-      if (type === 'windowName') return window.name || document.getElementById('payload').value;
-      return document.getElementById('payload').value;
-    }
-
-    window.addEventListener('message', (event) => {
-      if (typeof event.data === 'string') lastMessage = event.data;
-    });
-
-    document.getElementById('prime').onclick = () => {
-      const payload = document.getElementById('payload').value;
-      const type = document.getElementById('sourceType').value;
-      if (type === 'query') history.replaceState(null, '', '?payload=' + encodeURIComponent(payload));
-      if (type === 'hashQuery') location.hash = 'payload=' + encodeURIComponent(payload);
-      if (type === 'pathname') history.replaceState(null, '', '/' + encodeURIComponent(payload).replace(/%2F/g, '/'));
-      if (type === 'postMessage') window.postMessage(payload, '*');
-      if (type === 'windowName') window.name = payload;
-    };
-
-    document.getElementById('btn-set-action').onclick = () => {
-      document.getElementById('target-form').action = selectedValue();
-    };
-
-    document.getElementById('btn-set-formaction').onclick = () => {
-      document.getElementById('submit-btn').formAction = selectedValue();
-    };
-
-    document.getElementById('btn-submit').onclick = () => {
-      document.getElementById('target-form').submit();
-    };
-
-    document.getElementById('btn-request-submit').onclick = () => {
-      document.getElementById('target-form').requestSubmit(document.getElementById('submit-btn'));
-    };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_form_submit_csrf.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Form Submit and requestSubmit</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Form Submit and requestSubmit</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>5</strong> focused cases</span><span><strong>5</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submit-csrf.submit-btn">
+        <div class="family-case-card__meta"><span>Case 01</span><span>form submission</span></div>
+        <h2>Submit form</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submit-csrf/submit-btn/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submit-csrf/submit-btn/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submit-csrf.btn-set-action">
+        <div class="family-case-card__meta"><span>Case 02</span><span>form submission</span></div>
+        <h2>Set form.action from source</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submit-csrf/btn-set-action/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submit-csrf/btn-set-action/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submit-csrf.btn-set-formaction">
+        <div class="family-case-card__meta"><span>Case 03</span><span>form submission</span></div>
+        <h2>Set submitter formAction from source</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submit-csrf/btn-set-formaction/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submit-csrf/btn-set-formaction/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submit-csrf.btn-submit">
+        <div class="family-case-card__meta"><span>Case 04</span><span>form submission</span></div>
+        <h2>Call form.submit()</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submit-csrf/btn-submit/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submit-csrf/btn-submit/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submit-csrf.btn-request-submit">
+        <div class="family-case-card__meta"><span>Case 05</span><span>form submission</span></div>
+        <h2>Call form.requestSubmit(button)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submit-csrf/btn-request-submit/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submit-csrf/btn-request-submit/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_form_submit_csrf.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

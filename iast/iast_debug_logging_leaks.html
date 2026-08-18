@@ -2,77 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Debug Logging Leaks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    textarea { min-height: 90px; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>Debug Logging Module · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Debug Logging Module.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Debug Logging Module</h1>
-  <p class="note">Logs tainted data via <code>console.log</code> and <code>console.error</code> to trigger <code>iast_debug_logging_leaks</code>.</p>
-
-  <div class="card">
-    <label for="secret">Sensitive payload</label>
-    <textarea id="secret" placeholder="api_key=TAINT-123"></textarea>
-    <button id="prime">Prime taint sources</button>
-    <p class="note">Sources include ?secret=..., hash fragments, or this textarea when primed.</p>
-  </div>
-
-  <div class="card">
-    <button id="btn-log">console.log(secret)</button>
-    <button id="btn-error">console.error(secret)</button>
-  </div>
-
-  <script>
-    function getPayload() {
-      const params = new URLSearchParams(location.search);
-      return params.get('secret') || (location.hash ? decodeURIComponent(location.hash.slice(1)) : '');
-    }
-
-    function primeSources(value) {
-      if (!value) return;
-      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
-      localStorage.setItem('iast_payload', value);
-      sessionStorage.setItem('iast_payload', value);
-      window.name = value;
-    }
-
-    const secretField = document.getElementById('secret');
-    secretField.value = getPayload() || 'api_key=TAINT-123';
-
-    document.getElementById('prime').onclick = () => {
-      primeSources(secretField.value);
-      alert('Taint sources primed for console payload.');
-    };
-
-    document.getElementById('btn-log').onclick = () => {
-      console.log('IAST debug log leak ->', secretField.value);
-    };
-
-    document.getElementById('btn-error').onclick = () => {
-      console.error('IAST debug error leak ->', secretField.value);
-    };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_debug_logging_leaks.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Debug Logging Module</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Debug Logging Module</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>2</strong> focused cases</span><span><strong>2</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-debug-logging-leaks.btn-log">
+        <div class="family-case-card__meta"><span>Case 01</span><span>debug log</span></div>
+        <h2>console.log(secret)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-debug-logging-leaks/btn-log/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-debug-logging-leaks/btn-log/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-debug-logging-leaks.btn-error">
+        <div class="family-case-card__meta"><span>Case 02</span><span>debug log</span></div>
+        <h2>console.error(secret)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-debug-logging-leaks/btn-error/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-debug-logging-leaks/btn-error/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_debug_logging_leaks.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

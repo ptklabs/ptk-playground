@@ -2,181 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Form Submission Hijack</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, button, select, textarea { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    textarea { min-height: 70px; }
-    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .preview { word-break: break-all; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; margin-top: 8px; }
-    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
-  </style>
+  <title>Form Submission Hijack and Dangerous Form Schemes · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Form Submission Hijack and Dangerous Form Schemes.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Form Submission Hijack and Dangerous Form Schemes</h1>
-  <p class="note">Covers <code>iast_form_submission_hijack</code> and <code>iast_dangerous_form_scheme_execution</code> with route, body, message, and referrer sources.</p>
-
-  <div class="card">
-    <label for="payload">Form target payload</label>
-    <input id="payload" type="text" value="https://example.org/form-hijack?ptk=1">
-    <label for="sourceType">Source type</label>
-    <select id="sourceType">
-      <option value="query">query</option>
-      <option value="hashQuery">hashQuery</option>
-      <option value="hashRoute">hashRoute</option>
-      <option value="pathname">pathname</option>
-      <option value="pathSegment">pathSegment</option>
-      <option value="clientRoute">clientRoute</option>
-      <option value="historyState">historyState</option>
-      <option value="bodyParam">bodyParam</option>
-      <option value="jsonBodyField">jsonBodyField</option>
-      <option value="formDataField">formDataField</option>
-      <option value="graphqlVariable">graphqlVariable</option>
-      <option value="postMessage">postMessage</option>
-      <option value="windowName">window.name</option>
-      <option value="referrer">referrer (open via helper)</option>
-      <option value="inline">inline input only</option>
-    </select>
-    <button id="prime">Prime selected source</button>
-    <p id="status" class="note">No source primed yet.</p>
-  </div>
-
-  <div class="card">
-    <form id="target-form" method="GET">
-      <button id="submit-btn" type="submit">Submit form</button>
-    </form>
-    <button id="btn-action">form.action = payload</button>
-    <button id="btn-formaction">button.formAction = payload</button>
-    <button id="btn-js-action">form.action = javascript:payload</button>
-    <button id="btn-js-formaction">button.formAction = javascript:payload</button>
-    <button id="btn-data-action">form.action = data:payload</button>
-    <button id="btn-data-formaction">button.formAction = data:payload</button>
-    <div id="preview" class="preview">(form target preview)</div>
-  </div>
-
-  <script>
-    const payloadField = document.getElementById('payload');
-    const status = document.getElementById('status');
-    let lastMessage = null;
-    let lastBodyPayload = null;
-
-    function currentSourceValue() {
-      const selected = document.getElementById('sourceType').value;
-      const params = new URLSearchParams(location.search);
-      const rawHash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-      const hashParams = new URLSearchParams(rawHash.replace(/^#?/, ''));
-      if (selected === 'query') return params.get('payload') || payloadField.value;
-      if (selected === 'hashQuery') return hashParams.get('payload') || payloadField.value;
-      if (selected === 'hashRoute') return rawHash || payloadField.value;
-      if (selected === 'pathname') return location.pathname || payloadField.value;
-      if (selected === 'pathSegment') return location.pathname.split('/').filter(Boolean).pop() || payloadField.value;
-      if (selected === 'clientRoute') return payloadField.value;
-      if (selected === 'historyState') return (history.state && history.state.route) || payloadField.value;
-      if (selected === 'bodyParam' || selected === 'jsonBodyField' || selected === 'formDataField' || selected === 'graphqlVariable') return lastBodyPayload || payloadField.value;
-      if (selected === 'postMessage') return lastMessage || payloadField.value;
-      if (selected === 'windowName') return window.name || payloadField.value;
-      if (selected === 'referrer') return params.get('payload') || payloadField.value;
-      return payloadField.value;
-    }
-
-    async function primeBodySource(type, payload) {
-      if (type === 'bodyParam') {
-        await fetch(location.pathname, {
-          method: 'POST',
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
-          body: 'target=' + encodeURIComponent(payload)
-        }).catch(() => {});
-      } else if (type === 'jsonBodyField') {
-        await fetch(location.pathname, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ target: payload })
-        }).catch(() => {});
-      } else if (type === 'formDataField') {
-        const fd = new FormData();
-        fd.set('target', payload);
-        await fetch(location.pathname, { method: 'POST', body: fd }).catch(() => {});
-      } else if (type === 'graphqlVariable') {
-        await fetch(location.pathname, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ query: 'query Demo($target:String!){ demo(target:$target) }', variables: { target: payload } })
-        }).catch(() => {});
-      }
-      lastBodyPayload = payload;
-    }
-
-    function updatePreview() {
-      const form = document.getElementById('target-form');
-      const btn = document.getElementById('submit-btn');
-      document.getElementById('preview').textContent =
-        'form.action=' + (form.getAttribute('action') || form.action || '(empty)') + '\n' +
-        'button.formAction=' + (btn.getAttribute('formaction') || btn.formAction || '(empty)');
-    }
-
-    document.getElementById('prime').onclick = async () => {
-      const type = document.getElementById('sourceType').value;
-      const payload = payloadField.value;
-      if (type === 'query') history.replaceState(null, '', '?payload=' + encodeURIComponent(payload));
-      if (type === 'hashQuery') location.hash = 'payload=' + encodeURIComponent(payload);
-      if (type === 'hashRoute') location.hash = encodeURIComponent(payload);
-      if (type === 'pathname' || type === 'clientRoute') history.replaceState({ route: payload }, '', payload);
-      if (type === 'pathSegment') history.replaceState({ route: payload }, '', '/fixtures/' + encodeURIComponent(payload));
-      if (type === 'historyState') history.replaceState({ route: payload }, '', location.href);
-      if (type === 'bodyParam' || type === 'jsonBodyField' || type === 'formDataField' || type === 'graphqlVariable') await primeBodySource(type, payload);
-      if (type === 'postMessage') window.postMessage(payload, '*');
-      if (type === 'windowName') window.name = payload;
-      status.textContent = 'Primed source: ' + type;
-      updatePreview();
-    };
-
-    window.addEventListener('message', (event) => {
-      if (typeof event.data === 'string') {
-        lastMessage = event.data;
-        status.textContent = 'Captured postMessage payload.';
-      }
-    });
-
-    function currentJavascriptTarget() {
-      return 'javascript:' + currentSourceValue();
-    }
-
-    function currentDataTarget() {
-      return 'data:text/html,' + encodeURIComponent(currentSourceValue());
-    }
-
-    document.getElementById('btn-action').onclick = () => {
-      document.getElementById('target-form').setAttribute('action', currentSourceValue());
-      updatePreview();
-    };
-    document.getElementById('btn-formaction').onclick = () => {
-      document.getElementById('submit-btn').setAttribute('formaction', currentSourceValue());
-      updatePreview();
-    };
-    document.getElementById('btn-js-action').onclick = () => {
-      document.getElementById('target-form').setAttribute('action', currentJavascriptTarget());
-      updatePreview();
-    };
-    document.getElementById('btn-js-formaction').onclick = () => {
-      document.getElementById('submit-btn').setAttribute('formaction', currentJavascriptTarget());
-      updatePreview();
-    };
-    document.getElementById('btn-data-action').onclick = () => {
-      document.getElementById('target-form').setAttribute('action', currentDataTarget());
-      updatePreview();
-    };
-    document.getElementById('btn-data-formaction').onclick = () => {
-      document.getElementById('submit-btn').setAttribute('formaction', currentDataTarget());
-      updatePreview();
-    };
-
-    payloadField.value = new URLSearchParams(location.search).get('payload') || 'https://example.org/form-hijack?ptk=1';
-    updatePreview();
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_form_submission_hijack.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Form Submission Hijack and Dangerous Form Schemes</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Form Submission Hijack and Dangerous Form Schemes</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>7</strong> focused cases</span><span><strong>7</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submission-hijack.submit-btn">
+        <div class="family-case-card__meta"><span>Case 01</span><span>form navigation</span></div>
+        <h2>Submit form</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submission-hijack/submit-btn/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submission-hijack/submit-btn/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submission-hijack.btn-action">
+        <div class="family-case-card__meta"><span>Case 02</span><span>form navigation</span></div>
+        <h2>form.action = payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submission-hijack/btn-action/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submission-hijack/btn-action/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submission-hijack.btn-formaction">
+        <div class="family-case-card__meta"><span>Case 03</span><span>form navigation</span></div>
+        <h2>button.formAction = payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submission-hijack/btn-formaction/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submission-hijack/btn-formaction/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submission-hijack.btn-js-action">
+        <div class="family-case-card__meta"><span>Case 04</span><span>form navigation</span></div>
+        <h2>form.action = javascript:payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submission-hijack/btn-js-action/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submission-hijack/btn-js-action/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submission-hijack.btn-js-formaction">
+        <div class="family-case-card__meta"><span>Case 05</span><span>form navigation</span></div>
+        <h2>button.formAction = javascript:payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submission-hijack/btn-js-formaction/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submission-hijack/btn-js-formaction/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submission-hijack.btn-data-action">
+        <div class="family-case-card__meta"><span>Case 06</span><span>form navigation</span></div>
+        <h2>form.action = data:payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submission-hijack/btn-data-action/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submission-hijack/btn-data-action/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-form-submission-hijack.btn-data-formaction">
+        <div class="family-case-card__meta"><span>Case 07</span><span>form navigation</span></div>
+        <h2>button.formAction = data:payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-form-submission-hijack/btn-data-formaction/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-form-submission-hijack/btn-data-formaction/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_form_submission_hijack.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

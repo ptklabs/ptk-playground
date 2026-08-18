@@ -1,0 +1,93 @@
+{
+  "schema": "owasp-ptk-playground-playlists/v1",
+  "version": 1,
+  "playlists": [
+    {
+      "id": "browser-context-demo",
+      "title": "The browser is the source of truth",
+      "summary": "A concise presenter journey connecting loaded code, live runtime behavior, authenticated traffic and transient SPA state.",
+      "durationMinutes": 12,
+      "challengeIds": [
+        "support-widget",
+        "session-bound-order-search",
+        "transient-route-notice"
+      ]
+    },
+    {
+      "id": "current-browser-missions",
+      "title": "Current browser-security missions",
+      "summary": "Explore every implemented review and repaired mission without hiding the wider historical corpus.",
+      "challengeIds": [
+        "support-widget",
+        "deployment-response-boundary",
+        "session-bound-order-search",
+        "on-demand-analytics",
+        "saved-workspace",
+        "live-profile-preview",
+        "transient-route-notice",
+        "imported-request-preferences",
+        "history-order-router",
+        "lazy-route-module",
+        "same-origin-child-tab"
+      ]
+    },
+    {
+      "id": "static-to-runtime-evidence",
+      "title": "From static code to runtime evidence",
+      "summary": "Compare what browser-aware SAST can identify in collected code with what IAST proves only after state, responses and actions reach a live sink.",
+      "durationMinutes": 18,
+      "challengeIds": [
+        "support-widget",
+        "live-profile-preview",
+        "saved-workspace",
+        "transient-route-notice",
+        "imported-request-preferences"
+      ]
+    },
+    {
+      "id": "browser-state-and-navigation",
+      "title": "State, child documents and transient routes",
+      "summary": "Follow browser-owned state across actions, a same-origin child document, imported configuration and a short-lived SPA route.",
+      "durationMinutes": 15,
+      "challengeIds": [
+        "saved-workspace",
+        "imported-request-preferences",
+        "live-profile-preview",
+        "transient-route-notice"
+      ]
+    },
+    {
+      "id": "browser-dast-evidence",
+      "title": "DAST where the browser provides the request",
+      "summary": "Compare response-only evidence, authenticated POST traffic and a transient client-side route that a URL-only scanner can miss.",
+      "durationMinutes": 14,
+      "challengeIds": [
+        "deployment-response-boundary",
+        "session-bound-order-search",
+        "transient-route-notice"
+      ]
+    },
+    {
+      "id": "dependency-timing",
+      "title": "Dependencies at load time and after interaction",
+      "summary": "Exercise initial, action-loaded and end-of-life dependency cases with behavior-preserving controls.",
+      "durationMinutes": 10,
+      "challengeIds": [
+        "support-widget",
+        "on-demand-analytics",
+        "angular-expression-dependency"
+      ]
+    },
+    {
+      "id": "spa-deep-dive",
+      "title": "SPA Deep Dive",
+      "summary": "Follow browser-owned navigation, late-loaded code and a causally related child tab across one focused three-mission journey.",
+      "durationMinutes": 18,
+      "challengeIds": [
+        "history-order-router",
+        "lazy-route-module",
+        "same-origin-child-tab"
+      ]
+    }
+  ]
+}

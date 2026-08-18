@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>DOM-based test cases — Client-side JSON / SQL / XPath</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="./css/style.css" type="text/css" />
+
+
+  <script src="js/sources.js"></script>
+  <script src="js/client_injection/client_injection.js"></script>
+  <script src="js/summary.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', updateSummary);
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="topbar">
+      <a class="back" href="index.html">← Back to index</a>
+      <h1 class="title">DOM-based test cases — Client-side JSON / SQL / XPath</h1>
+    </div>
+    <div class="summary">
+      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
+      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
+      <span class="badge b-low">Low: <strong id="count-low">0</strong></span>
+      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
+      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
+    </div>
+    <p class="meta">
+      Scenarios cover WebSQL, JSON.parse/eval, and XPath helpers that become injectable when driven by attacker strings.
+      Buttons exercise the same helpers with safe validation to contrast behaviour.
+    </p>
+
+
+    <div class="log" id="client-log">Logs will appear here.</div>
+
+    <h2 class="section-title">High severity — direct injection sinks</h2>
+    <div class="grid">
+      <div class="card" data-severity="high, low" id="ci-sql-taint">
+        <div class="card-meta">CI-H1 (High): WebSQL query built via string concatenation from <code>location.hash</code></div>
+        <pre>// inline-script[#1]
+(function(){
+  var name = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+  tx.executeSql("SELECT * FROM users WHERE name='" + name + "'", [], function(){}, onSqlError);
+})();</pre>
+        <script>
+          (function() {
+            var name = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+            tx.executeSql("SELECT * FROM users WHERE name='" + name + "'", [], function() {}, onSqlError);
+          })();
+        </script>
+      </div>
+
+
+      <div class="card" data-severity="high, low" id="ci-xpath-taint">
+        <div class="card-meta">CI-H3 (High): XPath expression built from tainted selector</div>
+        <pre>// inline-script[#3]
+function runTaintedXPath(input) {
+  var expr = "//user[name='" + input + "']";
+  document.evaluate(expr, document, null, XPathResult.ANY_TYPE, null);
+}
+runTaintedXPath(getLocationSearch());</pre>
+        <script>
+          function runTaintedXPath(input) {
+            var expr = "//user[name='" + input + "']";
+            document.evaluate(expr, document, null, XPathResult.ANY_TYPE, null);
+          }
+          runTaintedXPath(getLocationSearch());
+        </script>
+      </div>
+
+      <div class="card" data-severity="high, medium, low" id="ci-json-selector">
+        <div class="card-meta">CI-H4 (High): Parsed JSON controls selectors and payload</div>
+        <pre>// inline-script[#4]
+function applyJsonSelector(jsonText) {
+  try {
+    var data = JSON.parse(jsonText);
+  } catch (err) {
+    console.warn('JSON parse error', err);
+  }
+}
+applyJsonSelector(getLocationSearch())</pre>
+        <script>
+          function applyJsonSelector(jsonText) {
+            try {
+              var data = JSON.parse(jsonText);
+            } catch (err) {
+              console.warn('JSON parse error', err);
+            }
+          }
+          applyJsonSelector(getLocationSearch())
+        </script>
+      </div>
+
+            <div class="card" data-severity="high, low" id="ci-sql-review">
+        <div class="card-meta">CI-H5 (High): Any call to <code>executeSql</code> should be reviewed</div>
+        <pre data-severity="low">// inline-script[#5]
+function runQuery(query, params) {
+  tx.executeSql(query, params || []);
+}
+runQuery(getLocationSearch(), []);</pre>
+        <script>
+          function runQuery(query, params) {
+            tx.executeSql(query, params || []);
+          }
+          runQuery(getLocationSearch(), []);
+        </script>
+      </div>
+    </div>
+
+
+        <!-- External scenarios -->
+    <h2 class="section-title">External scenarios (click to run)</h2>
+    <div class="grid">
+
+      <div class="card" data-rule="taint">
+        <div class="card-meta"><strong>Insecure sets : user-controlled values, weak attributes</strong></div>
+        <pre data-severity="high, low">onclick="runJsonEval()"</pre>
+        <div class="controls">
+          <button class="btn" data-severity="high, low" onclick="runJsonEval()">EXT: eval from JSON.parse (no attributes) - High</button>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      The <code>tx</code> helper mimics WebSQL and logs statements above. Use the controls to mutate payloads and compare safe
+      versus unsafe helper behaviour.
+    </footer>
+  </div>
+
+</body>
+
+</html>

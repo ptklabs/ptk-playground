@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Prototype Pollution Impact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    textarea, button, input { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 110px; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .log { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; min-height: 68px; }
+    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Prototype Pollution Impact</h1>
+  <p class="note">Uses a controlled prototype write on <code>__proto__</code>, then passes the polluted object into <code>fetch(init)</code> so the free impact rule and the full write rule can both be validated.</p>
+
+  <div class="card">
+    <label for="pollution-json">Prototype payload JSON</label>
+    <textarea id="pollution-json">{ "__proto__": { "credentials": "include" } }</textarea>
+    <label for="target-url">Fetch target URL</label>
+    <input id="target-url" type="text" value="./data/response-fields.json">
+    <button id="btn-trigger">Object.assign({}, payload) then fetch(url, init)</button>
+    <button id="btn-write">Reflect.set({}, "__proto__", payload.__proto__)</button>
+  </div>
+
+  <div class="card">
+    <div id="log" class="log">(waiting)</div>
+  </div>
+
+  <script>
+    const log = document.getElementById('log');
+
+    document.getElementById('btn-trigger').onclick = async () => {
+      const raw = document.getElementById('pollution-json').value;
+      const targetUrl = document.getElementById('target-url').value || './data/response-fields.json';
+      try {
+        const parsed = JSON.parse(raw);
+        const init = Object.assign({}, parsed);
+        log.textContent =
+          'Own keys on init: ' + JSON.stringify(Object.keys(init)) + '\n' +
+          'Inherited credentials: ' + String(init.credentials);
+        await fetch(targetUrl, init).catch(() => {});
+      } catch (err) {
+        log.textContent = 'Trigger failed: ' + (err && err.message ? err.message : err);
+      }
+    };
+
+    document.getElementById('btn-write').onclick = () => {
+      const raw = document.getElementById('pollution-json').value;
+      try {
+        const parsed = JSON.parse(raw);
+        const target = {};
+        Reflect.set(target, '__proto__', parsed.__proto__);
+        log.textContent =
+          'Reflect.set applied\n' +
+          'Inherited credentials: ' + String(target.credentials);
+      } catch (err) {
+        log.textContent = 'Write failed: ' + (err && err.message ? err.message : err);
+      }
+    };
+  </script>
+</body>
+</html>

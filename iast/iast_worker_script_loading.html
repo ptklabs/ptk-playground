@@ -2,98 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Worker Script Loading</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>Worker Script Loading Fixture · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Worker Script Loading Fixture.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Worker Script Loading Fixture</h1>
-  <p class="note">Covers <code>navigator.serviceWorker.register</code> and the <code>Worker</code> constructor for the full <code>iast_dynamic_import_loading</code> loader-path module.</p>
-
-  <div class="card">
-    <label for="sw-url">ServiceWorker script URL</label>
-    <input id="sw-url" type="text" placeholder="/sw-leak.js">
-    <label for="worker-url">Web Worker script URL</label>
-    <input id="worker-url" type="text" placeholder="/worker-leak.js">
-    <button id="prime">Prime taint sources</button>
-    <p class="note">Supply URLs via ?sw=... and ?worker=..., the hash, or the fields above then prime.</p>
-  </div>
-
-  <div class="card">
-    <button id="btn-sw">navigator.serviceWorker.register()</button>
-    <button id="btn-worker">new Worker()</button>
-    <p class="note">Service worker registration requires HTTPS/localhost. Both calls may fail if scripts do not exist; the IAST hook still observes them.</p>
-  </div>
-
-  <script>
-    function getParam(name) {
-      const params = new URLSearchParams(location.search);
-      return params.get(name) || '';
-    }
-
-    function getHash() {
-      return location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-    }
-
-    function primeSources(value) {
-      if (!value) return;
-      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
-      localStorage.setItem('iast_payload', value);
-      sessionStorage.setItem('iast_payload', value);
-      window.name = value;
-    }
-
-    const swField = document.getElementById('sw-url');
-    const workerField = document.getElementById('worker-url');
-    swField.value = getParam('sw') || getHash() || '/sw-leak.js';
-    workerField.value = getParam('worker') || '/worker-leak.js';
-
-    document.getElementById('prime').onclick = () => {
-      primeSources(swField.value + ' ' + workerField.value);
-      alert('Taint primed for worker URLs.');
-    };
-
-    document.getElementById('btn-sw').onclick = async () => {
-      if (!('serviceWorker' in navigator)) {
-        alert('navigator.serviceWorker is unavailable in this context.');
-        return;
-      }
-      try {
-        await navigator.serviceWorker.register(swField.value);
-      } catch (err) {
-        console.warn('ServiceWorker registration failed (expected in some setups):', err);
-      }
-    };
-
-    document.getElementById('btn-worker').onclick = () => {
-      try {
-        const worker = new Worker(workerField.value);
-        worker.terminate();
-      } catch (err) {
-        console.warn('Worker construction failed:', err);
-      }
-    };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_worker_script_loading.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Worker Script Loading Fixture</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Worker Script Loading Fixture</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>2</strong> focused cases</span><span><strong>2</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-worker-script-loading.btn-sw">
+        <div class="family-case-card__meta"><span>Case 01</span><span>worker script</span></div>
+        <h2>navigator.serviceWorker.register()</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-worker-script-loading/btn-sw/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-worker-script-loading/btn-sw/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-worker-script-loading.btn-worker">
+        <div class="family-case-card__meta"><span>Case 02</span><span>worker script</span></div>
+        <h2>new Worker()</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-worker-script-loading/btn-worker/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-worker-script-loading/btn-worker/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_worker_script_loading.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

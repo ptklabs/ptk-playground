@@ -2,162 +2,150 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Response Field Reachability</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-    button, input { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .sink-box { min-height: 64px; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; }
-    code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 6px; }
-    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-  </style>
+  <title>Response Field Reachability · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Response Field Reachability.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Response Field Reachability</h1>
-  <p class="note">Fetches a same-origin JSON document, registers response-field taint sources, then routes those values into DOM sinks and form targets.</p>
-
-  <div class="card">
-    <label for="response-url">Response JSON URL</label>
-    <input id="response-url" type="text" value="./data/response-fields.json">
-    <button id="btn-load">Load response payload</button>
-    <p id="status" class="note">No response loaded yet.</p>
-  </div>
-
-  <div class="card grid">
-    <div>
-      <h3>DOM sinks</h3>
-      <button id="btn-inner">response.html → innerHTML</button>
-      <button id="btn-outer">response.html → outerHTML</button>
-      <button id="btn-adjacent">response.htmlFragment → insertAdjacentHTML</button>
-      <button id="btn-write">response.html → document.write</button>
-      <button id="btn-mutation">response.htmlFragment → appendChild(fragment)</button>
-      <button id="btn-parser">response.html → DOMParser.parseFromString</button>
-      <button id="btn-fragment">response.contextualFragment → Range.createContextualFragment</button>
-      <div id="inner-target" class="sink-box" style="margin-top:8px;">(DOM target)</div>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_response_field_reachability.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
     </div>
-
-    <div>
-      <h3>Form targets</h3>
-      <form id="response-form" method="GET">
-        <button id="response-submit" type="submit">Submit form</button>
-      </form>
-      <button id="btn-action">response.formAction → form.action</button>
-      <button id="btn-formaction">response.formAction → button.formAction</button>
-      <button id="btn-action-js">response.formJavascriptAction → form.action</button>
-      <button id="btn-formaction-js">response.formJavascriptAction → button.formAction</button>
-      <div id="action-preview" class="sink-box" style="margin-top:8px;">(form target preview)</div>
-    </div>
-  </div>
-
-  <script>
-    let responsePayload = null;
-
-    async function loadPayload() {
-      const url = document.getElementById('response-url').value || './data/response-fields.json';
-      const res = await fetch(url, { credentials: 'same-origin' });
-      responsePayload = await res.json();
-      document.getElementById('status').textContent =
-        'Loaded response payload fields: ' + Object.keys(responsePayload).join(', ');
-      return responsePayload;
-    }
-
-    function ensurePayload() {
-      if (!responsePayload) {
-        throw new Error('Load the response payload first.');
-      }
-      return responsePayload;
-    }
-
-    document.getElementById('btn-load').onclick = async () => {
-      try {
-        await loadPayload();
-      } catch (err) {
-        console.warn('Failed to load payload', err);
-        document.getElementById('status').textContent = 'Load failed: ' + (err && err.message ? err.message : err);
-      }
-    };
-
-    document.getElementById('btn-inner').onclick = () => {
-      const payload = ensurePayload();
-      document.getElementById('inner-target').innerHTML = payload.html;
-    };
-
-    document.getElementById('btn-outer').onclick = () => {
-      const payload = ensurePayload();
-      document.getElementById('inner-target').outerHTML = '<div id="inner-target" class="sink-box">' + payload.html + '</div>';
-    };
-
-    document.getElementById('btn-adjacent').onclick = () => {
-      const payload = ensurePayload();
-      document.getElementById('inner-target').insertAdjacentHTML('beforeend', payload.htmlFragment);
-    };
-
-    document.getElementById('btn-write').onclick = () => {
-      const payload = ensurePayload();
-      document.open();
-      document.write(payload.html);
-      document.close();
-    };
-
-    document.getElementById('btn-mutation').onclick = () => {
-      const payload = ensurePayload();
-      const frag = document.createRange().createContextualFragment(payload.htmlFragment);
-      document.getElementById('inner-target').appendChild(frag);
-    };
-
-    document.getElementById('btn-parser').onclick = () => {
-      const payload = ensurePayload();
-      const doc = new DOMParser().parseFromString(payload.html, 'text/html');
-      document.getElementById('inner-target').textContent = doc.body.innerHTML;
-    };
-
-    document.getElementById('btn-fragment').onclick = () => {
-      const payload = ensurePayload();
-      const frag = document.createRange().createContextualFragment(payload.contextualFragment);
-      const host = document.getElementById('inner-target');
-      host.replaceChildren();
-      host.appendChild(frag);
-    };
-
-    function updateFormPreview() {
-      const form = document.getElementById('response-form');
-      const btn = document.getElementById('response-submit');
-      document.getElementById('action-preview').textContent =
-        'form.action=' + (form.getAttribute('action') || form.action || '(empty)') + '\n' +
-        'button.formAction=' + (btn.getAttribute('formaction') || btn.formAction || '(empty)');
-    }
-
-    document.getElementById('btn-action').onclick = () => {
-      const payload = ensurePayload();
-      document.getElementById('response-form').action = payload.formAction;
-      updateFormPreview();
-    };
-
-    document.getElementById('btn-formaction').onclick = () => {
-      const payload = ensurePayload();
-      document.getElementById('response-submit').formAction = payload.formAction;
-      updateFormPreview();
-    };
-
-    document.getElementById('btn-action-js').onclick = () => {
-      const payload = ensurePayload();
-      document.getElementById('response-form').action = payload.formJavascriptAction;
-      updateFormPreview();
-    };
-
-    document.getElementById('btn-formaction-js').onclick = () => {
-      const payload = ensurePayload();
-      document.getElementById('response-submit').formAction = payload.formJavascriptAction;
-      updateFormPreview();
-    };
-  </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Response Field Reachability</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Response Field Reachability</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>12</strong> focused cases</span><span><strong>12</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-inner">
+        <div class="family-case-card__meta"><span>Case 01</span><span>response field</span></div>
+        <h2>response.html → innerHTML</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-inner/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-inner/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-outer">
+        <div class="family-case-card__meta"><span>Case 02</span><span>response field</span></div>
+        <h2>response.html → outerHTML</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-outer/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-outer/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-adjacent">
+        <div class="family-case-card__meta"><span>Case 03</span><span>response field</span></div>
+        <h2>response.htmlFragment → insertAdjacentHTML</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-adjacent/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-adjacent/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-write">
+        <div class="family-case-card__meta"><span>Case 04</span><span>response field</span></div>
+        <h2>response.html → document.write</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-write/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-write/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-mutation">
+        <div class="family-case-card__meta"><span>Case 05</span><span>response field</span></div>
+        <h2>response.htmlFragment → appendChild(fragment)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-mutation/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-mutation/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-parser">
+        <div class="family-case-card__meta"><span>Case 06</span><span>response field</span></div>
+        <h2>response.html → DOMParser.parseFromString</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-parser/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-parser/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-fragment">
+        <div class="family-case-card__meta"><span>Case 07</span><span>response field</span></div>
+        <h2>response.contextualFragment → Range.createContextualFragment</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-fragment/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-fragment/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.response-submit">
+        <div class="family-case-card__meta"><span>Case 08</span><span>response field</span></div>
+        <h2>Submit form</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/response-submit/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/response-submit/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-action">
+        <div class="family-case-card__meta"><span>Case 09</span><span>response field</span></div>
+        <h2>response.formAction → form.action</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-action/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-action/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-formaction">
+        <div class="family-case-card__meta"><span>Case 10</span><span>response field</span></div>
+        <h2>response.formAction → button.formAction</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-formaction/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-formaction/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-action-js">
+        <div class="family-case-card__meta"><span>Case 11</span><span>response field</span></div>
+        <h2>response.formJavascriptAction → form.action</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-action-js/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-action-js/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-response-field-reachability.btn-formaction-js">
+        <div class="family-case-card__meta"><span>Case 12</span><span>response field</span></div>
+        <h2>response.formJavascriptAction → button.formAction</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-response-field-reachability/btn-formaction-js/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-response-field-reachability/btn-formaction-js/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_response_field_reachability.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

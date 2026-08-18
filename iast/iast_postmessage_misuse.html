@@ -2,177 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST postMessage Misuse</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    .sources { display: grid; gap: 8px; margin-top: 8px; }
-    .sources label { display: flex; gap: 8px; align-items: center; }
-    .sources table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    .sources td { padding: 4px 6px; border-bottom: 1px solid #1f2937; vertical-align: top; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    textarea { min-height: 100px; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    iframe { width: 100%; border: 1px solid #1f2937; border-radius: 8px; background: #0b1220; }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>postMessage Misuse Module · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for postMessage Misuse Module.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST postMessage Misuse Module</h1>
-  <p class="note">Tests window.postMessage sinks with tainted payloads and wildcard origin.</p>
-
-  <div class="card">
-    <label for="payload">Message payload (tainted)</label>
-    <textarea id="payload" placeholder='{"token":"TAINT"}'></textarea>
-    <div class="sources">
-      <div class="note">Choose which source to prime for the message payload.</div>
-      <label><input type="radio" name="sourceType" value="query" checked> URL query (?payload=...)</label>
-      <label><input type="radio" name="sourceType" value="hash"> URL hash</label>
-      <label><input type="radio" name="sourceType" value="cookie"> document.cookie</label>
-      <label><input type="radio" name="sourceType" value="localStorage"> localStorage</label>
-      <label><input type="radio" name="sourceType" value="sessionStorage"> sessionStorage</label>
-      <label><input type="radio" name="sourceType" value="windowName"> window.name</label>
-      <label><input type="radio" name="sourceType" value="inputOnly"> input only</label>
-      <button id="prime-selected">Prime selected source</button>
-      <button id="prime-all">Prime ALL sources</button>
-      <div id="active-sources"></div>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_postmessage_misuse.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
     </div>
-    <p class="note">Taint is read from ?payload=... or the textarea when you click "Prime taint sources".</p>
-  </div>
-
-  <div class="card">
-    <button id="btn-postmessage">window.postMessage(payload, '*')</button>
-    <button id="btn-postmessage-cross" style="margin-top:8px;">window.postMessage(payload, targetOrigin)</button>
-    <label for="target-origin" style="margin-top:8px;">Target origin</label>
-    <input id="target-origin" type="text" value="https://example.org">
-    <p class="note">Cross-origin target triggers <code>postmessage_cross_origin_leak</code>.</p>
-  </div>
-
-  <div class="card">
-    <p class="note">Sandboxed iframe to receive postMessage events.</p>
-    <iframe id="receiver" title="receiver" sandbox="allow-scripts"></iframe>
-  </div>
-
-  <script>
-    function getParamPayload() {
-      const params = new URLSearchParams(location.search);
-      const hash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-      return params.get('payload') || hash || '';
-    }
-
-    const sources = {
-      inputOnly: { label: 'Input only', value: '' },
-      query: { label: 'URL query ?payload', value: null },
-      hash: { label: 'URL hash', value: null },
-      cookie: { label: 'document.cookie "iast_payload"', value: null },
-      localStorage: { label: 'localStorage["iast_payload"]', value: null },
-      sessionStorage: { label: 'sessionStorage["iast_payload"]', value: null },
-      windowName: { label: 'window.name', value: null }
-    };
-
-    function getSelectedSourceType() {
-      const checked = document.querySelector('input[name="sourceType"]:checked');
-      return checked ? checked.value : 'query';
-    }
-
-    function setSourceValue(type, value) {
-      if (!sources[type]) return;
-      sources[type].value = value;
-      switch (type) {
-        case 'query':
-          break;
-        case 'hash':
-          window.location.hash = 'payload=' + encodeURIComponent(value);
-          break;
-        case 'cookie':
-          document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
-          break;
-        case 'localStorage':
-          localStorage.setItem('iast_payload', value);
-          break;
-        case 'sessionStorage':
-          sessionStorage.setItem('iast_payload', value);
-          break;
-        case 'windowName':
-          window.name = value;
-          break;
-        case 'inputOnly':
-        default:
-          break;
-      }
-      renderActiveSources();
-    }
-
-    function primeSelectedSource(value) {
-      const type = getSelectedSourceType();
-      setSourceValue(type, value);
-    }
-
-    function primeAllSources(value) {
-      Object.keys(sources).forEach(type => setSourceValue(type, value));
-    }
-
-    function renderActiveSources() {
-      const rows = Object.keys(sources).map(type => {
-        const { label, value } = sources[type];
-        const display = value == null || value === ''
-          ? '<em>(empty)</em>'
-          : '<code>' + String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
-        return '<tr><td style="width: 35%;"><strong>' + label + '</strong></td><td>' + display + '</td></tr>';
-      });
-      document.getElementById('active-sources').innerHTML =
-        '<h3>Active sources</h3><table><tbody>' + rows.join('') + '</tbody></table>';
-    }
-
-    const payloadField = document.getElementById('payload');
-    payloadField.value = getParamPayload() || '{"token":"TAINT"}';
-
-    document.getElementById('prime-selected').onclick = () => {
-      primeSelectedSource(payloadField.value);
-      alert('Selected source primed.');
-    };
-
-    document.getElementById('prime-all').onclick = () => {
-      primeAllSources(payloadField.value);
-      alert('All sources primed.');
-    };
-
-    document.getElementById('btn-postmessage').onclick = () => {
-      const msg = payloadField.value;
-      window.postMessage(msg, '*');
-    };
-
-    document.getElementById('btn-postmessage-cross').onclick = () => {
-      const msg = payloadField.value;
-      const origin = document.getElementById('target-origin').value || 'https://example.org';
-      window.postMessage(msg, origin);
-    };
-
-    const receiver = document.getElementById('receiver');
-    receiver.srcdoc = `
-      <script>
-        window.addEventListener('message', () => {});
-      <\\/script>
-      <div style="color:#e2e8f0;font-family:system-ui;padding:12px;">Receiver iframe ready</div>
-    `;
-
-    renderActiveSources();
-  </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>postMessage Misuse Module</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>postMessage Misuse Module</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>2</strong> focused cases</span><span><strong>2</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-postmessage-misuse.btn-postmessage">
+        <div class="family-case-card__meta"><span>Case 01</span><span>postmessage</span></div>
+        <h2>window.postMessage(payload, &#39;*&#39;)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-postmessage-misuse/btn-postmessage/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-postmessage-misuse/btn-postmessage/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-postmessage-misuse.btn-postmessage-cross">
+        <div class="family-case-card__meta"><span>Case 02</span><span>postmessage</span></div>
+        <h2>window.postMessage(payload, targetOrigin)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-postmessage-misuse/btn-postmessage-cross/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-postmessage-misuse/btn-postmessage-cross/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_postmessage_misuse.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

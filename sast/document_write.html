@@ -1,185 +1,124 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — document.write / writeln</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-  <!-- External script includes -->
-  <script src="js/sources.js"></script>
-  <script src="js/document_write/document_write_helpers.js"></script>
-
-  <script src="js/summary.js"></script>
-  <script>
-    const DOMPurify = {};
-    DOMPurify.sanitize = function(input) {
-      return input;
-    };
-    document.addEventListener('DOMContentLoaded', updateSummary);
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>document.write / writeln · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for document.write / writeln.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — <code>document.write</code> / <code>writeln</code></h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/document_write.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">11</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">1</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">10</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">1</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">23</strong></span>
-    </div>
-    <p class="meta">This page mixes <strong>inline</strong> and <strong>external</strong> test cases. External scripts don’t auto-run to avoid page replacement; trigger them with buttons.</p>
-
-
-    <!-- Inline cases -->
-    <h2 class="section-title">Inline cases</h2>
-    <div class="grid">
-
-      <div class="card" id="il-1" data-severity="high, low">
-        <div class="card-meta">INLINE-1 (High): direct hash → write (vuln)</div>
-        <pre>// inline-script[#1]
-document.write(location.hash);</pre>
-        <script>
-          document.write(location.hash);
-        </script>
-      </div>
-
-      <div class="card" id="il-2" data-severity="high, low">
-        <div class="card-meta">INLINE-2 (High): decoded hash → write (vuln)</div>
-        <pre>// inline-script[#2]
-document.write(decodeURIComponent(location.hash.slice(1)));</pre>
-        <script>
-          document.write(decodeURIComponent(location.hash.slice(1)));
-        </script>
-      </div>
-
-      <div class="card" id="il-3" data-severity="high, low">
-        <div class="card-meta">INLINE-3 (High): aliasing from query → writeln (vuln)</div>
-        <pre>// inline-script[#3]
-var q = location.search.substring(1);
-q = decodeURIComponent(q);
-document.writeln(q);</pre>
-        <script>
-          var q = location.search.substring(1);
-          try {
-            q = decodeURIComponent(q);
-          } catch (e) {}
-          document.writeln(q);
-        </script>
-      </div>
-
-      <div class="card" id="il-4" data-severity="high, low">
-        <div class="card-meta">INLINE-4 (High): helper propagator (vuln)</div>
-        <pre>// inline-script[#4]
-function id(v){ return v; }
-var s = location.hash.slice(1);
-document.write(id(s));</pre>
-        <script>
-          function id(v) {
-            return v;
-          }
-          var s = location.hash.slice(1);
-          document.write(id(s));
-        </script>
-      </div>
-
-      <div class="card" id="il-5" data-severity="safe, low">
-        <div class="card-meta">INLINE-5: sanitized via DOMPurify.sanitize (safe if sanitizer effective)</div>
-        <pre>// inline-script[#5]
-document.write(DOMPurify.sanitize(location.hash.slice(1)));</pre>
-        <script>
-          document.write(DOMPurify.sanitize(location.hash.slice(1)));
-        </script>
-      </div>
-
-
-      <div class="card" id="il-7" data-severity="high, low">
-        <div class="card-meta">INLINE-6 (High): concat + template literal (vuln)</div>
-        <pre>// inline-script[#7]
-var name = new URLSearchParams(location.search).get('name') || 'Guest';
-document.write('<div>Hello ' + name + '</div>');
-document.writeln(`<p>${name}</p>`);</pre>
-        <script>
-          var name = new URLSearchParams(location.search).get('name') || 'Guest';
-          document.write('<div>Hello ' + name + '</div>');
-          document.writeln(`<p>${name}</p>`);
-        </script>
-      </div>
-
-      <div class="card" id="il-8" data-severity="high, medium, low">
-        <div class="card-meta">INLINE-7 (High): string-eval → write (vuln) — <strong>click to run</strong></div>
-        <pre>// inline-script[#8] (gated)
-function runInlineSetTimeoutEval() {
-  var p = location.hash.slice(1);
-  setTimeout("document.write('INLINE-SETTIMEOUT: ' + '" + p + "')", 10);
-}</pre>
-        <div class="controls">
-          <button class="btn" onclick="runInlineSetTimeoutEval()">Run inline setTimeout('document.write(...)')</button>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>document.write / writeln</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>document.write / writeln</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>9</strong> focused cases</span><span><strong>9</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.il-1">
+        <div class="family-case-card__meta"><span>Case 01</span><span>document write</span></div>
+        <h2>INLINE-1 (High): direct hash → write (vuln)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/il-1/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/il-1/fixed/">Open repaired control</a>
         </div>
-        <script>
-          function runInlineSetTimeoutEval() {
-            var p = location.hash.slice(1);
-            setTimeout("document.write('INLINE-SETTIMEOUT: ' + '" + p + "')", 10);
-          }
-        </script>
-      </div>
-
-
-      <div class="card" id="il-9" data-severity="high, low">
-        <div class="card-meta">INLINE-8(High): document.addEventListener with extWriteFromInput</div>
-        <pre>// inline-script[#8] (gated)
-document.addEventListener('click', function(e){
-  var t = e && e.target;
-  if (t && t.matches && t.matches('.ext-write-button')) {
-    var id = t.getAttribute('data-field');
-    extWriteFromInput(id);
-  }
-});</pre>
-        <script>
-          document.addEventListener('click', function(e) {
-            var t = e && e.target;
-            if (t && t.matches && t.matches('.ext-write-button')) {
-              var id = t.getAttribute('data-field');
-              extWriteFromInput(id);
-            }
-          });
-        </script>
-      </div>
-    </div>
-
-    <!-- External cases -->
-    <h2 class="section-title">External cases (click to run)</h2>
-    <div class="grid">
-
-      <div class="card">
-        <div class="card-meta"><strong>Direct/decoded/urlparam/window.name</strong> (no auto-run)</div>
-        <pre data-severity="high, low">onclick="runWrite(location.hash)"</pre>
-        <div class="controls">
-          <button class="btn" data-severity="high" onclick="runWrite(location.hash)">EXT (High): direct hash → runWrite helper</button>
-
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.il-2">
+        <div class="family-case-card__meta"><span>Case 02</span><span>document write</span></div>
+        <h2>INLINE-2 (High): decoded hash → write (vuln)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/il-2/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/il-2/fixed/">Open repaired control</a>
         </div>
-        <pre data-severity="high, low">onclick="runWrite(getCookieByName('name'))"</pre>
-        <div class="controls">
-          <button class="btn" data-severity="high" onclick="runWrite(getCookieByName('name'))">EXT (High): runWrite helper with ext source</button>
-
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.il-3">
+        <div class="family-case-card__meta"><span>Case 03</span><span>document write</span></div>
+        <h2>INLINE-3 (High): aliasing from query → writeln (vuln)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/il-3/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/il-3/fixed/">Open repaired control</a>
         </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.il-4">
+        <div class="family-case-card__meta"><span>Case 04</span><span>document write</span></div>
+        <h2>INLINE-4 (High): helper propagator (vuln)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/il-4/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/il-4/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.il-7">
+        <div class="family-case-card__meta"><span>Case 05</span><span>document write</span></div>
+        <h2>INLINE-6 (High): concat + template literal (vuln)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/il-7/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/il-7/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.il-8">
+        <div class="family-case-card__meta"><span>Case 06</span><span>document write</span></div>
+        <h2>INLINE-7 (High): string-eval → write (vuln) — click to run</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/il-8/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/il-8/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.il-9">
+        <div class="family-case-card__meta"><span>Case 07</span><span>document write</span></div>
+        <h2>INLINE-8(High): document.addEventListener with extWriteFromInput</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/il-9/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/il-9/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.button-2-ext-high-direct-hash-runwrite-helper">
+        <div class="family-case-card__meta"><span>Case 08</span><span>document write</span></div>
+        <h2>EXT (High): direct hash → runWrite helper</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/button-2-ext-high-direct-hash-runwrite-helper/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/button-2-ext-high-direct-hash-runwrite-helper/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-document-write.button-3-ext-high-runwrite-helper-with-ext-source">
+        <div class="family-case-card__meta"><span>Case 09</span><span>document write</span></div>
+        <h2>EXT (High): runWrite helper with ext source</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-document-write/button-3-ext-high-runwrite-helper-with-ext-source/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-document-write/button-3-ext-high-runwrite-helper-with-ext-source/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-
-
-
-
-    </div>
-
-    <footer>PTK SAST testbed — document.write / writeln (inline + external). <a class="back" href="index.html">Back to index</a></footer>
-  </div>
-
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./document_write.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

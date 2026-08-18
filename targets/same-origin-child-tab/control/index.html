@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Different-Origin Scope Control · PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A clean alternate-loopback-host control for related-tab scope demonstrations.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+</head>
+<body data-playground-target="same-origin-child-tab-external-control" data-target-variant="control">
+  <a class="skip-link" href="#main">Skip to control</a>
+  <header class="site-header"><div class="site-header__inner"><span class="brand"><span class="brand__mark" aria-hidden="true">SCOPE</span><span>Browser Security Playground</span></span></div></header>
+  <main id="main" class="page-shell target-shell">
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Different-origin negative control</p><h1 id="target-title">This tab is not part of the application journey.</h1><p class="target-hero__lede">The alternate loopback hostname creates a different origin. It receives no message, session value, dependency, or application request from the launcher.</p></div><dl class="target-facts" aria-label="Control facts"><div><dt>Role</dt><dd>Scope control</dd></div><div><dt>State</dt><dd>None</dd></div><div><dt>Expected action</dt><dd>Observe only</dd></div></dl></section>
+    <aside class="notice notice--success" aria-label="Control status"><span class="notice__icon" aria-hidden="true">✓</span><p><strong>Clean boundary.</strong> Close this tab and continue only with the causally related same-origin child.</p></aside>
+  </main>
+</body>
+</html>

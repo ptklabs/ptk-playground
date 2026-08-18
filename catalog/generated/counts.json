@@ -1,0 +1,35 @@
+{
+  "schema": "owasp-ptk-playground-counts/v1",
+  "version": 1,
+  "challenges": {
+    "challenges": 415,
+    "atomic": 293,
+    "atomicObservations": 44,
+    "advancedLabs": 78,
+    "legacyCatalogueCases": 78,
+    "sourceLedgerFiles": 1386,
+    "authoredSourceFiles": 262,
+    "generatedAtomicSast": 126,
+    "generatedAtomicIast": 149,
+    "dastRuntimeTargets": 46,
+    "dastRuntimeRoutes": 203,
+    "scaPackages": 2,
+    "scaScenarios": 5,
+    "classifiedScenarioMarkers": 1608,
+    "retainedAggregateAssertions": 0,
+    "pendingScenarioReview": 0
+  },
+  "targets": 708,
+  "engines": {
+    "DAST": 65,
+    "SAST": 160,
+    "IAST": 199,
+    "SCA": 5
+  },
+  "migration": {
+    "classifiedScenarioMarkers": 1608,
+    "pendingScenarioReview": 0,
+    "retainedAggregateAssertions": 0,
+    "sourceMigrationComplete": true
+  }
+}

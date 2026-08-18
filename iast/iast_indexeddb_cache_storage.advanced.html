@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST IndexedDB and CacheStorage</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    textarea { min-height: 90px; }
+    button { margin-top: 8px; cursor: pointer; font-weight: 600; background: #2563eb; border: none; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .back-link { display:inline-block; margin-bottom:12px; color:#93c5fd; text-decoration:none; font-weight:600; }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST IndexedDB and CacheStorage</h1>
+  <p class="note">Exercises <code>iast_indexeddb_cache_storage</code> by persisting tainted content to IndexedDB and CacheStorage, then replaying it into eval and fetch URL sinks.</p>
+
+  <div class="card">
+    <label for="payload">Persisted payload</label>
+    <textarea id="payload">console.log('ptk-persistent')</textarea>
+    <button id="btn-idb-put">IndexedDB put()</button>
+    <button id="btn-idb-eval">IndexedDB get() → eval()</button>
+    <button id="btn-cache-put">Cache.put()</button>
+    <button id="btn-cache-fetch">Cache.match() → fetch(url)</button>
+  </div>
+
+  <script>
+    async function openDb() {
+      return await new Promise((resolve, reject) => {
+        const req = indexedDB.open('ptk-iast-cache', 1);
+        req.onupgradeneeded = () => {
+          req.result.createObjectStore('payloads');
+        };
+        req.onerror = () => reject(req.error);
+        req.onsuccess = () => resolve(req.result);
+      });
+    }
+
+    document.getElementById('btn-idb-put').onclick = async () => {
+      const db = await openDb();
+      const tx = db.transaction('payloads', 'readwrite');
+      tx.objectStore('payloads').put(document.getElementById('payload').value, 'demo');
+      await new Promise((resolve, reject) => {
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+        tx.onabort = () => reject(tx.error);
+      });
+    };
+
+    document.getElementById('btn-idb-eval').onclick = async () => {
+      const db = await openDb();
+      const tx = db.transaction('payloads', 'readonly');
+      const req = tx.objectStore('payloads').get('demo');
+      req.onsuccess = () => {
+        eval(String(req.result || 'void 0'));
+      };
+    };
+
+    document.getElementById('btn-cache-put').onclick = async () => {
+      const cache = await caches.open('ptk-iast-cache');
+      const body = document.getElementById('payload').value;
+      await cache.put('/ptk-iast-cache/demo', new Response(body, { headers: { 'content-type': 'text/plain' } }));
+    };
+
+    document.getElementById('btn-cache-fetch').onclick = async () => {
+      const cache = await caches.open('ptk-iast-cache');
+      const response = await cache.match('/ptk-iast-cache/demo');
+      const value = await response.text();
+      fetch(String(value)).catch(() => {});
+    };
+  </script>
+</body>
+</html>

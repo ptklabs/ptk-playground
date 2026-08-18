@@ -2,168 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST Open Redirect Sinks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, button, select { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .preview { word-break: break-all; background: #0b1220; border: 1px dashed #1f2937; border-radius: 8px; padding: 10px; margin-top: 8px; }
-    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-  </style>
+  <title>Open Redirect and Source-scoped Redirects · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for Open Redirect and Source-scoped Redirects.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST Open Redirect and Source-scoped Redirects</h1>
-  <p class="note">Covers <code>iast_open_redirect</code> and <code>iast_source_scoped_open_redirect</code> using query, hash, postMessage, referrer, and window.name sources.</p>
-
-  <div class="card">
-    <label for="payload">Redirect target (cross-origin)</label>
-    <input id="payload" type="text" placeholder="https://example.org/redirect?rd=iatstest">
-    <label for="sourceType">Source type</label>
-    <select id="sourceType">
-      <option value="query">query</option>
-      <option value="hashQuery">hashQuery</option>
-      <option value="hashRoute">hashRoute</option>
-      <option value="postMessage">postMessage</option>
-      <option value="referrer">referrer (open via helper)</option>
-      <option value="windowName">window.name</option>
-      <option value="inline">inline input only</option>
-    </select>
-    <button id="prime">Prime selected source</button>
-    <p id="status" class="note">No source primed yet.</p>
-  </div>
-
-  <div class="card">
-    <h3>Redirect/navigation sinks</h3>
-    <button id="btn-open">window.open(payload)</button>
-    <button id="btn-nav">navigation.navigate(payload)</button>
-    <button id="btn-href">location.href = payload</button>
-    <button id="btn-assign">location.assign(payload)</button>
-    <button id="btn-replace">location.replace(payload)</button>
-  </div>
-
-  <div class="card">
-    <h3>DOM attribute redirect sinks</h3>
-    <a id="link-target" href="#" class="preview">anchor href preview</a>
-    <form id="redirect-form" method="GET" style="margin-top:8px;">
-      <button id="redirect-submit" type="submit">Submit redirect form</button>
-    </form>
-    <button id="btn-anchor">anchor.href = payload</button>
-    <button id="btn-action">form.action = payload</button>
-    <div id="preview" class="preview">(preview)</div>
-  </div>
-
-  <script>
-    const payloadField = document.getElementById('payload');
-    const status = document.getElementById('status');
-    let lastMessage = null;
-
-    function htmlEscape(value) {
-      return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    }
-
-    function currentTarget() {
-      const selected = document.getElementById('sourceType').value;
-      const params = new URLSearchParams(location.search);
-      const rawHash = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-      const hashParams = new URLSearchParams(rawHash.replace(/^#?/, ''));
-      if (selected === 'query') return params.get('payload') || payloadField.value;
-      if (selected === 'hashQuery') return hashParams.get('payload') || payloadField.value;
-      if (selected === 'hashRoute') return rawHash || payloadField.value;
-      if (selected === 'postMessage') return lastMessage || payloadField.value;
-      if (selected === 'windowName') return window.name || payloadField.value;
-      if (selected === 'referrer') return params.get('payload') || payloadField.value;
-      return payloadField.value;
-    }
-
-    function updatePreview() {
-      const target = currentTarget();
-      const form = document.getElementById('redirect-form');
-      const link = document.getElementById('link-target');
-      document.getElementById('preview').innerHTML =
-        'resolved target: <code>' + htmlEscape(target) + '</code><br>' +
-        'anchor.href=' + htmlEscape(link.getAttribute('href') || link.href || '(empty)') + '<br>' +
-        'form.action=' + htmlEscape(form.getAttribute('action') || form.action || '(empty)');
-    }
-
-    document.getElementById('prime').onclick = () => {
-      const payload = payloadField.value;
-      const selected = document.getElementById('sourceType').value;
-      if (selected === 'query') history.replaceState(null, '', '?payload=' + encodeURIComponent(payload));
-      if (selected === 'hashQuery') location.hash = 'payload=' + encodeURIComponent(payload);
-      if (selected === 'hashRoute') location.hash = encodeURIComponent(payload);
-      if (selected === 'postMessage') window.postMessage(payload, '*');
-      if (selected === 'windowName') window.name = payload;
-      status.textContent = 'Primed source: ' + selected + '. Referrer=' + (document.referrer || '(empty)');
-      updatePreview();
-    };
-
-    window.addEventListener('message', (event) => {
-      if (typeof event.data === 'string') {
-        lastMessage = event.data;
-        status.textContent = 'Captured postMessage payload.';
-        updatePreview();
-      }
-    });
-
-    document.getElementById('btn-open').onclick = () => {
-      const target = currentTarget();
-      if (!target) return;
-      window.open(target, '_blank');
-    };
-
-    document.getElementById('btn-nav').onclick = () => {
-      const target = currentTarget();
-      if (!target) return;
-      if ('navigation' in window && typeof navigation.navigate === 'function') {
-        navigation.navigate(target);
-      } else {
-        status.textContent = 'navigation.navigate not supported in this browser';
-      }
-    };
-
-    document.getElementById('btn-href').onclick = () => {
-      const target = currentTarget();
-      if (!target) return;
-      location.href = target;
-    };
-
-    document.getElementById('btn-assign').onclick = () => {
-      const target = currentTarget();
-      if (!target) return;
-      location.assign(target);
-    };
-
-    document.getElementById('btn-replace').onclick = () => {
-      const target = currentTarget();
-      if (!target) return;
-      location.replace(target);
-    };
-
-    document.getElementById('btn-anchor').onclick = () => {
-      const target = currentTarget();
-      document.getElementById('link-target').href = target;
-      updatePreview();
-    };
-
-    document.getElementById('btn-action').onclick = () => {
-      const target = currentTarget();
-      document.getElementById('redirect-form').action = target;
-      updatePreview();
-    };
-
-    payloadField.value = new URLSearchParams(location.search).get('payload') || 'https://example.org/redirect?rd=iatstest';
-    updatePreview();
-    if (document.referrer) {
-      status.textContent = 'Opened with referrer: ' + document.referrer;
-    }
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_open_redirect.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>Open Redirect and Source-scoped Redirects</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>Open Redirect and Source-scoped Redirects</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>8</strong> focused cases</span><span><strong>8</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.btn-open">
+        <div class="family-case-card__meta"><span>Case 01</span><span>open redirect</span></div>
+        <h2>window.open(payload)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/btn-open/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/btn-open/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.btn-nav">
+        <div class="family-case-card__meta"><span>Case 02</span><span>open redirect</span></div>
+        <h2>navigation.navigate(payload)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/btn-nav/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/btn-nav/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.btn-href">
+        <div class="family-case-card__meta"><span>Case 03</span><span>open redirect</span></div>
+        <h2>location.href = payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/btn-href/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/btn-href/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.btn-assign">
+        <div class="family-case-card__meta"><span>Case 04</span><span>open redirect</span></div>
+        <h2>location.assign(payload)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/btn-assign/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/btn-assign/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.btn-replace">
+        <div class="family-case-card__meta"><span>Case 05</span><span>open redirect</span></div>
+        <h2>location.replace(payload)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/btn-replace/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/btn-replace/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.redirect-submit">
+        <div class="family-case-card__meta"><span>Case 06</span><span>open redirect</span></div>
+        <h2>Submit redirect form</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/redirect-submit/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/redirect-submit/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.btn-anchor">
+        <div class="family-case-card__meta"><span>Case 07</span><span>open redirect</span></div>
+        <h2>anchor.href = payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/btn-anchor/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/btn-anchor/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-open-redirect.btn-action">
+        <div class="family-case-card__meta"><span>Case 08</span><span>open redirect</span></div>
+        <h2>form.action = payload</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-open-redirect/btn-action/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-open-redirect/btn-action/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_open_redirect.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

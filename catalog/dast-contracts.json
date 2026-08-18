@@ -1,0 +1,4400 @@
+{
+  "schema": "owasp-ptk-playground-dast-contracts/v1",
+  "version": 1,
+  "summary": {
+    "runtimeRoutes": 203,
+    "securityTargets": 51,
+    "controls": 5,
+    "infrastructureRoutes": 152
+  },
+  "contracts": [
+    {
+      "id": "dast.route.root-42099b4a",
+      "route": "/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.git-config-e2f253ea",
+      "route": "/.git/config",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.well-known-assetlinks-json-6cafef57",
+      "route": "/.well-known/assetlinks.json",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.well-known-change-password-6b5159ff",
+      "route": "/.well-known/change-password",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.well-known-jwks-json-bc639538",
+      "route": "/.well-known/jwks.json",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.well-known-oauth-authorization-server-cb96d2ef",
+      "route": "/.well-known/oauth-authorization-server",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.well-known-openid-configuration-ee132748",
+      "route": "/.well-known/openid-configuration",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.well-known-openid-configuration",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.well-known-security-txt-45c9b9d0",
+      "route": "/.well-known/security.txt",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.actuator-7c526a2b",
+      "route": "/actuator",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.apple-app-site-association-28f701a1",
+      "route": "/apple-app-site-association",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.assets-css-playground-css-97cf84be",
+      "route": "/assets/css/playground.css",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.assets-js-catalogue-app-js-7a0217ed",
+      "route": "/assets/js/catalogue-app.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.assets-js-playground-js-a27fac33",
+      "route": "/assets/js/playground.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.assets-vendor-jquery-jquery-3-4-1-min-js-4f054798",
+      "route": "/assets/vendor/jquery/jquery-3.4.1.min.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.assets-vendor-jquery-jquery-3-7-1-min-js-5d1b672e",
+      "route": "/assets/vendor/jquery/jquery-3.7.1.min.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-fdec33f4",
+      "route": "/campaigns/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-index-2a8ea3452f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-deployment-response-boundary-a4076bf5",
+      "route": "/campaigns/deployment-response-boundary/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "deployment-response-boundary",
+        "file.campaigns-deployment-response-boundary-index-e4d18f9004",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-deployment-response-boundary-index-html-d9a130ff",
+      "route": "/campaigns/deployment-response-boundary/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-deployment-response-boundary-index-e4d18f9004",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-history-order-router-7bfa020e",
+      "route": "/campaigns/history-order-router/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-history-order-router-index-da11aa9581",
+        "history-order-router",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-history-order-router-index-html-bcbb043d",
+      "route": "/campaigns/history-order-router/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-history-order-router-index-da11aa9581",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-imported-request-preferences-6067f961",
+      "route": "/campaigns/imported-request-preferences/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-imported-request-preferences-index-d448de26d5",
+        "imported-request-preferences",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-imported-request-preferences-index-html-bc3b4d1b",
+      "route": "/campaigns/imported-request-preferences/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-imported-request-preferences-index-d448de26d5",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-index-html-54a29945",
+      "route": "/campaigns/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-index-2a8ea3452f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-lazy-route-module-b119b347",
+      "route": "/campaigns/lazy-route-module/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-lazy-route-module-index-7a175f909a",
+        "lazy-route-module",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-lazy-route-module-index-html-41c791b6",
+      "route": "/campaigns/lazy-route-module/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-lazy-route-module-index-7a175f909a",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-live-profile-preview-e512d83e",
+      "route": "/campaigns/live-profile-preview/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-live-profile-preview-index-5d0190383a",
+        "live-profile-preview",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-live-profile-preview-index-html-b8077b7c",
+      "route": "/campaigns/live-profile-preview/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-live-profile-preview-index-5d0190383a",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-on-demand-analytics-bf2eb486",
+      "route": "/campaigns/on-demand-analytics/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-on-demand-analytics-index-39cd2cec76",
+        "on-demand-analytics",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-on-demand-analytics-index-html-3ace87dd",
+      "route": "/campaigns/on-demand-analytics/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-on-demand-analytics-index-39cd2cec76",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-same-origin-child-tab-87632ffa",
+      "route": "/campaigns/same-origin-child-tab/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-same-origin-child-tab-index-f26f6aba86",
+        "passive/server.mjs",
+        "same-origin-child-tab"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-same-origin-child-tab-index-html-9002f87f",
+      "route": "/campaigns/same-origin-child-tab/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-same-origin-child-tab-index-f26f6aba86",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-saved-workspace-5a436ddb",
+      "route": "/campaigns/saved-workspace/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-saved-workspace-index-130fbe5dcc",
+        "passive/server.mjs",
+        "saved-workspace"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-saved-workspace-index-html-5c52ed31",
+      "route": "/campaigns/saved-workspace/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-saved-workspace-index-130fbe5dcc",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-session-bound-order-search-7c090e64",
+      "route": "/campaigns/session-bound-order-search/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-session-bound-order-search-index-d919c60eaf",
+        "passive/server.mjs",
+        "session-bound-order-search",
+        "session-request"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-session-bound-order-search-index-html-53f2662b",
+      "route": "/campaigns/session-bound-order-search/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-session-bound-order-search-index-d919c60eaf",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-support-widget-de206b99",
+      "route": "/campaigns/support-widget/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-support-widget-index-3f8d0726ef",
+        "passive/server.mjs",
+        "support-widget",
+        "widget-trust-boundary"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-support-widget-index-html-01ae94ea",
+      "route": "/campaigns/support-widget/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-support-widget-index-3f8d0726ef",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-transient-route-notice-547d2778",
+      "route": "/campaigns/transient-route-notice/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-transient-route-notice-index-6075e0e71d",
+        "passive/server.mjs",
+        "transient-route-notice",
+        "transient-spa-state"
+      ]
+    },
+    {
+      "id": "dast.route.campaigns-transient-route-notice-index-html-fd2f42ad",
+      "route": "/campaigns/transient-route-notice/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.campaigns-transient-route-notice-index-6075e0e71d",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-cases-json-87ce1614",
+      "route": "/catalog/cases.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-challenges-json-10e0f7a8",
+      "route": "/catalog/challenges.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-dast-contracts-json-2c4f800e",
+      "route": "/catalog/dast-contracts.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-demo-json-b935c51b",
+      "route": "/catalog/demo.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-families-json-298a4eab",
+      "route": "/catalog/families.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-generated-counts-json-9554a13f",
+      "route": "/catalog/generated/counts.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-generated-scanner-targets-json-222c8276",
+      "route": "/catalog/generated/scanner-targets.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-iast-atomic-json-e3abf5af",
+      "route": "/catalog/iast-atomic.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-legacy-routes-json-05650ec0",
+      "route": "/catalog/legacy-routes.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-missions-json-c32eb470",
+      "route": "/catalog/missions.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-playlists-json-65f7f7b1",
+      "route": "/catalog/playlists.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-sast-atomic-json-850e77d3",
+      "route": "/catalog/sast-atomic.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-sca-dependencies-json-e3462cf0",
+      "route": "/catalog/sca-dependencies.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-scanner-targets-json-d5bbe267",
+      "route": "/catalog/scanner-targets.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.catalog-source-ledger-json-b4a9333b",
+      "route": "/catalog/source-ledger.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.demo-34dbac07",
+      "route": "/demo/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.demo-index-0bf44cb5b8",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.demo-index-html-1a555c66",
+      "route": "/demo/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.demo-index-0bf44cb5b8",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.drupal-core-install-php-43ee65a0",
+      "route": "/drupal/core/install.php",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.dwr-engine-js-47441b0e",
+      "route": "/dwr/engine.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.explore-66cc853a",
+      "route": "/explore/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.explore-index-7f753ae309",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.explore-index-html-6b74d779",
+      "route": "/explore/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.explore-index-7f753ae309",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.grafana-766c9ed8",
+      "route": "/grafana/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.healthz-bc862a33",
+      "route": "/healthz",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.humans-txt-fb163cc5",
+      "route": "/humans.txt",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.impersonate-f0b8f3e3",
+      "route": "/impersonate",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.index-html-14fe4559",
+      "route": "/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.login-c42c80aa",
+      "route": "/login",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.logout-c94d0472",
+      "route": "/logout",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.mfa-verify-f0045223",
+      "route": "/mfa/verify",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.orgs-acme-workspaces-red-team-settings-html-d4e7fb11",
+      "route": "/orgs/acme/workspaces/red-team/settings.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.orgs-acme-workspaces-red-team-settings",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-205d22d1",
+      "route": "/passive/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.passive-index-44316a0870",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-assets-app-bundle-js-b947fbe6",
+      "route": "/passive/assets/app.bundle.js",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Debug and client disclosure",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-assets-app-bundle-js-map-290d4171",
+      "route": "/passive/assets/app.bundle.js.map",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Debug and client disclosure",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-assets-client-config-js-39fddcdc",
+      "route": "/passive/assets/client-config.js",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Debug and client disclosure",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.passive-assets-client-config-js",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-assets-header-disclosure-canary-js-0beaafc8",
+      "route": "/passive/assets/header-disclosure-canary.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-cases-headers-powered-by-html-cbf717ea",
+      "route": "/passive/cases/headers/powered-by.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "HTTP response headers",
+      "evidence": "response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "https",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/passive/cases/headers/secure-control.html",
+      "owners": [
+        "deployment-response-disclosure",
+        "passive.header-disclosure-present",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-cases-headers-secure-control-html-6daa934e",
+      "route": "/passive/cases/headers/secure-control.html",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "HTTP response headers",
+      "evidence": "response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "deployment-response-control",
+        "passive.header-disclosure-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-checkout-payment-html-e9006afa",
+      "route": "/passive/checkout/payment.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.passive-checkout-payment",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-css-index-css-128a250d",
+      "route": "/passive/css/index.css",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-debug-source-map-html-a6a2b6fc",
+      "route": "/passive/debug/source-map.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Debug and client disclosure",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-downloads-report-csv-769fe967",
+      "route": "/passive/downloads/report.csv",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Application workflow surface",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-files-data-dump-20cc1254",
+      "route": "/passive/files/data.dump",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Application workflow surface",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-data-sensitive-data-html-0ec19400",
+      "route": "/passive/fixtures/data/sensitive-data.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.passive-fixtures-data-sensitive-data",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-deser-indicator-html-d996a5c4",
+      "route": "/passive/fixtures/deser/indicator.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-errors-stacktraces-html-aab7894a",
+      "route": "/passive/fixtures/errors/stacktraces.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Debug and client disclosure",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.passive-fixtures-errors-stacktraces",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-headers-hsts-over-http-html-99755486",
+      "route": "/passive/fixtures/headers/hsts-over-http.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "HTTP response headers",
+      "evidence": "response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-headers-report-only-html-b4235bf4",
+      "route": "/passive/fixtures/headers/report-only.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "HTTP response headers",
+      "evidence": "response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-headers-secure-control-html-8e9738a4",
+      "route": "/passive/fixtures/headers/secure-control.html",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "HTTP response headers",
+      "evidence": "response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-headers-weak-security-html-cc2d3bc9",
+      "route": "/passive/fixtures/headers/weak-security.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "HTTP response headers",
+      "evidence": "response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/passive/fixtures/headers/secure-control.html",
+      "owners": [
+        "passive.passive-fixtures-headers-weak-security",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-params-high-risk-html-0af99c81",
+      "route": "/passive/fixtures/params/high-risk.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-tokens-index-html-53ba4070",
+      "route": "/passive/fixtures/tokens/index.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-tokens-jwt-url-html-b66d2e66",
+      "route": "/passive/fixtures/tokens/jwt-url.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-fixtures-tokens-url-leaks-html-cc722dcf",
+      "route": "/passive/fixtures/tokens/url-leaks.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-graphiql-5af2d466",
+      "route": "/passive/graphiql",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-graphql-5976ed21",
+      "route": "/passive/graphql",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-header-disclosure-canary-html-1c93d426",
+      "route": "/passive/header_disclosure_canary.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.passive-header-disclosure-canary-e401720b33",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-index-html-aad75d49",
+      "route": "/passive/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.passive-index-44316a0870",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-openapi-json-322c3b83",
+      "route": "/passive/openapi.json",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-openapi-yaml-de6bb8ea",
+      "route": "/passive/openapi.yaml",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-postman-collection-json-e1d8a2cf",
+      "route": "/passive/postman.collection.json",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-realtime-events-5d1f02d1",
+      "route": "/passive/realtime/events",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Realtime protocol surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-realtime-overview-html-83e04df2",
+      "route": "/passive/realtime/overview.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Realtime protocol surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.passive-realtime-overview",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-realtime-ws-b4ad985f",
+      "route": "/passive/realtime/ws",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Realtime protocol surface",
+      "evidence": "websocket-upgrade",
+      "transport": "websocket",
+      "methods": [
+        "GET-UPGRADE"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-redoc-2fba9c18",
+      "route": "/passive/redoc",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-swagger-ui-index-html-f4e5d4c2",
+      "route": "/passive/swagger-ui/index.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "API and platform discovery",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.passive-swagger-ui-index",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.passive-upload-index-html-eef47e92",
+      "route": "/passive/upload/index.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.password-reset-d40a8501",
+      "route": "/password/reset",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.phpinfo-php-1808fe5d",
+      "route": "/phpinfo.php",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.phpmyadmin-6c498112",
+      "route": "/phpmyadmin",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.play-8c002eed",
+      "route": "/play/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.play-index-4636e6a206",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.play-index-html-5440d4cf",
+      "route": "/play/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.play-index-4636e6a206",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.register-5b402e3d",
+      "route": "/register",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.robots-txt-b7a9adb9",
+      "route": "/robots.txt",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.scanner-2e658ba9",
+      "route": "/scanner/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.scanner-index-653e72ae01",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.scanner-index-html-09963111",
+      "route": "/scanner/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.scanner-index-653e72ae01",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.sidekiq-5a2abebc",
+      "route": "/sidekiq",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.signin-oidc-96fde1e1",
+      "route": "/signin-oidc",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.socket-io-005395ee",
+      "route": "/socket.io/",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Realtime protocol surface",
+      "evidence": "websocket-upgrade",
+      "transport": "websocket",
+      "methods": [
+        "GET-UPGRADE"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.sockjs-echo-aabf14de",
+      "route": "/sockjs/echo",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Realtime protocol surface",
+      "evidence": "websocket-upgrade",
+      "transport": "websocket",
+      "methods": [
+        "GET-UPGRADE"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.support-tickets-create-b22bcaf8",
+      "route": "/support/tickets/create",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.switch-tenant-3ec88e58",
+      "route": "/switch-tenant",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-angular-expression-dependency-expression-js-b2202a90",
+      "route": "/targets/angular-expression-dependency/expression.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-angular-expression-dependency-fixed-bbe13eae",
+      "route": "/targets/angular-expression-dependency/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-angular-expression-dependency-fixed-index-20ef0c84fd",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-angular-expression-dependency-fixed-index-html-9943d7cf",
+      "route": "/targets/angular-expression-dependency/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-angular-expression-dependency-fixed-index-20ef0c84fd",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-angular-expression-dependency-review-1867e32e",
+      "route": "/targets/angular-expression-dependency/review/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-angular-expression-dependency-review-index-926af992a0",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-angular-expression-dependency-review-index-html-58b6226f",
+      "route": "/targets/angular-expression-dependency/review/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-angular-expression-dependency-review-index-926af992a0",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-fixed-640db6ab",
+      "route": "/targets/history-order-router/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-history-order-router-fixed-index-34184ee5ed",
+        "history-order-router-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-fixed-api-order-2b9131e5",
+      "route": "/targets/history-order-router/fixed/api/order",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "SPA-created authenticated active request",
+      "evidence": "bounded-json-active-request",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-fixed-history-order-router-js-b5c65f34",
+      "route": "/targets/history-order-router/fixed/history-order-router.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-fixed-index-html-dd602ace",
+      "route": "/targets/history-order-router/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-history-order-router-fixed-index-34184ee5ed",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-vulnerable-53a3c99d",
+      "route": "/targets/history-order-router/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-history-order-router-vulnerable-index-873809407e",
+        "history-order-router-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-vulnerable-api-order-e42a2bb7",
+      "route": "/targets/history-order-router/vulnerable/api/order",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "SPA-created authenticated active request",
+      "evidence": "bounded-json-active-request",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/targets/history-order-router/fixed/api/order",
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-vulnerable-history-order-router-js-6c5b77a6",
+      "route": "/targets/history-order-router/vulnerable/history-order-router.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-history-order-router-vulnerable-index-html-a82970cd",
+      "route": "/targets/history-order-router/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-history-order-router-vulnerable-index-873809407e",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-imported-request-preferences-fixed-f2dfa4a4",
+      "route": "/targets/imported-request-preferences/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-imported-request-preferences-fixed-index-0040975816",
+        "imported-request-preferences-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-imported-request-preferences-fixed-index-html-305e85e6",
+      "route": "/targets/imported-request-preferences/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-imported-request-preferences-fixed-index-0040975816",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-imported-request-preferences-fixed-request-preferences-js-2a79bf1d",
+      "route": "/targets/imported-request-preferences/fixed/request-preferences.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-imported-request-preferences-preview-json-db3d14b3",
+      "route": "/targets/imported-request-preferences/preview.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-imported-request-preferences-vulnerable-78890eba",
+      "route": "/targets/imported-request-preferences/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-imported-request-preferences-vulnerable-index-d5c430813e",
+        "imported-request-preferences-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-imported-request-preferences-vulnerable-index-html-586181c4",
+      "route": "/targets/imported-request-preferences/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-imported-request-preferences-vulnerable-index-d5c430813e",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-imported-request-preferences-vulnerable-request-preferences-js-82431b26",
+      "route": "/targets/imported-request-preferences/vulnerable/request-preferences.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-fixed-80dfd707",
+      "route": "/targets/lazy-route-module/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-lazy-route-module-fixed-index-4a2b508aa3",
+        "lazy-route-module-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-fixed-analytics-route-js-c1d3eb70",
+      "route": "/targets/lazy-route-module/fixed/analytics-route.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-fixed-index-html-750661c6",
+      "route": "/targets/lazy-route-module/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-lazy-route-module-fixed-index-4a2b508aa3",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-fixed-lazy-route-app-js-7bb96d79",
+      "route": "/targets/lazy-route-module/fixed/lazy-route-app.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-vulnerable-f0fb7c61",
+      "route": "/targets/lazy-route-module/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-lazy-route-module-vulnerable-index-322769a0dd",
+        "lazy-route-module-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-vulnerable-analytics-route-js-3ab30d9b",
+      "route": "/targets/lazy-route-module/vulnerable/analytics-route.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-vulnerable-index-html-e35db14f",
+      "route": "/targets/lazy-route-module/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-lazy-route-module-vulnerable-index-322769a0dd",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-lazy-route-module-vulnerable-lazy-route-app-js-baba97bc",
+      "route": "/targets/lazy-route-module/vulnerable/lazy-route-app.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-live-profile-preview-fixed-65e9746a",
+      "route": "/targets/live-profile-preview/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-live-profile-preview-fixed-index-6ae52b7d72",
+        "live-profile-preview-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-live-profile-preview-fixed-index-html-ce5ecaf2",
+      "route": "/targets/live-profile-preview/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-live-profile-preview-fixed-index-6ae52b7d72",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-live-profile-preview-fixed-profile-preview-js-e352e3b6",
+      "route": "/targets/live-profile-preview/fixed/profile-preview.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-live-profile-preview-profile-json-6bbb25d2",
+      "route": "/targets/live-profile-preview/profile.json",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-live-profile-preview-vulnerable-c2ec43ed",
+      "route": "/targets/live-profile-preview/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-live-profile-preview-vulnerable-index-14b04c80cb",
+        "live-profile-preview-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-live-profile-preview-vulnerable-index-html-dbdd0566",
+      "route": "/targets/live-profile-preview/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-live-profile-preview-vulnerable-index-14b04c80cb",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-live-profile-preview-vulnerable-profile-preview-js-e388c0ed",
+      "route": "/targets/live-profile-preview/vulnerable/profile-preview.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-on-demand-analytics-analytics-loader-js-452d67e6",
+      "route": "/targets/on-demand-analytics/analytics-loader.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-on-demand-analytics-fixed-6a8ee70c",
+      "route": "/targets/on-demand-analytics/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-on-demand-analytics-fixed-index-9b8c80a70a",
+        "on-demand-analytics-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-on-demand-analytics-fixed-index-html-eebd50c7",
+      "route": "/targets/on-demand-analytics/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-on-demand-analytics-fixed-index-9b8c80a70a",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-on-demand-analytics-vulnerable-f3cc751a",
+      "route": "/targets/on-demand-analytics/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-on-demand-analytics-vulnerable-index-23cbf57e75",
+        "on-demand-analytics-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-on-demand-analytics-vulnerable-index-html-6ad75817",
+      "route": "/targets/on-demand-analytics/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-on-demand-analytics-vulnerable-index-23cbf57e75",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-control-047335fe",
+      "route": "/targets/same-origin-child-tab/control/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-control-index-ca66dba70c",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-control-index-html-f169c0a9",
+      "route": "/targets/same-origin-child-tab/control/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-control-index-ca66dba70c",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-fixed-249566fb",
+      "route": "/targets/same-origin-child-tab/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-fixed-index-3666474259",
+        "passive/server.mjs",
+        "same-origin-child-tab-control"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-fixed-api-context-c2e7b032",
+      "route": "/targets/same-origin-child-tab/fixed/api/context",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "Related child response evidence",
+      "evidence": "child-response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-fixed-child-runtime-js-38d9ac28",
+      "route": "/targets/same-origin-child-tab/fixed/child-runtime.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-fixed-child-tab-launcher-js-8f3b69a9",
+      "route": "/targets/same-origin-child-tab/fixed/child-tab-launcher.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-fixed-child-html-7cb2f653",
+      "route": "/targets/same-origin-child-tab/fixed/child.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-fixed-child-eef3aef81c",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-fixed-index-html-a0d81e57",
+      "route": "/targets/same-origin-child-tab/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-fixed-index-3666474259",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-vulnerable-37fbeca3",
+      "route": "/targets/same-origin-child-tab/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-vulnerable-index-eb1852d898",
+        "passive/server.mjs",
+        "same-origin-child-tab-review"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-vulnerable-api-context-32e96cb4",
+      "route": "/targets/same-origin-child-tab/vulnerable/api/context",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Related child response evidence",
+      "evidence": "child-response-metadata",
+      "transport": "http",
+      "methods": [
+        "GET"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/targets/same-origin-child-tab/fixed/api/context",
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-vulnerable-child-runtime-js-214fc581",
+      "route": "/targets/same-origin-child-tab/vulnerable/child-runtime.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-vulnerable-child-tab-launcher-js-f18159f4",
+      "route": "/targets/same-origin-child-tab/vulnerable/child-tab-launcher.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-vulnerable-child-html-38c25991",
+      "route": "/targets/same-origin-child-tab/vulnerable/child.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-vulnerable-child-c01a7e4e6e",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-same-origin-child-tab-vulnerable-index-html-2a4e3ab5",
+      "route": "/targets/same-origin-child-tab/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-same-origin-child-tab-vulnerable-index-eb1852d898",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-fixed-e131f484",
+      "route": "/targets/saved-workspace/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-saved-workspace-fixed-index-376061f141",
+        "passive/server.mjs",
+        "saved-workspace-control"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-fixed-dashboard-html-15a5d9e3",
+      "route": "/targets/saved-workspace/fixed/dashboard.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-saved-workspace-fixed-dashboard-926bd7c4b2",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-fixed-dashboard-js-040bde0f",
+      "route": "/targets/saved-workspace/fixed/dashboard.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-fixed-index-html-fab9f384",
+      "route": "/targets/saved-workspace/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-saved-workspace-fixed-index-376061f141",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-vulnerable-34669326",
+      "route": "/targets/saved-workspace/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-saved-workspace-vulnerable-index-71a345cf15",
+        "passive/server.mjs",
+        "saved-workspace-review"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-vulnerable-dashboard-html-3283708b",
+      "route": "/targets/saved-workspace/vulnerable/dashboard.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-saved-workspace-vulnerable-dashboard-19cd4c512e",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-vulnerable-dashboard-js-2dcf3952",
+      "route": "/targets/saved-workspace/vulnerable/dashboard.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-vulnerable-index-html-2ee6a632",
+      "route": "/targets/saved-workspace/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-saved-workspace-vulnerable-index-71a345cf15",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-saved-workspace-workspace-editor-js-639e0090",
+      "route": "/targets/saved-workspace/workspace-editor.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-session-bound-order-search-fixed-c3952854",
+      "route": "/targets/session-bound-order-search/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs",
+        "session-order-search-control"
+      ]
+    },
+    {
+      "id": "dast.route.targets-session-bound-order-search-fixed-api-search-dbcdff05",
+      "route": "/targets/session-bound-order-search/fixed/api/search",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "Authenticated active request",
+      "evidence": "bounded-active-request",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-session-bound-order-search-fixed-index-html-b4d2b9c1",
+      "route": "/targets/session-bound-order-search/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-session-bound-order-search-order-search-js-1890f76b",
+      "route": "/targets/session-bound-order-search/order-search.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-session-bound-order-search-vulnerable-61075ede",
+      "route": "/targets/session-bound-order-search/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs",
+        "session-order-search-review"
+      ]
+    },
+    {
+      "id": "dast.route.targets-session-bound-order-search-vulnerable-api-search-939d5b90",
+      "route": "/targets/session-bound-order-search/vulnerable/api/search",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Authenticated active request",
+      "evidence": "bounded-active-request",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "https",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/targets/session-bound-order-search/fixed/api/search",
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-session-bound-order-search-vulnerable-index-html-5bedc924",
+      "route": "/targets/session-bound-order-search/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-support-widget-fixed-76df31b8",
+      "route": "/targets/support-widget/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-support-widget-fixed-index-9b5d0e78f0",
+        "passive/server.mjs",
+        "support-widget-fixed"
+      ]
+    },
+    {
+      "id": "dast.route.targets-support-widget-fixed-index-html-777adf9e",
+      "route": "/targets/support-widget/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-support-widget-fixed-index-9b5d0e78f0",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-support-widget-fixed-widget-js-3d922929",
+      "route": "/targets/support-widget/fixed/widget.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-support-widget-vulnerable-f0463dcd",
+      "route": "/targets/support-widget/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-support-widget-vulnerable-index-eacc4b23d1",
+        "passive/server.mjs",
+        "support-widget-vulnerable"
+      ]
+    },
+    {
+      "id": "dast.route.targets-support-widget-vulnerable-index-html-dd6804ee",
+      "route": "/targets/support-widget/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-support-widget-vulnerable-index-eacc4b23d1",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-support-widget-vulnerable-widget-js-7d5124b5",
+      "route": "/targets/support-widget/vulnerable/widget.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Application workflow surface",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-transient-route-notice-fixed-fa2b535d",
+      "route": "/targets/transient-route-notice/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-transient-route-notice-fixed-index-b04d3b61b5",
+        "passive/server.mjs",
+        "transient-route-notice-control"
+      ]
+    },
+    {
+      "id": "dast.route.targets-transient-route-notice-fixed-index-html-e8e2978b",
+      "route": "/targets/transient-route-notice/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-transient-route-notice-fixed-index-b04d3b61b5",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-transient-route-notice-fixed-route-notice-js-78b6e33a",
+      "route": "/targets/transient-route-notice/fixed/route-notice.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-transient-route-notice-vulnerable-9653f78a",
+      "route": "/targets/transient-route-notice/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-transient-route-notice-vulnerable-index-a9791ff626",
+        "passive/server.mjs",
+        "transient-route-notice-review"
+      ]
+    },
+    {
+      "id": "dast.route.targets-transient-route-notice-vulnerable-index-html-0f63e3b0",
+      "route": "/targets/transient-route-notice/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-transient-route-notice-vulnerable-index-a9791ff626",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-transient-route-notice-vulnerable-route-notice-js-dfcb140a",
+      "route": "/targets/transient-route-notice/vulnerable/route-notice.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.wp-admin-index-html-726cc2b9",
+      "route": "/wp-admin/index.html",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "Known deployment resource",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive.wp-admin-index",
+        "passive/server.mjs"
+      ]
+    }
+  ]
+}

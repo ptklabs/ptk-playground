@@ -1,0 +1,6 @@
+{
+  "html": "<strong data-ptk-evidence=\"response\">PTK response evidence</strong>",
+  "htmlFragment": "<em data-ptk-evidence=\"fragment\">PTK response fragment</em>",
+  "formAction": "./?ptk=response-form",
+  "formJavascriptAction": "javascript:void(0)"
+}

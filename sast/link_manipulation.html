@@ -1,161 +1,79 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — Link manipulation</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-
-  <!-- External scripts -->
-  <script src="js/sources.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="js/link_manipulation/link_manipulation.js"></script>
-
-  <script src="js/summary.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', updateSummary);
-  </script>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Link manipulation · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for Link manipulation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — Link manipulation</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/link_manipulation.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-    <p class="meta">These scenarios focus on attacker-controlled values influencing anchor attributes. No helpers beyond a single minimal script.</p>
-
-    <div class="card">
-      <div class="card-meta"><strong>Preview link</strong></div>
-      <div class="preview">
-        <span>Link:</span>
-        <a id="link-preview" href="#" target="_self">#</a>
-      </div>
-      <div class="log" id="link-log">Awaiting events…</div>
-    </div>
-
-    <!-- Inline scenarios -->
-    <h2 class="section-title">Inline scenarios</h2>
-    <div class="grid">
-
-      <div class="card" data-severity="high, low" id="il-1">
-        <div class="card-meta">INLINE-1 (High): <code>href</code> set directly from <code>location.hash</code> (supports <code>javascript:</code>)</div>
-        <pre>// inline-script[#1]
-(function(){
-  if (!location.hash) return;
-  var raw = location.hash.slice(1);
-  try { raw = decodeURIComponent(raw); } catch (err) {}
-  linkCases.setLink('link-preview', raw, 'Set from hash');
-})();</pre>
-        <script>
-          (function() {
-            if (!location.hash) return;
-            var raw = location.hash.slice(1);
-            try {
-              raw = decodeURIComponent(raw);
-            } catch (err) {}
-            linkCases.setLink('link-preview', raw, 'Set from hash');
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="high, low" id="il-2">
-        <div class="card-meta">INLINE-2 (High): Query parameter appended without validation</div>
-        <pre>// inline-script[#2]
-(function(){
-  var params = new URLSearchParams(location.search);
-  var dest = params.get('link');
-  if (!dest) return;
-  var href = '/go?next=' + dest;
-  linkCases.setLink('link-preview', href, 'Set from query');
-})();</pre>
-        <script>
-          (function() {
-            var params = new URLSearchParams(location.search);
-            var dest = params.get('link');
-            if (!dest) return;
-            var href = '/go?next=' + dest;
-            linkCases.setLink('link-preview', href, 'Set from query');
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="high, low" id="il-3">
-        <div class="card-meta">INLINE-3 (High): Form <code>action</code> without <code>validation</code></div>
-        <pre>// inline-script[#3]
-(function(){
-  var form = document.getElementById('form');
-  if (!form) return;
-  form.setAttribute('action', getCookieByName('form_action'));
-})();</pre>
-        <script>
-          (function() {
-            var form = document.getElementById('form');
-            if (!form) return;
-            form.setAttribute('action', getCookieByName('form_action'));
-          })();
-        </script>
-      </div>
-
-
-
-      <div class="card" data-severity="high, low" id="jq-1">
-        <div class="card-meta">JQUERY-1 (High): jQuery <code>attr()</code> sets <code>href</code> from <code>returnUrl</code> param</div>
-        <div class="preview">
-          <span>jQuery link:</span>
-          <a id="jq-link-preview" href="#">#</a>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>Link manipulation</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>Link manipulation</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>4</strong> focused cases</span><span><strong>4</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-link-manipulation.il-1">
+        <div class="family-case-card__meta"><span>Case 01</span><span>link href assignment</span></div>
+        <h2>INLINE-1 (High): href</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-link-manipulation/il-1/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-link-manipulation/il-1/fixed/">Open repaired control</a>
         </div>
-        <pre>// inline-script[#5]
-$(function(){
-  var params = new URLSearchParams(window.location.search);
-  var returnUrl = params.get('returnUrl');
-  if (!returnUrl) return;
-  $('#jq-link-preview').attr('href', returnUrl);
-});</pre>
-        <script>
-          $(function() {
-            var params = new URLSearchParams(window.location.search);
-            var returnUrl = params.get('returnUrl');
-            if (!returnUrl) return;
-            $('#jq-link-preview').attr('href', returnUrl);
-          });
-        </script>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-link-manipulation.il-2">
+        <div class="family-case-card__meta"><span>Case 02</span><span>link href assignment</span></div>
+        <h2>INLINE-2 (High): Query parameter appended without validation</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-link-manipulation/il-2/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-link-manipulation/il-2/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-link-manipulation.il-3">
+        <div class="family-case-card__meta"><span>Case 03</span><span>link href assignment</span></div>
+        <h2>INLINE-3 (High): Form action</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-link-manipulation/il-3/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-link-manipulation/il-3/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-link-manipulation.jq-1">
+        <div class="family-case-card__meta"><span>Case 04</span><span>link href assignment</span></div>
+        <h2>JQUERY-1 (High): jQuery attr()</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-link-manipulation/jq-1/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-link-manipulation/jq-1/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-    </div>
-
-    <!-- Buttons / external triggers -->
-    <h2 class="section-title">Simple triggers</h2>
-    <div class="card">
-      <div class="card-meta"><strong>Buttons feed the same link preview</strong></div>
-      <pre data-severity="high">onclick="linkCases.setLink('link-preview', document.getElementById('user_link').value, 'Set from field')</pre>
-      <div class="controls">
-        <input id="user_link" type="text" value="javascript:alert('click')" />
-        <button class="btn" type="button" onclick="linkCases.setLink('link-preview', document.getElementById('user_link').value, 'Set from field')">Use field</button>
-      </div>
-      <pre data-severity="high">linkCases.setLink('link-preview', linkCases.getLocal(), 'Set from localStorage')</pre>
-      <div class="controls">
-        <button class="btn" type="button" onclick="linkCases.setLink('link-preview', linkCases.getLocal(), 'Set from localStorage')">Use localStorage</button>
-      </div>
-      <pre data-severity="high">onclick="linkCases.setLink('link-preview', linkCases.getCookie(), 'Set from cookie')"</pre>
-      <div class="controls">
-        <button class="btn" type="button" onclick="linkCases.setLink('link-preview', linkCases.getCookie(), 'Set from cookie')">Use cookie</button>
-      </div>
-    </div>
-
-    <footer>PTK SAST testbed — Link manipulation. <a class="back" href="index.html">Back to index</a></footer>
-  </div>
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./link_manipulation.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

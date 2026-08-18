@@ -2,55 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST XPath Injection</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    textarea { min-height: 96px; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    .back-link { display: inline-block; margin-bottom: 12px; color: #93c5fd; text-decoration: none; font-weight: 600; }
-    .back-link:hover { text-decoration: underline; }
-  </style>
+  <title>XPath Injection · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for XPath Injection.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST XPath Injection</h1>
-  <p class="note">Exercises <code>document.evaluate()</code> with controlled XPath expressions.</p>
-
-  <div class="card">
-    <label for="payload">XPath payload</label>
-    <textarea id="payload">//*[@id='items']//*[contains(@class,'item')]</textarea>
-    <button id="prime">Prime taint sources</button>
-    <button id="btn-evaluate">document.evaluate(payload)</button>
-  </div>
-
-  <script>
-    function primeSources(value) {
-      document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
-      localStorage.setItem('iast_payload', value);
-      sessionStorage.setItem('iast_payload', value);
-      window.name = value;
-    }
-
-    const payloadField = document.getElementById('payload');
-
-    document.getElementById('prime').onclick = () => {
-      primeSources(payloadField.value);
-      alert('XPath payload primed.');
-    };
-
-    document.getElementById('btn-evaluate').onclick = () => {
-      try {
-        document.evaluate(payloadField.value, document, null, XPathResult.ANY_TYPE, null);
-      } catch (err) {
-        console.warn('XPath evaluation failed:', err);
-      }
-    };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_xpath_injection.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>XPath Injection</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>XPath Injection</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>1</strong> focused cases</span><span><strong>1</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-xpath-injection.btn-evaluate">
+        <div class="family-case-card__meta"><span>Case 01</span><span>xpath expression</span></div>
+        <h2>document.evaluate(payload)</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-xpath-injection/btn-evaluate/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-xpath-injection/btn-evaluate/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_xpath_injection.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

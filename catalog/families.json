@@ -1,0 +1,1481 @@
+{
+  "schema": "owasp-ptk-playground-families/v1",
+  "version": 1,
+  "families": [
+    {
+      "id": "family.action-loaded-dependencies",
+      "title": "Action-loaded dependencies",
+      "engines": [
+        "SCA"
+      ],
+      "challengeIds": [
+        "on-demand-analytics"
+      ]
+    },
+    {
+      "id": "family.action-loaded-response-data",
+      "title": "Action-loaded response data",
+      "engines": [
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "live-profile-preview"
+      ]
+    },
+    {
+      "id": "family.ajax",
+      "title": "Ajax",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.ajax-request-header"
+      ]
+    },
+    {
+      "id": "family.api-and-platform-discovery",
+      "title": "API and platform discovery",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.passive-graphiql-5af2d466",
+        "dast.route.passive-graphql-5976ed21",
+        "dast.route.passive-openapi-json-322c3b83",
+        "dast.route.passive-openapi-yaml-de6bb8ea",
+        "dast.route.passive-postman-collection-json-e1d8a2cf",
+        "dast.route.passive-redoc-2fba9c18",
+        "dast.route.passive-swagger-ui-index-html-f4e5d4c2",
+        "dast.route.well-known-assetlinks-json-6cafef57",
+        "dast.route.well-known-change-password-6b5159ff",
+        "dast.route.well-known-jwks-json-bc639538",
+        "dast.route.well-known-oauth-authorization-server-cb96d2ef",
+        "dast.route.well-known-openid-configuration-ee132748",
+        "dast.route.well-known-security-txt-45c9b9d0"
+      ]
+    },
+    {
+      "id": "family.api-docs",
+      "title": "API docs",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.passive-swagger-ui-index"
+      ]
+    },
+    {
+      "id": "family.application-workflow-surface",
+      "title": "Application workflow surface",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.passive-checkout-payment-html-e9006afa",
+        "dast.route.passive-downloads-report-csv-769fe967",
+        "dast.route.passive-files-data-dump-20cc1254",
+        "dast.route.passive-upload-index-html-eef47e92",
+        "dast.route.support-tickets-create-b22bcaf8",
+        "dast.route.switch-tenant-3ec88e58"
+      ]
+    },
+    {
+      "id": "family.auth-tokens",
+      "title": "Auth tokens",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.jwt-client-misuse"
+      ]
+    },
+    {
+      "id": "family.authenticated-active-request",
+      "title": "Authenticated active request",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.targets-session-bound-order-search-vulnerable-api-search-939d5b90"
+      ]
+    },
+    {
+      "id": "family.authenticated-browser-traffic",
+      "title": "Authenticated browser traffic",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "session-bound-order-search"
+      ]
+    },
+    {
+      "id": "family.automation-canary",
+      "title": "Automation canary",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.dangerous-url-schemes-minimal",
+        "iast.postmessage-form-hijack-minimal"
+      ]
+    },
+    {
+      "id": "family.browser-trust-boundaries",
+      "title": "Browser trust boundaries",
+      "engines": [
+        "IAST",
+        "SAST",
+        "SCA"
+      ],
+      "challengeIds": [
+        "support-widget"
+      ]
+    },
+    {
+      "id": "family.client-configuration-integrity",
+      "title": "Client configuration integrity",
+      "engines": [
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "imported-request-preferences"
+      ]
+    },
+    {
+      "id": "family.client-template-injection",
+      "title": "Client template injection",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-client-template-injection.tmpl-target"
+      ]
+    },
+    {
+      "id": "family.client-side-prototype-pollution",
+      "title": "Client-side prototype pollution",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-prototype-pollution-client.page"
+      ]
+    },
+    {
+      "id": "family.cookies",
+      "title": "Cookies",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.cookie"
+      ]
+    },
+    {
+      "id": "family.data",
+      "title": "Data",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.passive-fixtures-data-sensitive-data"
+      ]
+    },
+    {
+      "id": "family.data-sinks",
+      "title": "Data sinks",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.client-injection"
+      ]
+    },
+    {
+      "id": "family.debug-and-client-disclosure",
+      "title": "Debug and client disclosure",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.passive-assets-app-bundle-js-b947fbe6",
+        "dast.route.passive-assets-app-bundle-js-map-290d4171",
+        "dast.route.passive-assets-client-config-js-39fddcdc",
+        "dast.route.passive-debug-source-map-html-a6a2b6fc",
+        "dast.route.passive-fixtures-errors-stacktraces-html-aab7894a"
+      ]
+    },
+    {
+      "id": "family.dom",
+      "title": "DOM",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.dom-clobbering"
+      ]
+    },
+    {
+      "id": "family.dom-apis",
+      "title": "DOM APIs",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.append-child"
+      ]
+    },
+    {
+      "id": "family.dom-clobbering",
+      "title": "DOM clobbering",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-dom-clobbering.page"
+      ]
+    },
+    {
+      "id": "family.dom-data-manipulation",
+      "title": "DOM data manipulation",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.dom-data-manipulation"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-ajax-request-header-manipulation",
+      "title": "DOM-based test cases — Ajax request header manipulation",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-ajax-request-header.arh-copy-cookie",
+        "sast.atomic.sast-ajax-request-header.arh-global-eval",
+        "sast.atomic.sast-ajax-request-header.arh-message-listener",
+        "sast.atomic.sast-ajax-request-header.arh-setrequestheader",
+        "sast.atomic.sast-ajax-request-header.arh-xhr-open"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-appendchild",
+      "title": "DOM-based test cases — appendChild()",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-append-child-copy.button-10-ext-template-literal",
+        "sast.atomic.sast-append-child-copy.button-11-ext-wrapper-function",
+        "sast.atomic.sast-append-child-copy.button-12-ext-decodeuricomponent",
+        "sast.atomic.sast-append-child-copy.button-13-ext-delegated-appendchild",
+        "sast.atomic.sast-append-child-copy.button-14-ext-append-text-node",
+        "sast.atomic.sast-append-child-copy.button-3-ext-location-hash",
+        "sast.atomic.sast-append-child-copy.button-4-ext-urlsearchparams",
+        "sast.atomic.sast-append-child-copy.button-5-ext-window-name",
+        "sast.atomic.sast-append-child-copy.button-6-ext-document-referrer",
+        "sast.atomic.sast-append-child-copy.button-7-ext-document-cookie",
+        "sast.atomic.sast-append-child-copy.button-8-ext-localstorage",
+        "sast.atomic.sast-append-child-copy.button-9-ext-sessionstorage",
+        "sast.atomic.sast-append-child-copy.il-1",
+        "sast.atomic.sast-append-child-copy.il-2",
+        "sast.atomic.sast-append-child.append-inline-2",
+        "sast.atomic.sast-append-child.append-inline-3",
+        "sast.atomic.sast-append-child.button-4-ext-urlsearchparams",
+        "sast.atomic.sast-append-child.il-1"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-client-side-json-sql-xpath",
+      "title": "DOM-based test cases — Client-side JSON / SQL / XPath",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-client-injection.button-1-ext-eval-from-json-parse-no-attributes-high",
+        "sast.atomic.sast-client-injection.ci-sql-review",
+        "sast.atomic.sast-client-injection.ci-sql-taint",
+        "sast.atomic.sast-client-injection.ci-xpath-taint"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-document-cookie-security",
+      "title": "DOM-based test cases — document.cookie security",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-cookie.button-1-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-cookie.button-2-ext-from-location-search-high",
+        "sast.atomic.sast-cookie.button-3-ext-from-element-value-high",
+        "sast.atomic.sast-cookie.il-2",
+        "sast.atomic.sast-cookie.il-3",
+        "sast.atomic.sast-cookie.il-4",
+        "sast.atomic.sast-test.il-4"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-document-write-writeln",
+      "title": "DOM-based test cases — document.write / writeln",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-document-write.button-2-ext-high-direct-hash-runwrite-helper",
+        "sast.atomic.sast-document-write.button-3-ext-high-runwrite-helper-with-ext-source",
+        "sast.atomic.sast-document-write.il-1",
+        "sast.atomic.sast-document-write.il-2",
+        "sast.atomic.sast-document-write.il-3",
+        "sast.atomic.sast-document-write.il-4",
+        "sast.atomic.sast-document-write.il-7",
+        "sast.atomic.sast-document-write.il-8",
+        "sast.atomic.sast-document-write.il-9"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-dom-data-manipulation-sinks",
+      "title": "DOM-based test cases — DOM data manipulation sinks",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-dom-data-manipulation-copy.external-card-navigation",
+        "sast.atomic.sast-dom-data-manipulation-copy.external-card-script",
+        "sast.atomic.sast-dom-data-manipulation-copy.external-card-style",
+        "sast.atomic.sast-dom-data-manipulation-copy.inline-card-history",
+        "sast.atomic.sast-dom-data-manipulation-copy.inline-card-html",
+        "sast.atomic.sast-dom-data-manipulation-copy.inline-card-navigation",
+        "sast.atomic.sast-dom-data-manipulation-copy.inline-card-script",
+        "sast.atomic.sast-dom-data-manipulation-copy.inline-card-style",
+        "sast.atomic.sast-dom-data-manipulation.inline-card-forms",
+        "sast.atomic.sast-dom-data-manipulation.inline-card-history",
+        "sast.atomic.sast-dom-data-manipulation.inline-card-style"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-dom-selector-injection",
+      "title": "DOM-based test cases — DOM selector injection",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-dom-selector.button-1-ext-from-cookie-no-attributes-high",
+        "sast.atomic.sast-dom-selector.ds-hash-queryselector",
+        "sast.atomic.sast-dom-selector.ds-jquery-find-query",
+        "sast.atomic.sast-dom-selector.ds-jquery-find-root",
+        "sast.atomic.sast-dom-selector.ds-jquery-root",
+        "sast.atomic.sast-dom-selector.ds-wildcard-postmessage"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-element-innerhtml",
+      "title": "DOM-based test cases — element.innerHTML",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-inner-html.button-3-ext-high-location-hash-innerhtmlsink",
+        "sast.atomic.sast-inner-html.button-4-ext-high-element-value-innerhtmlsink",
+        "sast.atomic.sast-inner-html.il-1",
+        "sast.atomic.sast-inner-html.il-2",
+        "sast.atomic.sast-inner-html.il-4"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-eval-family-sinks",
+      "title": "DOM-based test cases — eval family sinks",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-eval.button-3-ext-location-hash",
+        "sast.atomic.sast-eval.button-4-ext-urlsearchparams",
+        "sast.atomic.sast-eval.button-5-ext-window-name",
+        "sast.atomic.sast-eval.button-6-ext-document-referrer",
+        "sast.atomic.sast-eval.button-7-ext-document-cookie",
+        "sast.atomic.sast-eval.button-8-ext-localstorage",
+        "sast.atomic.sast-eval.button-9-ext-sessionstorage",
+        "sast.atomic.sast-eval.il-1",
+        "sast.atomic.sast-eval.il-2",
+        "sast.atomic.sast-eval.il-3",
+        "sast.atomic.sast-eval.il-5"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-insertadjacenthtml",
+      "title": "DOM-based test cases — insertAdjacentHTML",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-insert-adjacent-html.button-3-ext-location-hash",
+        "sast.atomic.sast-insert-adjacent-html.button-4-ext-urlsearchparams",
+        "sast.atomic.sast-insert-adjacent-html.button-5-ext-window-name",
+        "sast.atomic.sast-insert-adjacent-html.button-6-ext-document-referrer",
+        "sast.atomic.sast-insert-adjacent-html.button-7-ext-document-cookie",
+        "sast.atomic.sast-insert-adjacent-html.button-8-ext-localstorage",
+        "sast.atomic.sast-insert-adjacent-html.button-9-ext-sessionstorage",
+        "sast.atomic.sast-insert-adjacent-html.il-1",
+        "sast.atomic.sast-insert-adjacent-html.il-2"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-javascript-injection-taint",
+      "title": "DOM-based test cases — JavaScript injection (taint)",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-javascript-injection-taint.jsi-crmf",
+        "sast.atomic.sast-javascript-injection-taint.jsi-execcommand",
+        "sast.atomic.sast-javascript-injection-taint.jsi-execscript",
+        "sast.atomic.sast-javascript-injection-taint.jsi-fragment",
+        "sast.atomic.sast-javascript-injection-taint.jsi-jquery",
+        "sast.atomic.sast-javascript-injection-taint.jsi-script-text",
+        "sast.atomic.sast-javascript-injection-taint.jsi-timer"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-link-manipulation",
+      "title": "DOM-based test cases — Link manipulation",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-link-manipulation.il-1",
+        "sast.atomic.sast-link-manipulation.il-2",
+        "sast.atomic.sast-link-manipulation.il-3",
+        "sast.atomic.sast-link-manipulation.jq-1"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-new-function",
+      "title": "DOM-based test cases — new Function(...)",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-function-constructor.button-3-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-function-constructor.button-4-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-function-constructor.button-5-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-function-constructor.button-6-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-function-constructor.button-7-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-function-constructor.button-8-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-function-constructor.button-9-ext-from-hash-no-attributes-high",
+        "sast.atomic.sast-function-constructor.il-1",
+        "sast.atomic.sast-function-constructor.il-2",
+        "sast.atomic.sast-function-constructor.il-3"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-open-redirect-sinks",
+      "title": "DOM-based test cases — Open Redirect sinks",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-open-redirect.button-3-ext-location-hash",
+        "sast.atomic.sast-open-redirect.button-4-ext-urlsearchparams",
+        "sast.atomic.sast-open-redirect.button-5-ext-window-name",
+        "sast.atomic.sast-open-redirect.button-6-ext-document-referrer",
+        "sast.atomic.sast-open-redirect.button-7-ext-document-cookie",
+        "sast.atomic.sast-open-redirect.button-8-ext-localstorage",
+        "sast.atomic.sast-open-redirect.button-9-ext-sessionstorage",
+        "sast.atomic.sast-open-redirect.il-1",
+        "sast.atomic.sast-open-redirect.il-2"
+      ]
+    },
+    {
+      "id": "family.dom-based-test-cases-web-message-handling",
+      "title": "DOM-based test cases — Web Message handling",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-web-message.wm-cookie-write",
+        "sast.atomic.sast-web-message.wm-missing-target",
+        "sast.atomic.sast-web-message.wm-selector-write",
+        "sast.atomic.sast-web-message.wm-wildcard-target"
+      ]
+    },
+    {
+      "id": "family.dynamic-execution",
+      "title": "Dynamic execution",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.eval",
+        "sast.function-constructor",
+        "sast.javascript-injection-taint"
+      ]
+    },
+    {
+      "id": "family.focused-canary",
+      "title": "Focused canary",
+      "engines": [
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "hash-html-rendering",
+        "iast.angularjs-expression-parser"
+      ]
+    },
+    {
+      "id": "family.frameworks",
+      "title": "Frameworks",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.wp-admin-index"
+      ]
+    },
+    {
+      "id": "family.helper",
+      "title": "Helper",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.iast-referrer-helper"
+      ]
+    },
+    {
+      "id": "family.html",
+      "title": "HTML",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.passive-fixtures-errors-stacktraces"
+      ]
+    },
+    {
+      "id": "family.html-sinks",
+      "title": "HTML sinks",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.document-write",
+        "sast.inner-html",
+        "sast.insert-adjacent-html"
+      ]
+    },
+    {
+      "id": "family.http-response-evidence",
+      "title": "HTTP response evidence",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "deployment-response-boundary"
+      ]
+    },
+    {
+      "id": "family.http-response-headers",
+      "title": "HTTP response headers",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.passive-cases-headers-powered-by-html-cbf717ea",
+        "dast.route.passive-fixtures-headers-hsts-over-http-html-99755486",
+        "dast.route.passive-fixtures-headers-report-only-html-b4235bf4",
+        "dast.route.passive-fixtures-headers-weak-security-html-cc2d3bc9"
+      ]
+    },
+    {
+      "id": "family.https",
+      "title": "HTTPS",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.passive-fixtures-headers-weak-security"
+      ]
+    },
+    {
+      "id": "family.iast-blob-and-object-url-execution",
+      "title": "IAST Blob and Object URL Execution",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-blob-object-url-execution.btn-iframe-url",
+        "iast.atomic.iast-iast-blob-object-url-execution.btn-script-url",
+        "iast.atomic.iast-iast-blob-object-url-execution.btn-worker-url"
+      ]
+    },
+    {
+      "id": "family.iast-client-http-exfiltration-module",
+      "title": "IAST Client HTTP Exfiltration Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-client-http-exfiltration.btn-beacon",
+        "iast.atomic.iast-iast-client-http-exfiltration.btn-fetch-body",
+        "iast.atomic.iast-iast-client-http-exfiltration.btn-fetch-headers",
+        "iast.atomic.iast-iast-client-http-exfiltration.btn-fetch-url",
+        "iast.atomic.iast-iast-client-http-exfiltration.btn-image",
+        "iast.atomic.iast-iast-client-http-exfiltration.btn-xhr"
+      ]
+    },
+    {
+      "id": "family.iast-client-json-parsing",
+      "title": "IAST Client JSON Parsing",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-client-json-parsing.btn-parse",
+        "iast.atomic.iast-iast-client-json-parsing.btn-parse-selected-source"
+      ]
+    },
+    {
+      "id": "family.iast-client-sql-injection",
+      "title": "IAST Client SQL Injection",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-client-sql-injection.btn-open",
+        "iast.atomic.iast-iast-client-sql-injection.btn-sql"
+      ]
+    },
+    {
+      "id": "family.iast-clipboard-exfiltration-module",
+      "title": "IAST Clipboard Exfiltration Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-clipboard-exfiltration.btn-clipboard"
+      ]
+    },
+    {
+      "id": "family.iast-csrf-like-requests-module",
+      "title": "IAST CSRF-like Requests Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-csrf-like-requests.btn-csrf"
+      ]
+    },
+    {
+      "id": "family.iast-debug-logging-module",
+      "title": "IAST Debug Logging Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-debug-logging-leaks.btn-error",
+        "iast.atomic.iast-iast-debug-logging-leaks.btn-log"
+      ]
+    },
+    {
+      "id": "family.iast-document-domain-manipulation",
+      "title": "IAST document.domain Manipulation",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-document-domain-manipulation.btn-domain"
+      ]
+    },
+    {
+      "id": "family.iast-dom-clobbering",
+      "title": "IAST DOM Clobbering",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-dom-clobbering.btn-anchor",
+        "iast.atomic.iast-iast-dom-clobbering.btn-form"
+      ]
+    },
+    {
+      "id": "family.iast-dom-parser-xss",
+      "title": "IAST DOM Parser XSS",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-dom-parser-xss.btn-domparser",
+        "iast.atomic.iast-iast-dom-parser-xss.btn-range",
+        "iast.atomic.iast-iast-dom-parser-xss.btn-sethtmlunsafe",
+        "iast.atomic.iast-iast-dom-parser-xss.btn-shadow-sethtmlunsafe"
+      ]
+    },
+    {
+      "id": "family.iast-dom-url-navigation-and-link-manipulation",
+      "title": "IAST DOM URL Navigation and Link Manipulation",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-dom-url-navigation.btn-assign",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-attr-action",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-attr-formaction",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-attr-href",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-attr-src",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-href",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-pushstate",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-replace",
+        "iast.atomic.iast-iast-dom-url-navigation.btn-replacestate",
+        "iast.atomic.iast-iast-dom-url-navigation.form-button"
+      ]
+    },
+    {
+      "id": "family.iast-dom-xss-module",
+      "title": "IAST DOM XSS Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-dom-xss.appendchild",
+        "iast.atomic.iast-iast-dom-xss.documentwrite",
+        "iast.atomic.iast-iast-dom-xss.inline-event-target",
+        "iast.atomic.iast-iast-dom-xss.inlineevent",
+        "iast.atomic.iast-iast-dom-xss.innerhtml",
+        "iast.atomic.iast-iast-dom-xss.insertadjacenthtml",
+        "iast.atomic.iast-iast-dom-xss.outerhtml"
+      ]
+    },
+    {
+      "id": "family.iast-dom-xss-secondary-sources",
+      "title": "IAST DOM XSS Secondary Sources",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-dom-xss-secondary-sources.btn-adjacent",
+        "iast.atomic.iast-iast-dom-xss-secondary-sources.btn-inline",
+        "iast.atomic.iast-iast-dom-xss-secondary-sources.btn-inner",
+        "iast.atomic.iast-iast-dom-xss-secondary-sources.btn-mutation",
+        "iast.atomic.iast-iast-dom-xss-secondary-sources.btn-outer",
+        "iast.atomic.iast-iast-dom-xss-secondary-sources.btn-srcdoc",
+        "iast.atomic.iast-iast-dom-xss-secondary-sources.btn-write"
+      ]
+    },
+    {
+      "id": "family.iast-dynamic-script-loading-fixture",
+      "title": "IAST Dynamic Script Loading Fixture",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-dynamic-script-loading.btn-append",
+        "iast.atomic.iast-iast-dynamic-script-loading.btn-reuse"
+      ]
+    },
+    {
+      "id": "family.iast-filereader-sensitive-flows",
+      "title": "IAST FileReader Sensitive Flows",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-file-reader-sensitive-flows.btn-arraybuffer",
+        "iast.atomic.iast-iast-file-reader-sensitive-flows.btn-dataurl",
+        "iast.atomic.iast-iast-file-reader-sensitive-flows.btn-text"
+      ]
+    },
+    {
+      "id": "family.iast-form-submission-hijack-and-dangerous-form-schemes",
+      "title": "IAST Form Submission Hijack and Dangerous Form Schemes",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-form-submission-hijack.btn-action",
+        "iast.atomic.iast-iast-form-submission-hijack.btn-data-action",
+        "iast.atomic.iast-iast-form-submission-hijack.btn-data-formaction",
+        "iast.atomic.iast-iast-form-submission-hijack.btn-formaction",
+        "iast.atomic.iast-iast-form-submission-hijack.btn-js-action",
+        "iast.atomic.iast-iast-form-submission-hijack.btn-js-formaction",
+        "iast.atomic.iast-iast-form-submission-hijack.submit-btn"
+      ]
+    },
+    {
+      "id": "family.iast-form-submit-and-requestsubmit",
+      "title": "IAST Form Submit and requestSubmit",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-form-submit-csrf.btn-request-submit",
+        "iast.atomic.iast-iast-form-submit-csrf.btn-set-action",
+        "iast.atomic.iast-iast-form-submit-csrf.btn-set-formaction",
+        "iast.atomic.iast-iast-form-submit-csrf.btn-submit",
+        "iast.atomic.iast-iast-form-submit-csrf.submit-btn"
+      ]
+    },
+    {
+      "id": "family.iast-iframe-navigation-module",
+      "title": "IAST IFrame Navigation Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-iframe-navigation.btn-src",
+        "iast.atomic.iast-iast-iframe-navigation.btn-srcdoc"
+      ]
+    },
+    {
+      "id": "family.iast-inbound-channel-trust",
+      "title": "IAST Inbound Channel Trust",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-inbound-channel-trust.btn-broadcast-innerhtml",
+        "iast.atomic.iast-iast-inbound-channel-trust.btn-port-eval",
+        "iast.atomic.iast-iast-inbound-channel-trust.btn-worker-action",
+        "iast.atomic.iast-iast-inbound-channel-trust.submit-btn"
+      ]
+    },
+    {
+      "id": "family.iast-indexeddb-and-cachestorage",
+      "title": "IAST IndexedDB and CacheStorage",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-indexeddb-cache-storage.btn-cache-fetch",
+        "iast.atomic.iast-iast-indexeddb-cache-storage.btn-cache-put",
+        "iast.atomic.iast-iast-indexeddb-cache-storage.btn-idb-eval",
+        "iast.atomic.iast-iast-indexeddb-cache-storage.btn-idb-put"
+      ]
+    },
+    {
+      "id": "family.iast-js-execution-module",
+      "title": "IAST JS Execution Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-js-execution.btn-apply",
+        "iast.atomic.iast-iast-js-execution.btn-eval",
+        "iast.atomic.iast-iast-js-execution.btn-fn"
+      ]
+    },
+    {
+      "id": "family.iast-open-redirect-and-source-scoped-redirects",
+      "title": "IAST Open Redirect and Source-scoped Redirects",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-open-redirect.btn-action",
+        "iast.atomic.iast-iast-open-redirect.btn-anchor",
+        "iast.atomic.iast-iast-open-redirect.btn-assign",
+        "iast.atomic.iast-iast-open-redirect.btn-href",
+        "iast.atomic.iast-iast-open-redirect.btn-nav",
+        "iast.atomic.iast-iast-open-redirect.btn-open",
+        "iast.atomic.iast-iast-open-redirect.btn-replace",
+        "iast.atomic.iast-iast-open-redirect.redirect-submit"
+      ]
+    },
+    {
+      "id": "family.iast-postmessage-misuse-module",
+      "title": "IAST postMessage Misuse Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-postmessage-misuse.btn-postmessage",
+        "iast.atomic.iast-iast-postmessage-misuse.btn-postmessage-cross"
+      ]
+    },
+    {
+      "id": "family.iast-prototype-pollution-impact",
+      "title": "IAST Prototype Pollution Impact",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-prototype-pollution-impact.btn-trigger",
+        "iast.atomic.iast-iast-prototype-pollution-impact.btn-write"
+      ]
+    },
+    {
+      "id": "family.iast-realtime-exfiltration-module",
+      "title": "IAST Realtime Exfiltration Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-realtime-exfiltration.btn-rtc",
+        "iast.atomic.iast-iast-realtime-exfiltration.btn-ws"
+      ]
+    },
+    {
+      "id": "family.iast-referrer-helper",
+      "title": "IAST Referrer Helper",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-referrer-helper.open"
+      ]
+    },
+    {
+      "id": "family.iast-response-field-reachability",
+      "title": "IAST Response Field Reachability",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-response-field-reachability.btn-action",
+        "iast.atomic.iast-iast-response-field-reachability.btn-action-js",
+        "iast.atomic.iast-iast-response-field-reachability.btn-adjacent",
+        "iast.atomic.iast-iast-response-field-reachability.btn-formaction",
+        "iast.atomic.iast-iast-response-field-reachability.btn-formaction-js",
+        "iast.atomic.iast-iast-response-field-reachability.btn-fragment",
+        "iast.atomic.iast-iast-response-field-reachability.btn-inner",
+        "iast.atomic.iast-iast-response-field-reachability.btn-mutation",
+        "iast.atomic.iast-iast-response-field-reachability.btn-outer",
+        "iast.atomic.iast-iast-response-field-reachability.btn-parser",
+        "iast.atomic.iast-iast-response-field-reachability.btn-write",
+        "iast.atomic.iast-iast-response-field-reachability.response-submit"
+      ]
+    },
+    {
+      "id": "family.iast-route-controlled-navigation",
+      "title": "IAST Route Controlled Navigation",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-route-controlled-navigation.btn-nav",
+        "iast.atomic.iast-iast-route-controlled-navigation.btn-push",
+        "iast.atomic.iast-iast-route-controlled-navigation.btn-replace"
+      ]
+    },
+    {
+      "id": "family.iast-runtime-playground",
+      "title": "IAST Runtime Playground",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-runtime.adjacent-html",
+        "iast.atomic.iast-iast-runtime.button-1-inline-event",
+        "iast.atomic.iast-iast-runtime.button-2-r-text-fetch-chain",
+        "iast.atomic.iast-iast-runtime.button-3-javascript-url",
+        "iast.atomic.iast-iast-runtime.inline-event",
+        "iast.atomic.iast-iast-runtime.inline-event-target",
+        "iast.atomic.iast-iast-runtime.inner-html",
+        "iast.atomic.iast-iast-runtime.link-href"
+      ]
+    },
+    {
+      "id": "family.iast-session-material-cross-boundary",
+      "title": "IAST Session Material Cross-Boundary",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-beacon",
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-fetch-header",
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-image",
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-post-cross",
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-post-star",
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-rtc",
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-ws",
+        "iast.atomic.iast-iast-session-material-cross-boundary-exfiltration.btn-xhr-header"
+      ]
+    },
+    {
+      "id": "family.iast-storage-taint-to-exec",
+      "title": "IAST Storage Taint To Exec",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-storage-taint-to-exec.btn-apply",
+        "iast.atomic.iast-iast-storage-taint-to-exec.btn-eval",
+        "iast.atomic.iast-iast-storage-taint-to-exec.btn-function",
+        "iast.atomic.iast-iast-storage-taint-to-exec.btn-interval",
+        "iast.atomic.iast-iast-storage-taint-to-exec.btn-timeout"
+      ]
+    },
+    {
+      "id": "family.iast-storage-token-leaks-module",
+      "title": "IAST Storage Token Leaks Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-storage-token-leaks.btn-cookie",
+        "iast.atomic.iast-iast-storage-token-leaks.btn-cookie-safe",
+        "iast.atomic.iast-iast-storage-token-leaks.btn-local",
+        "iast.atomic.iast-iast-storage-token-leaks.btn-session"
+      ]
+    },
+    {
+      "id": "family.iast-storage-backed-request-reuse",
+      "title": "IAST Storage-backed Request Reuse",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-storage-backed-request-reuse.btn-fetch-header",
+        "iast.atomic.iast-iast-storage-backed-request-reuse.btn-fetch-url",
+        "iast.atomic.iast-iast-storage-backed-request-reuse.btn-xhr-header",
+        "iast.atomic.iast-iast-storage-backed-request-reuse.btn-xhr-url"
+      ]
+    },
+    {
+      "id": "family.iast-timer-js-execution-module",
+      "title": "IAST Timer JS Execution Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-timer-js-execution.btn-interval",
+        "iast.atomic.iast-iast-timer-js-execution.btn-timeout"
+      ]
+    },
+    {
+      "id": "family.iast-trusted-types-and-sanitizer-misuse",
+      "title": "IAST Trusted Types and Sanitizer Misuse",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-trusted-types-and-sanitizer-misuse.btn-create-html",
+        "iast.atomic.iast-iast-trusted-types-and-sanitizer-misuse.btn-create-script",
+        "iast.atomic.iast-iast-trusted-types-and-sanitizer-misuse.btn-create-script-url",
+        "iast.atomic.iast-iast-trusted-types-and-sanitizer-misuse.btn-dompurify"
+      ]
+    },
+    {
+      "id": "family.iast-web-messaging-channels-module",
+      "title": "IAST Web Messaging Channels Module",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-web-messaging-channels.btn-broadcast",
+        "iast.atomic.iast-iast-web-messaging-channels.btn-port"
+      ]
+    },
+    {
+      "id": "family.iast-websocket-url-poisoning",
+      "title": "IAST WebSocket URL Poisoning",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-websocket-url-poisoning.btn-open"
+      ]
+    },
+    {
+      "id": "family.iast-worker-script-loading-fixture",
+      "title": "IAST Worker Script Loading Fixture",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-worker-script-loading.btn-sw",
+        "iast.atomic.iast-iast-worker-script-loading.btn-worker"
+      ]
+    },
+    {
+      "id": "family.iast-xpath-injection",
+      "title": "IAST XPath Injection",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.atomic.iast-iast-xpath-injection.btn-evaluate"
+      ]
+    },
+    {
+      "id": "family.initially-loaded-client-dependencies",
+      "title": "Initially loaded client dependencies",
+      "engines": [
+        "SCA"
+      ],
+      "challengeIds": [
+        "angular-expression-dependency"
+      ]
+    },
+    {
+      "id": "family.js-asset",
+      "title": "JS asset",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.passive-assets-client-config-js"
+      ]
+    },
+    {
+      "id": "family.jwt-client-misuse",
+      "title": "JWT client misuse",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-jwt-client-misuse.page"
+      ]
+    },
+    {
+      "id": "family.known-deployment-resource",
+      "title": "Known deployment resource",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.humans-txt-fb163cc5",
+        "dast.route.orgs-acme-workspaces-red-team-settings-html-d4e7fb11",
+        "dast.route.robots-txt-b7a9adb9",
+        "dast.route.wp-admin-index-html-726cc2b9"
+      ]
+    },
+    {
+      "id": "family.lazy-spa-modules-and-dependencies",
+      "title": "Lazy SPA modules and dependencies",
+      "engines": [
+        "IAST",
+        "SAST",
+        "SCA"
+      ],
+      "challengeIds": [
+        "lazy-route-module"
+      ]
+    },
+    {
+      "id": "family.messaging",
+      "title": "Messaging",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.web-message"
+      ]
+    },
+    {
+      "id": "family.metadata",
+      "title": "Metadata",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.well-known-openid-configuration"
+      ]
+    },
+    {
+      "id": "family.navigation",
+      "title": "Navigation",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.link-manipulation",
+        "sast.open-redirect"
+      ]
+    },
+    {
+      "id": "family.persistent-browser-state",
+      "title": "Persistent browser state",
+      "engines": [
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "saved-workspace"
+      ]
+    },
+    {
+      "id": "family.playground",
+      "title": "Playground",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.iast-runtime"
+      ]
+    },
+    {
+      "id": "family.prototype",
+      "title": "Prototype",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.prototype-pollution-client"
+      ]
+    },
+    {
+      "id": "family.realtime",
+      "title": "Realtime",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.passive-realtime-overview"
+      ]
+    },
+    {
+      "id": "family.realtime-protocol-surface",
+      "title": "Realtime protocol surface",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.passive-realtime-events-5d1f02d1",
+        "dast.route.passive-realtime-overview-html-83e04df2",
+        "dast.route.passive-realtime-ws-b4ad985f",
+        "dast.route.socket-io-005395ee",
+        "dast.route.sockjs-echo-aabf14de"
+      ]
+    },
+    {
+      "id": "family.related-browser-contexts-and-scope",
+      "title": "Related browser contexts and scope",
+      "engines": [
+        "DAST",
+        "IAST",
+        "SAST",
+        "SCA"
+      ],
+      "challengeIds": [
+        "same-origin-child-tab"
+      ]
+    },
+    {
+      "id": "family.related-child-response-evidence",
+      "title": "Related child response evidence",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.targets-same-origin-child-tab-vulnerable-api-context-32e96cb4"
+      ]
+    },
+    {
+      "id": "family.runtime-flow",
+      "title": "Runtime flow",
+      "engines": [
+        "IAST"
+      ],
+      "challengeIds": [
+        "iast.iast-blob-object-url-execution",
+        "iast.iast-client-http-exfiltration",
+        "iast.iast-client-json-parsing",
+        "iast.iast-client-sql-injection",
+        "iast.iast-clipboard-exfiltration",
+        "iast.iast-csrf-like-requests",
+        "iast.iast-debug-logging-leaks",
+        "iast.iast-document-domain-manipulation",
+        "iast.iast-dom-clobbering",
+        "iast.iast-dom-parser-xss",
+        "iast.iast-dom-url-navigation",
+        "iast.iast-dom-xss",
+        "iast.iast-dom-xss-secondary-sources",
+        "iast.iast-dynamic-script-loading",
+        "iast.iast-file-reader-sensitive-flows",
+        "iast.iast-form-submission-hijack",
+        "iast.iast-form-submit-csrf",
+        "iast.iast-iframe-navigation",
+        "iast.iast-inbound-channel-trust",
+        "iast.iast-indexeddb-cache-storage",
+        "iast.iast-js-execution",
+        "iast.iast-open-redirect",
+        "iast.iast-postmessage-misuse",
+        "iast.iast-prototype-pollution-impact",
+        "iast.iast-realtime-exfiltration",
+        "iast.iast-response-field-reachability",
+        "iast.iast-route-controlled-navigation",
+        "iast.iast-session-material-cross-boundary-exfiltration",
+        "iast.iast-storage-backed-request-reuse",
+        "iast.iast-storage-taint-to-exec",
+        "iast.iast-storage-token-leaks",
+        "iast.iast-timer-js-execution",
+        "iast.iast-trusted-types-and-sanitizer-misuse",
+        "iast.iast-web-messaging-channels",
+        "iast.iast-websocket-url-poisoning",
+        "iast.iast-worker-script-loading",
+        "iast.iast-xpath-injection"
+      ]
+    },
+    {
+      "id": "family.secrets-fixture-comments-code",
+      "title": "Secrets Fixture — Comments & Code",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-secrets.page"
+      ]
+    },
+    {
+      "id": "family.selectors",
+      "title": "Selectors",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.dom-selector"
+      ]
+    },
+    {
+      "id": "family.sensitive-data-and-input-surface",
+      "title": "Sensitive data and input surface",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.passive-fixtures-data-sensitive-data-html-0ec19400",
+        "dast.route.passive-fixtures-deser-indicator-html-d996a5c4",
+        "dast.route.passive-fixtures-params-high-risk-html-0af99c81",
+        "dast.route.passive-fixtures-tokens-index-html-53ba4070",
+        "dast.route.passive-fixtures-tokens-jwt-url-html-b66d2e66",
+        "dast.route.passive-fixtures-tokens-url-leaks-html-cc722dcf"
+      ]
+    },
+    {
+      "id": "family.service-worker",
+      "title": "Service Worker",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.service-worker-cache-poisoning"
+      ]
+    },
+    {
+      "id": "family.service-worker-cache-poisoning",
+      "title": "Service Worker cache poisoning",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-service-worker-cache-poisoning.page"
+      ]
+    },
+    {
+      "id": "family.spa-navigation-and-authenticated-traffic",
+      "title": "SPA navigation and authenticated traffic",
+      "engines": [
+        "DAST",
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "history-order-router"
+      ]
+    },
+    {
+      "id": "family.spa-created-authenticated-active-request",
+      "title": "SPA-created authenticated active request",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.targets-history-order-router-vulnerable-api-order-e42a2bb7"
+      ]
+    },
+    {
+      "id": "family.static-analysis",
+      "title": "Static analysis",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.secrets"
+      ]
+    },
+    {
+      "id": "family.storage",
+      "title": "Storage",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.storage-security"
+      ]
+    },
+    {
+      "id": "family.storage-security",
+      "title": "Storage security",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.atomic.sast-storage-security.page"
+      ]
+    },
+    {
+      "id": "family.templates",
+      "title": "Templates",
+      "engines": [
+        "SAST"
+      ],
+      "challengeIds": [
+        "sast.client-template-injection"
+      ]
+    },
+    {
+      "id": "family.tenant",
+      "title": "Tenant",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.orgs-acme-workspaces-red-team-settings"
+      ]
+    },
+    {
+      "id": "family.transient-spa-route-state",
+      "title": "Transient SPA route state",
+      "engines": [
+        "DAST",
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "transient-route-notice"
+      ]
+    },
+    {
+      "id": "family.uncatalogued-historical-source",
+      "title": "Uncatalogued historical source",
+      "engines": [
+        "DAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "legacy.passive-deserialization-indicator",
+        "legacy.passive-file-transfer-surface",
+        "legacy.passive-sourcemap-debug",
+        "legacy.passive-token-param-surfaces",
+        "legacy.sast-append-child-copy",
+        "legacy.sast-dom-data-manipulation-copy",
+        "legacy.sast-test"
+      ]
+    },
+    {
+      "id": "family.workflow",
+      "title": "Workflow",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "passive.passive-checkout-payment"
+      ]
+    }
+  ]
+}

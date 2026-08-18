@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Lazy Analytics Route · Review Target</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A SPA route that imports its module and client dependency only after navigation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../../assets/css/playground.css">
+  <script type="module" src="./lazy-route-app.js"></script>
+</head>
+<body data-playground-target="lazy-route-module-review" data-target-variant="vulnerable">
+  <a class="skip-link" href="#main">Skip to target</a>
+  <header class="site-header"><div class="site-header__inner"><a class="brand" href="../../../"><span class="brand__mark" aria-hidden="true">SPA</span><span>Browser Security Playground</span></a><nav class="site-nav" aria-label="Target navigation"><a href="../../../campaigns/lazy-route-module/">Mission</a><a href="./analytics-route.js">View lazy module</a><a href="../fixed/">Repaired target</a></nav></div></header>
+  <main id="main" class="page-shell target-shell">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../../">Playground</a><span aria-hidden="true">/</span><a href="../../../campaigns/lazy-route-module/">Lazy analytics route</a><span aria-hidden="true">/</span><span>Review target</span></nav>
+    <section class="target-hero" aria-labelledby="target-title"><div><p class="eyebrow">Lazy SPA route</p><h1 id="target-title">Reveal code that is absent at page load.</h1><p class="target-hero__lede">The initial application shell contains neither the analytics route module nor its dependency. Both appear only after the History API transition below.</p><div class="hero__actions"><button id="open-analytics-route" class="button" type="button">Open analytics route</button><button id="reset-analytics-route" class="button button--secondary" type="button">Reset route</button></div></div><dl class="target-facts" aria-label="Target facts"><div><dt>Variant</dt><dd>Review</dd></div><div><dt>Chunk</dt><dd>Dynamic import</dd></div><div><dt>Dependency</dt><dd>After action</dd></div></dl></section>
+    <aside class="notice notice--warning" aria-label="Authorised use notice"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Controlled training target.</strong> All code and dependency files are pinned, local, and requested only after the prepared action.</p></aside>
+    <section class="widget-stage" aria-labelledby="analytics-title">
+      <div class="widget-card"><div class="widget-card__heading"><div><p class="eyebrow">Route outlet</p><h2 id="analytics-title">Analytics workspace</h2></div><span class="status-pill">Lazy</span></div><div id="analytics-route-workspace" class="support-thread" aria-live="polite">The analytics route is closed.</div></div>
+      <aside class="proof-panel" aria-labelledby="proof-title"><p class="eyebrow">Neutral proof</p><h2 id="proof-title">Browser evidence</h2><p>Observe the module and dependency requests after the route changes.</p><output id="analytics-route-status" class="proof-token" aria-live="polite">LAZY-ROUTE-IDLE</output></aside>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>Direct target · No eager route chunk · Same-origin assets.</p><nav aria-label="Target links"><a href="../fixed/">Compare the repaired target</a></nav></div></footer>
+</body>
+</html>

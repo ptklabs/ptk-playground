@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IAST Realtime Channel Exfiltration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
+    h1 { margin-top: 0; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .sources { display: grid; gap: 8px; margin-top: 8px; }
+    .sources label { display: flex; gap: 8px; align-items: center; }
+    .sources table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    .sources td { padding: 4px 6px; border-bottom: 1px solid #1f2937; vertical-align: top; }
+    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
+    input, textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
+    input[type="radio"] { width: auto; padding: 0; }
+    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
+    button:hover { background: #1d4ed8; }
+    .note { color: #94a3b8; font-size: 0.9rem; }
+    .row { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  
+    .back-link {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← Back to index</a>
+  <h1>IAST Realtime Exfiltration Module</h1>
+  <p class="note">Covers <code>WebSocket.send</code> and <code>RTCDataChannel.send</code> sinks. The payload is tainted and forwarded across the respective APIs.</p>
+
+  <div class="card">
+    <label for="message">Payload message</label>
+    <textarea id="message" placeholder="leak=TAINT"></textarea>
+    <label for="endpoint">WebSocket endpoint</label>
+    <input id="endpoint" type="text" placeholder="wss://echo.websocket.events">
+    <div class="row">
+      <button id="use-same-host" type="button">Use same-host WS URL</button>
+      <button id="use-external" type="button">Use external WS URL</button>
+    </div>
+    <div class="sources">
+      <div class="note">Choose which source to prime for the message.</div>
+      <label><input type="radio" name="sourceType" value="query" checked> URL query (?message=...)</label>
+      <label><input type="radio" name="sourceType" value="hash"> URL hash</label>
+      <label><input type="radio" name="sourceType" value="cookie"> document.cookie</label>
+      <label><input type="radio" name="sourceType" value="localStorage"> localStorage</label>
+      <label><input type="radio" name="sourceType" value="sessionStorage"> sessionStorage</label>
+      <label><input type="radio" name="sourceType" value="windowName"> window.name</label>
+      <label><input type="radio" name="sourceType" value="inputOnly"> input only</label>
+      <button id="prime-selected">Prime selected source</button>
+      <button id="prime-all">Prime ALL sources</button>
+      <div id="active-sources"></div>
+    </div>
+    <p class="note">Taint is pulled from ?message=..., hash fragments, or these fields when primed.</p>
+  </div>
+
+  <div class="card">
+    <button id="btn-ws">Send via WebSocket</button>
+    <button id="btn-ws-closed">Send after WebSocket close</button>
+    <button id="btn-rtc">Send via RTCDataChannel</button>
+    <p class="note">WebSocket attempts to send after connect (or immediately on error). RTC uses a loopback peer-connection so the channel reaches "open".</p>
+  </div>
+
+  <script>
+    function getParam(name) {
+      const params = new URLSearchParams(location.search);
+      return params.get(name) || '';
+    }
+
+    function getHash() {
+      return location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+    }
+
+    const sources = {
+      inputOnly: { label: 'Input only', value: '' },
+      query: { label: 'URL query ?message', value: null },
+      hash: { label: 'URL hash', value: null },
+      cookie: { label: 'document.cookie "iast_payload"', value: null },
+      localStorage: { label: 'localStorage["iast_payload"]', value: null },
+      sessionStorage: { label: 'sessionStorage["iast_payload"]', value: null },
+      windowName: { label: 'window.name', value: null }
+    };
+
+    function getSelectedSourceType() {
+      const checked = document.querySelector('input[name="sourceType"]:checked');
+      return checked ? checked.value : 'query';
+    }
+
+    function setSourceValue(type, value) {
+      if (!sources[type]) return;
+      sources[type].value = value;
+      switch (type) {
+        case 'query':
+          break;
+        case 'hash':
+          window.location.hash = 'message=' + encodeURIComponent(value);
+          break;
+        case 'cookie':
+          document.cookie = 'iast_payload=' + encodeURIComponent(value) + '; path=/';
+          break;
+        case 'localStorage':
+          localStorage.setItem('iast_payload', value);
+          break;
+        case 'sessionStorage':
+          sessionStorage.setItem('iast_payload', value);
+          break;
+        case 'windowName':
+          window.name = value;
+          break;
+        case 'inputOnly':
+        default:
+          break;
+      }
+      renderActiveSources();
+    }
+
+    function primeSelectedSource(value) {
+      const type = getSelectedSourceType();
+      setSourceValue(type, value);
+    }
+
+    function primeAllSources(value) {
+      Object.keys(sources).forEach(type => setSourceValue(type, value));
+    }
+
+    function renderActiveSources() {
+      const rows = Object.keys(sources).map(type => {
+        const { label, value } = sources[type];
+        const display = value == null || value === ''
+          ? '<em>(empty)</em>'
+          : '<code>' + String(value).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
+        return '<tr><td style="width: 35%;"><strong>' + label + '</strong></td><td>' + display + '</td></tr>';
+      });
+      document.getElementById('active-sources').innerHTML =
+        '<h3>Active sources</h3><table><tbody>' + rows.join('') + '</tbody></table>';
+    }
+
+    const messageField = document.getElementById('message');
+    const endpointField = document.getElementById('endpoint');
+    messageField.value = getParam('message') || getHash() || 'account=TAINT&balance=999';
+    endpointField.value = getParam('endpoint') || ('ws://' + location.host + '/ws-echo');
+
+    document.getElementById('use-same-host').onclick = () => {
+      endpointField.value = 'ws://' + location.host + '/ws-echo';
+    };
+
+    document.getElementById('use-external').onclick = () => {
+      endpointField.value = 'wss://echo.websocket.events';
+    };
+
+    document.getElementById('prime-selected').onclick = () => {
+      primeSelectedSource(messageField.value);
+      alert('Selected source primed for realtime payload.');
+    };
+
+    document.getElementById('prime-all').onclick = () => {
+      primeAllSources(messageField.value);
+      alert('All sources primed for realtime payload.');
+    };
+
+    document.getElementById('btn-ws').onclick = () => {
+      try {
+        const ws = new WebSocket(endpointField.value || 'wss://echo.websocket.events');
+        const payload = messageField.value;
+        ws.addEventListener('open', () => {
+          ws.send(payload);
+          setTimeout(() => ws.close(), 500);
+        });
+        ws.addEventListener('error', () => {
+          try { ws.send(payload); } catch (_) { /* swallow */ }
+        });
+        setTimeout(() => {
+          if (ws.readyState === WebSocket.CONNECTING) {
+            try { ws.send(payload); } catch (_) { /* invalid state is fine */ }
+          }
+        }, 1500);
+      } catch (err) {
+        console.warn('WebSocket send failed', err);
+      }
+    };
+
+    document.getElementById('btn-ws-closed').onclick = () => {
+      try {
+        const ws = new WebSocket(endpointField.value || 'wss://echo.websocket.events');
+        const payload = messageField.value;
+        ws.addEventListener('open', () => {
+          ws.close();
+        }, { once: true });
+        ws.addEventListener('close', () => {
+          try { ws.send(payload); } catch (_) { /* closed send is intentional */ }
+        }, { once: true });
+      } catch (err) {
+        console.warn('WebSocket closed-send failed', err);
+      }
+    };
+
+    async function sendViaRtc(payload) {
+      const local = new RTCPeerConnection();
+      const remote = new RTCPeerConnection();
+      local.onicecandidate = e => e.candidate && remote.addIceCandidate(e.candidate).catch(console.warn);
+      remote.onicecandidate = e => e.candidate && local.addIceCandidate(e.candidate).catch(console.warn);
+      remote.ondatachannel = event => {
+        event.channel.onmessage = () => event.channel.close();
+      };
+      const channel = local.createDataChannel('iast-realtime');
+      channel.onopen = () => {
+        channel.send(payload);
+        setTimeout(() => {
+          channel.close();
+          local.close();
+          remote.close();
+        }, 250);
+      };
+      const offer = await local.createOffer();
+      await local.setLocalDescription(offer);
+      await remote.setRemoteDescription(offer);
+      const answer = await remote.createAnswer();
+      await remote.setLocalDescription(answer);
+      await local.setRemoteDescription(answer);
+    }
+
+    document.getElementById('btn-rtc').onclick = () => {
+      if (typeof RTCPeerConnection === 'undefined') {
+        alert('RTCPeerConnection not supported in this browser.');
+        return;
+      }
+      sendViaRtc(messageField.value).catch(err => console.warn('RTC send failed', err));
+    };
+
+    renderActiveSources();
+  </script>
+</body>
+</html>

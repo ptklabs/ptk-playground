@@ -1,330 +1,115 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — DOM data manipulation sinks</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-
-  <!-- External scripts -->
-  <script src="js/sources.js"></script>
-  <script src="js/dom_data_manipulation/dom_data_manipulation.js"></script>
-  <script src="js/summary.js"></script>
-  <script>
-    window.__PTK_DEMO_NO_NAV__ = true;
-    document.addEventListener('DOMContentLoaded', () => {
-      if (!localStorage.getItem('buttonStyle')) {
-        localStorage.setItem('buttonStyle', "background:#c00;color:#fff;border:0;box-shadow:0 0 8px rgba(0,0,0,0.25)");
-      }
-      if (!localStorage.getItem('cardCss')) {
-        localStorage.setItem('cardCss', "background:#fee;border:2px dashed #c00;padding:1rem");
-      }
-      if (!localStorage.getItem('outerHTMLPayload')) {
-        localStorage.setItem('outerHTMLPayload', '<section id="inline-outer-zone"><strong>Replaced via outerHTML</strong></section>');
-      }
-      updateSummary();
-    });
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DOM data manipulation sinks · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for DOM data manipulation sinks.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — DOM data manipulation sinks</h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/dom_data_manipulation copy.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">8</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">3</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">2</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">1</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">14</strong></span>
-    </div>
-
-    <p class="meta">
-      These scenarios intentionally wire tainted DOM inputs (hash, query, cookies, storage, message events) into non-code DOM sinks:
-      script URLs/text, inline handlers, navigation attributes, form metadata, element values/placeholders, styles, document
-      title, history state, and <code>createHTMLDocument</code>. Each example shows its script directly beneath the explanation, mirroring
-      the style used throughout this testbed.
-    </p>
-
-    <h2 class="section-title">Inline scenarios</h2>
-    <div class="grid">
-
-      <div class="card" data-rule="taint" data-severity="high" id="inline-card-script">
-        <div class="card-meta"><strong>INLINE-1 (High): Hash/query → script src/text</strong></div>
-        <pre>// inline-script[#1]
-function inlineLoadScriptFromHash() {
-  const payload = location.hash.slice(1) || location.search || "javascript:alert('script')";
-  let scriptTag = document.getElementById('inline-script-payload');
-  if (!scriptTag) {
-    scriptTag = document.createElement('script');
-    scriptTag.id = 'inline-script-payload';
-    document.head.appendChild(scriptTag);
-  }
-  scriptTag.src = payload;
-  scriptTag.setAttribute('src', payload);
-  scriptTag.textContent = window.name || 'window.name-placeholder';
-}
-inlineLoadScriptFromHash();</pre>
-        <script>
-          function inlineLoadScriptFromHash() {
-            const payload = location.hash.slice(1) || location.search || "javascript:alert('script')";
-            let scriptTag = document.getElementById('inline-script-payload');
-            if (!scriptTag) {
-              scriptTag = document.createElement('script');
-              scriptTag.id = 'inline-script-payload';
-              document.head.appendChild(scriptTag);
-            }
-            scriptTag.src = payload;
-            scriptTag.setAttribute('src', payload);
-            scriptTag.textContent = window.name || 'window.name-placeholder';
-          }
-          inlineLoadScriptFromHash();
-        </script>
-        <div class="controls">
-          <button class="btn" type="button" onclick="inlineLoadScriptFromHash()">Reload script from URL</button>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>DOM data manipulation sinks</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>DOM data manipulation sinks</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>8</strong> focused cases</span><span><strong>8</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.inline-card-script">
+        <div class="family-case-card__meta"><span>Case 01</span><span>script src assignment</span></div>
+        <h2>INLINE-1 (High): Hash/query → script src/text</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-script/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-script/fixed/">Open repaired control</a>
         </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.inline-card-navigation">
+        <div class="family-case-card__meta"><span>Case 02</span><span>link href assignment</span></div>
+        <h2>INLINE-2 (High): DOM sources → link/form/placeholder</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-navigation/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-navigation/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.inline-card-style">
+        <div class="family-case-card__meta"><span>Case 03</span><span>style attribute assignment</span></div>
+        <h2>INLINE-3 (Medium): localStorage → style</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-style/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-style/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.inline-card-history">
+        <div class="family-case-card__meta"><span>Case 04</span><span>history url replacement</span></div>
+        <h2>INLINE-4 (High): Cookies/hash → history/title/location</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-history/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-history/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.inline-card-html">
+        <div class="family-case-card__meta"><span>Case 05</span><span>inner html</span></div>
+        <h2>INLINE-5 (High): Hash/localStorage → innerHTML/outerHTML/inline handler</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-html/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/inline-card-html/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.external-card-script">
+        <div class="family-case-card__meta"><span>Case 06</span><span>script src assignment</span></div>
+        <h2>EXTERNAL-1 (High): External JS loads script from tainted destination</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/external-card-script/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/external-card-script/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.external-card-navigation">
+        <div class="family-case-card__meta"><span>Case 07</span><span>link href assignment</span></div>
+        <h2>EXTERNAL-2 (High): External JS rewrites link/form/placeholder</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/external-card-navigation/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/external-card-navigation/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-dom-data-manipulation-copy.external-card-style">
+        <div class="family-case-card__meta"><span>Case 08</span><span>style attribute assignment</span></div>
+        <h2>EXTERNAL-3 (Medium): External JS mutates styles + history/title</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-dom-data-manipulation-copy/external-card-style/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-dom-data-manipulation-copy/external-card-style/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="inline-card-navigation">
-        <div class="card-meta"><strong>INLINE-2 (High): DOM sources → link/form/placeholder</strong></div>
-        <pre>// inline-script[#2]
-function inlineRewriteNavigation() {
-  const navLink = document.getElementById('inline-nav-link');
-  const form = document.getElementById('inline-profile-form');
-  const input = document.getElementById('inline-profile-input');
-  const submitBtn = document.getElementById('inline-submit-btn');
-  const field = document.getElementById('inline-user-url');
-  const dest = field.value || location.hash.slice(1) || getCookieByName('ptk_dest') || "javascript:alert('form')";
-
-  if (!sessionStorage.getItem('profilePayload')) {
-    sessionStorage.setItem('profilePayload', "<img src=x onerror=console.log(1)>");
-  }
-
-  navLink.href = dest;
-  navLink.setAttribute('href', dest);
-  form.action = dest;
-  form.target = window.name || '_blank';
-  form.method = new URLSearchParams(location.search).get('method') || 'post';
-  input.value = sessionStorage.getItem('profilePayload') || '';
-  submitBtn.formAction = (history.state && history.state.endpoint) || dest;
-  submitBtn.setAttribute('formaction', dest);
-}
-
-function inlineSetProfilePlaceholder(evt) {
-  const data = evt.data || {};
-  const input = document.getElementById('inline-profile-input');
-  if (input && data.placeholder) {
-    input.placeholder = data.placeholder;
-  }
-}
-
-window.addEventListener('message', inlineSetProfilePlaceholder);</pre>
-        <div class="field">
-          <label for="inline-user-url">Destination</label>
-          <input id="inline-user-url" type="text" value="javascript:alert('dom-data')" />
-        </div>
-        <p><a id="inline-nav-link" href="#">Preview link target</a></p>
-        <form id="inline-profile-form">
-          <input id="inline-profile-input" type="text" placeholder="Set via MessageEvent" />
-          <button id="inline-submit-btn" class="btn" type="button">Submit profile</button>
-        </form>
-        <script>
-          function inlineRewriteNavigation() {
-            const navLink = document.getElementById('inline-nav-link');
-            const form = document.getElementById('inline-profile-form');
-            const input = document.getElementById('inline-profile-input');
-            const submitBtn = document.getElementById('inline-submit-btn');
-            const field = document.getElementById('inline-user-url');
-            const dest = field.value || location.hash.slice(1) || getCookieByName('ptk_dest') || "javascript:alert('form')";
-
-            if (!sessionStorage.getItem('profilePayload')) {
-              sessionStorage.setItem('profilePayload', "<img src=x onerror=alert('profile')>");
-            }
-
-            navLink.href = dest;
-            navLink.setAttribute('href', dest);
-            form.action = dest;
-            form.target = window.name || '_blank';
-            form.method = new URLSearchParams(location.search).get('method') || 'post';
-            input.value = sessionStorage.getItem('profilePayload') || '';
-            submitBtn.formAction = (history.state && history.state.endpoint) || dest;
-            submitBtn.setAttribute('formaction', dest);
-          }
-
-          function inlineSetProfilePlaceholder(evt) {
-            const data = evt.data || {};
-            const input = document.getElementById('inline-profile-input');
-            if (input && data.placeholder) {
-              input.placeholder = data.placeholder;
-            }
-          }
-
-          window.addEventListener('message', inlineSetProfilePlaceholder);
-          inlineRewriteNavigation();
-        </script>
-        <div class="controls">
-          <button class="btn" type="button" onclick="inlineRewriteNavigation()">Apply tainted destination</button>
-        </div>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="medium" id="inline-card-style">
-        <div class="card-meta"><strong>INLINE-3 (Medium): localStorage → <code>style</code>/<code>cssText</code></strong></div>
-        <pre>// inline-script[#3]
-function inlineApplyTaintedStyles() {
-  const button = document.getElementById('inline-style-button');
-  const card = document.getElementById('inline-themed-card');
-  const storedButtonStyle = localStorage.getItem('buttonStyle');
-  const storedCardCss = localStorage.getItem('cardCss');
-  const payload = location.hash.slice(1) || "javascript:alert('style')";
-
-  button.setAttribute('style', storedButtonStyle || "background:red;color:#fff;");
-  card.style.cssText = storedCardCss || "background:#fee;border:2px dashed #c00;padding:1rem;";
-  card.style.backgroundImage = `url(${payload})`;
-}</pre>
-        <div class="controls">
-          <button id="inline-style-button" class="btn" type="button" onclick="inlineApplyTaintedStyles()">Apply tainted styles</button>
-        </div>
-        <div class="render-target" id="inline-themed-card">Awaiting themed card CSS…</div>
-        <script>
-          function inlineApplyTaintedStyles() {
-            const button = document.getElementById('inline-style-button');
-            const card = document.getElementById('inline-themed-card');
-            const storedButtonStyle = localStorage.getItem('buttonStyle');
-            const storedCardCss = localStorage.getItem('cardCss');
-            const payload = location.hash.slice(1) || "javascript:alert('style')";
-
-            button.setAttribute('style', storedButtonStyle || "background:red;color:#fff;");
-            card.style.cssText = storedCardCss || "background:#fee;border:2px dashed #c00;padding:1rem;";
-            card.style.backgroundImage = `url(${payload})`;
-          }
-        </script>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="inline-card-history">
-        <div class="card-meta"><strong>INLINE-4 (High): Cookies/hash → history/title/location</strong></div>
-        <pre>// inline-script[#4]
-function inlineMutateHistory() {
-  const payload = document.cookie || location.hash.slice(1) || "javascript:alert('history')";
-
-  history.pushState({ jump: payload }, payload, payload);
-  history.replaceState({ end: window.name || payload }, window.name || payload, window.name || payload);
-  document.title = payload;
-  document.implementation.createHTMLDocument(payload);
-
-  if (!window.__PTK_DEMO_NO_NAV__) {
-    location.assign(payload);
-    window.location = window.name || payload;
-    location.href = payload;
-  }
-}</pre>
-        <script>
-          function inlineMutateHistory() {
-            const payload = document.cookie || location.hash.slice(1) || "javascript:alert('history')";
-
-            history.pushState({ jump: payload }, payload, payload);
-            history.replaceState({ end: window.name || payload }, window.name || payload, window.name || payload);
-            document.title = payload;
-            document.implementation.createHTMLDocument(payload);
-
-            if (!window.__PTK_DEMO_NO_NAV__) {
-              location.assign(payload);
-              window.location = window.name || payload;
-              location.href = payload;
-            }
-          }
-        </script>
-        <div class="meta">Navigation calls are guarded by <code>window.__PTK_DEMO_NO_NAV__</code> to avoid leaving the demo.</div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="inlineMutateHistory()">Mutate history/title</button>
-        </div>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="inline-card-html">
-        <div class="card-meta"><strong>INLINE-5 (High): Hash/localStorage → innerHTML/outerHTML/inline handler</strong></div>
-        <pre>// inline-script[#5]
-function inlineRenderMarkup() {
-  const hero = document.getElementById('inline-hero');
-  const zone = document.getElementById('inline-outer-zone');
-  const handlerBtn = document.getElementById('inline-handler');
-  const payload = location.hash.slice(1) || "<strong>tainted markup</strong>";
-  const outerPayload = localStorage.getItem('outerHTMLPayload') || '<section id="inline-outer-zone"><em>fallback outerHTML</em></section>';
-
-  hero.innerHTML = payload;
-  zone.outerHTML = outerPayload;
-  handlerBtn.setAttribute('onclick', payload);
-}
-inlineRenderMarkup();</pre>
-        <div class="render-target" id="inline-hero">Hero content</div>
-        <div class="render-target" id="inline-outer-zone">Outer zone</div>
-        <button id="inline-handler" class="btn" type="button">Inline handler</button>
-        <script>
-          function inlineRenderMarkup() {
-            const hero = document.getElementById('inline-hero');
-            const zone = document.getElementById('inline-outer-zone');
-            const handlerBtn = document.getElementById('inline-handler');
-            const payload = location.hash.slice(1) || "<strong>tainted markup</strong>";
-            const outerPayload = localStorage.getItem('outerHTMLPayload') || '<section id="inline-outer-zone"><em>fallback outerHTML</em></section>';
-
-            hero.innerHTML = payload;
-            zone.outerHTML = outerPayload;
-            handlerBtn.setAttribute('onclick', payload);
-          }
-          inlineRenderMarkup();
-        </script>
-        <div class="controls">
-          <button class="btn" type="button" onclick="inlineRenderMarkup()">Re-render tainted markup</button>
-        </div>
-      </div>
-
-    </div>
-
-    <h2 class="section-title">External scenarios (click to run)</h2>
-    <div class="grid">
-
-      <div class="card" data-rule="taint" data-severity="high" id="external-card-script">
-        <div class="card-meta"><strong>EXTERNAL-1 (High): External JS loads script from tainted destination</strong></div>
-        <pre>onclick="domDataExternal.loadScriptFromHash()"</pre>
-        <div class="field">
-          <label for="external-destination">Destination</label>
-          <input id="external-destination" type="text" value="javascript:alert('external-script')" />
-        </div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="domDataExternal.loadScriptFromHash()">Load script via external file</button>
-        </div>
-        <div class="render-target" id="external-script-log">Latest script src: (not set)</div>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="high" id="external-card-navigation">
-        <div class="card-meta"><strong>EXTERNAL-2 (High): External JS rewrites link/form/placeholder</strong></div>
-        <pre>onclick="domDataExternal.rewriteNavigation()"</pre>
-        <p><a id="external-nav-link" href="#">External preview link</a></p>
-        <form id="external-form">
-          <input id="external-placeholder" type="text" placeholder="External placeholder" />
-          <button id="external-submit-btn" class="btn" type="button">Submit preview</button>
-        </form>
-        <div class="controls">
-          <button class="btn" type="button" onclick="domDataExternal.rewriteNavigation()">Rewrite navigation targets</button>
-        </div>
-      </div>
-
-      <div class="card" data-rule="taint" data-severity="medium" id="external-card-style">
-        <div class="card-meta"><strong>EXTERNAL-3 (Medium): External JS mutates styles + history/title</strong></div>
-        <pre>onclick="domDataExternal.applyStyles(); domDataExternal.mutateHistory()"</pre>
-        <div class="render-target" id="external-themed-card">External themed card</div>
-        <div class="controls">
-          <button id="external-style-button" class="btn" type="button" onclick="domDataExternal.applyStyles()">Apply tainted styles</button>
-          <button class="btn" type="button" onclick="domDataExternal.mutateHistory()">Mutate history/title</button>
-        </div>
-      </div>
-
-    </div>
-
-    <footer>PTK SAST testbed — DOM data-manipulation sinks. <a class="back" href="index.html">Back to index</a></footer>
-  </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./dom_data_manipulation copy.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

@@ -1,218 +1,169 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8" />
-  <title>DOM-based test cases — appendChild()</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="./css/style.css" type="text/css" />
-  <!-- External scripts -->
-  <script src="js/sources.js"></script>
-  <script src="js/append_child/append_child_sink.js"></script>
-
-
-  <script>
-    function setHashPayload() {
-      const payload = "<div class='hash-node'><img src=x onerror=alert('appendChild hash')></div>";
-      location.hash = encodeURIComponent(payload);
-    }
-  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>appendChild() · SAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused SAST review and repaired cases for appendChild().">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-
-<body>
-  <div class="container">
-    <div class="topbar">
-      <a class="back" href="index.html">← Back to index</a>
-      <h1 class="title">DOM-based test cases — <code>appendChild()</code></h1>
+<body class="engine-page engine-page--sast family-directory-page" data-family-directory="sast/append_child copy.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a></nav>
     </div>
-    <div class="summary">
-      <span class="badge b-hi">High: <strong id="count-high">0</strong></span>
-      <span class="badge b-med">Medium: <strong id="count-medium">0</strong></span>
-      <span class="badge b-lo">Low: <strong id="count-low">0</strong></span>
-      <span class="badge b-safe">Safe: <strong id="count-safe">0</strong></span>
-      <span class="badge b-total">Total: <strong id="count-total">0</strong></span>
-    </div>
-    <p class="meta">Payloads are converted into DOM nodes via <code class="inline">appendChild</code>, using <code class="inline">innerHTML</code> under the hood to keep the sink realistic.</p>
-
-    <div class="controls">
-      <a class="btn secondary" href="?payload=%3Cscript%3Ealert('qs')%3C/script%3E">Use query payload</a>
-      <button class="btn secondary" type="button" onclick="setHashPayload()">Set hash payload</button>
-    </div>
-
-    <div class="card">
-      <div class="card-meta"><strong>Preloaded values for external scenarios</strong></div>
-      <ul>
-        <li>Cookie <code class="inline">payload</code>: <span id="bootstrap-cookie">(pending)</span></li>
-        <li><code class="inline">localStorage.payload</code>: <span id="bootstrap-ls">(pending)</span></li>
-        <li><code class="inline">sessionStorage.payload</code>: <span id="bootstrap-ss">(pending)</span></li>
-        <li><code class="inline">window.name</code>: <span id="bootstrap-wn">(pending)</span></li>
-        <li><code class="inline">document.referrer</code>: <span id="bootstrap-ref">(pending)</span></li>
-      </ul>
-    </div>
-
-    <!-- Inline scenarios -->
-    <h2 class="section-title">Inline scenarios</h2>
-    <div class="grid">
-
-      <div class="card" data-severity="high" id="il-1">
-        <div class="card-meta">INLINE-1 (High): Query/hash → <code class="inline">appendChild</code></div>
-        <pre>// inline-script[#1]
-(function(){
-  const target = 'inline-appendchild-target';
-  function render(payload) {
-    appendChildUtils.clear(target);
-    appendChildSink(payload, target);
-  }
-  const params = new URLSearchParams(location.search);
-  if (params.has('payload')) render(params.get('payload'));
-  if (location.hash) {
-    try { render(decodeURIComponent(location.hash.slice(1))); }
-    catch (err) { render(location.hash.slice(1)); }
-  }
-  window.addEventListener('hashchange', () => {
-    if (!location.hash) return;
-    try { render(decodeURIComponent(location.hash.slice(1))); }
-    catch (err) { render(location.hash.slice(1)); }
-  });
-})();</pre>
-        <div class="render-target" id="inline-appendchild-target">Waiting for payload…</div>
-        <script>
-          (function() {
-            const target = 'inline-appendchild-target';
-
-            function render(payload) {
-              if (payload == null) return;
-              appendChildUtils.clear(target);
-              appendChildSink(payload, target);
-            }
-            const params = new URLSearchParams(location.search);
-            if (params.has('payload')) render(params.get('payload'));
-            if (location.hash) {
-              try {
-                render(decodeURIComponent(location.hash.slice(1)));
-              } catch (err) {
-                render(location.hash.slice(1));
-              }
-            }
-            window.addEventListener('hashchange', () => {
-              if (!location.hash) return;
-              try {
-                render(decodeURIComponent(location.hash.slice(1)));
-              } catch (err) {
-                render(location.hash.slice(1));
-              }
-            });
-          })();
-        </script>
-      </div>
-
-      <div class="card" data-severity="high" id="il-2">
-        <div class="card-meta">INLINE-2 (High): Field → <code class="inline">appendChild</code></div>
-        <pre>// inline-script[#2]
-function inlineAppendChildFromField(fieldId, targetId) {
-  const el = document.getElementById(fieldId);
-  if (!el) return;
-  appendChildSink(el.value, targetId);
-}</pre>
-        <div class="field">
-          <input id="inline_appendchild_payload" type="text" value="<div onclick=alert('inline')>Click me</div>" />
-          <button class="btn" type="button" onclick="inlineAppendChildFromField('inline_appendchild_payload', 'inline-appendchild-target')">Append inline field</button>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">SAST</a><span aria-hidden="true">/</span><span>appendChild()</span></nav>
+      <p class="eyebrow">SAST case family</p>
+      <h1>appendChild()</h1>
+      <p class="engine-hero__lede">Review one static browser-code pattern at a time without unrelated findings from the rest of the family.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>14</strong> focused cases</span><span><strong>14</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">{}</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.il-1">
+        <div class="family-case-card__meta"><span>Case 01</span><span>append contextual fragment</span></div>
+        <h2>INLINE-1 (High): Query/hash → appendChild</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/il-1/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/il-1/fixed/">Open repaired control</a>
         </div>
-        <script>
-          function inlineAppendChildFromField(fieldId, targetId) {
-            const el = document.getElementById(fieldId);
-            if (!el) return;
-            appendChildSink(el.value, targetId);
-          }
-        </script>
-      </div>
-
-      <div class="card" data-severity="safe" id="il-3">
-        <div class="card-meta">INLINE-3 (Safe): Create element + <code class="inline">textContent</code></div>
-        <pre>// inline-script[#3]
-(function(){
-  const params = new URLSearchParams(location.search);
-  const safe = params.get('safe');
-  const target = document.getElementById('inline-safe-target');
-  if (!target || !safe) return;
-  const span = document.createElement('span');
-  span.textContent = safe;
-  target.appendChild(span);
-})();</pre>
-        <div class="render-target" id="inline-safe-target">Waiting for safe payload…</div>
-        <script>
-          (function() {
-            const params = new URLSearchParams(location.search);
-            const safe = params.get('safe');
-            const target = document.getElementById('inline-safe-target');
-            if (!target || !safe) return;
-            const span = document.createElement('span');
-            span.textContent = safe;
-            target.appendChild(span);
-          })();
-        </script>
-      </div>
-
-    </div>
-
-    <!-- External scenarios -->
-    <h2 class="section-title">External scenarios (click to run)</h2>
-    <div class="grid">
-
-      <div class="card" data-severity="high">
-        <div class="card-meta"><strong>Direct DOM sources</strong></div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extAppendChildFromHash()">EXT: location.hash</button>
-          <button class="btn" type="button" onclick="extAppendChildFromSearch()">EXT: URLSearchParams</button>
-          <button class="btn" type="button" onclick="extAppendChildFromWindowName()">EXT: window.name</button>
-          <button class="btn" type="button" onclick="extAppendChildFromReferrer()">EXT: document.referrer</button>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.il-2">
+        <div class="family-case-card__meta"><span>Case 02</span><span>append contextual fragment</span></div>
+        <h2>INLINE-2 (High): Field → appendChild</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/il-2/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/il-2/fixed/">Open repaired control</a>
         </div>
-        <div class="render-target" id="external-appendchild-target">External DOM source target</div>
-      </div>
-
-      <div class="card" data-severity="high">
-        <div class="card-meta"><strong>Storage &amp; cookies</strong></div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extAppendChildFromCookie()">EXT: document.cookie</button>
-          <button class="btn" type="button" onclick="extAppendChildFromLocalStorage()">EXT: localStorage</button>
-          <button class="btn" type="button" onclick="extAppendChildFromSessionStorage()">EXT: sessionStorage</button>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-3-ext-location-hash">
+        <div class="family-case-card__meta"><span>Case 03</span><span>append contextual fragment</span></div>
+        <h2>EXT: location.hash</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-3-ext-location-hash/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-3-ext-location-hash/fixed/">Open repaired control</a>
         </div>
-        <div class="render-target" id="external-appendchild-storage">External storage target</div>
-      </div>
-
-      <div class="card" data-severity="medium">
-        <div class="card-meta"><strong>Wrappers &amp; builders</strong></div>
-        <div class="controls">
-          <button class="btn" type="button" onclick="extAppendChildTemplate()">EXT: template literal</button>
-          <button class="btn" type="button" onclick="extAppendChildWrapper()">EXT: wrapper function</button>
-          <button class="btn" type="button" onclick="extAppendChildDecode()">EXT: decodeURIComponent</button>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-4-ext-urlsearchparams">
+        <div class="family-case-card__meta"><span>Case 04</span><span>append contextual fragment</span></div>
+        <h2>EXT: URLSearchParams</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-4-ext-urlsearchparams/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-4-ext-urlsearchparams/fixed/">Open repaired control</a>
         </div>
-        <div class="render-target" id="external-appendchild-builders">External builder target</div>
-      </div>
-
-      <div class="card" data-severity="high">
-        <div class="card-meta"><strong>Delegated events</strong></div>
-        <div class="field">
-          <input id="ext_appendchild_input" type="text" value="<div class='delegated'>Delegated append</div>" />
-          <button class="btn ext-appendchild-field-button" type="button" data-target="external-appendchild-target" data-field="ext_appendchild_input">EXT: delegated appendChild</button>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-5-ext-window-name">
+        <div class="family-case-card__meta"><span>Case 05</span><span>append contextual fragment</span></div>
+        <h2>EXT: window.name</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-5-ext-window-name/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-5-ext-window-name/fixed/">Open repaired control</a>
         </div>
-      </div>
-
-      <div class="card" data-severity="safe">
-        <div class="card-meta"><strong>Safe pattern: text node</strong></div>
-        <div class="field">
-          <input id="ext_safe_appendchild_input" type="text" value="<svg/onload=alert(1)>" />
-          <button class="btn" type="button" onclick="extAppendChildSafe('ext_safe_appendchild_input')">EXT: append Text node</button>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-6-ext-document-referrer">
+        <div class="family-case-card__meta"><span>Case 06</span><span>append contextual fragment</span></div>
+        <h2>EXT: document.referrer</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-6-ext-document-referrer/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-6-ext-document-referrer/fixed/">Open repaired control</a>
         </div>
-        <div class="output" id="ext-safe-appendchild-output">Awaiting payload…</div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-7-ext-document-cookie">
+        <div class="family-case-card__meta"><span>Case 07</span><span>append contextual fragment</span></div>
+        <h2>EXT: document.cookie</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-7-ext-document-cookie/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-7-ext-document-cookie/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-8-ext-localstorage">
+        <div class="family-case-card__meta"><span>Case 08</span><span>append contextual fragment</span></div>
+        <h2>EXT: localStorage</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-8-ext-localstorage/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-8-ext-localstorage/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-9-ext-sessionstorage">
+        <div class="family-case-card__meta"><span>Case 09</span><span>append contextual fragment</span></div>
+        <h2>EXT: sessionStorage</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-9-ext-sessionstorage/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-9-ext-sessionstorage/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-10-ext-template-literal">
+        <div class="family-case-card__meta"><span>Case 10</span><span>append contextual fragment</span></div>
+        <h2>EXT: template literal</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-10-ext-template-literal/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-10-ext-template-literal/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-11-ext-wrapper-function">
+        <div class="family-case-card__meta"><span>Case 11</span><span>append contextual fragment</span></div>
+        <h2>EXT: wrapper function</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-11-ext-wrapper-function/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-11-ext-wrapper-function/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-12-ext-decodeuricomponent">
+        <div class="family-case-card__meta"><span>Case 12</span><span>append contextual fragment</span></div>
+        <h2>EXT: decodeURIComponent</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-12-ext-decodeuricomponent/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-12-ext-decodeuricomponent/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-13-ext-delegated-appendchild">
+        <div class="family-case-card__meta"><span>Case 13</span><span>append contextual fragment</span></div>
+        <h2>EXT: delegated appendChild</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-13-ext-delegated-appendchild/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-13-ext-delegated-appendchild/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="sast.atomic.sast-append-child-copy.button-14-ext-append-text-node">
+        <div class="family-case-card__meta"><span>Case 14</span><span>append contextual fragment</span></div>
+        <h2>EXT: append Text node</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/sast/sast-append-child-copy/button-14-ext-append-text-node/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/sast/sast-append-child-copy/button-14-ext-append-text-node/fixed/">Open repaired control</a>
+        </div>
+      </article>
       </div>
-
-    </div>
-
-    <footer>PTK SAST testbed — appendChild() (inline + external). <a class="back" href="index.html">Back to index</a></footer>
-  </div>
-
-
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./append_child copy.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>SAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=SAST">Explore SAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
-
 </html>

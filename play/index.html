@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Play · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guided OWASP PTK browser-security journeys built from the complete playground catalogue.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+  <script type="module" src="../assets/js/playground.js"></script>
+  <script type="module" src="../assets/js/catalogue-app.js"></script>
+</head>
+<body data-page="play">
+  <a class="skip-link" href="#main">Skip to guided path</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation">
+        <a href="./" aria-current="page">Play</a>
+        <a href="../explore/">Explore</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <section class="engine-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><span>Play</span></nav>
+      <p class="eyebrow">Guided browser-security paths</p>
+      <h1>Follow a story. Keep the entire corpus available.</h1>
+      <p class="engine-hero__lede">A playlist is only a guided view over the canonical challenge catalogue. It never hides or replaces the wider playground.</p>
+    </section>
+
+    <aside class="notice notice--warning" aria-label="Authorised use notice">
+      <span class="notice__icon" aria-hidden="true">!</span>
+      <p><strong>Use only on systems you are authorised to test.</strong> Every review target is deliberately vulnerable; repaired controls preserve the feature without the unsafe boundary.</p>
+    </aside>
+
+    <section class="section play-layout" aria-labelledby="playlist-title">
+      <aside class="playlist-panel" aria-label="Available guided paths">
+        <p class="eyebrow">Choose a path</p>
+        <nav data-playlist-list><span class="empty-state">Loading paths…</span></nav>
+        <a class="button button--secondary" href="../explore/">Show all challenges</a>
+      </aside>
+      <div class="playlist-content">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span data-playlist-duration>—</span></p>
+            <h2 id="playlist-title" data-playlist-title>Loading guided path…</h2>
+            <p data-playlist-summary></p>
+          </div>
+        </div>
+        <div class="challenge-list" data-playlist-challenges aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="site-footer__inner"><p>Guided paths over one scanner-neutral corpus.</p><nav aria-label="Project links"><a href="../">Playground home</a><a href="../explore/">Explore all</a><a href="https://github.com/ptklabs/ptk-playground#run-the-complete-local-demo-with-docker">Run locally</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a><a href="https://github.com/ptklabs/ptk-playground">Source</a></nav></div></footer>
+</body>
+</html>

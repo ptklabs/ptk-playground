@@ -853,6 +853,206 @@
           }
         }
       ]
+    },
+    {
+      "id": "history-order-router",
+      "title": "History Order Router",
+      "summary": "Follow an in-document History API transition into a browser-created authenticated JSON request.",
+      "story": "An account shell opens an order without reloading the document. The route updates the live view and sends one session-bound JSON request; compare route-state interpretation and an active API error with a behavior-preserving repaired path.",
+      "category": "SPA navigation and authenticated traffic",
+      "engines": ["DAST", "SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/history-order-router/",
+      "evidenceSummary": "History API route plus session-bound JSON POST",
+      "targets": {
+        "review": {
+          "id": "history-order-router-review",
+          "title": "History order router review target",
+          "route": "./targets/history-order-router/vulnerable/",
+          "displayRoute": "/targets/history-order-router/vulnerable/",
+          "source": "./targets/history-order-router/vulnerable/history-order-router.js",
+          "runtime": { "kind": "route-aware-server", "protocol": "http", "port": 3080 },
+          "action": { "summary": "Press Open prepared order and observe the route, DOM and JSON request.", "triggerSelector": "#open-order-route", "readySelector": "#order-route-status" },
+          "request": {
+            "method": "POST",
+            "route": "/targets/history-order-router/vulnerable/api/order",
+            "contentType": "application/json",
+            "parameterNames": ["orderId"],
+            "setup": "Open the review page to establish its scoped session, then press Open prepared order."
+          },
+          "visibleBehavior": "The document stays loaded while route-controlled markup is interpreted and a browser-session JSON request is emitted."
+        },
+        "repaired": {
+          "id": "history-order-router-control",
+          "title": "History order router repaired control",
+          "route": "./targets/history-order-router/fixed/",
+          "displayRoute": "/targets/history-order-router/fixed/",
+          "source": "./targets/history-order-router/fixed/history-order-router.js",
+          "runtime": { "kind": "route-aware-server", "protocol": "http", "port": 3080 },
+          "action": { "summary": "Press the same order action and observe the reviewed route and JSON request.", "triggerSelector": "#open-order-route", "readySelector": "#order-route-status" },
+          "request": {
+            "method": "POST",
+            "route": "/targets/history-order-router/fixed/api/order",
+            "contentType": "application/json",
+            "parameterNames": ["orderId"],
+            "setup": "Open the repaired page to establish its scoped session, then press Open prepared order."
+          },
+          "visibleBehavior": "The same route and request use an allow-listed identifier, constant text, and a clean API response."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover", "number": 1, "title": "Discover the route-to-request boundary",
+          "summary": "Identify the evidence created only after the SPA action.",
+          "instructions": ["Open the review target and note its initial URL and quiet request state.", "Press Open prepared order and observe that the document does not reload.", "Compare the changed route, live DOM and captured JSON request."],
+          "concepts": ["History API", "live route state", "authenticated request"],
+          "hint": "The important view and request do not exist in the initial HTML response.",
+          "demoCue": "Keep the URL, DOM and network views visible around one click.",
+          "completion": { "type": "choice", "prompt": "What completes the browser evidence?", "options": [{"value":"route-dom-request","label":"The route transition, live DOM update and resulting JSON request."},{"value":"initial-html","label":"Only the initial HTML response."},{"value":"page-title","label":"Only the document title."}], "answer": "route-dom-request" }
+        },
+        {
+          "id": "prove", "number": 2, "title": "Prove the browser-created flow",
+          "summary": "Correlate route state, DOM behavior and the scoped active request.",
+          "instructions": ["Start browser traffic, static and runtime analysis on the review target.", "Press Open prepared order and capture the JSON POST.", "Enter the evidence token shown by the in-document route."],
+          "concepts": ["route source", "HTML sink", "JSON parameter"],
+          "hint": "Use the local route-aware runtime when you want to attack the captured API parameter.",
+          "demoCue": "Show how one browser action gives SAST, IAST and DAST complementary evidence.",
+          "completion": { "type": "proof", "prompt": "Evidence token", "value": "HISTORY-ORDER-ROUTE-MARKUP" }
+        },
+        {
+          "id": "fix", "number": 3, "title": "Validate the paired repair",
+          "summary": "Preserve the route and request while removing interpretation and the API error oracle.",
+          "instructions": ["Open the repaired target and repeat the same action.", "Confirm the History API and JSON request still execute.", "Enter the repaired route token and compare malformed API responses locally."],
+          "concepts": ["allow-list", "text rendering", "clean active control"],
+          "hint": "The repaired path changes validation and rendering, not the browser journey.",
+          "demoCue": "Use the repaired route as a negative oracle for both browser and API evidence.",
+          "completion": { "type": "proof", "prompt": "Remediation token", "value": "HISTORY-ORDER-ROUTE-TEXT-SAFE" }
+        }
+      ]
+    },
+    {
+      "id": "lazy-route-module",
+      "title": "Lazy Analytics Route",
+      "summary": "Reveal an SPA route module and dependency that do not exist in browser traffic before the user action.",
+      "story": "An application shell loads its analytics feature only after a History API transition. Compare an older dependency and route-controlled HTML sink with a reviewed dependency and allow-listed text output while keeping the same lazy journey.",
+      "category": "Lazy SPA modules and dependencies",
+      "engines": ["SCA", "SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/lazy-route-module/",
+      "dependency": { "name": "jQuery", "license": "MIT", "reviewVersion": "3.4.1", "repairedVersion": "3.7.1" },
+      "evidenceSummary": "Dynamic route import and action-loaded dependency",
+      "targets": {
+        "review": {
+          "id": "lazy-route-module-review",
+          "title": "Lazy analytics route review target",
+          "route": "./targets/lazy-route-module/vulnerable/",
+          "displayRoute": "/targets/lazy-route-module/vulnerable/",
+          "source": "./targets/lazy-route-module/vulnerable/analytics-route.js",
+          "action": { "summary": "Observe initial traffic, then press Open analytics route.", "triggerSelector": "#open-analytics-route", "readySelector": "#analytics-route-status" },
+          "visibleBehavior": "The route action imports a new module, loads jQuery 3.4.1, and interprets the prepared route summary as markup."
+        },
+        "repaired": {
+          "id": "lazy-route-module-control",
+          "title": "Lazy analytics route repaired control",
+          "route": "./targets/lazy-route-module/fixed/",
+          "displayRoute": "/targets/lazy-route-module/fixed/",
+          "source": "./targets/lazy-route-module/fixed/analytics-route.js",
+          "action": { "summary": "Observe initial traffic, then press the same analytics action.", "triggerSelector": "#open-analytics-route", "readySelector": "#analytics-route-status" },
+          "visibleBehavior": "The same lazy route loads jQuery 3.7.1 and renders an allow-listed summary as text."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover", "number": 1, "title": "Establish the quiet initial state",
+          "summary": "Prove that neither the feature chunk nor dependency appears at page load.",
+          "instructions": ["Open the review target without using its route action.", "Inspect initial browser traffic for the analytics module and jQuery.", "Choose the transition needed to expose the real client surface."],
+          "concepts": ["code splitting", "dynamic import", "dependency timing"],
+          "hint": "The application shell alone is not the complete client application.",
+          "demoCue": "Start with a clean network view, then reveal both files with one route transition.",
+          "completion": { "type": "choice", "prompt": "What reveals the hidden client surface?", "options": [{"value":"route-action","label":"Open the lazy route and observe its new module and dependency requests."},{"value":"reload-shell","label":"Reload only the untouched shell."},{"value":"read-heading","label":"Read the page heading."}], "answer": "route-action" }
+        },
+        {
+          "id": "prove", "number": 2, "title": "Prove the late-loaded behavior",
+          "summary": "Correlate the imported source, dependency version and live route sink.",
+          "instructions": ["Start SCA, SAST and IAST on the review target.", "Press Open analytics route and observe both new requests.", "Enter the evidence token after the route content appears."],
+          "concepts": ["runtime component", "late source collection", "HTML sink"],
+          "hint": "The route module and dependency are requested in sequence after the click.",
+          "demoCue": "Show why browser actions matter to both composition and code analysis.",
+          "completion": { "type": "proof", "prompt": "Evidence token", "value": "LAZY-ROUTE-MODULE-AND-DEPENDENCY-LOADED" }
+        },
+        {
+          "id": "fix", "number": 3, "title": "Validate lazy-loading safely",
+          "summary": "Keep code splitting while upgrading the dependency and rendering reviewed text.",
+          "instructions": ["Open the repaired target and confirm its initial traffic remains quiet.", "Repeat the route action and compare the requested files and output.", "Enter the repaired evidence token."],
+          "concepts": ["dependency upgrade", "allow-listed state", "text rendering"],
+          "hint": "The repair does not make the route eager or remove the feature.",
+          "demoCue": "Compare request timing and visible output before discussing the two small code changes.",
+          "completion": { "type": "proof", "prompt": "Remediation token", "value": "LAZY-ROUTE-MODULE-TEXT-SAFE" }
+        }
+      ]
+    },
+    {
+      "id": "same-origin-child-tab",
+      "title": "Related Child Tab",
+      "summary": "Continue analysis in a causally related same-origin tab while preserving an explicit different-origin scope boundary.",
+      "story": "A support launcher opens a same-origin child workspace. The child loads its own dependency and context response before receiving a structured browser message; compare permissive HTML handling and response disclosure with exact validation, text rendering, a reviewed component, and a clean response.",
+      "category": "Related browser contexts and scope",
+      "engines": ["DAST", "SCA", "SAST", "IAST"],
+      "modes": ["campaign", "explorer", "demo", "scanner"],
+      "route": "./campaigns/same-origin-child-tab/",
+      "dependency": { "name": "jQuery", "license": "MIT", "reviewVersion": "3.4.1", "repairedVersion": "3.7.1" },
+      "evidenceSummary": "Same-origin child message, dependency and response",
+      "targets": {
+        "review": {
+          "id": "same-origin-child-tab-review",
+          "title": "Related child-tab review journey",
+          "route": "./targets/same-origin-child-tab/vulnerable/",
+          "displayRoute": "/targets/same-origin-child-tab/vulnerable/",
+          "source": "./targets/same-origin-child-tab/vulnerable/child-runtime.js",
+          "runtime": { "kind": "route-aware-server", "protocol": "http", "port": 3080 },
+          "journey": { "summary": "Open the prepared child and inspect evidence in the new same-origin tab.", "entrySelector": "#open-related-child", "childRoute": "/targets/same-origin-child-tab/vulnerable/child.html", "childReadySelector": "#child-runtime-status" },
+          "visibleBehavior": "The related child loads jQuery 3.4.1, accepts the workspace message as HTML, and receives a response metadata disclosure locally."
+        },
+        "repaired": {
+          "id": "same-origin-child-tab-control",
+          "title": "Related child-tab repaired journey",
+          "route": "./targets/same-origin-child-tab/fixed/",
+          "displayRoute": "/targets/same-origin-child-tab/fixed/",
+          "source": "./targets/same-origin-child-tab/fixed/child-runtime.js",
+          "runtime": { "kind": "route-aware-server", "protocol": "http", "port": 3080 },
+          "journey": { "summary": "Open the paired child and inspect evidence in the new same-origin tab.", "entrySelector": "#open-related-child", "childRoute": "/targets/same-origin-child-tab/fixed/child.html", "childReadySelector": "#child-runtime-status" },
+          "visibleBehavior": "The related child validates its opener, loads jQuery 3.7.1, renders text, and receives a clean local response."
+        }
+      },
+      "objectives": [
+        {
+          "id": "discover", "number": 1, "title": "Discover the related browser context",
+          "summary": "Identify why the launcher tab is not the whole authorised application journey.",
+          "instructions": ["Start on the review launcher and note its origin.", "Open the prepared related child and compare its origin and opener relationship.", "Observe which code, dependency and request exist only in the child."],
+          "concepts": ["opener relationship", "same-origin child", "bounded scope"],
+          "hint": "Causality and exact origin both matter; a random same-origin tab is not automatically related.",
+          "demoCue": "Keep launcher and child visible, then contrast the optional alternate-host control locally.",
+          "completion": { "type": "choice", "prompt": "Which tab belongs to the journey?", "options": [{"value":"causal-same-origin-child","label":"The same-origin child opened by the tracked launcher."},{"value":"every-same-origin-tab","label":"Every unrelated tab that happens to share a hostname."},{"value":"alternate-host-control","label":"The alternate-host control with no application state."}], "answer": "causal-same-origin-child" }
+        },
+        {
+          "id": "prove", "number": 2, "title": "Prove child-owned evidence",
+          "summary": "Collect runtime, component, source and response evidence from the child itself.",
+          "instructions": ["Start all browser engines on the review launcher.", "Open the related child and wait for its dependency, request and message.", "Enter the evidence token displayed inside the child."],
+          "concepts": ["child runtime", "postMessage", "child dependency", "response metadata"],
+          "hint": "The proof token appears only in the child document after its own lifecycle runs.",
+          "demoCue": "Show that the browser journey—not one tab ID—is the useful security boundary.",
+          "completion": { "type": "proof", "prompt": "Evidence token", "value": "RELATED-CHILD-MESSAGE-MARKUP" }
+        },
+        {
+          "id": "fix", "number": 3, "title": "Validate trust and scope controls",
+          "summary": "Preserve the related child while validating its exact message and dependency boundaries.",
+          "instructions": ["Open the repaired launcher and its related child.", "Confirm the message is displayed literally and the reviewed dependency loads.", "Use the local alternate-host control only to verify that it receives no state, then enter the repaired token."],
+          "concepts": ["exact origin", "exact opener", "text rendering", "scope exclusion"],
+          "hint": "The repaired application still follows its child; it does not broaden ownership to the alternate-host control.",
+          "demoCue": "Use the repaired child and external control as two different negative oracles.",
+          "completion": { "type": "proof", "prompt": "Remediation token", "value": "RELATED-CHILD-MESSAGE-TEXT-SAFE" }
+        }
+      ]
     }
   ]
 }

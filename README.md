@@ -1,38 +1,68 @@
 # OWASP PTK Playground
 
-Deliberately vulnerable browser fixtures for learning and validating
+A deliberately vulnerable browser-security playground for learning,
+demonstrating and validating
 [OWASP Penetration Testing Kit](https://owasp.org/www-project-penetration-testing-kit/).
 
-The playground combines realistic browser-security campaigns with focused
-client-side SAST, in-browser IAST and passive DAST fixtures. Campaign missions
-can also load pinned local dependencies for SCA. It supports four workflows:
-
-- **Campaign** — progressive Discover, Prove and Fix objectives.
-- **Explorer** — every objective, hint, target and source without unlocks.
-- **Demo** — one curated 12-minute journey across all four evidence families.
-- **Scanner** — direct state-free targets and neutral machine-readable metadata.
+The playground connects client-side SAST, in-browser IAST, SCA, passive DAST
+and active DAST to browser behaviours that can be seen and reproduced. It is
+scanner-neutral: direct targets do not call PTK APIs and can be used by other
+authorised security tools.
 
 Use these fixtures only in an environment you own or are authorised to test.
 
-## PTK Pro preview
-
-The home and campaign pages include a separate **PTK Pro — Coming soon**
-roadmap lane. It highlights selected public scenarios being used to validate
-additional future coverage. The preview is presentation metadata only: PTK Pro
-scanning is not enabled on this site, the current 12-minute demo uses published
-PTK capabilities, and every target remains open and scanner-neutral.
-
-Only a high-level status and planned engine are public. Scanner metadata and
-direct target files contain no product-tier data, private rule identities,
-payloads, detection logic, expected findings, access policy or credentials.
-
 ## Open the playground
 
-The public catalogue is available at:
+Public site: <https://ptklabs.github.io/ptk-playground/>
 
-<https://ptklabs.github.io/ptk-playground/>
+The site has two primary workflows:
 
-SAST and IAST pages can also be served locally with any static HTTP server:
+- **Play** — choose a short path, then use the linked mission's objectives,
+  hints and visible proof tokens or open every target directly.
+- **Explore** — search the complete catalogue of focused cases and retained
+  historical labs.
+
+The guided BSides journey is available at:
+
+<https://ptklabs.github.io/ptk-playground/play/?playlist=browser-context-demo>
+
+Playlists are views over the full catalogue. They do not define or limit the
+playground's coverage. The three-case browser-context path remains the fastest
+conference demo; six additional paths cover all current missions,
+static-to-runtime evidence, state and child documents, browser-provided DAST
+traffic, dependency timing, and a three-mission SPA Deep Dive.
+
+The SPA Deep Dive combines a History API route with an authenticated JSON
+request, a dynamically imported route module with a late-loaded dependency,
+and a causally related same-origin child tab. Use:
+
+<https://ptklabs.github.io/ptk-playground/play/?playlist=spa-deep-dive>
+
+Static hosting demonstrates the SAST, IAST and SCA boundaries. Run the local
+route-aware server for the session APIs, response metadata, and explicit
+alternate-host scope control.
+
+## Why browser context matters
+
+| Evidence | What the playground demonstrates |
+|---|---|
+| SAST | Client JavaScript and HTML paths, including code that has not executed |
+| IAST | Live browser-controlled source-to-sink behaviour |
+| Passive DAST | Browser-visible requests, responses, headers and attack surfaces |
+| Active DAST | Bounded mutation of captured requests using real browser state |
+| SCA | Dependencies that load initially or after an application action |
+
+Focused challenges provide an isolated review target and a meaningful repaired
+control. The current generated corpus separates 126 unique historical SAST
+assertions and 149 historical IAST assertions into target-local review/control
+source pairs. Broad SAST and IAST URLs are now family directories linking one
+focused target per unique case. Historical combined pages remain available at
+sibling `*.advanced.html` URLs for compatibility and research; they are not
+counted as atomic coverage.
+
+## Run locally
+
+For static SAST, IAST, SCA and browser targets:
 
 ```bash
 python3 -m http.server 8000
@@ -40,305 +70,224 @@ python3 -m http.server 8000
 
 Then open <http://localhost:8000/>.
 
-For a scanner-neutral directory of all review/repaired target pairs, open:
-
-<http://localhost:8000/scanner/>
-
-The static page enables static targets and leaves protocol-dependent targets
-disabled. Its minimal machine-readable catalogue is available at
-`catalog/scanner-targets.json`; it contains routes and runtime requirements,
-not gameplay answers, scanner rules, payloads or expected findings.
-
-For the curated presenter journey, open:
-
-<http://localhost:8000/demo/>
-
-It connects the Support Widget, Session-Bound Order Search, and Transient Route
-Notice missions into three chapters covering SCA, SAST, IAST, and DAST. Static
-hosting enables chapters 1 and 3. Open
-<http://127.0.0.1:3080/demo/> through the route-aware server to enable all six
-review/repaired target links, including the authenticated chapter.
-
-The first browser-code campaign is available at:
-
-<http://localhost:8000/campaigns/support-widget/>
-
-Its scanner targets work directly, without campaign progress:
-
-- <http://localhost:8000/targets/support-widget/vulnerable/>
-- <http://localhost:8000/targets/support-widget/fixed/>
-
-The response-boundary campaign requires the route-aware server described
-below. Once it is running, open:
-
-<http://localhost:3080/campaigns/deployment-response-boundary/>
-
-Its paired scanner targets are served over local HTTPS:
-
-- <https://localhost:3443/passive/cases/headers/powered-by.html>
-- <https://localhost:3443/passive/cases/headers/secure-control.html>
-
-The session-bound active DAST campaign uses the same route-aware server:
-
-<http://localhost:3080/campaigns/session-bound-order-search/>
-
-Opening either target establishes a scoped HTTP-only session. Submitting the
-form creates the same-origin, form-encoded POST request used by the mission:
-
-- <https://localhost:3443/targets/session-bound-order-search/vulnerable/>
-- <https://localhost:3443/targets/session-bound-order-search/fixed/>
-
-The on-demand SCA campaign runs on static hosting. Its direct targets request
-no component during the initial load; press the workspace button to load the
-review or repaired dependency:
-
-- <http://localhost:8000/campaigns/on-demand-analytics/>
-- <http://localhost:8000/targets/on-demand-analytics/vulnerable/>
-- <http://localhost:8000/targets/on-demand-analytics/fixed/>
-
-The saved-workspace campaign demonstrates browser state crossing a real
-same-origin navigation. Each setup route saves a harmless announcement before
-opening its child dashboard document:
-
-- <http://localhost:8000/campaigns/saved-workspace/>
-- <http://localhost:8000/targets/saved-workspace/vulnerable/>
-- <http://localhost:8000/targets/saved-workspace/fixed/>
-
-The review dashboard interprets the restored value as markup; the repaired
-dashboard preserves the storage and navigation journey while rendering the
-same bytes as text.
-
-The live-profile-preview campaign demonstrates an API field that is absent
-from initial page traffic and reaches the DOM only after a browser action:
-
-- <http://localhost:8000/campaigns/live-profile-preview/>
-- <http://localhost:8000/targets/live-profile-preview/vulnerable/>
-- <http://localhost:8000/targets/live-profile-preview/fixed/>
-
-Both targets request the same local JSON response. The review target
-interprets its harmless markup-shaped summary; the repaired target displays
-the same response bytes as text.
-
-The transient-route-notice campaign demonstrates a client-side deep link whose
-DOM evidence exists for only 30 ms after an in-document hash-route change:
-
-- <http://localhost:8000/campaigns/transient-route-notice/>
-- <http://localhost:8000/targets/transient-route-notice/vulnerable/>
-- <http://localhost:8000/targets/transient-route-notice/fixed/>
-
-Both targets use the same action, hash-query parameter and expiry boundary. The
-review route interprets the prepared value as markup; the repaired route maps
-only the accepted value to constant text and rejects arbitrary input.
-
-The imported-request-preferences campaign demonstrates how user-controlled
-JSON can change a browser request through an inherited object property:
-
-- <http://localhost:8000/campaigns/imported-request-preferences/>
-- <http://localhost:8000/targets/imported-request-preferences/vulnerable/>
-- <http://localhost:8000/targets/imported-request-preferences/fixed/>
-
-Both targets parse the same prepared document and request the same local JSON
-preview. The review route performs an unsafe merge; the repaired route uses a
-null-prototype options object and copies only accepted own properties.
-
-## Run passive DAST fixtures
-
-Passive checks depend on real response headers, exact routes, MIME types,
-cookies, downloads, SSE, WebSocket upgrades and HTTPS context. GitHub Pages can
-show the catalogue, but it cannot reproduce those server behaviours.
-
-Start the dedicated route-aware server from the repository root:
+Passive response behaviour and active DAST cases require exact headers,
+cookies, methods, SSE/WebSocket upgrades or HTTPS. Start the loopback-only
+route-aware runtime:
 
 ```bash
 npm run demo
 ```
 
-Default pages:
+Then open:
 
-- <http://localhost:3080/passive/>
-- <http://localhost:3080/scanner/>
-- <http://localhost:3080/demo/>
-- <http://localhost:3080/campaigns/deployment-response-boundary/>
-- <http://localhost:3080/campaigns/session-bound-order-search/>
-- <https://localhost:3443/passive/> when OpenSSL is available
+- <http://127.0.0.1:3080/play/>
+- <http://127.0.0.1:3080/explore/>
+- <http://127.0.0.1:3080/passive/>
+- <https://127.0.0.1:3443/> when local HTTPS is available
 
-The HTTPS endpoint uses a local self-signed certificate intended only for this
-fixture environment.
+The HTTPS listener uses a self-signed certificate intended only for this local
+fixture environment. The server binds to `127.0.0.1` by default.
 
-The server binds to `127.0.0.1` by default so the deliberately vulnerable
-fixtures are not exposed to the local network. The ports can be changed with
-`PTK_PASSIVE_HTTP_PORT` and `PTK_PASSIVE_HTTPS_PORT` when required.
-
-Before a workshop or presentation, run the isolated readiness check:
+Before a workshop or presentation, run:
 
 ```bash
 npm run demo:preflight
 ```
 
-The preflight starts a temporary loopback-only runtime on unused ports and
-checks the health contract, curated demo and scanner catalogues, local-only
-target routes, HTTPS availability, scoped session cookie, and the exact
-session-bound DAST review/control response pair. It stops its temporary server
-when complete.
+The preflight creates an isolated temporary runtime, checks its health and
+positive/control contracts, and stops it on completion.
 
-The route-aware runtime exposes a machine-readable readiness response at
-`/healthz`. A successful response identifies the service and reports whether
-the local HTTPS listener is available.
+## Run the complete local demo with Docker
 
-Campaign and presenter progress is stored only in namespaced session storage.
-Use the visible **Reset** control on the current mission or demo page before a
-presentation. The Saved Workspace targets have their own **Clear saved
-announcement** action; review and repaired values use separate keys. These
-controls reset playground-owned state without clearing unrelated browser data.
+The Docker image runs the same route-aware Node runtime used by `npm run demo`.
+It includes the local HTTPS listener and DAST request/response behavior; it is
+not a generic static web-server image.
 
-## Understand the engines
+Build and start it with Docker Compose:
 
-### SAST
+```bash
+docker compose up --build
+```
 
-SAST analyses collected client-side code without requiring the vulnerable path
-to execute. A broad SAST lab can therefore produce findings for multiple code
-paths even when only one control is clicked.
+Then open:
 
-### IAST
+- <http://127.0.0.1:3080/>;
+- <http://127.0.0.1:3080/play/>;
+- <http://127.0.0.1:3080/play/?playlist=spa-deep-dive>; or
+- <https://127.0.0.1:3443/> for the local self-signed HTTPS fixtures.
 
-IAST observes source-to-sink behaviour while browser code executes. Most IAST
-cases require a declared setup and trigger before the expected finding can be
-reported.
+The browser will warn about the intentionally self-signed local certificate.
+Do not expose this deliberately vulnerable playground to an untrusted network.
+Compose publishes both ports on host loopback only, runs the Node process as a
+non-root user, drops Linux capabilities and keeps the container filesystem
+read-only apart from temporary TLS material.
 
-### Passive DAST
+To validate a running container from the repository checkout:
 
-Passive DAST analyses browser-visible requests, responses and attack-surface
-signals without mutating the target. The local server provides the exact
-protocol behaviour required by these cases.
+```bash
+npm run demo:container:smoke
+```
 
-### Active DAST
+This checks HTTP and HTTPS health, the SPA Deep Dive catalogue, and the
+session-bound DAST positive/repaired contract. Stop and remove the local
+container with:
 
-Active DAST replays and mutates browser-observed requests within an authorised
-scope. The session-bound order-search mission supplies a bounded POST API,
-scoped cookie and paired repaired route so a scanner can prove both a positive
-finding and its absence without attacking an external application.
+```bash
+docker compose down
+```
 
-### SCA
+The equivalent Docker CLI commands are:
 
-SCA observes the JavaScript dependencies loaded by the browser. Campaign
-dependencies are pinned locally with source, licence and SHA-256 metadata so a
-vulnerable version and its repaired comparison remain deterministic.
-The on-demand analytics mission also demonstrates why the user journey
-matters: its dependency is absent from initial page traffic and appears only
-after a browser action.
+```bash
+docker build -t ptk-playground .
+docker run --rm \
+  --name ptk-playground \
+  --init \
+  --read-only \
+  --tmpfs /tmp:rw,size=16m,mode=1777 \
+  --cap-drop ALL \
+  --security-opt no-new-privileges \
+  -p 127.0.0.1:3080:3080 \
+  -p 127.0.0.1:3443:3443 \
+  ptk-playground
+```
 
-### Cross-navigation browser state
+## Direct scanner targets
 
-The saved-workspace mission connects static and runtime analysis across two
-documents. The setup page persists application state, then a child dashboard
-reads that origin-scoped value and writes it to the DOM. The paired control
-keeps the same storage and navigation behavior while changing only the DOM
-write from markup interpretation to text rendering.
+Focused targets remain directly addressable without progress state, hints or
+presentation code. Static hosting leaves protocol-dependent targets disabled
+rather than inventing a localhost URL.
 
-### Action-loaded response fields
+Useful entry points:
 
-The live-profile-preview mission connects browser traffic, static source and
-runtime reachability. The profile response does not exist in initial traffic;
-the user action fetches one same-origin JSON document and passes a parsed field
-to paired DOM operations.
+- `/explore/` — complete human-readable catalogue;
+- `/scanner/` — compatibility directory for current paired missions;
+- `catalog/challenges.json` — canonical public challenge catalogue;
+- `catalog/families.json` — human-readable groupings;
+- `catalog/playlists.json` — guided challenge references; and
+- `catalog/generated/scanner-targets.json` — complete scanner-neutral target
+  feed generated from the canonical catalogue;
+- `catalog/generated/counts.json` — generated corpus and engine counts;
+- `catalog/legacy-routes.json` — frozen compatibility route inventory.
 
-### Transient SPA route state
+Public metadata describes routes and browser behaviour. It does not contain
+private PTK rule IDs, payloads, matchers, scan policies, expected findings,
+credentials or extension-specific control APIs.
 
-The transient-route-notice mission changes a hash-query route without a page
-reload and removes the rendered notice after 30 ms. It provides paired static,
-runtime and active-browser targets for scanners that can observe an application
-transition rather than relying only on the initial response or a late snapshot.
+## Full-corpus accounting
 
-### Imported client configuration
+The migration is driven by `catalog/source-ledger.json`. It records every
+selected source file, its hash, role, disposition, public route and discovered
+scenario markers.
 
-The imported-request-preferences mission connects a static configuration-merge
-path with its live browser impact. It distinguishes an object's own request
-keys from values inherited through its prototype, while the repaired control
-keeps the import and preview request but accepts only reviewed own properties.
+The ledger separates:
 
-## Public fixture boundary
+- reviewed focused targets and their generated source files;
+- generated family directories, retained historical Advanced pages and their
+  migrated child assertions;
+- indexes and presentation shells;
+- target helpers and runtime templates; and
+- pinned third-party dependencies.
 
-The playground contains generic browser behaviours, not PTK rule definitions,
-payload catalogues, matchers, policies or execution logic. PTK-specific mapping
-and expected-result assertions are maintained in the separate test harness.
+Every discovered marker has an explicit assertion, control, setup or helper
+role. Authored assertions are linked to an isolated SAST/IAST challenge or an
+explicit route-aware DAST contract. The source-migration flag therefore means
+the public fixture is accounted for; it does not claim that every scanner has
+been proven to report every case.
 
-Credential-looking strings in secret-detection fixtures are synthetic,
-non-functional test values. They do not grant access to any real account,
-service or system.
+Additional generated catalogues document:
+
+- every route-aware endpoint as a security target or runtime support route;
+- allowed transport and HTTP methods for DAST targets;
+- pinned SCA resource hashes, licences, loading conditions and controls; and
+- all direct review/repaired targets without presentation or product-policy
+  metadata.
+
+Regenerate and verify the public catalogues with:
+
+```bash
+npm run catalog:generate
+npm run catalog:check
+```
+
+## PTK Pro preview
+
+Selected presentation cards may be labelled **PTK Pro — Coming soon** or **In
+progress** to show future coverage direction. This is roadmap metadata only.
+The direct targets remain open and scanner-neutral, and no private executable
+rulepack content is published in this repository. The homepage does not carry
+a separate Pro section.
 
 ## Repository structure
 
 ```text
 ptk-playground/
-├── index.html              Playground home
-├── catalog/cases.json      Public, non-executable case catalogue
-├── catalog/missions.json   Campaign and objective metadata
-├── catalog/demo.json       Curated, scanner-neutral demo metadata
-├── catalog/scanner-targets.json
-│                           Minimal scanner-neutral target metadata
-├── campaigns/              Guided, explorer, demo and scanner shells
-├── demo/                   Curated cross-engine presenter journey
-├── scanner/                Filterable scanner quick start
-├── targets/                Direct state-free mission targets
-├── assets/                 Shared self-hosted UI assets
-├── sast/                   Client-side static-analysis fixtures
-├── iast/                   Runtime source-to-sink fixtures
-├── passive/                Route-aware passive DAST fixtures and server
-└── test/                   Structural and public-boundary tests
+├── play/                    Guided playlists
+├── explore/                 Complete filterable catalogue
+├── catalog/                 Canonical and compatibility metadata
+├── atomic/                  Generated isolated SAST and IAST target pairs
+├── targets/                 Direct review and repaired targets
+├── sast/                    SAST family directories and Advanced labs
+├── iast/                    IAST family directories and Advanced labs
+├── passive/                 Route-aware DAST fixtures and local server
+├── campaigns/               Compatibility mission views
+├── demo/                    Compatibility presenter view
+├── scanner/                 Compatibility direct-target directory
+├── assets/                  Self-hosted UI and pinned dependencies
+├── scripts/                 Deterministic catalogue and readiness tools
+└── test/                    Structural and browser contracts
 ```
 
-PTK-specific module IDs, exact finding assertions and automation orchestration
-are maintained outside this public fixture repository.
+Exact PTK rule mappings and expected-result assertions are maintained outside
+this public fixture repository. The public catalogue proves fixture contracts;
+PTK result parity remains an evidence gate in the PTK test owner.
 
-## Validate structural contracts
+## Validate the playground
 
-The structural suite checks catalogue and mission validity, static and
-route-aware local targets,
-target/game isolation, vendored dependency provenance, duplicate element IDs,
-self-hosted playground assets and the public rulepack boundary:
+Install the pinned development dependency and run all public tests:
 
 ```bash
-node --test test/playground.structure.test.mjs
+npm install
+npm run test:all
 ```
 
-The public browser tests cover the static campaign shell, the scanner target
-directory, the paired response-metadata mission, the session-bound
-active-request mission and the action-loaded dependency mission:
+The suite checks:
 
-```bash
-node --test test/playground.browser-smoke.mjs
-node --test test/scanner-directory.browser.test.mjs
-node --test test/deployment-response.browser.test.mjs
-node --test test/session-bound-order-search.browser.test.mjs
-node --test test/on-demand-analytics.browser.test.mjs
-node --test test/saved-workspace.browser.test.mjs
-node --test test/live-profile-preview.browser.test.mjs
-node --test test/transient-route-notice.browser.test.mjs
-node --test test/imported-request-preferences.browser.test.mjs
-node --test test/demo-journey.browser.test.mjs
-```
+- full source-ledger and legacy-route accounting;
+- canonical challenge, family and playlist integrity;
+- complete generated scanner-target and count projections;
+- separate SAST/IAST review and repaired source files;
+- unique family-directory links and preserved Advanced combined labs;
+- complete DAST runtime-route classification and bounded active-request
+  methods;
+- SCA resource checksums, licences, load timing and repaired controls;
+- GitHub Pages project-subpath behaviour;
+- static versus route-aware target handling;
+- review/repaired target isolation;
+- self-hosted executable resources;
+- responsive desktop and mobile layouts; and
+- absence of public private-rule or product-policy leakage.
 
-Some legacy SAST fixtures intentionally use a bounded list of remote jQuery or
-Underscore dependencies. The structural test freezes that list so it cannot
-grow silently; replacing those dependencies with reviewed local copies is a
-separate fixture-compatibility task.
+Some historical SAST labs intentionally retain a bounded set of remote library
+references from the original corpus. Structural tests freeze that list so it
+cannot grow silently. Focused and newly created challenges must use reviewed
+local dependencies.
 
-## Add a fixture
+## Add or migrate a challenge
 
-1. Choose a campaign mission or a focused SAST, IAST or passive DAST fixture.
-2. Prefer one vulnerable behaviour and one clear safe control per deterministic
-   case.
-3. Keep state, cookies and storage keys scoped to the case.
-4. Keep navigation and requests inside the authorised fixture origin.
-5. Add neutral public metadata to `catalog/cases.json`.
-6. For a paired mission target, update `catalog/missions.json` and its exact
-   minimal projection in `catalog/scanner-targets.json`.
-7. Run the structural tests.
-8. When the fixture is used by PTK regression automation, update the maintained
-   internal coverage manifest and expected finding contract separately.
+1. Register the source and scenario in the migration ledger.
+2. Keep one declared security assertion per focused target.
+3. Create a separate meaningful repaired control where applicable.
+4. Keep requests and navigation inside the authorised fixture origin.
+5. Keep vulnerable implementation code target-local so SAST isolation remains
+   meaningful.
+6. Update the canonical catalogue generator and structural contracts.
+7. Validate the visible behaviour in supported browsers.
+8. Maintain PTK-specific expected findings in the private/internal test owner,
+   not in this public repository.
 
-Do not add extension-private APIs, credentials, scan policies or executable
-rule definitions to this repository.
+Do not add credentials, extension-private APIs, remote executable code, scan
+policies or executable rule definitions.
 
 ## Project links
 
