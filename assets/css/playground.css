@@ -404,6 +404,11 @@ a {
   margin-bottom: 22px;
 }
 
+.section-heading > div {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .section-heading h2 {
   margin: 0;
   font-size: clamp(1.65rem, 3vw, 2.35rem);
@@ -2449,6 +2454,10 @@ body[data-engine] .engine-hero::after {
   .scanner-directory__heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .section-heading > div {
+    width: 100%;
   }
 
   .mode-switch {
