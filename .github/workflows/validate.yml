@@ -17,6 +17,9 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.1-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -27,9 +30,6 @@ jobs:
 
       - name: Install exact lockfile
         run: npm ci --ignore-scripts
-
-      - name: Install browser runtime
-        run: npx playwright install --with-deps chromium
 
       - name: Validate public and security boundaries
         run: |
