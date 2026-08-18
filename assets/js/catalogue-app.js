@@ -114,7 +114,7 @@ function challengeCard(challenge, options = {}) {
   })
   if (options.number) card.append(element('span', { className: 'challenge-card__number', text: options.number }))
   const heading = element('div', { className: 'challenge-card__heading' })
-  const headingText = element('div')
+  const headingText = element('div', { className: 'challenge-card__heading-copy' })
   headingText.append(element('p', { className: 'eyebrow', text: challenge.category }))
   headingText.append(element('h2', { text: challenge.title }))
   heading.append(headingText)

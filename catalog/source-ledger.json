@@ -59,7 +59,7 @@
     {
       "id": "file.assets-css-playground-css-540b4b0b37",
       "path": "assets/css/playground.css",
-      "sha256": "5f098d1bbc7cedb8f186b24baa445fbaddca0dab32cd267f2b6aff81b937093a",
+      "sha256": "46af5d24929cfc8333a97767968abb10abccaacff82aee23aebc91529aa2981f",
       "role": "presentation-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -67,7 +67,7 @@
     {
       "id": "file.assets-js-catalogue-app-js-9d04c65a6b",
       "path": "assets/js/catalogue-app.js",
-      "sha256": "c3d87d70cd2d6c33eb42a4aa882e8bec393c43a294299182f45d0f748b3a6c10",
+      "sha256": "7f5fb890a572a042e7add714d4b2dc9fec908cefb0e2d5a62a632e8a006370f2",
       "role": "presentation-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
