@@ -1132,6 +1132,19 @@
       ]
     },
     {
+      "id": "family.jwt-request-carrier-and-verification",
+      "title": "JWT request carrier and verification",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5",
+        "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91",
+        "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28",
+        "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e"
+      ]
+    },
+    {
       "id": "family.known-deployment-resource",
       "title": "Known deployment resource",
       "engines": [

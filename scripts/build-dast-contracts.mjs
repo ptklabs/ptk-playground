@@ -37,6 +37,8 @@ function isSecurityTarget(pathname) {
   if (/^\/targets\/session-bound-order-search\/(?:vulnerable|fixed)\/api\/search$/.test(pathname)) return true
   if (/^\/targets\/history-order-router\/(?:vulnerable|fixed)\/api\/order$/.test(pathname)) return true
   if (/^\/targets\/same-origin-child-tab\/(?:vulnerable|fixed)\/api\/context$/.test(pathname)) return true
+  if (/^\/targets\/jwt-lab\/(?:authorization|cookie|form|json)\/(?:vulnerable|fixed)\/api\/session$/.test(pathname)) return true
+  if (pathname.startsWith('/jwt/') || pathname.startsWith('/targets/jwt-lab/dast/')) return false
   if (!pathname.startsWith('/passive/')) return false
   return ![
     '/passive/',
@@ -48,6 +50,7 @@ function isSecurityTarget(pathname) {
 }
 
 function category(pathname) {
+  if (pathname.includes('/targets/jwt-lab/')) return 'JWT request carrier and verification'
   if (pathname.includes('/api/search')) return 'Authenticated active request'
   if (pathname.includes('/api/order')) return 'SPA-created authenticated active request'
   if (pathname.includes('/api/context')) return 'Related child response evidence'
@@ -61,6 +64,7 @@ function category(pathname) {
 }
 
 function evidence(pathname) {
+  if (pathname.includes('/targets/jwt-lab/')) return 'jwt-request-differential'
   if (pathname.includes('/api/search')) return 'bounded-active-request'
   if (pathname.includes('/api/order')) return 'bounded-json-active-request'
   if (pathname.includes('/api/context')) return 'child-response-metadata'
@@ -75,7 +79,11 @@ const controlFor = new Map([
   ['/passive/fixtures/headers/weak-security.html', '/passive/fixtures/headers/secure-control.html'],
   ['/targets/session-bound-order-search/vulnerable/api/search', '/targets/session-bound-order-search/fixed/api/search'],
   ['/targets/history-order-router/vulnerable/api/order', '/targets/history-order-router/fixed/api/order'],
-  ['/targets/same-origin-child-tab/vulnerable/api/context', '/targets/same-origin-child-tab/fixed/api/context']
+  ['/targets/same-origin-child-tab/vulnerable/api/context', '/targets/same-origin-child-tab/fixed/api/context'],
+  ['/targets/jwt-lab/authorization/vulnerable/api/session', '/targets/jwt-lab/authorization/fixed/api/session'],
+  ['/targets/jwt-lab/cookie/vulnerable/api/session', '/targets/jwt-lab/cookie/fixed/api/session'],
+  ['/targets/jwt-lab/form/vulnerable/api/session', '/targets/jwt-lab/form/fixed/api/session'],
+  ['/targets/jwt-lab/json/vulnerable/api/session', '/targets/jwt-lab/json/fixed/api/session']
 ])
 const controlRoutes = new Set(controlFor.values())
 
@@ -86,6 +94,8 @@ const contracts = routes
     const activeSearch = pathname.includes('/api/search')
     const activeOrder = pathname.includes('/api/order')
     const childContext = pathname.includes('/api/context')
+    const jwtSession = pathname.includes('/targets/jwt-lab/') && pathname.endsWith('/api/session')
+    const jwtSeed = pathname.includes('/targets/jwt-lab/cookie/') && pathname.endsWith('/api/seed')
     const formRoute = ['/support/tickets/create', '/switch-tenant', '/passive/upload/index.html'].includes(pathname)
     const websocket = /realtime\/ws|socket\.io|sockjs/.test(pathname)
     const securityTarget = isSecurityTarget(pathname)
@@ -97,10 +107,10 @@ const contracts = routes
       category: category(pathname),
       evidence: evidence(pathname),
       transport: websocket ? 'websocket' : 'http',
-      methods: websocket ? ['GET-UPGRADE'] : activeSearch || activeOrder ? ['POST'] : childContext ? ['GET'] : formRoute ? ['GET', 'POST'] : ['GET', 'HEAD'],
+      methods: websocket ? ['GET-UPGRADE'] : activeSearch || activeOrder || jwtSession ? ['POST'] : childContext || jwtSeed ? ['GET'] : formRoute ? ['GET', 'POST'] : ['GET', 'HEAD'],
       runtime: {
         kind: 'route-aware-server',
-        protocol: activeSearch || pathname === '/passive/cases/headers/powered-by.html' || pathname === '/passive/cases/headers/secure-control.html' ? 'https' : activeOrder || childContext ? 'http' : 'http-or-https',
+        protocol: activeSearch || pathname === '/passive/cases/headers/powered-by.html' || pathname === '/passive/cases/headers/secure-control.html' ? 'https' : activeOrder || childContext || jwtSession || jwtSeed ? 'http' : 'http-or-https',
         loopbackOnly: true
       },
       ...(controlFor.has(pathname) ? { controlRoute: controlFor.get(pathname) } : {}),

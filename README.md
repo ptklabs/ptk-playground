@@ -42,6 +42,21 @@ Static hosting demonstrates the SAST, IAST and SCA boundaries. Run the local
 route-aware server for the session APIs, response metadata, and explicit
 alternate-host scope control.
 
+## JWT Lab
+
+Open `/jwt/` to follow a synthetic token through browser storage and four HTTP
+request carriers. The storage review/control pair works on GitHub Pages and is
+useful for JWT discovery demonstrations. Authorization headers, HttpOnly
+cookies, form fields and nested JSON bodies require the local route-aware
+runtime because static hosting cannot implement request/response behavior.
+
+The active JWT fixtures are deliberately bounded. They use synthetic tokens,
+never read local files for `kid` values, and never fetch remote `jku` URLs. Each
+review endpoint has a paired fixed endpoint so scanners can prove both the
+positive result and the negative control. Some case cards may describe future
+coverage, but the playground contains no private rule definitions or attack
+payload catalogue.
+
 ## Why browser context matters
 
 | Evidence | What the playground demonstrates |
@@ -161,6 +176,7 @@ rather than inventing a localhost URL.
 Useful entry points:
 
 - `/explore/` — complete human-readable catalogue;
+- `/jwt/` — JWT storage discovery and local request-carrier lab;
 - `/scanner/` — compatibility directory for current paired missions;
 - `catalog/challenges.json` — canonical public challenge catalogue;
 - `catalog/families.json` — human-readable groupings;

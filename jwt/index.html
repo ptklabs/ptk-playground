@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>JWT Lab · OWASP PTK Playground</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Scanner-neutral JWT discovery and request-carrier test cases for browser security tools.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../assets/css/playground.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to JWT cases</a>
+  <header class="site-header"><div class="site-header__inner">
+    <a class="brand" href="../"><span class="brand__mark" aria-hidden="true">PTK</span><span>OWASP PTK Playground</span></a>
+    <nav class="site-nav" aria-label="Playground navigation"><a href="../play/">Play</a><a href="../explore/">Explore</a><a href="./" aria-current="page">JWT Lab</a></nav>
+  </div></header>
+  <main id="main" class="page-shell">
+    <section class="hero">
+      <div><p class="eyebrow">JWT browser and request evidence</p><h1>Follow one synthetic token across the browser and HTTP request surface.</h1><p class="hero__lede">These paired cases demonstrate browser-storage discovery and exact Authorization, cookie, form and nested-JSON request carriers. All tokens are synthetic and intentionally non-secret.</p></div>
+      <aside class="hero__panel"><p class="eyebrow">Two execution modes</p><h2>Static discovery, local active testing.</h2><p>Storage cases work on GitHub Pages. Request mutation needs the loopback-only Node or Docker runtime so POST bodies, cookies and response behavior are deterministic.</p></aside>
+    </section>
+    <aside class="notice notice--warning"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Use only on authorised targets.</strong> The local APIs are deliberately vulnerable simulations and must not be exposed to an untrusted network.</p></aside>
+    <section class="section" aria-labelledby="storage-title">
+      <div class="section-heading"><div><p class="eyebrow">Static hosting</p><h2 id="storage-title">JWT discovery in browser state</h2><p>Open the review page, then open the PTK JWT tool. Compare it with the clean control on the same origin.</p></div></div>
+      <div class="entry-grid">
+        <article class="entry-card"><span class="badge badge--primary">Review</span><h3>Cookie and Web Storage tokens</h3><p>Seeds synthetic JWTs in a readable cookie, localStorage and sessionStorage.</p><a class="button" href="./storage/vulnerable/">Open storage review</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">Control</span><h3>Opaque session values</h3><p>Runs the same storage workflow with non-JWT values and clears review tokens first.</p><a class="button button--secondary" href="./storage/fixed/">Open storage control</a></article>
+      </div>
+    </section>
+    <section class="section" aria-labelledby="request-title">
+      <div class="section-heading"><div><p class="eyebrow">Local runtime</p><h2 id="request-title">JWTs in captured requests</h2><p>Generate one bounded request at a time using Authorization, an HttpOnly cookie, a form field or a nested JSON property.</p></div></div>
+      <div class="entry-grid">
+        <article class="entry-card"><span class="badge badge--mixed">DAST</span><h3>Four exact request carriers</h3><p>Each vulnerable endpoint has a paired control with the same method, token and browser action.</p><a class="button" href="../targets/jwt-lab/dast/">Open local DAST cases</a></article>
+        <article class="entry-card"><span class="badge badge--primary">PTK Pro · Coming soon</span><h3>Advanced verification behavior</h3><p>The same open fixtures also model algorithm-none, empty-signature, key-path and remote-key metadata handling without exposing private scanner rules.</p><a class="button button--secondary" href="../targets/jwt-lab/dast/">Review advanced cases</a></article>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="site-footer__inner"><p>JWT Lab · Synthetic tokens only.</p><nav><a href="../">Playground home</a><a href="https://github.com/ptklabs/ptk-playground">Source</a></nav></div></footer>
+</body>
+</html>

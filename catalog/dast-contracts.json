@@ -2,10 +2,10 @@
   "schema": "owasp-ptk-playground-dast-contracts/v1",
   "version": 1,
   "summary": {
-    "runtimeRoutes": 203,
-    "securityTargets": 51,
-    "controls": 5,
-    "infrastructureRoutes": 152
+    "runtimeRoutes": 223,
+    "securityTargets": 59,
+    "controls": 9,
+    "infrastructureRoutes": 164
   },
   "contracts": [
     {
@@ -246,6 +246,48 @@
       "role": "infrastructure",
       "disposition": "runtime-support",
       "category": "Known deployment resource",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.assets-js-jwt-dast-lab-js-5c1e59aa",
+      "route": "/assets/js/jwt-dast-lab.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
+      "evidence": "response-resource",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.assets-js-jwt-storage-lab-js-5393d31c",
+      "route": "/assets/js/jwt-storage-lab.js",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
       "evidence": "response-resource",
       "transport": "http",
       "methods": [
@@ -1413,6 +1455,138 @@
         "loopbackOnly": true
       },
       "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.jwt-be9be0ad",
+      "route": "/jwt/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.jwt-index-9f67c22d1f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.jwt-index-html-80f98b3c",
+      "route": "/jwt/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.jwt-index-9f67c22d1f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.jwt-storage-fixed-11b317fd",
+      "route": "/jwt/storage/fixed/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.jwt-storage-fixed-index-3359cb84b9",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.jwt-storage-fixed-index-html-a17a0457",
+      "route": "/jwt/storage/fixed/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.jwt-storage-fixed-index-3359cb84b9",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.jwt-storage-vulnerable-2ab13997",
+      "route": "/jwt/storage/vulnerable/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.jwt-storage-vulnerable-index-b7124b6a56",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.jwt-storage-vulnerable-index-html-e3cc1c12",
+      "route": "/jwt/storage/vulnerable/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "Sensitive data and input surface",
+      "evidence": "browser-response",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.jwt-storage-vulnerable-index-b7124b6a56",
         "passive/server.mjs"
       ]
     },
@@ -3020,6 +3194,254 @@
         "protocol": "http-or-https",
         "loopbackOnly": true
       },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-authorization-fixed-api-session-0141a12d",
+      "route": "/targets/jwt-lab/authorization/fixed/api/session",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5",
+      "route": "/targets/jwt-lab/authorization/vulnerable/api/session",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/targets/jwt-lab/authorization/fixed/api/session",
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-cookie-fixed-api-seed-320bc2dc",
+      "route": "/targets/jwt-lab/cookie/fixed/api/seed",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "GET"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-cookie-fixed-api-session-d291d65f",
+      "route": "/targets/jwt-lab/cookie/fixed/api/session",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-cookie-vulnerable-api-seed-79469456",
+      "route": "/targets/jwt-lab/cookie/vulnerable/api/seed",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "GET"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91",
+      "route": "/targets/jwt-lab/cookie/vulnerable/api/session",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/targets/jwt-lab/cookie/fixed/api/session",
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-dast-b6107d9a",
+      "route": "/targets/jwt-lab/dast/",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-jwt-lab-dast-index-dcc88d8799",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-dast-index-html-4923e16a",
+      "route": "/targets/jwt-lab/dast/index.html",
+      "role": "infrastructure",
+      "disposition": "runtime-support",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "GET",
+        "HEAD"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "file.targets-jwt-lab-dast-index-dcc88d8799",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-form-fixed-api-session-306171fe",
+      "route": "/targets/jwt-lab/form/fixed/api/session",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28",
+      "route": "/targets/jwt-lab/form/vulnerable/api/session",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/targets/jwt-lab/form/fixed/api/session",
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-json-fixed-api-session-f2f12348",
+      "route": "/targets/jwt-lab/json/fixed/api/session",
+      "role": "control",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e",
+      "route": "/targets/jwt-lab/json/vulnerable/api/session",
+      "role": "assertion",
+      "disposition": "security-target",
+      "category": "JWT request carrier and verification",
+      "evidence": "jwt-request-differential",
+      "transport": "http",
+      "methods": [
+        "POST"
+      ],
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "controlRoute": "/targets/jwt-lab/json/fixed/api/session",
       "owners": [
         "passive/server.mjs"
       ]

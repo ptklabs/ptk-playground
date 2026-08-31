@@ -79,10 +79,18 @@ const routeMap = new Map([
   ["/catalog/generated/scanner-targets.json", playgroundFileResponse("catalog/generated/scanner-targets.json", { contentType: "application/json; charset=utf-8" })],
   ["/catalog/generated/counts.json", playgroundFileResponse("catalog/generated/counts.json", { contentType: "application/json; charset=utf-8" })],
   ["/assets/js/catalogue-app.js", playgroundFileResponse("assets/js/catalogue-app.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/js/jwt-storage-lab.js", playgroundFileResponse("assets/js/jwt-storage-lab.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/js/jwt-dast-lab.js", playgroundFileResponse("assets/js/jwt-dast-lab.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/play/", playgroundFileResponse("play/index.html")],
   ["/play/index.html", playgroundFileResponse("play/index.html")],
   ["/explore/", playgroundFileResponse("explore/index.html")],
   ["/explore/index.html", playgroundFileResponse("explore/index.html")],
+  ["/jwt/", playgroundFileResponse("jwt/index.html")],
+  ["/jwt/index.html", playgroundFileResponse("jwt/index.html")],
+  ["/jwt/storage/vulnerable/", playgroundFileResponse("jwt/storage/vulnerable/index.html")],
+  ["/jwt/storage/vulnerable/index.html", playgroundFileResponse("jwt/storage/vulnerable/index.html")],
+  ["/jwt/storage/fixed/", playgroundFileResponse("jwt/storage/fixed/index.html")],
+  ["/jwt/storage/fixed/index.html", playgroundFileResponse("jwt/storage/fixed/index.html")],
   ["/demo/", playgroundFileResponse("demo/index.html")],
   ["/demo/index.html", playgroundFileResponse("demo/index.html")],
   ["/scanner/", playgroundFileResponse("scanner/index.html")],
@@ -182,6 +190,8 @@ const routeMap = new Map([
   ["/targets/angular-expression-dependency/fixed/", playgroundFileResponse("targets/angular-expression-dependency/fixed/index.html")],
   ["/targets/angular-expression-dependency/fixed/index.html", playgroundFileResponse("targets/angular-expression-dependency/fixed/index.html")],
   ["/targets/angular-expression-dependency/expression.js", playgroundFileResponse("targets/angular-expression-dependency/expression.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/jwt-lab/dast/", playgroundFileResponse("targets/jwt-lab/dast/index.html")],
+  ["/targets/jwt-lab/dast/index.html", playgroundFileResponse("targets/jwt-lab/dast/index.html")],
   ["/assets/vendor/jquery/jquery-3.4.1.min.js", playgroundFileResponse("assets/vendor/jquery/jquery-3.4.1.min.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/assets/vendor/jquery/jquery-3.7.1.min.js", playgroundFileResponse("assets/vendor/jquery/jquery-3.7.1.min.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/passive/header_disclosure_canary.html", fileResponse("header_disclosure_canary.html")],
@@ -557,6 +567,131 @@ async function serveHistoryOrderApi(req, res, { pathname }) {
   });
 }
 
+const JWT_LAB_SIGNED_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwdGstcGxheWdyb3VuZCIsInNjb3BlIjoiZGVtbyJ9.synthetic-signature";
+
+function decodeJwtLabHeader(segment) {
+  try {
+    if (!segment || String(segment).length > 2048) return null;
+    const decoded = Buffer.from(String(segment), "base64url").toString("utf8");
+    const value = JSON.parse(decoded);
+    return value && typeof value === "object" && !Array.isArray(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function parseJwtLabToken(value) {
+  const text = String(value || "");
+  if (!text || text.length > 4096) return null;
+  const match = text.match(/([A-Za-z0-9_-]+)\.([A-Za-z0-9_-]+)\.([A-Za-z0-9_-]*)/);
+  if (!match) return null;
+  const header = decodeJwtLabHeader(match[1]);
+  if (!header) return null;
+  return { token: match[0], header, payload: match[2], signature: match[3] };
+}
+
+function jwtLabCookie(req, name) {
+  for (const part of String(req.headers.cookie || "").split(/;\s*/)) {
+    const separator = part.indexOf("=");
+    if (separator < 0) continue;
+    if (part.slice(0, separator).trim() === name) return part.slice(separator + 1);
+  }
+  return "";
+}
+
+async function jwtLabCarrierToken(req, carrier) {
+  if (carrier === "authorization") {
+    return String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+  }
+  if (carrier === "cookie") return jwtLabCookie(req, "ptk_jwt_lab_session");
+  const contentType = String(req.headers["content-type"] || "").toLowerCase();
+  const rawBody = await readBoundedBody(req, 4096);
+  if (carrier === "form") {
+    if (!contentType.startsWith("application/x-www-form-urlencoded")) return "";
+    return String(new URLSearchParams(rawBody).get("access_token") || "");
+  }
+  if (carrier === "json") {
+    if (!/^application\/(?:[a-z0-9.+-]*\+)?json(?:;|$)/.test(contentType)) return "";
+    try {
+      const body = JSON.parse(rawBody);
+      return typeof body?.auth?.access_token === "string" ? body.auth.access_token : "";
+    } catch {
+      return "";
+    }
+  }
+  return "";
+}
+
+function jwtLabDecision(parsed, vulnerable) {
+  if (!parsed) return { status: 401, code: "JWT_REQUIRED", message: "A valid synthetic token is required." };
+  const alg = String(parsed.header.alg || "").toLowerCase();
+  const kid = String(parsed.header.kid || "");
+  const jku = String(parsed.header.jku || "");
+  if (parsed.token === JWT_LAB_SIGNED_TOKEN) {
+    return { status: 200, code: "JWT_ACCEPTED", message: "Synthetic JWT accepted for the demo account." };
+  }
+  if (vulnerable && alg === "none" && parsed.signature === "") {
+    return { status: 200, code: "JWT_ACCEPTED", message: "Synthetic JWT accepted for the demo account." };
+  }
+  if (vulnerable && alg === "hs256" && parsed.signature === "" && !kid && !jku) {
+    return { status: 200, code: "JWT_ACCEPTED", message: "Synthetic JWT accepted for the demo account." };
+  }
+  if (vulnerable && /(?:\.\.[/\\]|^[/\\]|[/\\]dev[/\\]null)/i.test(kid)) {
+    return { status: 400, code: "JWT_KID_PATH", message: "Unsafe kid path traversal reached the simulated key resolver; no file was read." };
+  }
+  if (vulnerable && /^https?:\/\//i.test(jku)) {
+    return { status: 400, code: "JWT_REMOTE_KEY", message: "Untrusted jku remote key metadata reached the simulated resolver; no network request was made." };
+  }
+  return { status: 401, code: "JWT_REJECTED", message: "JWT signature or verification policy rejected the token." };
+}
+
+async function serveJwtLabApi(req, res, { pathname }) {
+  const match = pathname.match(/^\/targets\/jwt-lab\/(authorization|cookie|form|json)\/(vulnerable|fixed)\/api\/(seed|session)$/);
+  if (!match) {
+    jsonResponse(res, 404, { ok: false, code: "JWT_LAB_ROUTE_NOT_FOUND" });
+    return;
+  }
+  const [, carrier, variant, operation] = match;
+  if (req.headers["x-playground-request"] !== "jwt-lab") {
+    jsonResponse(res, 400, { ok: false, code: "REQUEST_CONTEXT_REQUIRED" });
+    return;
+  }
+  if (operation === "seed") {
+    if (carrier !== "cookie" || req.method !== "GET") {
+      res.setHeader("Allow", carrier === "cookie" ? "GET" : "POST");
+      jsonResponse(res, 405, { ok: false, code: "METHOD_NOT_ALLOWED" });
+      return;
+    }
+    const cookiePath = `/targets/jwt-lab/cookie/${variant}/`;
+    jsonResponse(res, 200, { ok: true, code: "COOKIE_SEEDED" }, {
+      "Set-Cookie": `ptk_jwt_lab_session=${JWT_LAB_SIGNED_TOKEN}; Path=${cookiePath}; HttpOnly; SameSite=Lax`
+    });
+    return;
+  }
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    jsonResponse(res, 405, { ok: false, code: "METHOD_NOT_ALLOWED" });
+    return;
+  }
+  let token;
+  try {
+    token = await jwtLabCarrierToken(req, carrier);
+  } catch (error) {
+    jsonResponse(res, error?.code === "request_body_too_large" ? 413 : 400, {
+      ok: false,
+      code: error?.code === "request_body_too_large" ? "REQUEST_BODY_TOO_LARGE" : "REQUEST_BODY_INVALID"
+    });
+    return;
+  }
+  const decision = jwtLabDecision(parseJwtLabToken(token), variant === "vulnerable");
+  jsonResponse(res, decision.status, {
+    ok: decision.status >= 200 && decision.status < 300,
+    code: decision.code,
+    message: decision.message,
+    carrier
+  });
+}
+
 function serveChildContextApi(req, res, { pathname }) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
@@ -667,6 +802,10 @@ function createRequestHandler(isHttps) {
     }
     if (/^\/targets\/same-origin-child-tab\/(?:vulnerable|fixed)\/api\/context$/.test(url.pathname)) {
       serveChildContextApi(req, res, { pathname: url.pathname });
+      return;
+    }
+    if (/^\/targets\/jwt-lab\/(?:authorization|cookie|form|json)\/(?:vulnerable|fixed)\/api\/(?:seed|session)$/.test(url.pathname)) {
+      await serveJwtLabApi(req, res, { pathname: url.pathname });
       return;
     }
     serveRoute(req, res, { pathname: url.pathname, isHttps });

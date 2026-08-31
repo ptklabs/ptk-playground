@@ -3,8 +3,8 @@
   "version": 2,
   "generatedFrom": "catalog/challenges.json",
   "summary": {
-    "challenges": 415,
-    "targets": 708
+    "challenges": 419,
+    "targets": 716
   },
   "targets": [
     {
@@ -5709,6 +5709,150 @@
         "DAST"
       ],
       "route": "/targets/history-order-router/fixed/api/order",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5.review",
+      "challengeId": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5",
+      "variant": "review",
+      "title": "Targets · Jwt lab · Authorization · Vulnerable · Api · Session review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/authorization/vulnerable/api/session",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "POST"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5.control",
+      "challengeId": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5",
+      "variant": "repaired",
+      "title": "Targets · Jwt lab · Authorization · Vulnerable · Api · Session paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/authorization/fixed/api/session",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91.review",
+      "challengeId": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91",
+      "variant": "review",
+      "title": "Targets · Jwt lab · Cookie · Vulnerable · Api · Session review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/cookie/vulnerable/api/session",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "POST"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91.control",
+      "challengeId": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91",
+      "variant": "repaired",
+      "title": "Targets · Jwt lab · Cookie · Vulnerable · Api · Session paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/cookie/fixed/api/session",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28.review",
+      "challengeId": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28",
+      "variant": "review",
+      "title": "Targets · Jwt lab · Form · Vulnerable · Api · Session review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/form/vulnerable/api/session",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "POST"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28.control",
+      "challengeId": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28",
+      "variant": "repaired",
+      "title": "Targets · Jwt lab · Form · Vulnerable · Api · Session paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/form/fixed/api/session",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e.review",
+      "challengeId": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e",
+      "variant": "review",
+      "title": "Targets · Jwt lab · Json · Vulnerable · Api · Session review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/json/vulnerable/api/session",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "POST"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e.control",
+      "challengeId": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e",
+      "variant": "repaired",
+      "title": "Targets · Jwt lab · Json · Vulnerable · Api · Session paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/targets/jwt-lab/json/fixed/api/session",
       "runtime": {
         "kind": "route-aware-server",
         "protocol": "http",

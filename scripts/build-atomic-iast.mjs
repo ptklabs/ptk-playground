@@ -29,6 +29,7 @@ function htmlText(value) {
 
 function defaultValue(entry) {
   const value = `${entry.sourcePath} ${entry.label}`.toLowerCase()
+  if (/domparser|srcdoc/.test(value)) return `<strong data-ptk-evidence="runtime">PTK runtime evidence</strong>`
   if (/eval|function|timer|script|javascript|worker/.test(value)) return `document.querySelector('#output').textContent='PTK runtime evidence'`
   if (/json|prototype|sql/.test(value)) return `{"name":"PTK runtime evidence","__proto__":{"ptk":true}}`
   if (/url|navigation|redirect|action|href|src|websocket|request|fetch|xhr|beacon|image/.test(value)) return `ptk-runtime-evidence`
@@ -100,7 +101,7 @@ function reviewOperation(entry) {
   if (value.includes('dom_parser_xss')) {
     if (value.includes('range')) return `const fragment = document.createRange().createContextualFragment(${supplied});\noutput.appendChild(fragment);\nevidence.textContent = 'Contextual fragment appended';`
     if (value.includes('sethtmlunsafe')) return `if (typeof output.setHTMLUnsafe === 'function') output.setHTMLUnsafe(${supplied}); else output.innerHTML = ${supplied};\nevidence.textContent = 'Unsafe HTML parser reached';`
-    return `const parsed = new DOMParser().parseFromString(${supplied}, 'text/html');\noutput.appendChild(document.importNode(parsed.body, true));\nevidence.textContent = 'DOMParser result appended';`
+    return `const mime = document.querySelector('#parser-mime')?.value || 'text/html';\nconst parsed = new DOMParser().parseFromString(${supplied}, mime);\noutput.replaceChildren(document.importNode(parsed.documentElement, true));\nevidence.textContent = 'DOMParser result appended for ' + mime;`
   }
   if (value.includes('response_field_reachability')) {
     const load = `const response = await fetch('./payload.json').then((result) => result.json())`
@@ -108,7 +109,7 @@ function reviewOperation(entry) {
     if (value.includes('insertadjacenthtml')) return `${load};\noutput.insertAdjacentHTML('beforeend', response.htmlFragment);\nevidence.textContent = 'Response field reached insertAdjacentHTML';`
     if (value.includes('document.write')) return `${load};\nconst target = document.querySelector('#preview').contentWindow.document;\ntarget.open();\ntarget.write(response.html);\ntarget.close();\nevidence.textContent = 'Response field reached document.write';`
     if (value.includes('appendchild') || value.includes('contextualfragment')) return `${load};\noutput.appendChild(document.createRange().createContextualFragment(response.htmlFragment));\nevidence.textContent = 'Response fragment appended';`
-    if (value.includes('domparser')) return `${load};\nconst parsed = new DOMParser().parseFromString(response.html, 'text/html');\noutput.appendChild(document.importNode(parsed.body, true));\nevidence.textContent = 'Response HTML parsed';`
+    if (value.includes('domparser')) return `${load};\nconst mime = document.querySelector('#parser-mime')?.value || 'text/html';\nconst parsed = new DOMParser().parseFromString(response.html, mime);\noutput.replaceChildren(document.importNode(parsed.documentElement, true));\nevidence.textContent = 'Response HTML parsed for ' + mime;`
     if (value.includes('formaction')) return `${load};\ndocument.querySelector('#case-submit').formAction = response.formAction;\nevidence.textContent = 'Response field reached formAction';`
     if (value.includes('form.action')) return `${load};\ndocument.querySelector('#case-form').action = response.formAction;\nevidence.textContent = 'Response field reached form.action';`
     if (value.includes('submit form')) return `${load};\ndocument.querySelector('#case-form').action = response.formAction;\nevidence.textContent = 'Response-backed form prepared';\ndocument.querySelector('#case-form').requestSubmit();`
@@ -126,9 +127,12 @@ function reviewOperation(entry) {
     if (value.includes('insertadjacenthtml')) return `output.insertAdjacentHTML('beforeend', ${supplied});\nevidence.textContent = 'Value reached insertAdjacentHTML';`
     if (value.includes('document.write')) return `const target = document.querySelector('#preview').contentWindow.document;\ntarget.open();\ntarget.write(${supplied});\ntarget.close();\nevidence.textContent = 'Value reached document.write';`
     if (value.includes('appendchild') || value.includes('contextualfragment')) return `const fragment = document.createRange().createContextualFragment(${supplied});\noutput.appendChild(fragment);\nevidence.textContent = 'Fragment appended';`
-    if (value.includes('domparser')) return `const parsed = new DOMParser().parseFromString(${supplied}, 'text/html');\noutput.appendChild(document.importNode(parsed.body, true));\nevidence.textContent = 'Parsed DOM appended';`
+    if (value.includes('domparser')) return `const mime = document.querySelector('#parser-mime')?.value || 'text/html';\nconst parsed = new DOMParser().parseFromString(${supplied}, mime);\noutput.replaceChildren(document.importNode(parsed.documentElement, true));\nevidence.textContent = 'Parsed DOM appended for ' + mime;`
     if (value.includes('onclick') || value.includes('inline event')) return `output.setAttribute('onclick', ${supplied});\noutput.click();\nevidence.textContent = 'Inline handler assigned';`
-    if (value.includes('srcdoc')) return `document.querySelector('#preview').srcdoc = ${supplied};\nevidence.textContent = 'Value reached iframe.srcdoc';`
+    if (value.includes('srcdoc')) {
+      if (value.includes('secondary_sources')) return `localStorage.setItem('ptkAtomicSecondaryHtml', ${supplied});\nconst secondaryValue = localStorage.getItem('ptkAtomicSecondaryHtml');\ndocument.querySelector('#preview').srcdoc = secondaryValue;\nevidence.textContent = 'localStorage value reached iframe.srcdoc';`
+      return `document.querySelector('#preview').srcdoc = ${supplied};\nevidence.textContent = 'Value reached iframe.srcdoc';`
+    }
     return `output.innerHTML = ${supplied};\nevidence.textContent = 'Value reached innerHTML';`
   }
   if (value.includes('dom_url_navigation') || value.includes('open_redirect') || value.includes('route_controlled_navigation') || value.includes('form_submission_hijack') || value.includes('form_submit_csrf')) {
@@ -193,6 +197,16 @@ function reviewOperation(entry) {
 
 function fixedOperation(entry) {
   const value = `${entry.sourcePath} ${entry.label}`.toLowerCase()
+  if (value.includes('domparser')) {
+    const source = value.includes('response_field_reachability')
+      ? `const response = await fetch('./payload.json').then((result) => result.json());\nconst sourceValue = response.html`
+      : `const sourceValue = input.value`
+    return `${source};\nconst mime = document.querySelector('#parser-mime')?.value || 'text/html';\nconst cleanMarkup = mime === 'image/svg+xml' ? '<svg><text>Known safe markup</text></svg>' : '<p>Known safe markup</p>';\nnew DOMParser().parseFromString(cleanMarkup, mime);\noutput.textContent = sourceValue;\nevidence.textContent = 'Same parser invoked with constant markup; untrusted value stayed text';`
+  }
+  if (value.includes('srcdoc')) {
+    if (value.includes('secondary_sources')) return `localStorage.setItem('ptkAtomicSecondaryHtml', input.value);\nconst secondaryValue = localStorage.getItem('ptkAtomicSecondaryHtml');\ndocument.querySelector('#preview').srcdoc = '<p data-ptk-control="constant">Known safe markup</p>';\noutput.textContent = secondaryValue;\nevidence.textContent = 'Same storage read preserved; iframe.srcdoc received constant markup';`
+    return `document.querySelector('#preview').srcdoc = '<p data-ptk-control="constant">Known safe markup</p>';\noutput.textContent = input.value;\nevidence.textContent = 'Same iframe sink invoked with constant markup; untrusted value stayed text';`
+  }
   if (/request|fetch|xhr|beacon|websocket|postmessage|navigation|redirect|action|href|src|worker|script|eval|function|timer|sql|xpath|document_domain|clipboard/.test(value)) {
     return `output.textContent = input.value;\nevidence.textContent = 'Untrusted value kept as data; executable, navigation and request boundaries use constants';`
   }
@@ -204,11 +218,17 @@ function fixedOperation(entry) {
 function scriptFor(entry, variant) {
   const operationEntry = { ...entry, label: `${entry.anchor} ${entry.label}` }
   const operation = variant === 'review' ? reviewOperation(operationEntry) : fixedOperation(operationEntry)
+  const value = `${entry.sourcePath} ${entry.anchor} ${entry.label}`.toLowerCase()
+  const queryBacked = (value.includes('dom_parser_xss') || value.includes('iframe_navigation'))
+    && !value.includes('response_field_reachability')
+  const preparedValue = queryBacked
+    ? `new URLSearchParams(location.search).get('value') || ${JSON.stringify(defaultValue(entry))}`
+    : JSON.stringify(defaultValue(entry))
   return `const input = document.querySelector('#case-input')
 const output = document.querySelector('#output')
 const evidence = document.querySelector('#evidence')
 
-input.value = ${JSON.stringify(defaultValue(entry))}
+input.value = ${preparedValue}
 
 document.querySelector('#run-case').addEventListener('click', async () => {
   evidence.dataset.state = 'running'
@@ -233,6 +253,7 @@ function supportRequirements(entry) {
   return {
     form: /formaction|form\.action|form submit|form_submission|form_submit|worker message/.test(value),
     link: /javascript:|navigation target|anchor|href|referrer_helper/.test(value),
+    domParser: /domparser/.test(value),
     preview: (/blob_object_url/.test(value) && /iframe/.test(value))
       || /document\.write|srcdoc|iframe_navigation|iframe\.src|setattribute\(['"]src/.test(value)
   }
@@ -261,7 +282,7 @@ function pageFor(entry, variant) {
       <nav class="site-nav" aria-label="Atomic target navigation"><a href="${rootRoute(entry.sourcePath)}">Case family</a><a href="${rootRoute('./explore/?engine=IAST')}">Explore IAST</a></nav>
     </div>
   </header>
-  <main class="page-shell target-shell atomic-shell" data-atomic-iast-id="${htmlText(entry.id)}" data-variant="${variant}">
+  <main class="page-shell target-shell atomic-shell" data-atomic-iast-id="${htmlText(entry.id)}" data-operation-kind="${htmlText(entry.operationKind)}" data-variant="${variant}">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="${rootRoute('./')}">Playground</a><span aria-hidden="true">/</span><a href="${rootRoute('./iast/')}">IAST</a><span aria-hidden="true">/</span><a href="${rootRoute(entry.sourcePath)}">Case family</a><span aria-hidden="true">/</span><span>${stateLabel}</span></nav>
     <section class="atomic-hero atomic-hero--${variant}">
       <div class="atomic-hero__copy">
@@ -286,6 +307,13 @@ function pageFor(entry, variant) {
         <div class="atomic-panel__heading"><div><p class="eyebrow">Prepared flow</p><h2>Browser input and action</h2></div><span class="atomic-panel__step">01</span></div>
         <label class="atomic-field-label" for="case-input">Harmless runtime value</label>
         <textarea class="atomic-input" id="case-input" rows="4" spellcheck="false"></textarea>
+${support.domParser ? `        <label class="atomic-field-label" for="parser-mime">Parser MIME type</label>
+        <select class="atomic-input" id="parser-mime">
+          <option value="text/html">text/html</option>
+          <option value="application/xhtml+xml">application/xhtml+xml</option>
+          <option value="image/svg+xml">image/svg+xml</option>
+          <option value="text/plain">text/plain (unsupported control)</option>
+        </select>` : ''}
         <p class="atomic-help">The value is intentionally visible and editable so the source-to-operation path can be reproduced without a destructive payload.</p>
         <form class="atomic-support-form" id="case-form" method="get" action="./" target="preview"${support.form ? '' : ' hidden'}>
           <input type="hidden" name="ptk" value="form-evidence">

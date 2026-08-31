@@ -71,6 +71,7 @@ test('full-corpus source ledger is current and accounts for every selected sourc
     'scanner',
     'play',
     'explore',
+    'jwt',
     'atomic',
     'targets',
     'assets/css',
@@ -227,6 +228,31 @@ test('DAST contract catalogue classifies every route-aware endpoint and keeps ac
   assert.equal(active.runtime.protocol, 'https')
   assert.equal(active.controlRoute, '/targets/session-bound-order-search/fixed/api/search')
   assert.match(read('passive/server.mjs'), /request_body_too_large/)
+
+  const jwtCarriers = ['authorization', 'cookie', 'form', 'json']
+  for (const carrier of jwtCarriers) {
+    const reviewRoute = `/targets/jwt-lab/${carrier}/vulnerable/api/session`
+    const fixedRoute = `/targets/jwt-lab/${carrier}/fixed/api/session`
+    const review = dastContracts.contracts.find((contract) => contract.route === reviewRoute)
+    const fixed = dastContracts.contracts.find((contract) => contract.route === fixedRoute)
+    assert.ok(review, `JWT review contract missing: ${carrier}`)
+    assert.ok(fixed, `JWT control contract missing: ${carrier}`)
+    assert.deepEqual(review.methods, ['POST'])
+    assert.equal(review.controlRoute, fixedRoute)
+    assert.equal(review.runtime.loopbackOnly, true)
+    assert.equal(fixed.role, 'control')
+  }
+
+  const publicJwtSources = [
+    read('jwt/index.html'),
+    read('targets/jwt-lab/dast/index.html'),
+    read('assets/js/jwt-storage-lab.js'),
+    read('assets/js/jwt-dast-lab.js')
+  ].join('\n')
+  assert.doesNotMatch(publicJwtSources, /jwt_scenario_|jwtCarrierProof|jwtCarrierBaseline/)
+  const runtimeSource = read('passive/server.mjs')
+  assert.match(runtimeSource, /no file was read/)
+  assert.match(runtimeSource, /no network request was made/)
 })
 
 test('SCA catalogue pins every public dependency and provides a paired browser control', () => {
@@ -710,6 +736,7 @@ test('public product preview terminology is confined to the approved presentatio
   const previewPresentationFiles = new Set([
     'README.md',
     'campaigns/index.html',
+    'jwt/index.html',
     'catalog/missions.json',
     'catalog/challenges.json',
     'assets/js/playground.js',
@@ -732,7 +759,7 @@ test('public product preview terminology is confined to the approved presentatio
       .replace(/<style\b[\s\S]*?<\/style>/gi, '')
       .replace(/<pre\b[\s\S]*?<\/pre>/gi, '')
     assert.doesNotMatch(visibleMarkup, /\bportal\b/i, `${relative} exposes Portal terminology in visible text`)
-    if (relative !== 'campaigns/index.html') {
+    if (!['campaigns/index.html', 'jwt/index.html'].includes(relative)) {
       assert.doesNotMatch(visibleMarkup, /\bpro\b/i, `${relative} exposes product-preview terminology in visible text`)
     }
   }

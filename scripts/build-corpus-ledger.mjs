@@ -16,6 +16,7 @@ const inventoryRoots = [
   'scanner',
   'play',
   'explore',
+  'jwt',
   'atomic',
   'targets',
   'assets/css',
@@ -110,7 +111,7 @@ function classifySource(relativePath) {
   if (relativePath.startsWith('campaigns/')) {
     return { role: 'presentation', disposition: isIndex ? 'index-only' : 'helper-only', reviewStatus: 'reviewed' }
   }
-  if (/^(?:demo|scanner|play|explore)\//.test(relativePath)) {
+  if (/^(?:demo|scanner|play|explore|jwt)\//.test(relativePath)) {
     return { role: 'presentation', disposition: isIndex ? 'index-only' : 'helper-only', reviewStatus: 'reviewed' }
   }
   if (relativePath.startsWith('atomic/')) {
@@ -448,6 +449,16 @@ for (const route of [
   '/targets/history-order-router/fixed/api/order',
   '/targets/same-origin-child-tab/vulnerable/api/context',
   '/targets/same-origin-child-tab/fixed/api/context',
+  '/targets/jwt-lab/authorization/vulnerable/api/session',
+  '/targets/jwt-lab/authorization/fixed/api/session',
+  '/targets/jwt-lab/cookie/vulnerable/api/seed',
+  '/targets/jwt-lab/cookie/fixed/api/seed',
+  '/targets/jwt-lab/cookie/vulnerable/api/session',
+  '/targets/jwt-lab/cookie/fixed/api/session',
+  '/targets/jwt-lab/form/vulnerable/api/session',
+  '/targets/jwt-lab/form/fixed/api/session',
+  '/targets/jwt-lab/json/vulnerable/api/session',
+  '/targets/jwt-lab/json/fixed/api/session',
   '/passive/realtime/ws'
 ]) registerRoute(route, 'route-aware-runtime', 'passive/server.mjs')
 

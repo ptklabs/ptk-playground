@@ -28,6 +28,10 @@ function request(url, options = {}) {
   });
 }
 
+const encodeJwtPart = (value) => Buffer.from(JSON.stringify(value)).toString("base64url");
+const jwtPayload = encodeJwtPart({ sub: "ptk-playground", scope: "demo" });
+const jwtToken = (header, signature = "invalid") => `${encodeJwtPart(header)}.${jwtPayload}.${signature}`;
+
 async function waitForHealth(timeoutMs = 20_000) {
   const deadline = Date.now() + timeoutMs;
   let lastError;
@@ -106,8 +110,23 @@ assert.equal(JSON.parse(reviewResult.body).code, "ORDER_QUERY_SYNTAX");
 assert.equal(repairedResult.status, 200, "repaired route must remain clean");
 assert.equal(JSON.parse(repairedResult.body).ok, true);
 
+const jwtHeaders = {
+  "x-playground-request": "jwt-lab",
+  authorization: `Bearer ${jwtToken({ alg: "none", typ: "JWT" }, "")}`
+};
+const [jwtPage, jwtReview, jwtControl] = await Promise.all([
+  request(`${httpOrigin}/jwt/`),
+  request(`${httpOrigin}/targets/jwt-lab/authorization/vulnerable/api/session`, { method: "POST", headers: jwtHeaders }),
+  request(`${httpOrigin}/targets/jwt-lab/authorization/fixed/api/session`, { method: "POST", headers: jwtHeaders })
+]);
+assert.equal(jwtPage.status, 200, "JWT Lab must be available in the container");
+assert.equal(jwtReview.status, 200, "JWT review route must retain its bounded acceptance oracle");
+assert.equal(JSON.parse(jwtReview.body).code, "JWT_ACCEPTED");
+assert.equal(jwtControl.status, 401, "JWT control route must reject the same token");
+
 console.log("OWASP PTK Playground container smoke: PASS");
 console.log(`  HTTP runtime: ${httpOrigin}/`);
 console.log(`  HTTPS runtime: ${httpsOrigin}/`);
 console.log("  SPA Deep Dive catalogue: PASS");
 console.log("  Session-bound DAST review/control oracle: PASS");
+console.log("  JWT Authorization review/control oracle: PASS");

@@ -3,20 +3,20 @@
   "version": 1,
   "migrationStatus": "full-corpus-fixtures-complete",
   "summary": {
-    "challenges": 415,
-    "atomic": 293,
+    "challenges": 419,
+    "atomic": 297,
     "atomicObservations": 44,
     "advancedLabs": 78,
     "legacyCatalogueCases": 78,
-    "sourceLedgerFiles": 1386,
-    "authoredSourceFiles": 262,
+    "sourceLedgerFiles": 1392,
+    "authoredSourceFiles": 268,
     "generatedAtomicSast": 126,
     "generatedAtomicIast": 149,
-    "dastRuntimeTargets": 46,
-    "dastRuntimeRoutes": 203,
+    "dastRuntimeTargets": 50,
+    "dastRuntimeRoutes": 223,
     "scaPackages": 2,
     "scaScenarios": 5,
-    "classifiedScenarioMarkers": 1608,
+    "classifiedScenarioMarkers": 1616,
     "retainedAggregateAssertions": 0,
     "pendingScenarioReview": 0
   },
@@ -11462,6 +11462,222 @@
         ]
       },
       "familyId": "family.spa-created-authenticated-active-request"
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5",
+      "kind": "atomic-challenge",
+      "title": "Targets · Jwt lab · Authorization · Vulnerable · Api · Session",
+      "summary": "A route-aware jwt request differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "JWT request carrier and verification",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5.review",
+          "title": "Targets · Jwt lab · Authorization · Vulnerable · Api · Session review route",
+          "route": "/targets/jwt-lab/authorization/vulnerable/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "POST"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared jwt request differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5.control",
+          "title": "Targets · Jwt lab · Authorization · Vulnerable · Api · Session paired control",
+          "route": "/targets/jwt-lab/authorization/fixed/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.targets-jwt-lab-authorization-vulnerable-api-session-089af6d5"
+        ]
+      },
+      "familyId": "family.jwt-request-carrier-and-verification"
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91",
+      "kind": "atomic-challenge",
+      "title": "Targets · Jwt lab · Cookie · Vulnerable · Api · Session",
+      "summary": "A route-aware jwt request differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "JWT request carrier and verification",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91.review",
+          "title": "Targets · Jwt lab · Cookie · Vulnerable · Api · Session review route",
+          "route": "/targets/jwt-lab/cookie/vulnerable/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "POST"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared jwt request differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91.control",
+          "title": "Targets · Jwt lab · Cookie · Vulnerable · Api · Session paired control",
+          "route": "/targets/jwt-lab/cookie/fixed/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.targets-jwt-lab-cookie-vulnerable-api-session-f8e9eb91"
+        ]
+      },
+      "familyId": "family.jwt-request-carrier-and-verification"
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28",
+      "kind": "atomic-challenge",
+      "title": "Targets · Jwt lab · Form · Vulnerable · Api · Session",
+      "summary": "A route-aware jwt request differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "JWT request carrier and verification",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28.review",
+          "title": "Targets · Jwt lab · Form · Vulnerable · Api · Session review route",
+          "route": "/targets/jwt-lab/form/vulnerable/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "POST"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared jwt request differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28.control",
+          "title": "Targets · Jwt lab · Form · Vulnerable · Api · Session paired control",
+          "route": "/targets/jwt-lab/form/fixed/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.targets-jwt-lab-form-vulnerable-api-session-06c3aa28"
+        ]
+      },
+      "familyId": "family.jwt-request-carrier-and-verification"
+    },
+    {
+      "id": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e",
+      "kind": "atomic-challenge",
+      "title": "Targets · Jwt lab · Json · Vulnerable · Api · Session",
+      "summary": "A route-aware jwt request differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "JWT request carrier and verification",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e.review",
+          "title": "Targets · Jwt lab · Json · Vulnerable · Api · Session review route",
+          "route": "/targets/jwt-lab/json/vulnerable/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "POST"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared jwt request differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e.control",
+          "title": "Targets · Jwt lab · Json · Vulnerable · Api · Session paired control",
+          "route": "/targets/jwt-lab/json/fixed/api/session",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.targets-jwt-lab-json-vulnerable-api-session-79a6231e"
+        ]
+      },
+      "familyId": "family.jwt-request-carrier-and-verification"
     },
     {
       "id": "dast.route.targets-same-origin-child-tab-vulnerable-api-context-32e96cb4",

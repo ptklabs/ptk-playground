@@ -72,6 +72,10 @@ function assertLocalRoute(route, label) {
   assert.equal(resolved.password, "", `${label} must not contain URL credentials`);
 }
 
+const encodeJwtPart = (value) => Buffer.from(JSON.stringify(value)).toString("base64url");
+const jwtPayload = encodeJwtPart({ sub: "ptk-playground", scope: "demo" });
+const jwtToken = (header, signature = "invalid") => `${encodeJwtPart(header)}.${jwtPayload}.${signature}`;
+
 const [httpPort, httpsPort] = await Promise.all([allocatePort(), allocatePort()]);
 assert.notEqual(httpPort, httpsPort, "preflight ports must be distinct");
 
@@ -110,14 +114,16 @@ try {
     httpsAvailable: true
   });
 
-  const [playPage, compatibilityDemoPage, scannerPage, demoCatalogResponse, scannerCatalogResponse] = await Promise.all([
+  const [playPage, compatibilityDemoPage, scannerPage, jwtPage, jwtDastPage, demoCatalogResponse, scannerCatalogResponse] = await Promise.all([
     request(`${httpOrigin}/play/?playlist=browser-context-demo`),
     request(`${httpOrigin}/demo/`),
     request(`${httpOrigin}/scanner/`),
+    request(`${httpOrigin}/jwt/`),
+    request(`${httpOrigin}/targets/jwt-lab/dast/`),
     request(`${httpOrigin}/catalog/demo.json`),
     request(`${httpOrigin}/catalog/scanner-targets.json`)
   ]);
-  for (const [label, response] of Object.entries({ playPage, compatibilityDemoPage, scannerPage, demoCatalogResponse, scannerCatalogResponse })) {
+  for (const [label, response] of Object.entries({ playPage, compatibilityDemoPage, scannerPage, jwtPage, jwtDastPage, demoCatalogResponse, scannerCatalogResponse })) {
     assert.equal(response.status, 200, `${label} must return HTTP 200`);
   }
 
@@ -179,6 +185,39 @@ try {
   assert.equal(repairedResult.status, 200, "repaired POST must stay clean for the same input");
   assert.equal(JSON.parse(repairedResult.body).ok, true);
 
+  const jwtHeaders = {
+    "x-playground-request": "jwt-lab",
+    authorization: `Bearer ${jwtToken({ alg: "none", typ: "JWT" }, "")}`
+  };
+  const [jwtHeaderReview, jwtHeaderControl] = await Promise.all([
+    request(`${httpOrigin}/targets/jwt-lab/authorization/vulnerable/api/session`, { method: "POST", headers: jwtHeaders }),
+    request(`${httpOrigin}/targets/jwt-lab/authorization/fixed/api/session`, { method: "POST", headers: jwtHeaders })
+  ]);
+  assert.equal(jwtHeaderReview.status, 200, "JWT Authorization review must retain its bounded acceptance oracle");
+  assert.equal(JSON.parse(jwtHeaderReview.body).code, "JWT_ACCEPTED");
+  assert.equal(jwtHeaderControl.status, 401, "JWT Authorization control must reject the same token");
+
+  const jwtJsonBody = JSON.stringify({
+    auth: { access_token: jwtToken({ alg: "HS256", typ: "JWT", kid: "../../../../../dev/null" }) },
+    keep: "unchanged"
+  });
+  const jwtJsonOptions = {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "content-length": Buffer.byteLength(jwtJsonBody),
+      "x-playground-request": "jwt-lab"
+    },
+    body: jwtJsonBody
+  };
+  const [jwtJsonReview, jwtJsonControl] = await Promise.all([
+    request(`${httpOrigin}/targets/jwt-lab/json/vulnerable/api/session`, jwtJsonOptions),
+    request(`${httpOrigin}/targets/jwt-lab/json/fixed/api/session`, jwtJsonOptions)
+  ]);
+  assert.equal(jwtJsonReview.status, 400, "JWT JSON review must expose the simulated key-selection evidence");
+  assert.equal(JSON.parse(jwtJsonReview.body).code, "JWT_KID_PATH");
+  assert.equal(jwtJsonControl.status, 401, "JWT JSON control must reject the same token");
+
   console.log("OWASP PTK Playground demo preflight: PASS");
   console.log(`  Local presentation: ${httpOrigin}/play/?playlist=browser-context-demo`);
   console.log(`  Compatibility demo: ${httpOrigin}/demo/`);
@@ -186,6 +225,7 @@ try {
   console.log(`  HTTPS active target: ${httpsOrigin}/targets/session-bound-order-search/vulnerable/`);
   console.log("  Engines represented: DAST, SAST, IAST, SCA");
   console.log("  Session-bound DAST review/control oracle: PASS");
+  console.log("  JWT Authorization and nested-JSON review/control oracles: PASS");
 } finally {
   if (child.exitCode === null) child.kill("SIGTERM");
   await new Promise((resolve) => {

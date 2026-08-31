@@ -2,8 +2,8 @@
   "schema": "owasp-ptk-playground-legacy-routes/v1",
   "version": 1,
   "summary": {
-    "routes": 1454,
-    "runtimeRoutes": 203
+    "routes": 1474,
+    "runtimeRoutes": 223
   },
   "routes": [
     {
@@ -109,6 +109,24 @@
     },
     {
       "path": "/assets/js/catalogue-app.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/assets/js/jwt-dast-lab.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/assets/js/jwt-storage-lab.js",
       "kinds": [
         "route-aware-runtime"
       ],
@@ -11420,6 +11438,72 @@
       ]
     },
     {
+      "path": "/jwt/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.jwt-index-9f67c22d1f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/jwt/index.html",
+      "kinds": [
+        "route-aware-runtime",
+        "source-file"
+      ],
+      "owners": [
+        "file.jwt-index-9f67c22d1f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/jwt/storage/fixed/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.jwt-storage-fixed-index-3359cb84b9",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/jwt/storage/fixed/index.html",
+      "kinds": [
+        "route-aware-runtime",
+        "source-file"
+      ],
+      "owners": [
+        "file.jwt-storage-fixed-index-3359cb84b9",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/jwt/storage/vulnerable/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.jwt-storage-vulnerable-index-b7124b6a56",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/jwt/storage/vulnerable/index.html",
+      "kinds": [
+        "route-aware-runtime",
+        "source-file"
+      ],
+      "owners": [
+        "file.jwt-storage-vulnerable-index-b7124b6a56",
+        "passive/server.mjs"
+      ]
+    },
+    {
       "path": "/login",
       "kinds": [
         "route-aware-runtime"
@@ -12805,6 +12889,118 @@
     },
     {
       "path": "/targets/imported-request-preferences/vulnerable/request-preferences.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/authorization/fixed/api/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/authorization/vulnerable/api/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/cookie/fixed/api/seed",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/cookie/fixed/api/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/cookie/vulnerable/api/seed",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/cookie/vulnerable/api/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/dast/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.targets-jwt-lab-dast-index-dcc88d8799",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/dast/index.html",
+      "kinds": [
+        "route-aware-runtime",
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-jwt-lab-dast-index-dcc88d8799",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/form/fixed/api/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/form/vulnerable/api/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/json/fixed/api/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/json/vulnerable/api/session",
       "kinds": [
         "route-aware-runtime"
       ],

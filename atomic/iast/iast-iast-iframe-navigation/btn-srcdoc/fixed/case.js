@@ -2,14 +2,15 @@ const input = document.querySelector('#case-input')
 const output = document.querySelector('#output')
 const evidence = document.querySelector('#evidence')
 
-input.value = "ptk-runtime-evidence"
+input.value = new URLSearchParams(location.search).get('value') || "<strong data-ptk-evidence=\"runtime\">PTK runtime evidence</strong>"
 
 document.querySelector('#run-case').addEventListener('click', async () => {
   evidence.dataset.state = 'running'
   evidence.textContent = 'Running…'
   try {
+    document.querySelector('#preview').srcdoc = '<p data-ptk-control="constant">Known safe markup</p>';
     output.textContent = input.value;
-    evidence.textContent = 'Untrusted value kept as data; executable, navigation and request boundaries use constants';
+    evidence.textContent = 'Same iframe sink invoked with constant markup; untrusted value stayed text';
     evidence.dataset.state = 'complete'
   } catch (error) {
     evidence.dataset.state = 'boundary'

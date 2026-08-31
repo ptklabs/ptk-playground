@@ -9,9 +9,10 @@ document.querySelector('#run-case').addEventListener('click', async () => {
   evidence.textContent = 'Running…'
   try {
     const response = await fetch('./payload.json').then((result) => result.json());
-    const parsed = new DOMParser().parseFromString(response.html, 'text/html');
-    output.appendChild(document.importNode(parsed.body, true));
-    evidence.textContent = 'Response HTML parsed';
+    const mime = document.querySelector('#parser-mime')?.value || 'text/html';
+    const parsed = new DOMParser().parseFromString(response.html, mime);
+    output.replaceChildren(document.importNode(parsed.documentElement, true));
+    evidence.textContent = 'Response HTML parsed for ' + mime;
     evidence.dataset.state = 'complete'
   } catch (error) {
     evidence.dataset.state = 'boundary'

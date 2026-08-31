@@ -14,6 +14,7 @@
     "scanner",
     "play",
     "explore",
+    "jwt",
     "atomic",
     "targets",
     "assets/css",
@@ -21,37 +22,37 @@
     "assets/vendor"
   ],
   "summary": {
-    "sourceFiles": 1386,
-    "authoredSourceFiles": 262,
+    "sourceFiles": 1392,
+    "authoredSourceFiles": 268,
     "generatedAtomicFiles": 1124,
     "roleCounts": {
       "atomic-case": 5,
-      "atomic-target": 576,
+      "atomic-target": 577,
       "case-support": 34,
       "dependency": 7,
       "family-directory": 64,
       "family-index": 3,
       "legacy-aggregate": 76,
-      "presentation": 16,
-      "presentation-support": 3,
+      "presentation": 19,
+      "presentation-support": 5,
       "runtime": 1,
       "runtime-template": 1,
       "target-support": 600
     },
     "reviewCounts": {
-      "reviewed": 1386
+      "reviewed": 1392
     },
     "scenarios": {
-      "total": 1575,
-      "reviewed": 1575,
+      "total": 1583,
+      "reviewed": 1583,
       "pendingManual": 0,
-      "assertions": 1171,
+      "assertions": 1179,
       "controls": 32,
       "setup": 54,
       "helpers": 318,
       "retainedAggregateAssertions": 0,
       "absorbedTriggers": 33,
-      "reviewedMarkers": 1608
+      "reviewedMarkers": 1616
     },
     "migrationComplete": true
   },
@@ -68,6 +69,22 @@
       "id": "file.assets-js-catalogue-app-js-9d04c65a6b",
       "path": "assets/js/catalogue-app.js",
       "sha256": "7f5fb890a572a042e7add714d4b2dc9fec908cefb0e2d5a62a632e8a006370f2",
+      "role": "presentation-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.assets-js-jwt-dast-lab-js-07b973b8d4",
+      "path": "assets/js/jwt-dast-lab.js",
+      "sha256": "1b3c544e9016ea42b4ed7238b6ac43058bac4af39ca7fe80dd5aa0a61fdd15a3",
+      "role": "presentation-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.assets-js-jwt-storage-lab-js-0c399c9091",
+      "path": "assets/js/jwt-storage-lab.js",
+      "sha256": "e646f8d9ab82a952bba5c53562f0af7024bdd3311df6708e414c8bec33de8bac",
       "role": "presentation-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -147,7 +164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-blob-object-url-execution-btn-iframe-url-fixed-index-b1f275b089",
       "path": "atomic/iast/iast-iast-blob-object-url-execution/btn-iframe-url/fixed/index.html",
-      "sha256": "d8a6e4ecf9904016662c197ab8838d114b584b66b5c697ba5b4e1c60380b288b",
+      "sha256": "fceba2e0c91306a66609ae0883b49939ddc50ab934fc9c55de468d0e2cde2482",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -197,7 +214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-blob-object-url-execution-btn-iframe-url-review-index-1bc7103321",
       "path": "atomic/iast/iast-iast-blob-object-url-execution/btn-iframe-url/review/index.html",
-      "sha256": "cf26cc1523d6689b4b6060db64a0cb7f70c2bea88b82c2d6cb243957c922f96d",
+      "sha256": "720b5da9ed2a74b2e18dd6fee7996a69de968a8be40acb69f004c70c1e0ac4fe",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -247,7 +264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-blob-object-url-execution-btn-script-url-fixed-index-870666ef87",
       "path": "atomic/iast/iast-iast-blob-object-url-execution/btn-script-url/fixed/index.html",
-      "sha256": "2bf2567c981c67c6196ba936a6f95a5546b4fab68710a4f19fad510be316bd1c",
+      "sha256": "550485ec0ba1d4a0d41df4e5b233a9c349c3f4d9b4b5047026760218b8abdebc",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -297,7 +314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-blob-object-url-execution-btn-script-url-review-index-cdfeec1259",
       "path": "atomic/iast/iast-iast-blob-object-url-execution/btn-script-url/review/index.html",
-      "sha256": "0f61bfb8db79fb4c5aaf75e4ec59a5bd736b4dbbfbdc7e1e61ec193366a4959b",
+      "sha256": "3f71ebb7f1b53dd82ef8400a1c5087609c9474eddd0a2b98da46f6a3cc86c7d8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -347,7 +364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-blob-object-url-execution-btn-worker-url-fixed-index-cedea71203",
       "path": "atomic/iast/iast-iast-blob-object-url-execution/btn-worker-url/fixed/index.html",
-      "sha256": "34a9b492a1cfd6e2d89ce5866266e73aed45ced8d4b399ee3a5a6790e0142fff",
+      "sha256": "4fb538ac9bea79574d0a5cf75aef361a6b341629ff2daa75a8214fc35ffa421d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -397,7 +414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-blob-object-url-execution-btn-worker-url-review-index-d00142a2ef",
       "path": "atomic/iast/iast-iast-blob-object-url-execution/btn-worker-url/review/index.html",
-      "sha256": "3d4c4df4b7a660ddecdaf21fbbc70b7734eac79ab027ac49d7b9953d045353ba",
+      "sha256": "899a45eb88168848e9f27d32ba50a60e0794427337af70e247f9419f3b88170e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -447,7 +464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-beacon-fixed-index-1855053454",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-beacon/fixed/index.html",
-      "sha256": "07d12aee2fd475fa8c3f7f0a3ca1498625be55533ecd19f8bf712e03b4619bf4",
+      "sha256": "775d133032b6c92b67deeb0170267b18d810b5ac0e4158237a42d5032a2a3abc",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -497,7 +514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-beacon-review-index-2e8a26309c",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-beacon/review/index.html",
-      "sha256": "fd7ded24284dd1a0a2c71c0b4874bc479fd7513618ad97c982a9cdf2b965b54a",
+      "sha256": "a15fd98e3984e4e37c4bff4872277ee2cbc2edf16c5771e25e9437f78a791a12",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -547,7 +564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-fetch-body-fixed-index-939633ef4a",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-body/fixed/index.html",
-      "sha256": "32e957d6f0a3703ff6c1149bcf6a5bc9a19f389fef021ae028224fe91301c8c3",
+      "sha256": "7ec36d6b9f4ebff5ebe715d1508e08fb85b69d616e42f6264b272cf094dcefb6",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -597,7 +614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-fetch-body-review-index-e6b0709be0",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-body/review/index.html",
-      "sha256": "d5b492bb1ad960b98869812dd7b0156af3746fa21cdffaba578158efe15886c0",
+      "sha256": "847f7d65e96b59b4bf7c7b246ae6cb57505c354b8c55e02b8bde47534b7560f2",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -647,7 +664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-fetch-headers-fixed-index-f0d77559b2",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-headers/fixed/index.html",
-      "sha256": "10419359ea21cbbb4d6a2834323763e4fc7807d83ca88bfec753fb049b15f8c1",
+      "sha256": "0c5022850c9a1ed33fa5ca7685b0d4692e04c10c8b41d8ad41243c16c5276b4b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -697,7 +714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-fetch-headers-review-index-da964fc679",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-headers/review/index.html",
-      "sha256": "19d7954da9da2c6e257dbf9c3e14189420daab305f4aa0c6ebea9aa012ffc0d0",
+      "sha256": "f3912870485d5bc30ddc51242ded58d0cc75d50c8b6ed949091e43ebcc15d6c8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -747,7 +764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-fetch-url-fixed-index-b46b15b1b6",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-url/fixed/index.html",
-      "sha256": "5599fea6f98cf3ca8947cd5cf3e92fd4fb514a04ad8cd0ed25e128ed7cc7d835",
+      "sha256": "4f38b644d99b27d92a2b008a806e61532023e0845adffbbfd0bff7d0b718f164",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -797,7 +814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-fetch-url-review-index-b74147c5a3",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-fetch-url/review/index.html",
-      "sha256": "0722abba4662c8849dd630e4007bed146b99cf30d550a72253631854410885bb",
+      "sha256": "624e61d4f5e1c5c88cfa130b083e13040b5c02f0a1834b9e9d54d125d7905527",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -847,7 +864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-image-fixed-index-0d062cb271",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-image/fixed/index.html",
-      "sha256": "f16aa7569fe5f9c30864db9edac68d3c003bd591040bc490dff2ec0823638eea",
+      "sha256": "0c8859f414f40e81bc64ba21b8c9d1277c70b950f05a298b50050d70f22096be",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -897,7 +914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-image-review-index-31511a794a",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-image/review/index.html",
-      "sha256": "da136705a3f32865833ac7ed96c5f0ed3567f401e4f03511eb0f0bb0c59f7a4b",
+      "sha256": "51a965c94fda54e453de08b6c5efe1f98389fa83b8946ac87479946241ac4a2f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -947,7 +964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-xhr-fixed-index-7275c8fcc2",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-xhr/fixed/index.html",
-      "sha256": "64c212a1b0ee4016c6adb45ea00d1d2d01a131eccdeba86ce4566c2cf26701e8",
+      "sha256": "208e5c29b516e626ecf779067f2bbb014c759622d15737d74cc4c3caaa28747f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -997,7 +1014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-http-exfiltration-btn-xhr-review-index-bc43dfd98f",
       "path": "atomic/iast/iast-iast-client-http-exfiltration/btn-xhr/review/index.html",
-      "sha256": "457527317f93282ec803c0beb6be1b3c7a8c4c301cec3988a02215a23c9cde25",
+      "sha256": "8d7c2836f9fe5115ccf6c3ad5b6fc9b867b8109bdf1cbf1c649eb9c490ab4677",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1047,7 +1064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-json-parsing-btn-parse-selected-source-fixed-index-a642979a36",
       "path": "atomic/iast/iast-iast-client-json-parsing/btn-parse-selected-source/fixed/index.html",
-      "sha256": "0e9ad3544f1922a3999f68c48fd7008d0bc7ec5bc0bdffecb32080b0c4af3aea",
+      "sha256": "5a3dff1ba29323ccdebe3c33fd91ae8f8455a870baf770875fb0e856b48b680a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1097,7 +1114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-json-parsing-btn-parse-selected-source-review-index-bf253207b3",
       "path": "atomic/iast/iast-iast-client-json-parsing/btn-parse-selected-source/review/index.html",
-      "sha256": "a2fcc14d804734499ddb91634d436496ddfc47b2eb8c6fe30045ff524abda787",
+      "sha256": "c5e88471c89445261fef519d3fa6f236f2e29711e92b64c2ed920a1262081fca",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1147,7 +1164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-json-parsing-btn-parse-fixed-index-a5e8156e60",
       "path": "atomic/iast/iast-iast-client-json-parsing/btn-parse/fixed/index.html",
-      "sha256": "1c58b94062e3c9c8339574d8e2ebd1fb89d500aaf511acfb1179e5e70f6be94a",
+      "sha256": "3c7102d5f27af1bd4f6133441b288863615a1345f5b91ab7a28ad5d930cdcda3",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1197,7 +1214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-json-parsing-btn-parse-review-index-70a6f6eae3",
       "path": "atomic/iast/iast-iast-client-json-parsing/btn-parse/review/index.html",
-      "sha256": "d96de3cfb860ea63a5824416aebb0ff1f21ac4052938e8bb5c462dc913053354",
+      "sha256": "3266a7701c1a7c444e6f1b43e9d73430f9f6519754ae862312770528b5948c84",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1247,7 +1264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-sql-injection-btn-open-fixed-index-697e5e877c",
       "path": "atomic/iast/iast-iast-client-sql-injection/btn-open/fixed/index.html",
-      "sha256": "9d6a3c726976eddb4116f32076d6100ceb0664ab9e49ee579323549e99ed78ab",
+      "sha256": "6e67308e4fc48d724f802306ad34460039384dacfe5875e36f5b69257ff25c28",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1297,7 +1314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-sql-injection-btn-open-review-index-d186b82e12",
       "path": "atomic/iast/iast-iast-client-sql-injection/btn-open/review/index.html",
-      "sha256": "dd6214237f08902a46e41e18320471dbb08f85408cddc5e9332a61c80e43c1ba",
+      "sha256": "7fc28bfab3ff0a423a78bc806e9115340c5206c1bced49df8d479bb370655dfd",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1347,7 +1364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-sql-injection-btn-sql-fixed-index-b9760c79e0",
       "path": "atomic/iast/iast-iast-client-sql-injection/btn-sql/fixed/index.html",
-      "sha256": "093d8c31d74c7e1fc4bbcae0b936a75e8378dc52d19416c4c6053514abd27602",
+      "sha256": "b6ba6ba385359c1bcdb3ee1af23d8d253d6f88e962faefce335fc2292e75b7d0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1397,7 +1414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-client-sql-injection-btn-sql-review-index-f797bfa95a",
       "path": "atomic/iast/iast-iast-client-sql-injection/btn-sql/review/index.html",
-      "sha256": "7a090b49a2738ccf7ca306c917ffd5d3cdae8351b59c29c248a29377481a296f",
+      "sha256": "57667ac94b1862d922c15426dab7661947aa3f0d427f5c6faf89136567daf657",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1447,7 +1464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-clipboard-exfiltration-btn-clipboard-fixed-index-6f3589d8a5",
       "path": "atomic/iast/iast-iast-clipboard-exfiltration/btn-clipboard/fixed/index.html",
-      "sha256": "e3a7ee91bd6828bce2dc2567ab5913e73cc0d0719c6ccabea787192b3d2aff60",
+      "sha256": "ac7131110164c9419054de5084ecdff6725f04914f6be7ebc6bbfebc24ec2bc6",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1497,7 +1514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-clipboard-exfiltration-btn-clipboard-review-index-cfd11fdb09",
       "path": "atomic/iast/iast-iast-clipboard-exfiltration/btn-clipboard/review/index.html",
-      "sha256": "f1f7c34cf8a5b9bb5b1795a18efe7a7ee0679cf1d4f4b788a5384dcfee289a6b",
+      "sha256": "ab59f47cf166622d82565d9663593b6670e16ce04fb439f043d35b7dc44b71f8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1547,7 +1564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-csrf-like-requests-btn-csrf-fixed-index-35c0777ed2",
       "path": "atomic/iast/iast-iast-csrf-like-requests/btn-csrf/fixed/index.html",
-      "sha256": "37e1269a3425928f4c75e0cc1e0174b351166a1abcdc5b35df92937aa54221f5",
+      "sha256": "ca37b6789639f2657f70e4163444c28b55537eefcb2136b07b437a82334eefe8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1597,7 +1614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-csrf-like-requests-btn-csrf-review-index-37b5892ab5",
       "path": "atomic/iast/iast-iast-csrf-like-requests/btn-csrf/review/index.html",
-      "sha256": "8674b4681b5e6e3dfd0863827e358029f1b860a72de9019b1f5d38fa58f2cdbe",
+      "sha256": "8ee59f34b6292a9c075ba4dd752734e0d24c3e102cfd512767e48b462d6fde57",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1647,7 +1664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-debug-logging-leaks-btn-error-fixed-index-061249f7b5",
       "path": "atomic/iast/iast-iast-debug-logging-leaks/btn-error/fixed/index.html",
-      "sha256": "d1384868276be4758476a735a3ed439d3c0bebaf25234bb964071d65e9e2bb94",
+      "sha256": "188f980d0e315f63c1a3b6d453179fccf035c217a74bdb789cc8af33d3c25553",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1697,7 +1714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-debug-logging-leaks-btn-error-review-index-a3b00f2297",
       "path": "atomic/iast/iast-iast-debug-logging-leaks/btn-error/review/index.html",
-      "sha256": "de25a2b9e905c6a7590da884b5bfaa4122b9473080987892d1483f002a301c7d",
+      "sha256": "05179898c9f9ad2514276456bbf28e9adfe214046e4df90d0049ebfcb647c56b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1747,7 +1764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-debug-logging-leaks-btn-log-fixed-index-e3a271cbbf",
       "path": "atomic/iast/iast-iast-debug-logging-leaks/btn-log/fixed/index.html",
-      "sha256": "35547fb316949271c2c7df604a669b92dd3b94318915ea7f449133d8f2ca5628",
+      "sha256": "e38c71fc30808b6ad6cc9eb26cdfccf63d0f3cf69fa26118e8dd2839d712d9ea",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1797,7 +1814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-debug-logging-leaks-btn-log-review-index-4d248c7d63",
       "path": "atomic/iast/iast-iast-debug-logging-leaks/btn-log/review/index.html",
-      "sha256": "94ec38a3fbca36faf6a4d5e8c9285f1a9fee8c2a1d62e9fbb28b5b7d42e9be7e",
+      "sha256": "f53429f7eea3e15bc330c63eca60eb34821193e03aab94b74ef06c1dc9c459ed",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1847,7 +1864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-document-domain-manipulation-btn-domain-fixed-index-03e6aca64c",
       "path": "atomic/iast/iast-iast-document-domain-manipulation/btn-domain/fixed/index.html",
-      "sha256": "208d219c9a24ab90e65c6b95c8471376150eb55577a0ce3ab088b03c5195b0fb",
+      "sha256": "471f367fa9c77113f1d97f6d1bfd821a6d23ccb49af553d2e0f3ad8fb2aad9cb",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1897,7 +1914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-document-domain-manipulation-btn-domain-review-index-8f980260be",
       "path": "atomic/iast/iast-iast-document-domain-manipulation/btn-domain/review/index.html",
-      "sha256": "1c4a16a44842e79e22815dbed066b005fc90990bbfc96056ffdd26623cf917ba",
+      "sha256": "fcf0b71dd50b5f0a771425b67c10a536d432871baebc563fa43f41fe1cc8ed5e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1947,7 +1964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-clobbering-btn-anchor-fixed-index-c327144390",
       "path": "atomic/iast/iast-iast-dom-clobbering/btn-anchor/fixed/index.html",
-      "sha256": "951704fe5e9d01cc3ba365a8808cd0b23db11e8eba6e36e0429bf8bbd01bd495",
+      "sha256": "f269d7a7a4880a61df9ff26b93a43fa95f1dbd2f4a7cf3abcedd20d40eee8c75",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -1997,7 +2014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-clobbering-btn-anchor-review-index-92cbf29184",
       "path": "atomic/iast/iast-iast-dom-clobbering/btn-anchor/review/index.html",
-      "sha256": "2bb3791cb35611e2b579d1f3f614cf28560295ffaf5c3e1e10f0a2d9614f2b7e",
+      "sha256": "7a87abf81d19cf1f0ddb3702e2221da5c65fa9ec50339f7f9faeeffd61d87797",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2047,7 +2064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-clobbering-btn-form-fixed-index-555be4c5db",
       "path": "atomic/iast/iast-iast-dom-clobbering/btn-form/fixed/index.html",
-      "sha256": "15880196d5d99a0f87fd59b897acff51610840b97fc0c1603b8751a33cc22390",
+      "sha256": "750612b066d24d766fb343cccf6caebf854d3ad61bc9673c8b3a47d9c134e08d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2097,7 +2114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-clobbering-btn-form-review-index-d61cbd5706",
       "path": "atomic/iast/iast-iast-dom-clobbering/btn-form/review/index.html",
-      "sha256": "acc972293f4c093a8081fb3caa2141f03049bc5ab599db8a710b616973413c2e",
+      "sha256": "9dd2a2d6f9dc784c0ee253929924bf5d4790da51bf8b8c02115be4a8f61a2bca",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2139,7 +2156,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-domparser-fixed-case-js-1332308d30",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-domparser/fixed/case.js",
-      "sha256": "1139a45d8043218c0f4305b82bccd4a91941f668e1d2a62bc6f789cfeb52877a",
+      "sha256": "67b81167ddfe9dc93e0069ac3c9dbbf8ad394bf91373576a596b773328241c1f",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2147,7 +2164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-domparser-fixed-index-999df83547",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-domparser/fixed/index.html",
-      "sha256": "98b40bf8d178205fb9c535da6a9b685fa285bd93e2895824c5f1e8c222d935f5",
+      "sha256": "16ae8141ce323c6d25bce18f66aaf26fde45ecb5acd4fa707ddc32bf9788ad10",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2189,7 +2206,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-domparser-review-case-js-08241c3a61",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-domparser/review/case.js",
-      "sha256": "b7b54fe97b0baa6eb48b2b2b5e5abf23a608a2a1e9ad5671f0f55af3a8fb3d7b",
+      "sha256": "d60891a7a35494f2577494683634aff98438e4400c9cea1002b7d5b950d5abc0",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2197,7 +2214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-domparser-review-index-2cb717cd57",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-domparser/review/index.html",
-      "sha256": "e83c9a897136932c99d991b3ac54839cefbf1348776fdec3a19e89dcf917945b",
+      "sha256": "9914d7ad76d89320343ede19d595d9513f8a99130391d7ee94ddedd183a06e1d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2239,7 +2256,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-range-fixed-case-js-a29789ce83",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-range/fixed/case.js",
-      "sha256": "1139a45d8043218c0f4305b82bccd4a91941f668e1d2a62bc6f789cfeb52877a",
+      "sha256": "1d8d2a60ffa37f20cea5fafd93c8ecc4b0afd6cf8a1b5a924818a42967eb16a7",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2247,7 +2264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-range-fixed-index-63b3e361ce",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-range/fixed/index.html",
-      "sha256": "d2beec06d6feb465d9f054d1ab59afb830e05b794b4288da3cb8d5a8410e2de7",
+      "sha256": "f0e569eeaa0ee38cd9073e0f80ca97d8249d951a1e93667132aed09b94363614",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2289,7 +2306,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-range-review-case-js-6ada28468e",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-range/review/case.js",
-      "sha256": "3d2a36c3f081c0323bc02f8ebe6ba48940f37cd42b790c52fb5f39c26b829237",
+      "sha256": "4faf43b3140437e6de184e1cb68cba84464c15262c8765bcd3d818f37366d90a",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2297,7 +2314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-range-review-index-006c477c2d",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-range/review/index.html",
-      "sha256": "16d81f9c963ed5dc655e95fd75857c3ff97f57a64e7a482e2d60f3c0b992bc9a",
+      "sha256": "18d57d327c5553a5a7300b1646aba36f63d47ee3fc979a88f5f9a253fae37383",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2339,7 +2356,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-sethtmlunsafe-fixed-case-js-74b9571316",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-sethtmlunsafe/fixed/case.js",
-      "sha256": "1139a45d8043218c0f4305b82bccd4a91941f668e1d2a62bc6f789cfeb52877a",
+      "sha256": "1d8d2a60ffa37f20cea5fafd93c8ecc4b0afd6cf8a1b5a924818a42967eb16a7",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2347,7 +2364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-sethtmlunsafe-fixed-index-580dd77956",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-sethtmlunsafe/fixed/index.html",
-      "sha256": "48674dfe259849bcc7cb6ec3014bfe28bba280e2f93ed6dd7ae844b258575647",
+      "sha256": "c4fb631583494dd85d9e4f12483cc610b7e11d90764e8440c853404d09fadd42",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2389,7 +2406,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-sethtmlunsafe-review-case-js-212f495066",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-sethtmlunsafe/review/case.js",
-      "sha256": "a58705135035ac164c93ead6f59dce3b2397859eb841647965623070ffc19f7b",
+      "sha256": "43df4a810beb5d72a129a9252bda2c1cfe45e3ad14f26f16c1ca86b933ae912d",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2397,7 +2414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-sethtmlunsafe-review-index-5233424910",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-sethtmlunsafe/review/index.html",
-      "sha256": "ebb333b898cbe195a02ae4618dd090843477ef1229094bbce6fbad5600059575",
+      "sha256": "078e5caefd2beb18787f8b9bd8081dddb203ff0f4e3930f91934424a875ee5aa",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2439,7 +2456,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-shadow-sethtmlunsafe-fixed-case-js-b32c0343b5",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-shadow-sethtmlunsafe/fixed/case.js",
-      "sha256": "1139a45d8043218c0f4305b82bccd4a91941f668e1d2a62bc6f789cfeb52877a",
+      "sha256": "1d8d2a60ffa37f20cea5fafd93c8ecc4b0afd6cf8a1b5a924818a42967eb16a7",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2447,7 +2464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-shadow-sethtmlunsafe-fixed-index-8f29c0964d",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-shadow-sethtmlunsafe/fixed/index.html",
-      "sha256": "1d3198434605b6e0296203ee2bcd6cb2e477d1d2f21715039f570d53f3872e0e",
+      "sha256": "42a57a9ef53ce2ad1a8f12085adc27cb93d75629edb81c99e48530648a44ae58",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2489,7 +2506,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-shadow-sethtmlunsafe-review-case-js-d1dd64516d",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-shadow-sethtmlunsafe/review/case.js",
-      "sha256": "a58705135035ac164c93ead6f59dce3b2397859eb841647965623070ffc19f7b",
+      "sha256": "43df4a810beb5d72a129a9252bda2c1cfe45e3ad14f26f16c1ca86b933ae912d",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -2497,7 +2514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-parser-xss-btn-shadow-sethtmlunsafe-review-index-5d834266b5",
       "path": "atomic/iast/iast-iast-dom-parser-xss/btn-shadow-sethtmlunsafe/review/index.html",
-      "sha256": "b79dcaf452ef99da613791a227bafa24e3aa41c142e9963b9f08026273a58ea7",
+      "sha256": "624f01b4f167ad78ab099edbf4fb768b59eafffb98cc1b5cdf62f5db0c2e987c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2547,7 +2564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-assign-fixed-index-35ea7a1d89",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-assign/fixed/index.html",
-      "sha256": "3f3a95cc6429270fab7d4492521322fd470d7706ce8ef1d43a25068c9aaab405",
+      "sha256": "afe50e9f289e87509858937f2832586d2c42c4bb3329a447d7185ad787bdb528",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2597,7 +2614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-assign-review-index-76424f3b7f",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-assign/review/index.html",
-      "sha256": "40ed58dc57b8c86aec8e370c6a3f203c2e4e2129a20aac6a5fa0d954622624d1",
+      "sha256": "2c4b91171eb0924e3d2d50c39ffa4089ec14d2e7011edf672a1950caeb4a4717",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2647,7 +2664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-action-fixed-index-f4d3a7037f",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-action/fixed/index.html",
-      "sha256": "fc507339c431ac609834dd86482d2757bfdc0c837b9cab78430a1dbe3495bbd2",
+      "sha256": "ddf535618b76eb946a4a438b974a095ef68d90289ca4b9c31a8d5c8cd50b3b73",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2697,7 +2714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-action-review-index-16539ad30b",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-action/review/index.html",
-      "sha256": "4e735b6091fd8f445ccd80c8d78c63e1c2a0b6465a519fe8bf51212286c95e5c",
+      "sha256": "d2b0938650ceec1bdd5edf5bcb31de0563e87157741cf20adc4ccc3ae553e60d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2747,7 +2764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-formaction-fixed-index-f1a8341b32",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-formaction/fixed/index.html",
-      "sha256": "6bc40d4fe4a06b4121d365e8747ad340393b4cc10f4cd7c0717b3190569e7d6d",
+      "sha256": "6f4dde970b9ad3bbf6d38bd1ccc27f0877fb797ceb952ba95473f73f6a600c5b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2797,7 +2814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-formaction-review-index-4ba14e066b",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-formaction/review/index.html",
-      "sha256": "090ecc655dbd5d0c067d0f85c332385426d3b84d66ec607a5d5bd99031b7a21e",
+      "sha256": "fa6f8f5f8e3aa28ada649ff83b5908f87f83315f74624f6eedeec1035cabcd9b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2847,7 +2864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-href-fixed-index-cc7d06a2ab",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-href/fixed/index.html",
-      "sha256": "6dff8a82856193c94c1c05865abd6bb6a6f28b93e293c4f7b9a2901fae25105c",
+      "sha256": "3fb02e8960bc045603d94c36374f718c4ab00c0f5b85b8a83b7f8611582aee3e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2897,7 +2914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-href-review-index-b50ddc2506",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-href/review/index.html",
-      "sha256": "6399be473fdf1af46fd7af1b2b951f5df0c121a984da1f2879febbba4a8efca9",
+      "sha256": "6aedf31493e3cd6f2b606c87ccaa48d98a6b19700049063ae6c088fd5c07812d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2947,7 +2964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-src-fixed-index-2f34ae8cd8",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-src/fixed/index.html",
-      "sha256": "2d25c1b3db1627f257dbbdd8f466f5d323d98926421e78e33b61410468fc0286",
+      "sha256": "8666378316b016f4ba3177a00cb1dd7f241ef34a1b3cd986f7d9a55b2e581e5d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -2997,7 +3014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-attr-src-review-index-ce0b512dfa",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-attr-src/review/index.html",
-      "sha256": "551c842869d1511aaeb526a58a9177f833e44c7d87a16100bdae34719a3dfc42",
+      "sha256": "0cd44ae3ceb48a902460e6b74d32653189952c4f503ad6bdfff9153be80e56fc",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3047,7 +3064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-href-fixed-index-431474afb7",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-href/fixed/index.html",
-      "sha256": "bdffb15a31505827691565a7a5bcfca756bbd473dda977a408728746fd784c7b",
+      "sha256": "fc33f04b6cbf95299ac51f1698deb77be61bac7c7789de4d674e78997a657e70",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3097,7 +3114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-href-review-index-32bd15cb7a",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-href/review/index.html",
-      "sha256": "e67753a9e785216fc27f874fc56538117777ba0c1e9b5a0525fc977ff991df7e",
+      "sha256": "1ea02179bd6431a7a7562a325d380a1ca5b5b9b414c79677a5e353505536b1f3",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3147,7 +3164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-pushstate-fixed-index-dcecaac79a",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-pushstate/fixed/index.html",
-      "sha256": "7c92b8bad25d8c2bf667669d9eec0f849174551ea592bd870c4cc304d517ba62",
+      "sha256": "75a446fa58cd8f5a086b0db0aa07ad82f78d1eacd4be063fd8180c90903bc2f1",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3197,7 +3214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-pushstate-review-index-a4e7a15d21",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-pushstate/review/index.html",
-      "sha256": "af44b48973856a85f8c556102bced9aac69a5b1e1d5966f6ec017011cd89de3f",
+      "sha256": "7ea6379f554cc6889ac1abf046cd82702e529fbda236fb5295231714f1033cee",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3247,7 +3264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-replace-fixed-index-64287b13dd",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-replace/fixed/index.html",
-      "sha256": "03eff162efe50153ea1b84d6b6f748180d12e6a11fdeb72739871f3fa8e037d9",
+      "sha256": "a298d3c736bfdc1ed5bc5830bb321380cfdfad731d66b9021c220e2630370591",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3297,7 +3314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-replace-review-index-00b6bbb398",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-replace/review/index.html",
-      "sha256": "ebff23e0d6d627b971ebb3eb7a48ce8b5a4927d7844ce6fd1773cb89a8d02b7d",
+      "sha256": "9fabeb7487f10b6150ce5eef766c3341e87687f511d87d1df63914a5482608fb",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3347,7 +3364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-replacestate-fixed-index-fe6610abf7",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-replacestate/fixed/index.html",
-      "sha256": "abca8c04a2107fab525bc2f5ec866569fcee9da5c77aa24fc9ef7ca8ce7dcf38",
+      "sha256": "077b451cdb551832b207b90fa771c4b35df424f54c0d78f9789db91fab27fb35",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3397,7 +3414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-btn-replacestate-review-index-b16930f33e",
       "path": "atomic/iast/iast-iast-dom-url-navigation/btn-replacestate/review/index.html",
-      "sha256": "b6f277f15dad551341b5010b22c1691db07f86df950afb9b50797f8635465adb",
+      "sha256": "0623b02b43ca770a2dc8f6fa612b245c545594fb29eb0681918dea481caba291",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3447,7 +3464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-form-button-fixed-index-734d74efa9",
       "path": "atomic/iast/iast-iast-dom-url-navigation/form-button/fixed/index.html",
-      "sha256": "23f0ef780094d29901a03e8f3d45a29d28dae2bccc87235a3abe07dcc8c8723a",
+      "sha256": "960e923f8c898e9f10d9fd2595a298e97e57e3ed487a40b3cb08a930f62486cb",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3497,7 +3514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-url-navigation-form-button-review-index-fd9bc39f93",
       "path": "atomic/iast/iast-iast-dom-url-navigation/form-button/review/index.html",
-      "sha256": "348e22eca2420b73ddca3010ee0d357070438239806ba02de88969ca596617a5",
+      "sha256": "0ef721fa8253b3b63cbd945e5c7151b8bfb90ffe842b6fa4b1b9a9ddb11d1288",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3547,7 +3564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-adjacent-fixed-index-18870d2f82",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-adjacent/fixed/index.html",
-      "sha256": "1548ff2b1e00b78faf5bf86dd975b28ff4dead8b92979a75d8a7c245d3e2319e",
+      "sha256": "636bf55154a9a61c365f6b6af0c32be84bf71eb6155c4b80a3d0d62b1f1c666b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3597,7 +3614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-adjacent-review-index-1da2e99af8",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-adjacent/review/index.html",
-      "sha256": "7f7a22d8018c1bdaab42bca70035bcc7642be3c877a8f412cf08ad93bcb244f2",
+      "sha256": "46cf497c9d8abb47605b6363f17ec6bb844b94fc452a0cdcae570ce04c053043",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3647,7 +3664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-inline-fixed-index-204f60b56b",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-inline/fixed/index.html",
-      "sha256": "24d8c0b4c82cc53d76c86c39cdc0c7e60d61410da9f5564a1fe8bba6209af660",
+      "sha256": "75412f6d2bc4fd278c8145580328ca7ff59454bb803f7802a2ad8e94153b87e0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3697,7 +3714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-inline-review-index-d627884458",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-inline/review/index.html",
-      "sha256": "dfbb1a657481078c2f1a482c90554cd456afedb2821483b4eb8cb70eb6d07b34",
+      "sha256": "feb43d1204c705bfe272c6bb3c15a769682364e8234d75ee468e2b4c0e12b13b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3747,7 +3764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-inner-fixed-index-2d1e66dde7",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-inner/fixed/index.html",
-      "sha256": "c6135df4554bceb82bc3a67f8761d5b0730b7e40649f6ad6c7dcb372adfbb7ca",
+      "sha256": "00fe964f75aea8326f77ebcd71218c222b6756e204eec67c8a04ac70ab2fff1d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3797,7 +3814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-inner-review-index-036636750b",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-inner/review/index.html",
-      "sha256": "ba98123e6ea54e647e2a3d7b7ce961012ef527c5b8025463fd2d57a01de1f1e5",
+      "sha256": "2f2d83d68630ef8c04b2eb4ebbe458af20bd6c487681add7c5fdf8cca12ee8f7",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3847,7 +3864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-mutation-fixed-index-a87c0f2f3b",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-mutation/fixed/index.html",
-      "sha256": "94fe109ea867f913fc33c00846f9bf4b1bfe6aaf45cf6821400ca00cdf9cd28f",
+      "sha256": "90617a6c6653631dacd9c7d1d0a6078be87ec640dc935aed60619069c01a6738",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3897,7 +3914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-mutation-review-index-074f1cf41e",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-mutation/review/index.html",
-      "sha256": "36569a1919af73a5e74dc2f06eec4480b16ed763b6ffbd45920808d3557301f7",
+      "sha256": "0439cad2fb6865bc6f204e3f6b82ad86a489db8fe182877f2c96b277f4e541a2",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3947,7 +3964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-outer-fixed-index-9102abfa24",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-outer/fixed/index.html",
-      "sha256": "34c87cdf66254c041c8e463936097675f38cbd34953c818ef89a13d2609d6513",
+      "sha256": "b941bd0037f973b2be7c5be691e30743d68e6a8b4bd1c7a5c8123b9bb1bb2257",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -3997,7 +4014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-outer-review-index-5c57d397fb",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-outer/review/index.html",
-      "sha256": "bc17fd74fd79c8a0f3fd41ef0d7461810d48007f16ba8325b70f74ce02f82c59",
+      "sha256": "35572fac0dc6fb7a22fd0e2bb6c21ec0899e2729ec321bbc8ceac0869485f14c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4039,7 +4056,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-srcdoc-fixed-case-js-b90aed787e",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-srcdoc/fixed/case.js",
-      "sha256": "4aeb2faf56b6794ade25b481c8ef4ce37d4fdfbff2645a6bf3abf71ffce00c97",
+      "sha256": "4e077efbf536c4d2d479405fb547cb164f714a33200355980e2f7595be7b94af",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -4047,7 +4064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-srcdoc-fixed-index-e9820c574a",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-srcdoc/fixed/index.html",
-      "sha256": "e427441a1b2b119c1eb64c03badafde7e47fa487b5ed1a96e037b4ac9663de9f",
+      "sha256": "cb05b610f5a78593cc05942d6e960b2048d9f51869bb774fe2a7b76b4086c640",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4089,7 +4106,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-srcdoc-review-case-js-8698faf47c",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-srcdoc/review/case.js",
-      "sha256": "46917bae8d0efc7b19d2f389284cb7031883bae05921a4fbbc642041fcec2a95",
+      "sha256": "0a16cd31a6992edcd5bef9f9d0e6846932c1e317d4672d50f56ce3988b98c3ba",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -4097,7 +4114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-srcdoc-review-index-be5577159f",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-srcdoc/review/index.html",
-      "sha256": "47886431c51ce1b0015e4dd579ab37fa37db99d78586e41ea9e6f53381102451",
+      "sha256": "8cce19391d94ff8de583fcdd91828c42e2e04af14af469f36ebe323f0c67b852",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4147,7 +4164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-write-fixed-index-87b8774920",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-write/fixed/index.html",
-      "sha256": "2f0cf45566fca444b0c8238c8756b0762686e7ad5888b7d3c0b87aa4abdef6c7",
+      "sha256": "595ec944f85d28523f91dede26efea9b4f3cefa4a1f376e148dfb896a6e942df",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4197,7 +4214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-secondary-sources-btn-write-review-index-668909a800",
       "path": "atomic/iast/iast-iast-dom-xss-secondary-sources/btn-write/review/index.html",
-      "sha256": "5da3c2cf4b0a01a8a4ee98e7b32dd23fe0923b405d86144a5746c36e5710a8ed",
+      "sha256": "f4599777800c4d98a83b655ce8d31697278fb26894317d8bdc4d6549fc70ec70",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4247,7 +4264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-appendchild-fixed-index-1f136492df",
       "path": "atomic/iast/iast-iast-dom-xss/appendchild/fixed/index.html",
-      "sha256": "4a6812d37f28ffbe6dba10b61e2658c27e15453d614d6d895322ba552830cbe1",
+      "sha256": "87cbeea834b3f5ce06dfb3597cf7ed74e2c783362687268ec63adff35fc12e7c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4297,7 +4314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-appendchild-review-index-cf14265c97",
       "path": "atomic/iast/iast-iast-dom-xss/appendchild/review/index.html",
-      "sha256": "8354a169f6046fbc316d34f0ad88095aa6326425db6e08a4020ce7b0d360783f",
+      "sha256": "ca05c08b400eed026150a1fe4ee212145dcf5d355969c525dadeec1c048e551c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4347,7 +4364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-documentwrite-fixed-index-90af2305ae",
       "path": "atomic/iast/iast-iast-dom-xss/documentwrite/fixed/index.html",
-      "sha256": "9fc1fba58fcd46ec2aac11df5345c0233171c94fc653ca2bd2ee8cd20041a1ee",
+      "sha256": "96761a632fb4a1660182c9e5d7431410d8f767cbc5011b6794932722aa73bfd8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4397,7 +4414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-documentwrite-review-index-9d2bce2ba1",
       "path": "atomic/iast/iast-iast-dom-xss/documentwrite/review/index.html",
-      "sha256": "1203f1652dba1a8ae9dda8fa8759e0f2b1651e11d907f74887fc128bb9540a9e",
+      "sha256": "a92fb322253b35825d54e758a10235c0977790c1a9277317427aa6c4c191c1ca",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4447,7 +4464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-inline-event-target-fixed-index-f1d63c0027",
       "path": "atomic/iast/iast-iast-dom-xss/inline-event-target/fixed/index.html",
-      "sha256": "49f5006625bae823ab852c2da03f4cda9b6199c18838800dbf93ef9c1cca4edd",
+      "sha256": "0b29bc10ba7b23461bd94a251739809609d2ffd3995d4021bca1c7d009a9f7c5",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4497,7 +4514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-inline-event-target-review-index-c746127e75",
       "path": "atomic/iast/iast-iast-dom-xss/inline-event-target/review/index.html",
-      "sha256": "c185d1827aea1e589f66aa9ffde34949ef96b185102180dcf1cf4525720a3555",
+      "sha256": "e726f26c99883e29be266978c2a3c27d0caf7951da740033e0d49c38ce192c7b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4547,7 +4564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-inlineevent-fixed-index-dba184ebd3",
       "path": "atomic/iast/iast-iast-dom-xss/inlineevent/fixed/index.html",
-      "sha256": "a257c168c3cb33741ed6ff5f7385896b36c8db00ced4430628d15517aee9f708",
+      "sha256": "f7b6536edc8f0eda63c1b41baf7cae1c7256011642ce4d0763ffa75a52dba3b9",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4597,7 +4614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-inlineevent-review-index-fd6c4516fb",
       "path": "atomic/iast/iast-iast-dom-xss/inlineevent/review/index.html",
-      "sha256": "7760b9587f09e6bac0784f2cdc877fa85618dbf2126c6a6ca65fcb4b0142346b",
+      "sha256": "50214c458480d0d27f538c576d089025e93e086427c4b4e4abc6e10f3f7a7208",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4647,7 +4664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-innerhtml-fixed-index-3a141650ee",
       "path": "atomic/iast/iast-iast-dom-xss/innerhtml/fixed/index.html",
-      "sha256": "1f6834dbda26ae0b25246ab776eaca5266c472e849dc7ccf562810d307e97d2f",
+      "sha256": "a7c1456d7c83d4f30c8294905e40b99c897c90298f2a44d948a43b5569155c82",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4697,7 +4714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-innerhtml-review-index-1c9b488e52",
       "path": "atomic/iast/iast-iast-dom-xss/innerhtml/review/index.html",
-      "sha256": "dd1841831012305397649da4e11b1e2bac952ea1e78e73d09905fa8a7f7790e4",
+      "sha256": "b50a3d18d04b0df64ca07afdb5c73f02ec1f086f16a46b719f3dbd6a272130aa",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4747,7 +4764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-insertadjacenthtml-fixed-index-127ca03e61",
       "path": "atomic/iast/iast-iast-dom-xss/insertadjacenthtml/fixed/index.html",
-      "sha256": "ef875fee1899ce20aca7c0221e4365efe2b422dff959254cbf9951bc24a501db",
+      "sha256": "a5217fac34dccbdf38867152655546c1876b365b82da4e7d8db17920469d3ab6",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4797,7 +4814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-insertadjacenthtml-review-index-09cf40f074",
       "path": "atomic/iast/iast-iast-dom-xss/insertadjacenthtml/review/index.html",
-      "sha256": "c4c51cc903f9fa47123e3a8a2c34bd2e094963108c589132394a6db0a37b0877",
+      "sha256": "de3a5f5a5080781fcb3fa955e715f1efdfb8398d9d300457b18339efaaf3411b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4847,7 +4864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-outerhtml-fixed-index-97aa23b224",
       "path": "atomic/iast/iast-iast-dom-xss/outerhtml/fixed/index.html",
-      "sha256": "832a0fe63f4ee3b2333ddf32aebb3584cb99933b2d153f5671299bdfd33cf7d4",
+      "sha256": "66fdd324972e8ab380fd37ccfbce939b2941862e2d62f3368e21ef90a9fa4336",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4897,7 +4914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dom-xss-outerhtml-review-index-119ba50624",
       "path": "atomic/iast/iast-iast-dom-xss/outerhtml/review/index.html",
-      "sha256": "4cc2ab582b8316b32384756eb3f9e90c4329944433f6090a31cd412e02b90eb0",
+      "sha256": "d3964eb8f808f496787bbc4d489dda035a998c1c24d2a20efd86969d25233ee3",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4947,7 +4964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dynamic-script-loading-btn-append-fixed-index-c3e6ee6ccc",
       "path": "atomic/iast/iast-iast-dynamic-script-loading/btn-append/fixed/index.html",
-      "sha256": "5e4c85a196d20ad31a52b7a38c87f01bc9902f2c926d8107e5bce39e34a645f9",
+      "sha256": "2eb51046854bb5f9fd1536877a7b1c3097e4d8f4d52786c8757d384465b80290",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -4997,7 +5014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dynamic-script-loading-btn-append-review-index-ca5ca083e6",
       "path": "atomic/iast/iast-iast-dynamic-script-loading/btn-append/review/index.html",
-      "sha256": "ee7d1574abdf8374d0e6caae13839657f469c54c1685dae6e2bf36c4bbc99a7e",
+      "sha256": "2288ee048191295ad98444fd2d41cde1c26265f7e2ba059676bd068de1793005",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5047,7 +5064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dynamic-script-loading-btn-reuse-fixed-index-44cfe32855",
       "path": "atomic/iast/iast-iast-dynamic-script-loading/btn-reuse/fixed/index.html",
-      "sha256": "f402233786ab6d729b7a6781eae832b1cbcf3dabc72c67020c28f6e6646df865",
+      "sha256": "56156ff304275faeaa29087b1bddbabbc905800f7a54d1f3486d5769938ab8a4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5097,7 +5114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-dynamic-script-loading-btn-reuse-review-index-7c399a782d",
       "path": "atomic/iast/iast-iast-dynamic-script-loading/btn-reuse/review/index.html",
-      "sha256": "ecb0bc68ae0815b88d5ac1a36ed6c5ac669d01e4aaafd70bcbe2a340d025ae84",
+      "sha256": "16b6536497f9260f07cc862a849d82da622d36b98e311cddecdb4c5d5e68db43",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5147,7 +5164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-file-reader-sensitive-flows-btn-arraybuffer-fixed-index-7bf1b3bd5d",
       "path": "atomic/iast/iast-iast-file-reader-sensitive-flows/btn-arraybuffer/fixed/index.html",
-      "sha256": "74deb6f15f9a12cccb4d17778f31bcdf46d260ea9cb8ca42706126b06f031d0c",
+      "sha256": "5c61c8904e8bd5efa7278509cb2dd1b06e3c85e862b7ba7261820e26b662ca71",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5197,7 +5214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-file-reader-sensitive-flows-btn-arraybuffer-review-index-34d7778f8d",
       "path": "atomic/iast/iast-iast-file-reader-sensitive-flows/btn-arraybuffer/review/index.html",
-      "sha256": "99183a32a2df6700ac198e881c244bb66a30c81505a413426a595c552f950b9a",
+      "sha256": "1e5d00f40548279af020be4896ac5322fd8fc7fa5c505ddb9a4c4985e2efb322",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5247,7 +5264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-file-reader-sensitive-flows-btn-dataurl-fixed-index-a841b2efed",
       "path": "atomic/iast/iast-iast-file-reader-sensitive-flows/btn-dataurl/fixed/index.html",
-      "sha256": "7664c9ea7bff4d08bc98bf290548c7584b4144eab6d1d5c1c0785bc40673c335",
+      "sha256": "6a6dc7e8492ef848e6a84627f9c9e6384f9bc50afbeee64e6461c053802df98c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5297,7 +5314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-file-reader-sensitive-flows-btn-dataurl-review-index-c2e63e6ac0",
       "path": "atomic/iast/iast-iast-file-reader-sensitive-flows/btn-dataurl/review/index.html",
-      "sha256": "1db329906295b412789e1fbccfbe34a26a08d916f9033d0197b29cd156824213",
+      "sha256": "3eb819c6cbe63057fe513c8e11a26c1bdc7a901228a2f95265bff7a537f71165",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5347,7 +5364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-file-reader-sensitive-flows-btn-text-fixed-index-d936e99616",
       "path": "atomic/iast/iast-iast-file-reader-sensitive-flows/btn-text/fixed/index.html",
-      "sha256": "1208f08f0f8f60f76ab6ad119839804aedf6ab1c0be036d9b6b807fb53659359",
+      "sha256": "6c6f2791e8ce277d133a062defa2b0f8f761844b5c02dc4975ef949b1e047667",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5397,7 +5414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-file-reader-sensitive-flows-btn-text-review-index-cdf49f7fb9",
       "path": "atomic/iast/iast-iast-file-reader-sensitive-flows/btn-text/review/index.html",
-      "sha256": "bd2efe70a10d0c8e120ad1b3ba51da8f794fcbca79f437668a95be0da0ce0113",
+      "sha256": "7df48a8bd624073e80912957832a00db283b60b8808ff1cd125d1e2baa83a6b1",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5447,7 +5464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-action-fixed-index-39d5e8e3a7",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-action/fixed/index.html",
-      "sha256": "92cdce67556d3cbd07d34bb9a81262aacf058e944903fe09d845a0c3c0efc097",
+      "sha256": "280eeb76002c5efddc0b000e4cac5722da2561910d11f74315cf84d88e534a09",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5497,7 +5514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-action-review-index-3f22fa7386",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-action/review/index.html",
-      "sha256": "cdd4a29591e63e2df4321d510d8c02cf36227c4076adad81c082bfcfd6b10b29",
+      "sha256": "97c57cbe5e7b06c0e32e73ab8611f738310e22a8807900397e4e05e1250a0f01",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5547,7 +5564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-data-action-fixed-index-64df5676a9",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-data-action/fixed/index.html",
-      "sha256": "cd5286557778942d6d9187d752c42430273fb968156a5d2e9c93a007ff723cbf",
+      "sha256": "6cd6db77b160ecca5a9d42494a5de4547e2182c48e0a8edb97276aa4def029f3",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5597,7 +5614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-data-action-review-index-72e1799439",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-data-action/review/index.html",
-      "sha256": "3136596320be74ad818a35b0f7d191c241395590fb0f2895eaae1816fc2249d3",
+      "sha256": "ffcd38fc2567427e1b9c363fc6d3344cb431b463203fe02445a5e03acfee5e78",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5647,7 +5664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-data-formaction-fixed-index-6774987ee0",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-data-formaction/fixed/index.html",
-      "sha256": "4658c4de363df37174980f0f3f7af03ad978652af7391085080a144a8a0cc2df",
+      "sha256": "e7757d7e24a8551d5fea4aaecd613f6a5cbe923561a32282f507b2ee1506a59a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5697,7 +5714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-data-formaction-review-index-c0a7673f52",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-data-formaction/review/index.html",
-      "sha256": "7a6c9853c771950d24a9eabf9824447322a8d01a1392090c6823a9e046fb009a",
+      "sha256": "17623cc245615b06d159560a902531cc4ce242448cd69b910711039fb2780f01",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5747,7 +5764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-formaction-fixed-index-09c733ced4",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-formaction/fixed/index.html",
-      "sha256": "33f3811ddf5e8c9111c94d9f306be5edf5005d2c331e86afa34f7eb6b7043307",
+      "sha256": "3a76c9f9a3c1a0968705fc416a71301ab8c5cbfcdedf155fd9dabc46cdaa5e2d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5797,7 +5814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-formaction-review-index-23039970dc",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-formaction/review/index.html",
-      "sha256": "3a3aa38566af9140bc8791dd153f0cf5938fbb468665eed106741d3997c2be2e",
+      "sha256": "98ac70d4e01bdd773a6b5dc585fe89a818a393b890885a895959fa7aba8878a0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5847,7 +5864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-js-action-fixed-index-fef3e69b34",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-js-action/fixed/index.html",
-      "sha256": "e636135eb95d97275f5e636dac64809436b4c5303d9a9446fedc6886f1333df8",
+      "sha256": "f0655b5f8faf9999848d452ed4fd0930142e2459271b43ed70873d4bc4e67f1e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5897,7 +5914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-js-action-review-index-df7bf61451",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-js-action/review/index.html",
-      "sha256": "bf60f04de4556699718b8752493d729c5c88e22dc25638fa34eeacefb59fd4d3",
+      "sha256": "8a5d1bf9e0becb4faba6164636f583828a7475019bf5a38d875d8b23e8f95637",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5947,7 +5964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-js-formaction-fixed-index-4f78d7a4c7",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-js-formaction/fixed/index.html",
-      "sha256": "f6f37454c613e5e459bad6e7a1312131bd8e889434f26b119fb799d6b955d48f",
+      "sha256": "2458f334bffcea81fb29594d519c820ba7f9ad5984fda77fe7b30aad93a54bc0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -5997,7 +6014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-btn-js-formaction-review-index-95d348048a",
       "path": "atomic/iast/iast-iast-form-submission-hijack/btn-js-formaction/review/index.html",
-      "sha256": "a824c9ddf8c86ba6816761b87c9d44194fb429a34d3ddd25987a281208e57a34",
+      "sha256": "74b49267e7b25da5d531c22fc52fd6444a3f3ea58faa183a2179dd9894e0cfb2",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6047,7 +6064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-submit-btn-fixed-index-cfc705c0ac",
       "path": "atomic/iast/iast-iast-form-submission-hijack/submit-btn/fixed/index.html",
-      "sha256": "cc6edc196a783133081396dc0f7713ed8c33efddd0fb87a7bb6369ee7f13f80b",
+      "sha256": "eab629a9792bc0dda1f7df3d0b27ddb95eaaf044f1175658fce88137c8f433d4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6097,7 +6114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submission-hijack-submit-btn-review-index-778b8f3234",
       "path": "atomic/iast/iast-iast-form-submission-hijack/submit-btn/review/index.html",
-      "sha256": "3925194de0a8b3f1f5c7e51edac56db8e19298fb3dd9b953c0d2db1e4eb4534c",
+      "sha256": "76b44a5bc968db32dc38e5abb87a3403e6b00cd3487374fc816e3dc13750de7a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6147,7 +6164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-request-submit-fixed-index-b628e0ec00",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-request-submit/fixed/index.html",
-      "sha256": "252791c897b682b10be5408df25a080993ee75737b9a6ce4891f04ab0f479b15",
+      "sha256": "ec06f7ad7997a89b5736181b7dea114119ddee50bc9fca9f1fb6ed7e43cb86ff",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6197,7 +6214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-request-submit-review-index-952e74e2b0",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-request-submit/review/index.html",
-      "sha256": "01cb90f306b56a7528c341a6820140f0c421331b1027bfc1ca492500cc2880f2",
+      "sha256": "29c16b4d271149c7c566cecdb4b67ad0be763cab54f3fa0ff443c043f97d699c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6247,7 +6264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-set-action-fixed-index-72b8f53188",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-set-action/fixed/index.html",
-      "sha256": "6b187af7ae202d11128dd6315877f9c206046e458f586068f5e8e632baa05bbf",
+      "sha256": "b163a1b749b23537bf824e4c6d6637e498ec53a38c45f7a44ba59171b234c8b0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6297,7 +6314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-set-action-review-index-369db35ba1",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-set-action/review/index.html",
-      "sha256": "9ac126f8356bebdb2a42fe8ea4349a4f8c6af22aa9fa8a4fd11aa0ff31dae9ae",
+      "sha256": "faf26e565eea4dbe06ea9d73b9984a2b0a54265cca59e42d41847d5e144324b4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6347,7 +6364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-set-formaction-fixed-index-b69aaf957f",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-set-formaction/fixed/index.html",
-      "sha256": "9a2ed522af959526c1563d96b93ab0c7fba1bd0cd564a8c94d876e75bd696421",
+      "sha256": "7b7c889b2cb83f68204ae4838f32beba2071281ca9611933559f076987cffe28",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6397,7 +6414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-set-formaction-review-index-d1f5c774fd",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-set-formaction/review/index.html",
-      "sha256": "af86f388dad9c980e7c72c1598e98c8cf940cf218a8f889e6d4c54d4361345a2",
+      "sha256": "afeed9c95d8e18f4284f662cd10de5ab51e80b3ebb1111c0e730bc77c5ae343d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6447,7 +6464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-submit-fixed-index-5d5a5c15af",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-submit/fixed/index.html",
-      "sha256": "67307bbf4787e19964c861db003000f607049167e056b060a9d814843311df07",
+      "sha256": "e5685ed8c30a22f9d6400360d0d9eae727446b912cc140c7f27453969e7ef6fc",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6497,7 +6514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-btn-submit-review-index-cd6ed9fa63",
       "path": "atomic/iast/iast-iast-form-submit-csrf/btn-submit/review/index.html",
-      "sha256": "c552828e79f10b8bf299eed8e76e3551c48cc5613d910ac346ed2bba5c7832c9",
+      "sha256": "ae40cbd67e7a61f52b2ea543ca3b687912857c1edb2d02cacd95c013e9908fd8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6547,7 +6564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-submit-btn-fixed-index-6f6e6923a6",
       "path": "atomic/iast/iast-iast-form-submit-csrf/submit-btn/fixed/index.html",
-      "sha256": "165d899d5b4a8727325b98956567911fe133821ab4906eb78173a912110082b1",
+      "sha256": "3344d7fb03f568dfaac2526356e4c541c34c119f7636035e3f8ae31fe0f1560a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6597,7 +6614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-form-submit-csrf-submit-btn-review-index-ea93dc5399",
       "path": "atomic/iast/iast-iast-form-submit-csrf/submit-btn/review/index.html",
-      "sha256": "85d8f5fd50ba53b591528f1f0ff0d309f264adca9a87db519ae9e829a076f46b",
+      "sha256": "0a0cdabd12d4b0f0ae181928fe485b741d893b4e26f3b1a29c76c13689c5639c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6639,7 +6656,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-src-fixed-case-js-cd59ef7ea4",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-src/fixed/case.js",
-      "sha256": "4aeb2faf56b6794ade25b481c8ef4ce37d4fdfbff2645a6bf3abf71ffce00c97",
+      "sha256": "644932836a2e629b6303a00e87e8b14bd0ed6e02a395d3c73215d84e8ac806f3",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -6647,7 +6664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-src-fixed-index-308e0f26b2",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-src/fixed/index.html",
-      "sha256": "75cc3896821acec83a1bf7ad4978b87b8daaf25240e2b2c5307267e5869c54bf",
+      "sha256": "ea1cac6d34c685f60d1ddab47b3f866154d9eb862fcaaf34ee3cc475c732b27d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6689,7 +6706,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-src-review-case-js-3fce040e91",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-src/review/case.js",
-      "sha256": "775c437f96d19923883a6b4800300b3188b444c0666662b0e4f91541e5d750e2",
+      "sha256": "73eb67d63b67ff65e5041a20c9ea641af350057d47c2f9d39c9b46de02eca086",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -6697,7 +6714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-src-review-index-7a7371af1d",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-src/review/index.html",
-      "sha256": "56a0ebc7e07f91f2f678a0dead29eb6f3d2f79ca68e3611867af48bf31805523",
+      "sha256": "1be8f72d485e79a385cc3cb323dd3315eb671c9397897d896d25f6561592b920",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6739,7 +6756,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-srcdoc-fixed-case-js-aa0e32c93c",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-srcdoc/fixed/case.js",
-      "sha256": "4aeb2faf56b6794ade25b481c8ef4ce37d4fdfbff2645a6bf3abf71ffce00c97",
+      "sha256": "395832585dbe5e97c3bffb50070a2fd67145668edc97471ce5432a23ffd3dafc",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -6747,7 +6764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-srcdoc-fixed-index-10a01d79ef",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-srcdoc/fixed/index.html",
-      "sha256": "37fa429f69bf48c6a6c3f094c17d1f2e64699f195fde1fac1ceff24a5cedf13f",
+      "sha256": "7ae2560474b6d94d7a0366d7459a1f5c230dd3cdf090fa22af9421a56c97f765",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6789,7 +6806,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-srcdoc-review-case-js-6aadd0d025",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-srcdoc/review/case.js",
-      "sha256": "46917bae8d0efc7b19d2f389284cb7031883bae05921a4fbbc642041fcec2a95",
+      "sha256": "22f9d5f66be9efe95087f9c0a1944126b7ace323df3aaadbd639c480aa047477",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -6797,7 +6814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-iframe-navigation-btn-srcdoc-review-index-1b06d660d8",
       "path": "atomic/iast/iast-iast-iframe-navigation/btn-srcdoc/review/index.html",
-      "sha256": "d7f1111e885f6c2059bec4a3923e640f81d58cc1e8eeb15425b9e5eaff2b42b8",
+      "sha256": "3818b5e4ed039c9cd9ae9e9cf82137dfbaa7aabbffc886949fa44662dc04e5e6",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6847,7 +6864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-btn-broadcast-innerhtml-fixed-index-cb00034256",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/btn-broadcast-innerhtml/fixed/index.html",
-      "sha256": "9e358c69e5ee5a483e684eeee2e09ce59d4dc0a570a48ade3ce445715dd6e6be",
+      "sha256": "98f6292a582c0c55f4308ff070cdbec4be3ece1769461acf97ba35625d1d7396",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6897,7 +6914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-btn-broadcast-innerhtml-review-index-b30991a468",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/btn-broadcast-innerhtml/review/index.html",
-      "sha256": "1d0ceedd7c5bc7b8bcff45c1bee3fb2acad7e575fb553dd9a9e5d7b3ac37a358",
+      "sha256": "21a0cf4c796a10fe922ac8be00ae147752c5d405ae56a88790b90715b0d2e3e3",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6947,7 +6964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-btn-port-eval-fixed-index-3ff32c19c7",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/btn-port-eval/fixed/index.html",
-      "sha256": "6bd78aa18170e4761b8d0dcb32e9163829cac96c083690c8720ed2efd20d6802",
+      "sha256": "06648481fd6b784abfdabab53e111b9c4491b389e6f92d761efa0cbc1afb1ea9",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -6997,7 +7014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-btn-port-eval-review-index-7933cac968",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/btn-port-eval/review/index.html",
-      "sha256": "723376cf4c395adcc75bdf72b82b0feb2fcd0e5cc1d68c49db7eda0753cc16be",
+      "sha256": "4f590cecd3c69ce7067cf6f52a4bc264a4a6132f245962a56139c5874aa265e7",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7047,7 +7064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-btn-worker-action-fixed-index-ae43cfe524",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/btn-worker-action/fixed/index.html",
-      "sha256": "f6a38251cc83ca82174576909ba17b46f30a18dcf9b5880de416cc21552b19da",
+      "sha256": "8a3ac214b0ceb02311b41930823f135e037a2441973977eafe72691196816557",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7097,7 +7114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-btn-worker-action-review-index-76f0e1aafa",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/btn-worker-action/review/index.html",
-      "sha256": "fd4196fdd0a14715e9cb3e2e5ba977e44efa151b18174c4c16a86afb05df734b",
+      "sha256": "02a3b6e67fb6bff5a39372eb69c3c1b872a8539e894555197757b21bba874dbc",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7147,7 +7164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-submit-btn-fixed-index-06859cfd2f",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/submit-btn/fixed/index.html",
-      "sha256": "1b27d2e6fe79df5e8c64bd42a26547f789626df4bac8a0084062f182c52b312c",
+      "sha256": "a266543b81222df8d4244f3e40a883cb5f27f16ba3dc04e6310c79efee09223d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7197,7 +7214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-inbound-channel-trust-submit-btn-review-index-73730cae4f",
       "path": "atomic/iast/iast-iast-inbound-channel-trust/submit-btn/review/index.html",
-      "sha256": "59e6b8a945d5da492f5706e75828a6c2b52c3109f8433c313067411c4cf88434",
+      "sha256": "06fa2309198a86e87747e2e70e93cbe1e6d6cc1aae88059901fa97d0f670e51c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7247,7 +7264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-cache-fetch-fixed-index-30eff341fa",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-cache-fetch/fixed/index.html",
-      "sha256": "8f7a3d59b7b37e4d74a25bcd4e73ad544039472651568943c649bd4f7743e216",
+      "sha256": "f4b1d5c859c1498597ad16e81fb624fab4d0dbed4da76cfd692f6ed8c65d4451",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7297,7 +7314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-cache-fetch-review-index-e78b3f239f",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-cache-fetch/review/index.html",
-      "sha256": "74dae28d503fce21de869fcb168f887f46167caaf427c1e8fe1eae349d987f51",
+      "sha256": "d9dcdd51f8ed1c8e139254d7f255b37d623063446e1ba79ee25f1201e50d6c39",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7347,7 +7364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-cache-put-fixed-index-3caa1d9cdc",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-cache-put/fixed/index.html",
-      "sha256": "1093d3886f377ad273946ca4d4d76e7c8601a9db375cbcb17cd2b432b52cd380",
+      "sha256": "8262c7e2fc7b98972a81d1c5b2d897084b35897296bf63f6afd9fddbf4fb9292",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7397,7 +7414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-cache-put-review-index-f7f8242bb5",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-cache-put/review/index.html",
-      "sha256": "c494557d72513b12acb20bf61e2b04c38c2a8538fda36f5f67a16b7ab2890f3c",
+      "sha256": "1cb26986b16f40756b4709f901bec5836a62ad292f5ac7e157c1ad5f775960ed",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7447,7 +7464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-idb-eval-fixed-index-2c1518d6ae",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-idb-eval/fixed/index.html",
-      "sha256": "33c222221e528e09bfba4708007b06b188837e03d6af1548cba464ded9cabff3",
+      "sha256": "9f6d2acf8dc1321a6487be6ffe2507d7298c37ea5f95e9b729ed8a1452191c52",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7497,7 +7514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-idb-eval-review-index-a78d1a36eb",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-idb-eval/review/index.html",
-      "sha256": "9cae16c5b52a3a2ebd96244fca7b4c71b0ed87b433c80a56adf8a59b0290e0de",
+      "sha256": "0cb12c62d4a5b2e863a3f7c556c8e4ce5cf1b87e8beace57a92479d6d698a04f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7547,7 +7564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-idb-put-fixed-index-863b01a868",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-idb-put/fixed/index.html",
-      "sha256": "4dc93120b97f9752f3c33dfd8591aa428df8008d69b91a009ad595c0c03afbe6",
+      "sha256": "078d128f6a8de4a632b10c5795905259ab541ae3ae8df10e160b7af03fe3063c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7597,7 +7614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-indexeddb-cache-storage-btn-idb-put-review-index-3b7da8063c",
       "path": "atomic/iast/iast-iast-indexeddb-cache-storage/btn-idb-put/review/index.html",
-      "sha256": "8ee8f8b04bf1acf419bd374cbfd6eaf6e8d901c0489c6f86dd8c231296c1b803",
+      "sha256": "38d4211bd4d4f8c1c5df140bccbdd55ed748aa62d94b0c50e067ede7ae6ff956",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7647,7 +7664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-js-execution-btn-apply-fixed-index-f8d8349102",
       "path": "atomic/iast/iast-iast-js-execution/btn-apply/fixed/index.html",
-      "sha256": "6b2a1d8224c78a1702194e49bf663012060acc3b05de85ee296701864dcf2a38",
+      "sha256": "7e32a85b3f17d5c36735c8307161ca3b5fc77563b435d935f43da1e98a7b7708",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7697,7 +7714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-js-execution-btn-apply-review-index-77d70d8728",
       "path": "atomic/iast/iast-iast-js-execution/btn-apply/review/index.html",
-      "sha256": "d271aa86403ea9a46482a493d9c8bf4f3f2f9e8511a667c5b59ed4b934bc471a",
+      "sha256": "4fcbe6846d7eebfbf290a893b92b1c4fb6f88a6630962e976781f62df7c15ad4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7747,7 +7764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-js-execution-btn-eval-fixed-index-ffe80b10b1",
       "path": "atomic/iast/iast-iast-js-execution/btn-eval/fixed/index.html",
-      "sha256": "9190ca1212252decccde80836e78a6bd9c1fb944ef19722a36310e9fa00406c9",
+      "sha256": "29a4efa7fcdee5f9c45fba55020dca07cca7e681f7d23dc4ceba947ab7d063b4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7797,7 +7814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-js-execution-btn-eval-review-index-e40128701c",
       "path": "atomic/iast/iast-iast-js-execution/btn-eval/review/index.html",
-      "sha256": "a66290ecd3c6928ed3f245a3c781970dfc6aa85882386f53c71542e49c028123",
+      "sha256": "1f868b6137d438aaad9d4bd26456eb38870ad5ce2697aabf73a4d103c5c111c9",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7847,7 +7864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-js-execution-btn-fn-fixed-index-d6eb58b746",
       "path": "atomic/iast/iast-iast-js-execution/btn-fn/fixed/index.html",
-      "sha256": "248ad772379443731cb1a99c2861733fe67b02e6f84bf0b660627d84c47caec7",
+      "sha256": "37da746e6b22a9d2fc3c71767eccf07034dcc0ba8e0641109929aafd1fd262a9",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7897,7 +7914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-js-execution-btn-fn-review-index-ddcaa4cc58",
       "path": "atomic/iast/iast-iast-js-execution/btn-fn/review/index.html",
-      "sha256": "d613503348f501fbb8b68cfcb1930a1e24a8f51b3b3d32b9f59cbc4f73ba2b87",
+      "sha256": "25e498697bba5a2b4a8106c107c52d12522ad3554c01b3b54891fece21002d59",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7947,7 +7964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-action-fixed-index-d1eb0c5daf",
       "path": "atomic/iast/iast-iast-open-redirect/btn-action/fixed/index.html",
-      "sha256": "6dd7265748949385d1c1ed4f90bda64d01867855dc8e62028dd64a18227d28f4",
+      "sha256": "1f1532bd3ee7ab076206e8bbd325d3864c143a6cdc702dedabfa290552c7c28d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -7997,7 +8014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-action-review-index-7b78d15b1e",
       "path": "atomic/iast/iast-iast-open-redirect/btn-action/review/index.html",
-      "sha256": "ad1b0174c0d919380408b12171709969812676d63abd82ccbbc8dd981f0900be",
+      "sha256": "bae12d8c4f160b10f9c4416b09180b54be915f5595e1ff541497ea16416aef35",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8047,7 +8064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-anchor-fixed-index-284b503f0f",
       "path": "atomic/iast/iast-iast-open-redirect/btn-anchor/fixed/index.html",
-      "sha256": "c51d284459b665fc117261fafd940198cc853657df19adcbfecad911485d24a8",
+      "sha256": "d079fe7b8c318349788b3e757021920afce76f9d674557c35dda3046af6c0ec8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8097,7 +8114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-anchor-review-index-05f74a8c8f",
       "path": "atomic/iast/iast-iast-open-redirect/btn-anchor/review/index.html",
-      "sha256": "67ea4c1636360bd499d65171ce31a02aa2006b0e40540104ae4f3595e19e7b2f",
+      "sha256": "f7223bd6382bcecf62c6f65f919872f08843ab11f0ad06a7f34d7e3dee6c51fa",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8147,7 +8164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-assign-fixed-index-bc066d9104",
       "path": "atomic/iast/iast-iast-open-redirect/btn-assign/fixed/index.html",
-      "sha256": "a6540f82086b2fe1f8ff3534f389167d3be60982046192ec0416318aeb5b6609",
+      "sha256": "084dc863f2945e93ba77879826469d613457b12eb6127509fa07df7f1b5d1843",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8197,7 +8214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-assign-review-index-041e5fdda5",
       "path": "atomic/iast/iast-iast-open-redirect/btn-assign/review/index.html",
-      "sha256": "1b52912c0209ad6febf1d9ebd401913d63b7fd32f707545f25db087f1fabf539",
+      "sha256": "e03057e084b49917b4ec05ce46057721402fcdfe1433f799f6e0adec98b0cbe0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8247,7 +8264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-href-fixed-index-11806a9f3b",
       "path": "atomic/iast/iast-iast-open-redirect/btn-href/fixed/index.html",
-      "sha256": "6329a1ccf52a6555c7c930f11ed05233770c33a7f8514b8036cc840df6ce7046",
+      "sha256": "52cde7ee899f52e121266dc37b37218d4284ebce3f18a31fc8adb2e987107616",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8297,7 +8314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-href-review-index-470d5e8d1f",
       "path": "atomic/iast/iast-iast-open-redirect/btn-href/review/index.html",
-      "sha256": "250e90c963d1de3e13e88ee5153b37b54c3e709c99f6402cf455eac825a28a27",
+      "sha256": "3410d1798912dbf4a6c190c6b009b2bffc375d3c19881659dc6f7d6a7ee98cb0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8347,7 +8364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-nav-fixed-index-297fd463e5",
       "path": "atomic/iast/iast-iast-open-redirect/btn-nav/fixed/index.html",
-      "sha256": "b0cfd7d77c4cd05518cfd07ec3419ff0a9aad748ef1db5c8a926a029714a5cb0",
+      "sha256": "a058d3bb6cad043186230586541ce7c630fd01613090f8d6a976638e758a6973",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8397,7 +8414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-nav-review-index-30aba13d51",
       "path": "atomic/iast/iast-iast-open-redirect/btn-nav/review/index.html",
-      "sha256": "a5127b0f15f783bb54ffc9b825b56d7b545db61a42f892d4adfda977da7fd91d",
+      "sha256": "67c10ac6c2caa150992ac320ac97d2a8e160660f400c9db98f8c336148fb912f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8447,7 +8464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-open-fixed-index-7152506aa1",
       "path": "atomic/iast/iast-iast-open-redirect/btn-open/fixed/index.html",
-      "sha256": "89fa36923e14fcd5231c2e74c10738b6b0a792bd7e96d70f1d7f0b130a7f8b56",
+      "sha256": "d10a7881623158bdae3f26a8a54f1c923c7e8bdb49a0fb1f2be90250f11f29e0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8497,7 +8514,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-open-review-index-33403b6d54",
       "path": "atomic/iast/iast-iast-open-redirect/btn-open/review/index.html",
-      "sha256": "c3328abd0c03920473cb471a699801b286bba7a599a7d6d2ad99dbe206619114",
+      "sha256": "2ae11397518288971be56d157b9deab46f1c036ac7cfa1e31b66d8de2cccc91e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8547,7 +8564,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-replace-fixed-index-158f9475ca",
       "path": "atomic/iast/iast-iast-open-redirect/btn-replace/fixed/index.html",
-      "sha256": "e52fde2cb9725f0a8a510f5f7dbd149860a0ed3ec9ef99c5597af0e60c505408",
+      "sha256": "17e080d8ae2db2bf010289118ca49a2f4328fedfa93c5d6ab1ad5d8f71cfb6b2",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8597,7 +8614,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-btn-replace-review-index-b5cd38ac5a",
       "path": "atomic/iast/iast-iast-open-redirect/btn-replace/review/index.html",
-      "sha256": "e979656c4f3934fddc1d74a5e0879a6dfb4d1a195713faf1aa90e30c3aa5f9a6",
+      "sha256": "5a348f517eff321a74cd96699c138596e1d8478b57ce5f916208c11cee9a15af",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8647,7 +8664,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-redirect-submit-fixed-index-96740a35fa",
       "path": "atomic/iast/iast-iast-open-redirect/redirect-submit/fixed/index.html",
-      "sha256": "86a88e6828df22040caf0207ce02f5a450e425a3e5a3743fa1b46f350478c97f",
+      "sha256": "4d7332890e6287015e73d956b653ba0e084a997201adec83600c8d41c9ab7f78",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8697,7 +8714,7 @@
     {
       "id": "file.atomic-iast-iast-iast-open-redirect-redirect-submit-review-index-668e51b22b",
       "path": "atomic/iast/iast-iast-open-redirect/redirect-submit/review/index.html",
-      "sha256": "f29de396ba427bd14b74611c9a487cca4d25214966115a4d6b43c5f150fdfeaa",
+      "sha256": "847ce859ed0634a68c1ad6008379497eb4507c231c4c2a86c519ee5a69621f6f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8747,7 +8764,7 @@
     {
       "id": "file.atomic-iast-iast-iast-postmessage-misuse-btn-postmessage-cross-fixed-index-3637ed5ad4",
       "path": "atomic/iast/iast-iast-postmessage-misuse/btn-postmessage-cross/fixed/index.html",
-      "sha256": "994bfae8c64b2ef26fbc8262a88c943df888aa6e953acc306c908b027f000b55",
+      "sha256": "7ba48d9c30584ea590c4a6e70f14df208c8e576c2ba1a21258bc1f4540a3beee",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8797,7 +8814,7 @@
     {
       "id": "file.atomic-iast-iast-iast-postmessage-misuse-btn-postmessage-cross-review-index-35077e0641",
       "path": "atomic/iast/iast-iast-postmessage-misuse/btn-postmessage-cross/review/index.html",
-      "sha256": "228bd82a1b4346003f082fa609bf5e7dd106d87f7f9f2d75b116635101294328",
+      "sha256": "f86d1bf6e5a4f670f2535d9b956c470791f64e41fa08650ca9b485cc8e8a1942",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8847,7 +8864,7 @@
     {
       "id": "file.atomic-iast-iast-iast-postmessage-misuse-btn-postmessage-fixed-index-080e24034c",
       "path": "atomic/iast/iast-iast-postmessage-misuse/btn-postmessage/fixed/index.html",
-      "sha256": "980d26f8a36932c6cda48d98d9e70ffc159cbf4a0995f53de806c9d8b5ec8f47",
+      "sha256": "b8312a7eaf0e81d74e3fe24f72605acaa58cbcb3901ca9de47532015f6b05ed5",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8897,7 +8914,7 @@
     {
       "id": "file.atomic-iast-iast-iast-postmessage-misuse-btn-postmessage-review-index-407eaa6a30",
       "path": "atomic/iast/iast-iast-postmessage-misuse/btn-postmessage/review/index.html",
-      "sha256": "71f320e46c921a1c76066c504091c5246dbbc5de55af12351b62132e40a48d19",
+      "sha256": "ceeac9bd84d72ae60c82efad6393f5778fe906de6b1e3ae2234677606e9a8e3f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8947,7 +8964,7 @@
     {
       "id": "file.atomic-iast-iast-iast-prototype-pollution-impact-btn-trigger-fixed-index-4bfc19e947",
       "path": "atomic/iast/iast-iast-prototype-pollution-impact/btn-trigger/fixed/index.html",
-      "sha256": "fed57b2ea85ee6df4a29e2bbd502484125245993d010e161bf9e0c32d3b4f0dc",
+      "sha256": "0aaf0a30d02b39fa6daf13512a444dcc7368161bf91ac312108abb65c2176167",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -8997,7 +9014,7 @@
     {
       "id": "file.atomic-iast-iast-iast-prototype-pollution-impact-btn-trigger-review-index-27eb4f5b90",
       "path": "atomic/iast/iast-iast-prototype-pollution-impact/btn-trigger/review/index.html",
-      "sha256": "5721a1829274deb310eb6cf981569eeccca1c3a2653db3deddb50c136fce24e2",
+      "sha256": "22b79440668252aa739a80cda271a5710212e11309cc75b49cb9f9d4bd320062",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9047,7 +9064,7 @@
     {
       "id": "file.atomic-iast-iast-iast-prototype-pollution-impact-btn-write-fixed-index-bb100e26ad",
       "path": "atomic/iast/iast-iast-prototype-pollution-impact/btn-write/fixed/index.html",
-      "sha256": "8d56fc48136af5c4b5a67648ab3fd04e92ad057c5522a9498ab2641d9bf93ef5",
+      "sha256": "da06073de62100cdf114c5a36732d914030470ff2089eda3e67a2249143770ec",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9097,7 +9114,7 @@
     {
       "id": "file.atomic-iast-iast-iast-prototype-pollution-impact-btn-write-review-index-8507883db6",
       "path": "atomic/iast/iast-iast-prototype-pollution-impact/btn-write/review/index.html",
-      "sha256": "dc5e16affdb1a504ea2eb572a1944db142081c1a02dd54bf1061d1873a6a0da4",
+      "sha256": "2e7993693c2cc4440e0c5fadbf2f51fb7b9eaa3d74c98833e09fd1c47bd05bdb",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9147,7 +9164,7 @@
     {
       "id": "file.atomic-iast-iast-iast-realtime-exfiltration-btn-rtc-fixed-index-0822335d98",
       "path": "atomic/iast/iast-iast-realtime-exfiltration/btn-rtc/fixed/index.html",
-      "sha256": "85d48122f1f2c1169312763e9d42cdbb8419ddc5c6068c4bb7dcba1793139ac5",
+      "sha256": "79ea2dfedfb9a53843c0cd9e6b3818c58b8b68473a89ba721757ff36df6ccdec",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9197,7 +9214,7 @@
     {
       "id": "file.atomic-iast-iast-iast-realtime-exfiltration-btn-rtc-review-index-03f774aa1c",
       "path": "atomic/iast/iast-iast-realtime-exfiltration/btn-rtc/review/index.html",
-      "sha256": "7daefa47e1cad333b8ba30bed6cd86686be14c8f170a2dad1a2a6d58b5ebe9c5",
+      "sha256": "e11b9ee3421973e4c1f74585172fb57ad22a38a9580c6355271cef357a25ad76",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9247,7 +9264,7 @@
     {
       "id": "file.atomic-iast-iast-iast-realtime-exfiltration-btn-ws-fixed-index-bc076095db",
       "path": "atomic/iast/iast-iast-realtime-exfiltration/btn-ws/fixed/index.html",
-      "sha256": "d7377612cc36489dc9f80f7c664e97daa60870388632cdec3c54d01c292a22ef",
+      "sha256": "665709392f6720ee87f1ea03fc38dd4b6321ee8be7a2104b30fedc88bebb4a6a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9297,7 +9314,7 @@
     {
       "id": "file.atomic-iast-iast-iast-realtime-exfiltration-btn-ws-review-index-3d6a7c070c",
       "path": "atomic/iast/iast-iast-realtime-exfiltration/btn-ws/review/index.html",
-      "sha256": "912dcd79de2bf4bd8b8e7863af7d4fd5f001a6c4d8008f9952aa4b910ceae999",
+      "sha256": "e12035cf5adbe33aa161fcbf96c8244519bcc8b7c61924b52b325b8f9a7493c7",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9347,7 +9364,7 @@
     {
       "id": "file.atomic-iast-iast-iast-referrer-helper-open-fixed-index-64eba572d4",
       "path": "atomic/iast/iast-iast-referrer-helper/open/fixed/index.html",
-      "sha256": "fee5fc3212e107bd363c894c8200a802ce1571d643fcf93063b8f7d0a84a93e5",
+      "sha256": "13fd71d751c7a1bd3dd773779e59897c259476085f14fb1f9fd933f3c49b7aab",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9397,7 +9414,7 @@
     {
       "id": "file.atomic-iast-iast-iast-referrer-helper-open-review-index-2a4ddfa3b1",
       "path": "atomic/iast/iast-iast-referrer-helper/open/review/index.html",
-      "sha256": "b0dccee905e0b6db4ee2a627c5cfd620f58d0c1b86a9dfac572b0fbafd7a6914",
+      "sha256": "e692fcb2c95c89f4b65bc1d01652c00027a89fca2d8f76810d0b0542d366a98f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9447,7 +9464,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-action-js-fixed-index-30197a395b",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-action-js/fixed/index.html",
-      "sha256": "5fe83834d99070fccf474f5cd476b6adf3a0b2055f9d39ad089556f0ac878889",
+      "sha256": "23d77df5c7f5a135a25ef2d801461839a55d84fa7f622f61823f3704e244c34c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9505,7 +9522,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-action-js-review-index-ad5bed4f3e",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-action-js/review/index.html",
-      "sha256": "2db84181fd57673d7184206d04bc2782f98e8e65858f22644364c17fa463bad0",
+      "sha256": "c3307c60c499e5cc9185c624d3e2a866cd8071ebaa149d83030659dddfbdf79d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9563,7 +9580,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-action-fixed-index-51432256a9",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-action/fixed/index.html",
-      "sha256": "ad3e72088448ad10a8ee60104908d8a95ffff65446a1067e48b14518f5e985a9",
+      "sha256": "231fb8c75a4210648509502820a3bc23fb340cbb8926e768702910428b482f2e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9621,7 +9638,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-action-review-index-440de04720",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-action/review/index.html",
-      "sha256": "31412725bcd8199ce7b1ae428ac73d35ce9d2ff5d19b0b1412a9f8690011a9e1",
+      "sha256": "6ea76185e45fae24dc029ee12b30417dd3cf697925333dccc10baa3d55766725",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9679,7 +9696,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-adjacent-fixed-index-12f2b52cec",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-adjacent/fixed/index.html",
-      "sha256": "c3329af4e110dbae8e2b1ae0140a68618568ef91082f3fc52090b795f72a15d8",
+      "sha256": "10685e429b0ccd79f4ddc3aef83dff66e1e9d4ef87ddc44e7b0cc6ef267653c6",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9737,7 +9754,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-adjacent-review-index-727ffb609a",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-adjacent/review/index.html",
-      "sha256": "0c09495b45977263914f1e82a22d7a257ca370d97a7ab9d1306dae0c60a1e2c6",
+      "sha256": "dc8e6a314a3dcc2ef9f4cd8bd54426bc0e370a4c0af12316fb1650ad7fb1207b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9795,7 +9812,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-formaction-js-fixed-index-a23fb5f744",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-formaction-js/fixed/index.html",
-      "sha256": "b40c637e61b13d00bdf3ae73e4dad0747275b32b042f2bb9e7190c81ac40a851",
+      "sha256": "cea4ccfdc3a1ef09aefd69c6375927382f65bacdd3ea26be55a22805a9ac1d44",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9853,7 +9870,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-formaction-js-review-index-cf36e4a14f",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-formaction-js/review/index.html",
-      "sha256": "fae6cbb00ec82c100b5cd709c7016e0d061acb8c8b59596042d531707812fd4e",
+      "sha256": "1197bde3fdea8661c5f3b4cc20919185987c34dfc245de3571f4ed8f5bb44ee2",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9911,7 +9928,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-formaction-fixed-index-a3f263ec11",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-formaction/fixed/index.html",
-      "sha256": "cd2dc6af741679e8f6daa7ed663deb2fc5b4e1372c1c0129294e4a7ca3848661",
+      "sha256": "0401fd8e00453a68f2d283ac83d7d6a353d7274931b450bbe377d49c9ba79018",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -9969,7 +9986,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-formaction-review-index-2f408e34d9",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-formaction/review/index.html",
-      "sha256": "e5fd1c93686a880493c6ad7de9fb7dc9990918d15bc54ad72e9e309a33089fec",
+      "sha256": "0c26208e89f579bc293d68a00c855ba1dc9a8735529d7f9091bf7f08793df6b2",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10027,7 +10044,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-fragment-fixed-index-072764478e",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-fragment/fixed/index.html",
-      "sha256": "b16e8995a90f95552c2488652c78c1d74ee6bcd25282e328f462b2ff462d93e4",
+      "sha256": "41fe3c26eca732d78b98230955a06fd5d8f04e28a4ca798a061d9ac78bf9e12f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10085,7 +10102,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-fragment-review-index-072b35cf4a",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-fragment/review/index.html",
-      "sha256": "d0998588d4c0b791fd2215c7b1d546c857522e8e9369f28327b47873e3c8ea60",
+      "sha256": "ae5444b75b1c0249d1e3d0767a9e48b3e46a7f4feef768657835515a169e8977",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10143,7 +10160,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-inner-fixed-index-2f74e74539",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-inner/fixed/index.html",
-      "sha256": "4f49f12a0a26e9d2b29a58af26ee0344324974bb094265cf36e277f738922ef9",
+      "sha256": "236728261404aa7ef09b546e825a993f3afe641ebff2f82a20b39f25b261806e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10201,7 +10218,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-inner-review-index-d10b2acf6b",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-inner/review/index.html",
-      "sha256": "344c8927dbd6fe9e91a68c9fd9bc84e17e1f3fa9c13e7e8064f0e60443370742",
+      "sha256": "9589ad2f0efca8f6fda7a447917619705ca68a3abc1e703a60959b435fc5eb6b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10259,7 +10276,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-mutation-fixed-index-bc50566e94",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-mutation/fixed/index.html",
-      "sha256": "8acfb764270282c1c76c62e5a9119e17a52897f59eba0c4a789ed261e10400a3",
+      "sha256": "5d8c350714bad6758394b75fe0d0a8e8792664d49229f5aaaeb13e9e64858218",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10317,7 +10334,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-mutation-review-index-e386b5c41f",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-mutation/review/index.html",
-      "sha256": "7fbed31b9af5634d7dfc805cb4e3662c1f1fc5dabe942b0acd954db099c97547",
+      "sha256": "10318da641e2e166422a7bb0a73ad1ad2cf1839b78320bfa0f8b71df42f20978",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10375,7 +10392,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-outer-fixed-index-67cd32bfee",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-outer/fixed/index.html",
-      "sha256": "27c4a524a83f8c5303e7eb744591b4ac94f8fc056dd642c69d76307e003509b7",
+      "sha256": "0cf5c39d949a1df7ac90d082cf317353b0a2e7378e4fcfa3260feefe24ab7735",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10433,7 +10450,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-outer-review-index-d9cec4670f",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-outer/review/index.html",
-      "sha256": "bf85217ed17bed08bc95aa30083052c1a53a3f7ac0fc5842fafbb5a45c19873f",
+      "sha256": "c7a8323463aa9349d788571dcdef46c5297d981560005b4a4d345d3d57ea9d07",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10483,7 +10500,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-parser-fixed-case-js-a5e3391bd7",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-parser/fixed/case.js",
-      "sha256": "1139a45d8043218c0f4305b82bccd4a91941f668e1d2a62bc6f789cfeb52877a",
+      "sha256": "8f2be0c1710f1dc6781b87ebbbcb27c58c41e66b277cc96b0aa8eafd71bcf719",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -10491,7 +10508,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-parser-fixed-index-a225978953",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-parser/fixed/index.html",
-      "sha256": "0df8563bd2b89dc8bfa62ec0bfa24bca1e03247081ccd702896450e22e183e18",
+      "sha256": "d1f58e23579b0ac1548afe884786f323ce58081087341fd031e838373f297b07",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10541,7 +10558,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-parser-review-case-js-3b0d65cca5",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-parser/review/case.js",
-      "sha256": "4e7f95883c4c29f3cf3625c24fa4a7e5fe187d9b8c8423e2a4add28d386ed3a4",
+      "sha256": "60207bed884d46574fe6e8571dc6d54a1c60fa1ec08241af29e4535c1899a96e",
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -10549,7 +10566,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-parser-review-index-c13b7b1e7a",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-parser/review/index.html",
-      "sha256": "401a11af18f15324438ae6d0b2dc750250bf410d6eec7bcb7d091c641a6c5b43",
+      "sha256": "776d0136fef92f35f96e79361e713c45a6ddc2f444071aab81a7e0409a4018f4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10607,7 +10624,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-write-fixed-index-92307c3440",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-write/fixed/index.html",
-      "sha256": "6202ca3d56c36acfc6c44693bccad9c64cd58abf7a8ab430e3a13737eb25bb9f",
+      "sha256": "ce860bae11ca45d142e8576702d669c5224e7db9cbbad97b43a2e3f8e9b9116b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10665,7 +10682,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-btn-write-review-index-8b6e1f7f15",
       "path": "atomic/iast/iast-iast-response-field-reachability/btn-write/review/index.html",
-      "sha256": "f3ab717d2bf1261aeb31da3fb638b1312fb9ad377d2a5aabf0d488363f31719f",
+      "sha256": "777b2d311fe4931268828736a815f561a1aace5aa7c114018d2c318b1f2e9927",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10723,7 +10740,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-response-submit-fixed-index-b2616edd63",
       "path": "atomic/iast/iast-iast-response-field-reachability/response-submit/fixed/index.html",
-      "sha256": "43bd977b9b6ed0d884a720f89f190218f053c89a2032f13638c3a2dfd7a3ae5f",
+      "sha256": "b75d07c088b92e40277b5ebce5a7993ad55c119fc8cf736998739f1b3672217d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10781,7 +10798,7 @@
     {
       "id": "file.atomic-iast-iast-iast-response-field-reachability-response-submit-review-index-c0b79052fd",
       "path": "atomic/iast/iast-iast-response-field-reachability/response-submit/review/index.html",
-      "sha256": "fd04116e5560de86c8c4e4122c852b26af1bda67e2d413ea521c778af7a7825a",
+      "sha256": "3e5e84376bd35a7bad7d1a04706da223a9b0ef6896020b591f5a55bd755cdf77",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10839,7 +10856,7 @@
     {
       "id": "file.atomic-iast-iast-iast-route-controlled-navigation-btn-nav-fixed-index-5b133f389a",
       "path": "atomic/iast/iast-iast-route-controlled-navigation/btn-nav/fixed/index.html",
-      "sha256": "716cc3776d511089e519896e230b0aac0bc9a300fb9715a42cfd0dc45e49cc6d",
+      "sha256": "3baedcf4001f713bcb93ce1f285a8bc0f3f2be13be714e1a86363df14d6a9b07",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10889,7 +10906,7 @@
     {
       "id": "file.atomic-iast-iast-iast-route-controlled-navigation-btn-nav-review-index-f51b977c6f",
       "path": "atomic/iast/iast-iast-route-controlled-navigation/btn-nav/review/index.html",
-      "sha256": "a3e19e8a81a606f16a022ba0812cd096c28283438a8b82a3804cf2e3872f796f",
+      "sha256": "c2d88c4a385175cbdbfb0b22f12df66e35884a02f8ba55e0e3c86bfe45017ac1",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10939,7 +10956,7 @@
     {
       "id": "file.atomic-iast-iast-iast-route-controlled-navigation-btn-push-fixed-index-1fcaf52187",
       "path": "atomic/iast/iast-iast-route-controlled-navigation/btn-push/fixed/index.html",
-      "sha256": "bce56a41f7da4c6ed0644112bb699751248b91963055953e5eb02b58c0a3da45",
+      "sha256": "ca8ea3f9f2f3b35c0a90da9785652e9f7660f362ae11ed2006ac302fc3853946",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -10989,7 +11006,7 @@
     {
       "id": "file.atomic-iast-iast-iast-route-controlled-navigation-btn-push-review-index-e261f9875a",
       "path": "atomic/iast/iast-iast-route-controlled-navigation/btn-push/review/index.html",
-      "sha256": "91c10dcbd0d3a114264f6fbf0c7ea43bbec9cc1a78691729f382a13b7bf0c974",
+      "sha256": "769c932815ddb6b550295c65ecf98a09eccb1032b2a501bda86cb478760371ec",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11039,7 +11056,7 @@
     {
       "id": "file.atomic-iast-iast-iast-route-controlled-navigation-btn-replace-fixed-index-bc30660e1a",
       "path": "atomic/iast/iast-iast-route-controlled-navigation/btn-replace/fixed/index.html",
-      "sha256": "419de15708643950f381e255f8782ffdf64e88e41fd0cbf6333819fbedbe1b60",
+      "sha256": "b6731e0eb84ed210a95f03981045792a10edcee4a4e20ec23bcd3ace7b1af878",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11089,7 +11106,7 @@
     {
       "id": "file.atomic-iast-iast-iast-route-controlled-navigation-btn-replace-review-index-fa444192ed",
       "path": "atomic/iast/iast-iast-route-controlled-navigation/btn-replace/review/index.html",
-      "sha256": "9d6e4572e374de7670603f5cd458e08c12a6fcfdd41dfe3fe5532846cebb7fc0",
+      "sha256": "5e95a3fdbde41c7f22614b4909d1bfa85e5c57b2c0e59c0fed27a49bec47fabf",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11139,7 +11156,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-adjacent-html-fixed-index-b51af16ac4",
       "path": "atomic/iast/iast-iast-runtime/adjacent-html/fixed/index.html",
-      "sha256": "5455e5da0265fa35782352cd19d4bd7dfc7a2367797d17f7aa9904180c62aead",
+      "sha256": "dcb1ed7588616fc0ffc958f02bfec3406497e76f0402a21c7bdd21e2b618475b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11189,7 +11206,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-adjacent-html-review-index-eb46cf2f95",
       "path": "atomic/iast/iast-iast-runtime/adjacent-html/review/index.html",
-      "sha256": "ad30d4ed18b31a938fe3cc312a80e4af6545420cd1492cb2f6655511fe40ff0e",
+      "sha256": "4745bbb3054f4e19a31b721ac44dc8a4c3a77e9b8d4e45aa53b41b07a4d32202",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11239,7 +11256,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-button-1-inline-event-fixed-index-3b7140bc37",
       "path": "atomic/iast/iast-iast-runtime/button-1-inline-event/fixed/index.html",
-      "sha256": "fb6cba632845488357e6341b8294fa541c172870390ad5e111ea399859c5131d",
+      "sha256": "51ebbc3b00adbecf42227dcf5e032d80855ad948378be2f040aad163a01991ca",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11289,7 +11306,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-button-1-inline-event-review-index-bbb97bb74f",
       "path": "atomic/iast/iast-iast-runtime/button-1-inline-event/review/index.html",
-      "sha256": "7ead73aa4f82cfa707e3292a0ddaba4b36e63deb9334f25a9bbb6a609778f8d4",
+      "sha256": "e242c71ed34f2239169217a5c4358b5efb8ba0eb97ca054b3c64b5186dd19aee",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11339,7 +11356,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-button-2-r-text-fetch-chain-fixed-index-ff7fefa8dd",
       "path": "atomic/iast/iast-iast-runtime/button-2-r-text-fetch-chain/fixed/index.html",
-      "sha256": "3b88720fb2799edfb20c94783def77bd0de921feccbfb9892bf22bb939897528",
+      "sha256": "0ca35e1910b5070d1f56d83f1a97010430409a9269600bdf2509e554a7999dc9",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11389,7 +11406,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-button-2-r-text-fetch-chain-review-index-d4e37d6794",
       "path": "atomic/iast/iast-iast-runtime/button-2-r-text-fetch-chain/review/index.html",
-      "sha256": "8852010a2f17677073e397538594fa6b2b1ca9aeb9e04c3f72f186648f895e5e",
+      "sha256": "630b56433d7922b7028070fd963521b15f38b2eb07eaf82138db14003de1a710",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11439,7 +11456,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-button-3-javascript-url-fixed-index-4fa95c1378",
       "path": "atomic/iast/iast-iast-runtime/button-3-javascript-url/fixed/index.html",
-      "sha256": "d51f9aaf373eb6d2c0b89e3e1d87aef0575871a2f8aed8b266a8b6ef52a36cf2",
+      "sha256": "375930089aba3c6ac256ba2a53611614fdd5caa70212a2c811fba192807b4e35",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11489,7 +11506,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-button-3-javascript-url-review-index-dd23895497",
       "path": "atomic/iast/iast-iast-runtime/button-3-javascript-url/review/index.html",
-      "sha256": "975f4501e5a81fa574f83d14113156188ff2df1d451542a499659457f616520f",
+      "sha256": "84b119aa63efa5c0a67768a56943516f3b6451c1d1f7cb2669fb608b983155c1",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11539,7 +11556,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-inline-event-target-fixed-index-b563f005e0",
       "path": "atomic/iast/iast-iast-runtime/inline-event-target/fixed/index.html",
-      "sha256": "bb6ac62ea030a1167f85f2e2a2867159098136b3b88ffc054a6506edd57b9a06",
+      "sha256": "1fd7b141538ebe2a13b7c252a378dcdfc9381f50b360f491b4341b15defb1dd3",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11589,7 +11606,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-inline-event-target-review-index-95460fc624",
       "path": "atomic/iast/iast-iast-runtime/inline-event-target/review/index.html",
-      "sha256": "706204ab1aab24817409c3fe96b31540ab6ef993221657c985ab5a745114491b",
+      "sha256": "8602c67e4e40b00f83af8be1a237329551f4f1ff8252b57226e9741686e15c1d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11639,7 +11656,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-inline-event-fixed-index-c3d468f09b",
       "path": "atomic/iast/iast-iast-runtime/inline-event/fixed/index.html",
-      "sha256": "4388c93b254dbfe0c981563969bb7b26be21bdf75003e7766d3e86d93d48b798",
+      "sha256": "448396f63cfddeba091acb0f32706a88add9ba2dcc41d6532a34a90c20ff55be",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11689,7 +11706,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-inline-event-review-index-9059a48bcc",
       "path": "atomic/iast/iast-iast-runtime/inline-event/review/index.html",
-      "sha256": "61ebee5ba8f194a97c76e1c47ef98fd89829a45540d4badd37fa5ab4d14795c5",
+      "sha256": "1b22148e28988ed480dd9365105c9931a7711c98a32c940c285d129d5936032f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11739,7 +11756,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-inner-html-fixed-index-101a1bbdd9",
       "path": "atomic/iast/iast-iast-runtime/inner-html/fixed/index.html",
-      "sha256": "dc5b7c234887167be165d02eb28a8a154989fe9474004126eb6f76087c19f80a",
+      "sha256": "7f27c04e7be021e4e216c45572b6cdcd316f068310b9980402056bcd60f8bbc4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11789,7 +11806,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-inner-html-review-index-b30b2804cd",
       "path": "atomic/iast/iast-iast-runtime/inner-html/review/index.html",
-      "sha256": "d44104e072a59f31fcf2097eb391bafa2e3df10455fa967288fc16836bc9f0f7",
+      "sha256": "0c03cbb38d357294071b66a7e018691f272e91b14e47063638e1a783371f4b2d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11839,7 +11856,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-link-href-fixed-index-dbdec58192",
       "path": "atomic/iast/iast-iast-runtime/link-href/fixed/index.html",
-      "sha256": "f7a25adb0efa6d0d00ce23900444484d31562d2e0e3e525ac23cb9070b0a69e9",
+      "sha256": "7334518ab4351e505772b799131362aec4c706f00aa4d3e21967484e33c040e8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11889,7 +11906,7 @@
     {
       "id": "file.atomic-iast-iast-iast-runtime-link-href-review-index-7aacf6fd52",
       "path": "atomic/iast/iast-iast-runtime/link-href/review/index.html",
-      "sha256": "398b8a08b73a6b1c7cee1a0eb6eb23435031952e6c4b951ac7b2a6550b48bb98",
+      "sha256": "2f477ecc480c7e8a3681505100d002cdcc94193976f059a02c8a49d5bcc58a65",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11939,7 +11956,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-beacon-fi-bde85ae879",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-beacon/fixed/index.html",
-      "sha256": "2734c912a050db4f371dc8cc1bc94365118e62bd9160cd225d9d332d90edf318",
+      "sha256": "264c05a97d1abde6763fe697bb544a3b13498554a3ebf5bcb4c28d5389c578e1",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -11989,7 +12006,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-beacon-re-af9e92a275",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-beacon/review/index.html",
-      "sha256": "e20431dde381e252b7ebfbd9068991d7e4f8268454fe3c73cc8930409def7d95",
+      "sha256": "5d33db87cf3be427433c4e050a8c6790e1f2f14fbf097bd3d29d4d284a5c1590",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12039,7 +12056,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-fetch-hea-707620c2cb",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-fetch-header/fixed/index.html",
-      "sha256": "580b447fba85dba3eb315a8a0069775b8c0272aa15d9cce63ccff44aa40ae56f",
+      "sha256": "f5a9305786f683c68d06a263b21a52f359eee8a89fbe8f20c64f2825ca99d016",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12089,7 +12106,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-fetch-hea-1adfaf20da",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-fetch-header/review/index.html",
-      "sha256": "98955eed2dd349e78316133fcd46d04c304e861208baedd0062da92340517e57",
+      "sha256": "831e56295413e06fcd5c5f94178b353a359a8e8ead26d089515ef88aa48354ff",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12139,7 +12156,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-image-fix-b25042ec8f",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-image/fixed/index.html",
-      "sha256": "cf6a5a39ccf858f6e16c722600f203e24e748d26583fd34709ec1c83da3ce0a0",
+      "sha256": "21634277e074bdad85db23f76d9b41a38eba6a294b86ca674a0ec4a107b1e2f3",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12189,7 +12206,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-image-rev-3c0dbdbc24",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-image/review/index.html",
-      "sha256": "b2608fb3720da159097aa9c5a2272407a4141d302ac19f2ba1589b446d0a68f2",
+      "sha256": "4ca660ec2dadbf1b4f14d68f9d702286df6123a8fa167ec481fb385cd9f62f30",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12239,7 +12256,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-post-cros-8d826fc598",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-post-cross/fixed/index.html",
-      "sha256": "9fcbe63edba4594032d74c04e631cf320406fa29d091f8fe4ff2fb374af04237",
+      "sha256": "fa6b021f1f720a88ddebc4ee5ea1576ed48c1a8ae52b961a43124b7f6a15254c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12289,7 +12306,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-post-cros-907a2fad30",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-post-cross/review/index.html",
-      "sha256": "73eec87a1a391dce4b61934da4f99fae62095c36d35b3ec695a9055954cea88f",
+      "sha256": "a32a891c9fa6de18bf95f646fda3d49dcc313f874821f083a093ae55cad409ee",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12339,7 +12356,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-post-star-b257bf7ae8",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-post-star/fixed/index.html",
-      "sha256": "da866229d7c3afbc8306d83c021624bddaddb674d9d4b6cff67f8989d4454f50",
+      "sha256": "259a2a8294304480ada33c7ebb48e4840cb0151642c42ef973b314153134598b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12389,7 +12406,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-post-star-9daaaa60c2",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-post-star/review/index.html",
-      "sha256": "923c133a1f302e3ae179bd48490c64571f69fb4694d2338b88f75f0b22258972",
+      "sha256": "9d74699a2ef5cee9dbc4ef8fa0c7a2e4d93be75ceac33efb6c6f0474907d27c1",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12439,7 +12456,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-rtc-fixed-5647cefb1c",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-rtc/fixed/index.html",
-      "sha256": "03baebd8fb48ea90b0ea84fe9b30697db9a4f4906fc0708f6ba8cf108d1d50df",
+      "sha256": "7687e9a71830fc56a46feb9e1d19f23c1eb6dc0b1060744da4e4e490449e67ee",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12489,7 +12506,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-rtc-revie-e1e39e5d76",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-rtc/review/index.html",
-      "sha256": "6dfb81349c5d21e08a4372f38ed5a89c2ce5b4247bf7d9e3c76faad4750ca002",
+      "sha256": "93a38e6e00fa9a7ce31a81daa5d766c9e69abb6f669aebd88cad36a8e54c879a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12539,7 +12556,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-ws-fixed--8c6f26587a",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-ws/fixed/index.html",
-      "sha256": "b9183249ea13f87c62f24951ecbf93a31aeefd5968f9b54d3d046b2d18ad245f",
+      "sha256": "5761f90b9dc0e7c53e3b8d68a1a47003983fad864a17a096a58f708ef16ef511",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12589,7 +12606,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-ws-review-624b745568",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-ws/review/index.html",
-      "sha256": "f17adc1599573de04bf50ee38b2e70fee28affc1b536b96a146e353b128bb744",
+      "sha256": "ff6a6109feb79f6da164ec190175e53037b1193069c459980d28c48dd30a52b1",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12639,7 +12656,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-xhr-heade-5a56034e73",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-xhr-header/fixed/index.html",
-      "sha256": "5a0b0d851054b478e2561c9474217a709eef6e6bd5efc40c8b5f2d069a2d2a83",
+      "sha256": "6bfb7659392ce421f7bfeff659f5028df6607995642a8ab9745e9969aaf0f38a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12689,7 +12706,7 @@
     {
       "id": "file.atomic-iast-iast-iast-session-material-cross-boundary-exfiltration-btn-xhr-heade-5b0ed37859",
       "path": "atomic/iast/iast-iast-session-material-cross-boundary-exfiltration/btn-xhr-header/review/index.html",
-      "sha256": "87e88da4a02aa1e17d273fd0c7baaa2de1c5689785644c0f0ff0d12fd640d11f",
+      "sha256": "071099f6d5b15a8cf314af277732a6f3caa2b96c27a350da19eebff36a295328",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12739,7 +12756,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-fetch-header-fixed-index-da92178c86",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-header/fixed/index.html",
-      "sha256": "80913f07ab094ff19eeb8f1e1cf01e8a728dfad3282d96d206b1dea6a9123637",
+      "sha256": "9633d682bec65aadadf1289bbc722b65b5231a331a19a952e363377073817272",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12789,7 +12806,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-fetch-header-review-index-4b9da54d6b",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-header/review/index.html",
-      "sha256": "a2e01d3aecb07f969915b9b4b225f7fe953932677b82063dc09853a2c8ddac90",
+      "sha256": "e6f44e3a06ff67113ab6fd398a80befafdc47f91296d2ba6b0f8f52ddd14881d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12839,7 +12856,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-fetch-url-fixed-index-acd32bf933",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-url/fixed/index.html",
-      "sha256": "ffc06474a1a3d5b12c091258f9b0e8bc7855e041ea1eff08bee8c7a9d34c40bb",
+      "sha256": "d6113a2d8f40855c9341dfc1662b930ab709a8cff8930820234271e26536f3ff",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12889,7 +12906,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-fetch-url-review-index-e46e993cbf",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-fetch-url/review/index.html",
-      "sha256": "19db89f3970d35dc8f8fd9e920ecd1f853c294102af009ee05fbb49067501be1",
+      "sha256": "923d8940544221f12defa44c33da24dfb85a30639557b3616da23a2c7149b0a6",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12939,7 +12956,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-xhr-header-fixed-index-91b25e3213",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-header/fixed/index.html",
-      "sha256": "9ab6ec40b7dc135cc0228d31dec18273482c26a617285e9e34f215f1f7c3fd50",
+      "sha256": "15760a958f665d9685a7e43c85e2b0f29879830cda673e9b0b9b18f823ac4d79",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -12989,7 +13006,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-xhr-header-review-index-b92ebaa1c2",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-header/review/index.html",
-      "sha256": "660cbe6e8939843ebf547f5bda40b4cf85fb67a0fab07588930e5746e06b1656",
+      "sha256": "bd8e0e62d09ae24803bfd8d22cbd58d9d0f623e28e96267d32265144808f653b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13039,7 +13056,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-xhr-url-fixed-index-91091cd694",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-url/fixed/index.html",
-      "sha256": "52a601f26174b99e50e4c074407bbc6a5533aa473efaff91d9ef624793041240",
+      "sha256": "ba33721872a57cf50d40144984c588fb9b8e697744f05e96aa557401d5ed8d7a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13089,7 +13106,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-backed-request-reuse-btn-xhr-url-review-index-f16435eca4",
       "path": "atomic/iast/iast-iast-storage-backed-request-reuse/btn-xhr-url/review/index.html",
-      "sha256": "24da74b1101173cfac1354ff5cef375c7738b1c3c3ac569629c7cd7f8754e5c2",
+      "sha256": "4802bd3c6a179ea53075990ef598144e3a62da5235d525d752e408f219b756ae",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13139,7 +13156,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-apply-fixed-index-6c79602549",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-apply/fixed/index.html",
-      "sha256": "f915d8ff19ad0b8ee3c5f55ecd55363676f068c1f849f778b5bbda65743942fc",
+      "sha256": "3e8eef21bbd9be216de6b2f477f5132f603dbc66410569ab9c8b034b85b4a790",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13189,7 +13206,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-apply-review-index-5495cc18db",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-apply/review/index.html",
-      "sha256": "455f84ad784b5aaf82e49608c26664051da46d59a1007b24487cbe57ef863ba7",
+      "sha256": "b4ac7f3866b23c47f0ae68d8936aaaa8107fc6b65d090fcfe5b90eb6b0219df0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13239,7 +13256,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-eval-fixed-index-e8e9eeafd9",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-eval/fixed/index.html",
-      "sha256": "5b9cab6296b5c02b5a5f3d8f7b890a1bfced4edf4eb513603dc4d4e0ecd651d8",
+      "sha256": "b98918ff338df2a7ac30134afede353679a8ddd478cffe2649525a843d8e9a8b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13289,7 +13306,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-eval-review-index-9abea6d436",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-eval/review/index.html",
-      "sha256": "96f4ac4f712dc825fd793e1c29f644f63e5e8fbe6df04bc01aeb4599c3d21a16",
+      "sha256": "33aa7dd68e10904bf016a8bad8a844e6e4ab19d0d8fb5b99217bad3a60ae4dc0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13339,7 +13356,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-function-fixed-index-ab45166b56",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-function/fixed/index.html",
-      "sha256": "56b1ce0399f028d93af567c0d488ea9285a270c9dbe883e28720936fce9cb1f4",
+      "sha256": "a8009793d2400a2091d7ee0451672658c9838cc3f62821419da2a21ffd296382",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13389,7 +13406,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-function-review-index-1f9904f24c",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-function/review/index.html",
-      "sha256": "a3c63cd792ae22ea39c58b0196e05a9d5a26ca9e2350fe3f5bfcaa9b93ee0ae2",
+      "sha256": "bd19454dac14ef0be8ae0602e963af5bc95d889b7bbd9115c5aa85b16d009896",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13439,7 +13456,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-interval-fixed-index-2409ad9a96",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-interval/fixed/index.html",
-      "sha256": "811e361e1d789ac19ba079d1ec935f1185918222cff4a066d8145c667a308695",
+      "sha256": "d8647cfa5c17f6f8206330006ddf78b299c665babe1e6513267796acac12877d",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13489,7 +13506,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-interval-review-index-b21d1c12ec",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-interval/review/index.html",
-      "sha256": "5bb653518134004aa22419470a83f3f6a0f25b49c5fed9ebf67f037c37e56dea",
+      "sha256": "469687ad7ca9ed6ea0bdbbe877598ab5614302284fbda7891031eb2a2b4f1a94",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13539,7 +13556,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-timeout-fixed-index-0e85c073eb",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-timeout/fixed/index.html",
-      "sha256": "4f8c0cfe7cbc305995d9e9f6ddc90d3abb9cea679fa499f05195a29f9dced8a4",
+      "sha256": "50893e5b3d3c5d9a24b0f2ab0ef09a5efdcac2b8d2ca96f2849135442bf20ffc",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13589,7 +13606,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-taint-to-exec-btn-timeout-review-index-1c5f1d065c",
       "path": "atomic/iast/iast-iast-storage-taint-to-exec/btn-timeout/review/index.html",
-      "sha256": "63c03b06ac19c2f130496208b091f09d3b35ff6acafe625f823019428a6b25a4",
+      "sha256": "36eb56e22b258050a8413bb336d0642ee4840149328efc0c39d27de0d6f57718",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13639,7 +13656,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-cookie-safe-fixed-index-60e3d791d1",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-cookie-safe/fixed/index.html",
-      "sha256": "cc3a0e861b8a8ee26aa38b5f3ede242ee445205c5b89d09eba191377cdaa32c3",
+      "sha256": "722a06ee2718b22abf937f9cd9e5ed426232a5e3cef96475e751480415e21125",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13689,7 +13706,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-cookie-safe-review-index-d148eb98c9",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-cookie-safe/review/index.html",
-      "sha256": "389e0af180bd74d021433ddfdee7f4eedb12cdfe83149928668180166f8e51f6",
+      "sha256": "edeebbabaebb22570ba5d1eccc04a8a9d2ba5e91e9915de22574fcbd116ad651",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13739,7 +13756,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-cookie-fixed-index-d56fcaca45",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-cookie/fixed/index.html",
-      "sha256": "c303faa1851472eced409bddfde708e170dd09458f653960cdd33ac40acf98ec",
+      "sha256": "6b9560767bdcfcf5385faf7d3df05e7e70335fb01a0eea44cdcf698d503370b8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13789,7 +13806,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-cookie-review-index-eb8e133549",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-cookie/review/index.html",
-      "sha256": "d2f317e9573a03816cab8cb0d1b31d70985e53d06a10933b6b19e626d7e681ef",
+      "sha256": "979650720421d6239d8aa7d2264130955af8ccb14d1a2c93ed7a4cf0b4d56fba",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13839,7 +13856,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-local-fixed-index-45327e4777",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-local/fixed/index.html",
-      "sha256": "294bb65b2a082e4635138ad836472b74edc4b78963459f68a1357b38dd578076",
+      "sha256": "b99791d89f7bf720b0e7477ec5cfa9ac646252443d516efa1a109de407d248ec",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13889,7 +13906,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-local-review-index-3545d28daf",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-local/review/index.html",
-      "sha256": "a34421abdc8764e14c7fb21a5f40caa97c62714ea80a630a37d608f1bf85fc8a",
+      "sha256": "9477852b0684e75b7991b1b6555ff574f540d5815a1c386fd730c1193c3183dc",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13939,7 +13956,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-session-fixed-index-598a89b438",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-session/fixed/index.html",
-      "sha256": "0aeea99631fc3146369742ca422bfff8dedb5c6d0ea6d94ece20827ecd56f95d",
+      "sha256": "afe9ea5722f4c05c01e9e755e2c4a4d76c8b314186d2a14401a8b1f4a938a767",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -13989,7 +14006,7 @@
     {
       "id": "file.atomic-iast-iast-iast-storage-token-leaks-btn-session-review-index-d06afd8d17",
       "path": "atomic/iast/iast-iast-storage-token-leaks/btn-session/review/index.html",
-      "sha256": "f0c176e1b0c18fdef53a87dc05399f205f7ce93424120c1609ca503069aa6e25",
+      "sha256": "3ffa6f29ddfb261442af63b4419c348fd0bb9563588aaf9bc1cbeedc2772b7f6",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14039,7 +14056,7 @@
     {
       "id": "file.atomic-iast-iast-iast-timer-js-execution-btn-interval-fixed-index-afa42858c9",
       "path": "atomic/iast/iast-iast-timer-js-execution/btn-interval/fixed/index.html",
-      "sha256": "15269c1b05412bd65fc822323c0dc5d4ffb15a679e5de44f3487a9931cadef55",
+      "sha256": "cbc7f45f857e653cf794568be3cfbd55fc0a1b67813e6bc518346ec64e07b1ec",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14089,7 +14106,7 @@
     {
       "id": "file.atomic-iast-iast-iast-timer-js-execution-btn-interval-review-index-5a3904fa84",
       "path": "atomic/iast/iast-iast-timer-js-execution/btn-interval/review/index.html",
-      "sha256": "42fb556251d998b2b5fa60d0579b635e8056caf301dcf87fb38aa86056cb4ffc",
+      "sha256": "8920b0945b52aa2682e41eb7bd3468914342d31c07aeabaf718191eed4480d1c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14139,7 +14156,7 @@
     {
       "id": "file.atomic-iast-iast-iast-timer-js-execution-btn-timeout-fixed-index-5552fcc3e9",
       "path": "atomic/iast/iast-iast-timer-js-execution/btn-timeout/fixed/index.html",
-      "sha256": "928e3caa080c48727701d0dfa467707818a69b1c9001593a94f17eac3b472713",
+      "sha256": "9b492fe091d1c92db9161b1452a5c368ac3fb593d5fdecd05c9737fc296e219c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14189,7 +14206,7 @@
     {
       "id": "file.atomic-iast-iast-iast-timer-js-execution-btn-timeout-review-index-8851bdb6fa",
       "path": "atomic/iast/iast-iast-timer-js-execution/btn-timeout/review/index.html",
-      "sha256": "58641ffce193ce904f3ea786eaea0040feb59c33b1823e3ed7da8b5ac21a3b63",
+      "sha256": "3a5006d106f48abc2875da87a564a578d07dd04d64950d29f4c4c7b3afc3fb5e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14239,7 +14256,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-create-html-fixed-i-a094bc9f8d",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-create-html/fixed/index.html",
-      "sha256": "f9a630a54adb2799f6a1e0fe09b3b9c011d95b3fc5d32efe0c6017fe8c19b49b",
+      "sha256": "bf734c27a1139a09ff539b006744ded1e863998848d8416262a813119e31a87f",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14289,7 +14306,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-create-html-review--d8d2438abd",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-create-html/review/index.html",
-      "sha256": "abf1677d6532dc20e0a4493770c3d0a3b8dfe051047c41494f6a882e22c79f51",
+      "sha256": "80d13659a01cefc57def39e166d1658fb89847ff28e9e27be880419e0e5dd8c0",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14339,7 +14356,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-create-script-url-f-0ac67c41c0",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-create-script-url/fixed/index.html",
-      "sha256": "e10cd9675e4d32e0efa329f568a7d9081269f5780c97162c12634a91ae227af5",
+      "sha256": "11e3d689d15db32a6fdabef776ebbb2000a23d0e1e314c21f6eac23bb230d45e",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14389,7 +14406,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-create-script-url-r-2f0d4aad55",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-create-script-url/review/index.html",
-      "sha256": "ff4602a83fab2ee57738d771073e279662943d080ece9c132d26ddeebec3d34a",
+      "sha256": "a913d1c15094d5fda34a9d6d8995221b85d44803ebd677c3b5d7dfed3fdce2ab",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14439,7 +14456,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-create-script-fixed-f8fb0ad601",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-create-script/fixed/index.html",
-      "sha256": "df98ec339325c4d2fadf8b4230b1715366c203a40eed23a0a68039e45c95f786",
+      "sha256": "7a237cbc2d83d02ff9c6f729ba0e70670ae4cbcf69af2f8d68e021e2710bbc1a",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14489,7 +14506,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-create-script-revie-c14bf89ca9",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-create-script/review/index.html",
-      "sha256": "a8e6287ef8eb68342812511141c1c1295f54e477ed1ab5ed7f907aa407276986",
+      "sha256": "318eafae25fb36851626e2486181a628bf25833e46675e478e31f516970a33d7",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14539,7 +14556,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-dompurify-fixed-ind-eb64c5eafa",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-dompurify/fixed/index.html",
-      "sha256": "111ffe090b5448b73aded6752a62db095dd8d16932edd483c5f5309f0ee1a2b6",
+      "sha256": "db1ac554f67bd909d8eabd8324a65457faa25384e1ae6744a8273576a2341a38",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14589,7 +14606,7 @@
     {
       "id": "file.atomic-iast-iast-iast-trusted-types-and-sanitizer-misuse-btn-dompurify-review-in-6554c74f00",
       "path": "atomic/iast/iast-iast-trusted-types-and-sanitizer-misuse/btn-dompurify/review/index.html",
-      "sha256": "dbd78fc82d969ade23d8daad1568dad74fbf7b784442080f60068cdfa2c26f6d",
+      "sha256": "4b5769a40ac14246a1b5ecc4dc27c415f72bd7f8563b5b3acd8fcae6246fcbba",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14639,7 +14656,7 @@
     {
       "id": "file.atomic-iast-iast-iast-web-messaging-channels-btn-broadcast-fixed-index-313b2d4076",
       "path": "atomic/iast/iast-iast-web-messaging-channels/btn-broadcast/fixed/index.html",
-      "sha256": "f01f05fdf8f8939ad06435ac2882982ff24943a84b3abac15fdc5e8fd6f08592",
+      "sha256": "552a60b7d90d48e8766a55e773c726bd7fc22a0d6041a179ee015ee841e5fd7c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14689,7 +14706,7 @@
     {
       "id": "file.atomic-iast-iast-iast-web-messaging-channels-btn-broadcast-review-index-da5971c65a",
       "path": "atomic/iast/iast-iast-web-messaging-channels/btn-broadcast/review/index.html",
-      "sha256": "f57826b4891c11974fa6736e0991396d7726ba9a223a65385e04efeb135b0b23",
+      "sha256": "53b6a319385bc365340ff51d7ea1b77b368ec8ad918dbfd41ff5c91099f24bc4",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14739,7 +14756,7 @@
     {
       "id": "file.atomic-iast-iast-iast-web-messaging-channels-btn-port-fixed-index-1e3777cfd9",
       "path": "atomic/iast/iast-iast-web-messaging-channels/btn-port/fixed/index.html",
-      "sha256": "b8abc9be6892a88fc4197e36f1a52514b96d9d22a350cabaf4d4b3720bf1d115",
+      "sha256": "97dee28531356a3c4d06c0fdd3b1109b7b4bfc10866e17b8a73456ad13703025",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14789,7 +14806,7 @@
     {
       "id": "file.atomic-iast-iast-iast-web-messaging-channels-btn-port-review-index-8a4415ca8d",
       "path": "atomic/iast/iast-iast-web-messaging-channels/btn-port/review/index.html",
-      "sha256": "79380e20f817a5b6dafa4f1fbc273e4e9e580ee13c174dd6a2f34cf5d43078b1",
+      "sha256": "333fa1a06bf882f18e2df738322491ab3e1f1864cfb974c9af2c4d26ae584e9c",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14839,7 +14856,7 @@
     {
       "id": "file.atomic-iast-iast-iast-websocket-url-poisoning-btn-open-fixed-index-b6379bee46",
       "path": "atomic/iast/iast-iast-websocket-url-poisoning/btn-open/fixed/index.html",
-      "sha256": "41ed8f544c7a0c2ebb38834dc4f0a0658074ba195585cae0ca90d294729b489a",
+      "sha256": "320c35f5bc946a17cdc5f02066e19ca9fab2379627ea6904bc0480690edd1d51",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14889,7 +14906,7 @@
     {
       "id": "file.atomic-iast-iast-iast-websocket-url-poisoning-btn-open-review-index-ec8759ea41",
       "path": "atomic/iast/iast-iast-websocket-url-poisoning/btn-open/review/index.html",
-      "sha256": "e1fd046ddd34713238c527230de4257c8b39077862c6bac6f54c4d0f5170c4c6",
+      "sha256": "595d91fb7fbf7cc4657c8c9a356453ec830a66fecd3fb9178adfda1875a83da2",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14939,7 +14956,7 @@
     {
       "id": "file.atomic-iast-iast-iast-worker-script-loading-btn-sw-fixed-index-0e46245911",
       "path": "atomic/iast/iast-iast-worker-script-loading/btn-sw/fixed/index.html",
-      "sha256": "392a3623a9ce7aa569977354ba35e3c3a4c15fae90d9f7791b49ee5a7950ce23",
+      "sha256": "f20887627081cd2ae1ef4104b8d880c01f2cf3bdc865914004f49f9c45675b25",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -14989,7 +15006,7 @@
     {
       "id": "file.atomic-iast-iast-iast-worker-script-loading-btn-sw-review-index-1978528d09",
       "path": "atomic/iast/iast-iast-worker-script-loading/btn-sw/review/index.html",
-      "sha256": "ceb1788e8826d28de0d9f26c3a91bcc88dc694215c472f07b8cf7ebee9dad501",
+      "sha256": "b561fe7921ef23301ffbb017330b6b6b893d6b741ddbaf31e212145712bd7be8",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -15039,7 +15056,7 @@
     {
       "id": "file.atomic-iast-iast-iast-worker-script-loading-btn-worker-fixed-index-9d4e305c24",
       "path": "atomic/iast/iast-iast-worker-script-loading/btn-worker/fixed/index.html",
-      "sha256": "80930f0115f44213b3284aba72a88901eee6309ea56104dcce068427efbbdbd1",
+      "sha256": "4ddb6dcc8a1fda0f86192d82e861a080054acde42d51f4b4a25747a50521b03b",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -15089,7 +15106,7 @@
     {
       "id": "file.atomic-iast-iast-iast-worker-script-loading-btn-worker-review-index-4e1b637ebd",
       "path": "atomic/iast/iast-iast-worker-script-loading/btn-worker/review/index.html",
-      "sha256": "b5cc426b048ff7b57c1410988ab9a8d5240a3349f4de13d7c2a20abf20556205",
+      "sha256": "1b5020a04b8b39a8c40e09c80f871e89dbd1152c053f37183b11481fb6e06597",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -15139,7 +15156,7 @@
     {
       "id": "file.atomic-iast-iast-iast-xpath-injection-btn-evaluate-fixed-index-e6aed67894",
       "path": "atomic/iast/iast-iast-xpath-injection/btn-evaluate/fixed/index.html",
-      "sha256": "b368629b42ea76328f9c78447b6f7b5d88fb4e6d6506def6dbff9921548a06c4",
+      "sha256": "36a16706cc433fa18ddadb835e4f2dec86066730f23b00e29a42fec6accf1d56",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -15189,7 +15206,7 @@
     {
       "id": "file.atomic-iast-iast-iast-xpath-injection-btn-evaluate-review-index-3f2577d745",
       "path": "atomic/iast/iast-iast-xpath-injection/btn-evaluate/review/index.html",
-      "sha256": "a466a913cbc32b86e77ae133116aa24a4598192d294745c2756e792d361acff3",
+      "sha256": "5c6e32b350e6ddf85b7c02f448db7e793559c99e230293337601c717d050b0eb",
       "role": "atomic-target",
       "disposition": "migrate-atomic",
       "reviewStatus": "reviewed",
@@ -26432,6 +26449,36 @@
       "route": "/iast/"
     },
     {
+      "id": "file.jwt-index-9f67c22d1f",
+      "path": "jwt/index.html",
+      "sha256": "23fe1c000a859b36e970e7a479f40e3fe0973aee2ba981e941f071f7e84e01a0",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Follow one synthetic token across the browser and HTTP request surface.",
+      "route": "/jwt/"
+    },
+    {
+      "id": "file.jwt-storage-fixed-index-3359cb84b9",
+      "path": "jwt/storage/fixed/index.html",
+      "sha256": "22bbe72171fa6fdc4ff04df9f9893cb89e4d0ebeaf30528bee0bd16752b24e4e",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Opaque values in the same browser stores",
+      "route": "/jwt/storage/fixed/"
+    },
+    {
+      "id": "file.jwt-storage-vulnerable-index-b7124b6a56",
+      "path": "jwt/storage/vulnerable/index.html",
+      "sha256": "22f0948d2048b9cc95fce00eff8f7f283432d617bd0d479b668fc24487e86e89",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "JWTs stored in the live browser session",
+      "route": "/jwt/storage/vulnerable/"
+    },
+    {
       "id": "file.passive-api-docs-graphql-1cbc8a7d45",
       "path": "passive/api_docs_graphql.html",
       "sha256": "b89d018c7f3769e8103d6a7585a24f0ee3a680f13cd4284ab0ae4b455a5fa136",
@@ -26678,7 +26725,7 @@
     {
       "id": "file.passive-server-mjs-6b5bc0f960",
       "path": "passive/server.mjs",
-      "sha256": "b3035b7de445bda19ea9f9093cefa722ea2b9d3e3470ac4456a80aaa52f45c14",
+      "sha256": "e11c1106d173ff8dc176f9d83095be4c9ba74048c4b2901c2db97700e0260391",
       "role": "runtime",
       "disposition": "helper-only",
       "reviewStatus": "reviewed",
@@ -30227,6 +30274,98 @@
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.targets-jwt-lab-dast-index-dcc88d8799",
+      "path": "targets/jwt-lab/dast/index.html",
+      "sha256": "8629d7e2b43ba66905c02f9da149e040307123dbb53760892e065ccfc34e6fbd",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Capture one JWT carrier at a time.",
+      "route": "/targets/jwt-lab/dast/",
+      "scenarios": [
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-1-send-review",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-1-send-review",
+          "locator": "button:nth-of-type(1)",
+          "label": "Send review",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-2-send-control",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-2-send-control",
+          "locator": "button:nth-of-type(2)",
+          "label": "Send control",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-3-send-review",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-3-send-review",
+          "locator": "button:nth-of-type(3)",
+          "label": "Send review",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-4-send-control",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-4-send-control",
+          "locator": "button:nth-of-type(4)",
+          "label": "Send control",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-5-send-review",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-5-send-review",
+          "locator": "button:nth-of-type(5)",
+          "label": "Send review",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-6-send-control",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-6-send-control",
+          "locator": "button:nth-of-type(6)",
+          "label": "Send control",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-7-send-review",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-7-send-review",
+          "locator": "button:nth-of-type(7)",
+          "label": "Send review",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-dast-index-dcc88d8799.button-8-send-control",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "button-8-send-control",
+          "locator": "button:nth-of-type(8)",
+          "label": "Send control",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
     },
     {
       "id": "file.targets-lazy-route-module-fixed-analytics-route-js-e796b1e34b",
