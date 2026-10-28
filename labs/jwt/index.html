@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JWT labs · PTK Playground</title><link rel="stylesheet" href="../../assets/css/playground.css"></head>
+<body><main class="page-shell">
+  <p class="eyebrow">Labs / JWT</p><h1>JWT verification and token evidence</h1>
+  <p>These are separate synthetic attacks, each with a vulnerable and repaired route. A working target is not automatically a PTK finding. Run <code>npm run demo</code> for the local request APIs.</p>
+  <div class="entry-grid">
+    <article class="entry-card"><span class="badge badge--mixed">Target works · PTK finding pending</span><h2>None algorithm</h2><p>An unsigned <code>alg:none</code> token is accepted only by the vulnerable verifier.</p><a class="button" href="../jwt-none/">Open lab</a></article>
+    <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h2>Algorithm/key confusion</h2><p>Public RSA bytes become an HMAC secret only on the vulnerable route.</p><a class="button" href="../jwt-alg-confusion/">Open lab</a></article>
+    <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h2>Null signature</h2><p>The header remains <code>HS256</code>; the vulnerable verifier trusts an empty signature.</p><a class="button" href="../jwt-null-signature/">Open lab</a></article>
+    <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h2>Embedded JWK injection</h2><p>The vulnerable verifier trusts an attacker-owned public key in the JWT header.</p><a class="button" href="../jwt-jwk-injection/">Open lab</a></article>
+    <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h2>Weak HMAC secret</h2><p>A forged nested-JSON token succeeds with the weak key, not the repaired key.</p><a class="button" href="../jwt-nested-weak-secret/">Open lab</a></article>
+    <article class="entry-card"><span class="badge badge--primary">Discovery exercise</span><h2>Cookie and Web Storage</h2><p>Inspect synthetic tokens in browser state, separate from a verifier attack.</p><a class="button button--secondary" href="../../jwt/">Open token discovery</a></article>
+  </div>
+  <p><a href="../">All lab categories</a> · <a href="../../">Playground home</a></p>
+</main></body></html>

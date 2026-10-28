@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>XSS Labs · PTK Playground</title><link rel="stylesheet" href="../../assets/css/playground.css"></head>
+<body><main class="page-shell">
+  <p class="eyebrow">Labs / XSS</p><h1>Five paths to browser execution</h1>
+  <p>Every working lab has one prepared action, a vulnerable and repaired route, a harmless execution marker, and reset instructions. A browser marker proves the target contrast—not an automatic PTK finding. Full and Auto findings are labelled only after native qualification.</p>
+  <section class="section"><h2>Server-reflected contexts</h2><div class="entry-grid">
+    <article class="entry-card"><span class="badge badge--mixed">Browser target verified · PTK finding pending</span><h3>HTML body reflection</h3><p>Query data is interpreted as HTML versus encoded text.</p><a class="button" href="../xss-reflected/">Open lab</a></article>
+    <article class="entry-card"><span class="badge badge--mixed">Browser target verified · PTK finding pending</span><h3>Quoted attribute breakout</h3><p>The same input leaves a server-rendered attribute only on the vulnerable route.</p><a class="button" href="../xss-attribute/">Open lab</a></article>
+  </div></section>
+  <section class="section"><h2>Stored, two-session</h2><div class="entry-grid">
+    <article class="entry-card"><span class="badge badge--mixed">Browser target verified · Full proof pending</span><h3>Alice writes; Bob reads</h3><p>A separate browser session renders stored content; the repaired route treats it as text.</p><a class="button" href="../stored-xss/">Open lab</a></article>
+  </div></section>
+  <section class="section"><h2>DOM source-to-sink</h2><div class="entry-grid">
+    <article class="entry-card"><span class="badge badge--mixed">Browser target verified · PTK finding pending</span><h3>Fragment → innerHTML</h3><p>The page reads <code>location.hash</code> and reaches an HTML sink.</p><a class="button" href="../xss-dom/">Open lab</a></article>
+    <article class="entry-card"><span class="badge badge--mixed">Browser target verified · PTK finding pending</span><h3>Query → JavaScript execution</h3><p>The page reads <code>location.search</code> and constructs code; the control renders text.</p><a class="button" href="../xss-query-code/">Open lab</a></article>
+  </div></section>
+  <section class="section"><h2>SPA and multi-context candidates</h2><p>These existing paired missions have source-to-sink evidence, but have not yet passed separate harmless-script-execution and current Full-finding qualification for this XSS collection. They are not counted among the five execution labs.</p><div class="entry-grid">
+    <article class="entry-card"><h3>Short-lived SPA notice</h3><p>Hash query data reaches a 30 ms DOM notice.</p><a class="button button--secondary" href="../../campaigns/transient-route-notice/">Open mission</a></article>
+    <article class="entry-card"><h3>Saved workspace</h3><p>Persisted storage data reaches a later document.</p><a class="button button--secondary" href="../../campaigns/saved-workspace/">Open mission</a></article>
+    <article class="entry-card"><h3>Loaded profile preview</h3><p>A fetched response field reaches a DOM renderer after a user action.</p><a class="button button--secondary" href="../../campaigns/live-profile-preview/">Open mission</a></article>
+    <article class="entry-card"><h3>Support widget message</h3><p>Cross-window message data reaches a widget renderer.</p><a class="button button--secondary" href="../../campaigns/support-widget/">Open mission</a></article>
+  </div></section>
+  <p>Pro-only targets will be marked <strong>Pro — coming soon</strong> only after the target works and its private rule mapping is verified. This page does not imply unpublished Pro detection is available.</p>
+  <p><a href="../">All lab categories</a> · <a href="../../">Playground home</a></p>
+</main></body>
+</html>

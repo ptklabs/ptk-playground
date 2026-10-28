@@ -2,8 +2,8 @@
   "schema": "owasp-ptk-playground-legacy-routes/v1",
   "version": 1,
   "summary": {
-    "routes": 1474,
-    "runtimeRoutes": 223
+    "routes": 1606,
+    "runtimeRoutes": 304
   },
   "routes": [
     {
@@ -90,6 +90,132 @@
       ]
     },
     {
+      "path": "/api/labs/graphql/fixed",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/graphql/vulnerable",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/idor-read/fixed/objects/order-bob",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/idor-read/vulnerable/objects/order-bob",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/idor-write/fixed/objects/order-bob",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/idor-write/vulnerable/objects/order-bob",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/jwt/nested/fixed/admin",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/jwt/nested/fixed/issue",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/jwt/nested/vulnerable/admin",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/jwt/nested/vulnerable/issue",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/me",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/reset",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/session",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/api/labs/stored-xss/messages",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
       "path": "/apple-app-site-association",
       "kinds": [
         "route-aware-runtime"
@@ -108,6 +234,15 @@
       ]
     },
     {
+      "path": "/assets/js/access-control-lab.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
       "path": "/assets/js/catalogue-app.js",
       "kinds": [
         "route-aware-runtime"
@@ -117,7 +252,25 @@
       ]
     },
     {
+      "path": "/assets/js/graphql-lab.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
       "path": "/assets/js/jwt-dast-lab.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/assets/js/jwt-nested-lab.js",
       "kinds": [
         "route-aware-runtime"
       ],
@@ -136,6 +289,24 @@
     },
     {
       "path": "/assets/js/playground.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/assets/js/real-labs.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/assets/js/stored-xss-lab.js",
       "kinds": [
         "route-aware-runtime"
       ],
@@ -10098,6 +10269,29 @@
       ]
     },
     {
+      "path": "/campaigns/graphql-order/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-graphql-order-index-de3fdbfbf8",
+        "graphql-order",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/graphql-order/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-graphql-order-index-de3fdbfbf8"
+      ]
+    },
+    {
       "path": "/campaigns/history-order-router/",
       "kinds": [
         "mission",
@@ -10120,6 +10314,52 @@
       "owners": [
         "file.campaigns-history-order-router-index-da11aa9581",
         "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/idor-read/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-idor-read-index-a47b005663",
+        "idor-read",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/idor-read/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-idor-read-index-a47b005663"
+      ]
+    },
+    {
+      "path": "/campaigns/idor-write/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-idor-write-index-dbdcc99dc5",
+        "idor-write",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/idor-write/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-idor-write-index-dbdcc99dc5"
       ]
     },
     {
@@ -10156,6 +10396,121 @@
       "owners": [
         "file.campaigns-index-2a8ea3452f",
         "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-alg-confusion/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-jwt-alg-confusion-index-e157c4cd15",
+        "jwt-alg-confusion",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-alg-confusion/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-jwt-alg-confusion-index-e157c4cd15"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-jwk-injection/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-jwt-jwk-injection-index-e633861c5b",
+        "jwt-jwk-injection",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-jwk-injection/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-jwt-jwk-injection-index-e633861c5b"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-nested-weak-secret/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-jwt-nested-weak-secret-index-4aac734e05",
+        "jwt-nested-weak-secret",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-nested-weak-secret/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-jwt-nested-weak-secret-index-4aac734e05"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-none/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-jwt-none-index-d0f02a7df7",
+        "jwt-none",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-none/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-jwt-none-index-d0f02a7df7"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-null-signature/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-jwt-null-signature-index-7c8ec97965",
+        "jwt-null-signature",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/jwt-null-signature/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-jwt-null-signature-index-7c8ec97965"
       ]
     },
     {
@@ -10311,6 +10666,98 @@
       ]
     },
     {
+      "path": "/campaigns/sql-auth-bypass/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-sql-auth-bypass-index-79e6118538",
+        "passive/server.mjs",
+        "sql-auth-bypass"
+      ]
+    },
+    {
+      "path": "/campaigns/sql-auth-bypass/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-sql-auth-bypass-index-79e6118538"
+      ]
+    },
+    {
+      "path": "/campaigns/sql-double-quote/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-sql-double-quote-index-568c6363d3",
+        "passive/server.mjs",
+        "sql-double-quote"
+      ]
+    },
+    {
+      "path": "/campaigns/sql-double-quote/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-sql-double-quote-index-568c6363d3"
+      ]
+    },
+    {
+      "path": "/campaigns/sql-single-quote/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-sql-single-quote-index-26162654af",
+        "passive/server.mjs",
+        "sql-single-quote"
+      ]
+    },
+    {
+      "path": "/campaigns/sql-single-quote/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-sql-single-quote-index-26162654af"
+      ]
+    },
+    {
+      "path": "/campaigns/stored-xss/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-stored-xss-index-eef2267558",
+        "passive/server.mjs",
+        "stored-xss"
+      ]
+    },
+    {
+      "path": "/campaigns/stored-xss/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-stored-xss-index-eef2267558"
+      ]
+    },
+    {
       "path": "/campaigns/support-widget/",
       "kinds": [
         "demo",
@@ -10362,6 +10809,98 @@
       "owners": [
         "file.campaigns-transient-route-notice-index-6075e0e71d",
         "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-attribute/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-xss-attribute-index-97819fb130",
+        "passive/server.mjs",
+        "xss-attribute"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-attribute/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-xss-attribute-index-97819fb130"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-dom/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-xss-dom-index-39e7744fa7",
+        "passive/server.mjs",
+        "xss-dom"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-dom/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-xss-dom-index-39e7744fa7"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-query-code/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-xss-query-code-index-4d3f9a01ae",
+        "passive/server.mjs",
+        "xss-query-code"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-query-code/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-xss-query-code-index-4d3f9a01ae"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-reflected/",
+      "kinds": [
+        "mission",
+        "route-aware-runtime",
+        "scanner-mission",
+        "source"
+      ],
+      "owners": [
+        "file.campaigns-xss-reflected-index-3635c909e6",
+        "passive/server.mjs",
+        "xss-reflected"
+      ]
+    },
+    {
+      "path": "/campaigns/xss-reflected/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.campaigns-xss-reflected-index-3635c909e6"
       ]
     },
     {
@@ -11501,6 +12040,471 @@
       "owners": [
         "file.jwt-storage-vulnerable-index-b7124b6a56",
         "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-index-5f3105d8e1",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/access-control/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-access-control-index-3714a72cc8",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/access-control/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-access-control-index-3714a72cc8"
+      ]
+    },
+    {
+      "path": "/labs/browser-context/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-browser-context-index-785bf25015",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/browser-context/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-browser-context-index-785bf25015"
+      ]
+    },
+    {
+      "path": "/labs/graphql-order/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-graphql-order-index-3ae8a1ac0f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/graphql-order/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-graphql-order-index-3ae8a1ac0f"
+      ]
+    },
+    {
+      "path": "/labs/idor-read/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-idor-read-index-be9085d3fa",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/idor-read/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-idor-read-index-be9085d3fa"
+      ]
+    },
+    {
+      "path": "/labs/idor-write/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-idor-write-index-50af4fd8b7",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/idor-write/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-idor-write-index-50af4fd8b7"
+      ]
+    },
+    {
+      "path": "/labs/imported-request-preferences/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-imported-request-preferences-index-606fa76a1c",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/imported-request-preferences/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-imported-request-preferences-index-606fa76a1c"
+      ]
+    },
+    {
+      "path": "/labs/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-index-5f3105d8e1"
+      ]
+    },
+    {
+      "path": "/labs/jwt-alg-confusion/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "jwt-confusion-control",
+        "jwt-confusion-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/jwt-jwk-injection/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "jwt-jwk-control",
+        "jwt-jwk-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/jwt-nested-weak-secret/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-jwt-nested-weak-secret-index-e198822b76",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/jwt-nested-weak-secret/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-jwt-nested-weak-secret-index-e198822b76"
+      ]
+    },
+    {
+      "path": "/labs/jwt-none/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "jwt-none-control",
+        "jwt-none-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/jwt-null-signature/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "jwt-null-signature-control",
+        "jwt-null-signature-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/jwt/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-jwt-index-fcd27c6bf4",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/jwt/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-jwt-index-fcd27c6bf4"
+      ]
+    },
+    {
+      "path": "/labs/on-demand-analytics/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-on-demand-analytics-index-c705c3dce0",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/on-demand-analytics/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-on-demand-analytics-index-c705c3dce0"
+      ]
+    },
+    {
+      "path": "/labs/real-lab/",
+      "kinds": [
+        "source"
+      ],
+      "owners": [
+        "file.labs-real-lab-index-07460bbcaf"
+      ]
+    },
+    {
+      "path": "/labs/real-lab/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-real-lab-index-07460bbcaf"
+      ]
+    },
+    {
+      "path": "/labs/session-bound-order-search/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-session-bound-order-search-index-e0ab81b85c",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/session-bound-order-search/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-session-bound-order-search-index-e0ab81b85c"
+      ]
+    },
+    {
+      "path": "/labs/spa/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-spa-index-0f726fe0c7",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/spa/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-spa-index-0f726fe0c7"
+      ]
+    },
+    {
+      "path": "/labs/sql-auth-bypass/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "passive/server.mjs",
+        "sql-auth-control",
+        "sql-auth-review"
+      ]
+    },
+    {
+      "path": "/labs/sql-double-quote/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "passive/server.mjs",
+        "sql-double-control",
+        "sql-double-review"
+      ]
+    },
+    {
+      "path": "/labs/sql-single-quote/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "passive/server.mjs",
+        "sql-single-control",
+        "sql-single-review"
+      ]
+    },
+    {
+      "path": "/labs/sql/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-sql-index-d52f0ab53f",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/sql/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-sql-index-d52f0ab53f"
+      ]
+    },
+    {
+      "path": "/labs/stored-xss/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-stored-xss-index-6ebfeef03d",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/stored-xss/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-stored-xss-index-6ebfeef03d"
+      ]
+    },
+    {
+      "path": "/labs/support-widget/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-support-widget-index-05de7168e5",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/support-widget/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-support-widget-index-05de7168e5"
+      ]
+    },
+    {
+      "path": "/labs/xss-attribute/",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/xss-dom/",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/xss-query-code/",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/xss-reflected/",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/xss/",
+      "kinds": [
+        "route-aware-runtime",
+        "source"
+      ],
+      "owners": [
+        "file.labs-xss-index-421f8dde86",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/labs/xss/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.labs-xss-index-421f8dde86"
       ]
     },
     {
@@ -12681,6 +13685,90 @@
       ]
     },
     {
+      "path": "/targets/access-control/idor-read/",
+      "kinds": [
+        "source"
+      ],
+      "owners": [
+        "file.targets-access-control-idor-read-index-735ad7ff1b"
+      ]
+    },
+    {
+      "path": "/targets/access-control/idor-read/fixed/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "idor-read-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/access-control/idor-read/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-access-control-idor-read-index-735ad7ff1b"
+      ]
+    },
+    {
+      "path": "/targets/access-control/idor-read/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "idor-read-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/access-control/idor-write/",
+      "kinds": [
+        "source"
+      ],
+      "owners": [
+        "file.targets-access-control-idor-write-index-02b08e40c7"
+      ]
+    },
+    {
+      "path": "/targets/access-control/idor-write/fixed/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "idor-write-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/access-control/idor-write/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-access-control-idor-write-index-02b08e40c7"
+      ]
+    },
+    {
+      "path": "/targets/access-control/idor-write/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target"
+      ],
+      "owners": [
+        "idor-write-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
       "path": "/targets/angular-expression-dependency/expression.js",
       "kinds": [
         "route-aware-runtime"
@@ -12731,6 +13819,52 @@
       "owners": [
         "file.targets-angular-expression-dependency-review-index-926af992a0",
         "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/graphql/order/fixed/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-graphql-order-fixed-index-0e80ee3444",
+        "graphql-order-control",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/graphql/order/fixed/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-graphql-order-fixed-index-0e80ee3444"
+      ]
+    },
+    {
+      "path": "/targets/graphql/order/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-graphql-order-vulnerable-index-fa82da5a89",
+        "graphql-order-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/graphql/order/vulnerable/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-graphql-order-vulnerable-index-fa82da5a89"
       ]
     },
     {
@@ -13006,6 +14140,30 @@
       ],
       "owners": [
         "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/nested-json-weak-secret/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-jwt-lab-nested-json-weak-secret-index-2d11c0f48d",
+        "jwt-nested-control",
+        "jwt-nested-review",
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/jwt-lab/nested-json-weak-secret/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-jwt-lab-nested-json-weak-secret-index-2d11c0f48d"
       ]
     },
     {
@@ -13565,6 +14723,70 @@
       ]
     },
     {
+      "path": "/targets/stored-xss/fixed/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-stored-xss-fixed-index-ddad306080",
+        "passive/server.mjs",
+        "stored-xss-control"
+      ]
+    },
+    {
+      "path": "/targets/stored-xss/fixed/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-stored-xss-fixed-index-ddad306080"
+      ]
+    },
+    {
+      "path": "/targets/stored-xss/fixed/render.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/stored-xss/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-stored-xss-vulnerable-index-a88614e624",
+        "passive/server.mjs",
+        "stored-xss-review"
+      ]
+    },
+    {
+      "path": "/targets/stored-xss/vulnerable/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-stored-xss-vulnerable-index-a88614e624"
+      ]
+    },
+    {
+      "path": "/targets/stored-xss/vulnerable/render.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
       "path": "/targets/support-widget/fixed/",
       "kinds": [
         "mission-target",
@@ -13698,6 +14920,174 @@
       ],
       "owners": [
         "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/xss/dom/fixed/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-xss-dom-fixed-index-45bf788c8c",
+        "passive/server.mjs",
+        "xss-dom-control"
+      ]
+    },
+    {
+      "path": "/targets/xss/dom/fixed/app.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/xss/dom/fixed/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-xss-dom-fixed-index-45bf788c8c"
+      ]
+    },
+    {
+      "path": "/targets/xss/dom/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-xss-dom-vulnerable-index-b12dafd634",
+        "passive/server.mjs",
+        "xss-dom-review"
+      ]
+    },
+    {
+      "path": "/targets/xss/dom/vulnerable/app.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/xss/dom/vulnerable/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-xss-dom-vulnerable-index-b12dafd634"
+      ]
+    },
+    {
+      "path": "/targets/xss/query-code/fixed/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-xss-query-code-fixed-index-9c1cd2f587",
+        "passive/server.mjs",
+        "xss-query-code-control"
+      ]
+    },
+    {
+      "path": "/targets/xss/query-code/fixed/app.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/xss/query-code/fixed/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-xss-query-code-fixed-index-9c1cd2f587"
+      ]
+    },
+    {
+      "path": "/targets/xss/query-code/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "route-aware-runtime",
+        "scanner-target",
+        "source"
+      ],
+      "owners": [
+        "file.targets-xss-query-code-vulnerable-index-ad3b90d2c8",
+        "passive/server.mjs",
+        "xss-query-code-review"
+      ]
+    },
+    {
+      "path": "/targets/xss/query-code/vulnerable/app.js",
+      "kinds": [
+        "route-aware-runtime"
+      ],
+      "owners": [
+        "passive/server.mjs"
+      ]
+    },
+    {
+      "path": "/targets/xss/query-code/vulnerable/index.html",
+      "kinds": [
+        "source-file"
+      ],
+      "owners": [
+        "file.targets-xss-query-code-vulnerable-index-ad3b90d2c8"
+      ]
+    },
+    {
+      "path": "/targets/xss/reflected-attribute/fixed/",
+      "kinds": [
+        "mission-target",
+        "scanner-target"
+      ],
+      "owners": [
+        "xss-attribute-control"
+      ]
+    },
+    {
+      "path": "/targets/xss/reflected-attribute/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "scanner-target"
+      ],
+      "owners": [
+        "xss-attribute-review"
+      ]
+    },
+    {
+      "path": "/targets/xss/reflected/fixed/",
+      "kinds": [
+        "mission-target",
+        "scanner-target"
+      ],
+      "owners": [
+        "xss-reflected-control"
+      ]
+    },
+    {
+      "path": "/targets/xss/reflected/vulnerable/",
+      "kinds": [
+        "mission-target",
+        "scanner-target"
+      ],
+      "owners": [
+        "xss-reflected-review"
       ]
     },
     {

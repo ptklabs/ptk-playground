@@ -15,6 +15,7 @@
     "play",
     "explore",
     "jwt",
+    "labs",
     "atomic",
     "targets",
     "assets/css",
@@ -22,37 +23,37 @@
     "assets/vendor"
   ],
   "summary": {
-    "sourceFiles": 1392,
-    "authoredSourceFiles": 268,
+    "sourceFiles": 1449,
+    "authoredSourceFiles": 325,
     "generatedAtomicFiles": 1124,
     "roleCounts": {
       "atomic-case": 5,
-      "atomic-target": 577,
-      "case-support": 34,
+      "atomic-target": 588,
+      "case-support": 36,
       "dependency": 7,
       "family-directory": 64,
-      "family-index": 3,
+      "family-index": 20,
       "legacy-aggregate": 76,
-      "presentation": 19,
-      "presentation-support": 5,
+      "presentation": 35,
+      "presentation-support": 10,
       "runtime": 1,
       "runtime-template": 1,
-      "target-support": 600
+      "target-support": 606
     },
     "reviewCounts": {
-      "reviewed": 1392
+      "reviewed": 1449
     },
     "scenarios": {
-      "total": 1583,
-      "reviewed": 1583,
+      "total": 1603,
+      "reviewed": 1603,
       "pendingManual": 0,
-      "assertions": 1179,
+      "assertions": 1199,
       "controls": 32,
       "setup": 54,
       "helpers": 318,
       "retainedAggregateAssertions": 0,
       "absorbedTriggers": 33,
-      "reviewedMarkers": 1616
+      "reviewedMarkers": 1636
     },
     "migrationComplete": true
   },
@@ -66,6 +67,14 @@
       "reviewStatus": "reviewed"
     },
     {
+      "id": "file.assets-js-access-control-lab-js-3c068ca63d",
+      "path": "assets/js/access-control-lab.js",
+      "sha256": "9773e49cc62b977738e3c1a6c01ea605803091cbd4551020cfa1304e7f669fe1",
+      "role": "presentation-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
       "id": "file.assets-js-catalogue-app-js-9d04c65a6b",
       "path": "assets/js/catalogue-app.js",
       "sha256": "7f5fb890a572a042e7add714d4b2dc9fec908cefb0e2d5a62a632e8a006370f2",
@@ -74,9 +83,25 @@
       "reviewStatus": "reviewed"
     },
     {
+      "id": "file.assets-js-graphql-lab-js-bd40aa2d3b",
+      "path": "assets/js/graphql-lab.js",
+      "sha256": "0418771ebf3dc9a814cf6630aac451432634b67f0654ce335c0407529ff81219",
+      "role": "presentation-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
       "id": "file.assets-js-jwt-dast-lab-js-07b973b8d4",
       "path": "assets/js/jwt-dast-lab.js",
       "sha256": "1b3c544e9016ea42b4ed7238b6ac43058bac4af39ca7fe80dd5aa0a61fdd15a3",
+      "role": "presentation-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.assets-js-jwt-nested-lab-js-9056bda843",
+      "path": "assets/js/jwt-nested-lab.js",
+      "sha256": "88c8b1255c939eecd7fc5fc7eb1dc03f7eedf7348b70c59f74624b7d931947db",
       "role": "presentation-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -93,6 +118,22 @@
       "id": "file.assets-js-playground-js-304b7add29",
       "path": "assets/js/playground.js",
       "sha256": "46f1b2b00319a39d513960ad8e591f10433ed9126002b731c62ccc0f547f99cb",
+      "role": "presentation-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.assets-js-real-labs-js-060b6cb7ff",
+      "path": "assets/js/real-labs.js",
+      "sha256": "b4ad723bec70a5e44bb841c56721af5cf4a32aa473af09a2d5e67c9d49ea7547",
+      "role": "presentation-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.assets-js-stored-xss-lab-js-aa4ba80f72",
+      "path": "assets/js/stored-xss-lab.js",
+      "sha256": "f87c6ae9107cc91eb8eb51e238de0502822c2f0f832262b5654dd7bb58e2d01d",
       "role": "presentation-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
@@ -22816,6 +22857,16 @@
       "route": "/campaigns/deployment-response-boundary/"
     },
     {
+      "id": "file.campaigns-graphql-order-index-de3fdbfbf8",
+      "path": "campaigns/graphql-order/index.html",
+      "sha256": "e8daf119ebdc96ae8777e46f9a5fc1efed31b732d62f2861a5a0c911f40989f8",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "GraphQL order",
+      "route": "/campaigns/graphql-order/"
+    },
+    {
       "id": "file.campaigns-history-order-router-index-da11aa9581",
       "path": "campaigns/history-order-router/index.html",
       "sha256": "01ecda9e995c5b5e10f08dd480e8f4d59e13a2b48867457198fc413531ddada5",
@@ -22824,6 +22875,26 @@
       "reviewStatus": "reviewed",
       "title": "History Order Router",
       "route": "/campaigns/history-order-router/"
+    },
+    {
+      "id": "file.campaigns-idor-read-index-a47b005663",
+      "path": "campaigns/idor-read/index.html",
+      "sha256": "da08cb73b655256b322ab791f0a3f732f7e7b274dbd2ec76575436b1e8bc6893",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "IDOR read",
+      "route": "/campaigns/idor-read/"
+    },
+    {
+      "id": "file.campaigns-idor-write-index-dbdcc99dc5",
+      "path": "campaigns/idor-write/index.html",
+      "sha256": "6def3835e6fc9a6018aa613580abee4230bc9ac96a5465bad020916cfab72b02",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "IDOR update",
+      "route": "/campaigns/idor-write/"
     },
     {
       "id": "file.campaigns-imported-request-preferences-index-d448de26d5",
@@ -22844,6 +22915,56 @@
       "reviewStatus": "reviewed",
       "title": "Learn how browser evidence fits together.",
       "route": "/campaigns/"
+    },
+    {
+      "id": "file.campaigns-jwt-alg-confusion-index-e157c4cd15",
+      "path": "campaigns/jwt-alg-confusion/index.html",
+      "sha256": "22af68ecee2ab908aa1bed015bfa8f78c9e59b95baed64f9e0b2911832f25f58",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "JWT Algorithm Confusion",
+      "route": "/campaigns/jwt-alg-confusion/"
+    },
+    {
+      "id": "file.campaigns-jwt-jwk-injection-index-e633861c5b",
+      "path": "campaigns/jwt-jwk-injection/index.html",
+      "sha256": "e359ee112cc359663f2958b180b75509ae573a30a9831fe02afd9af4a9dcf876",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "JWT Embedded JWK",
+      "route": "/campaigns/jwt-jwk-injection/"
+    },
+    {
+      "id": "file.campaigns-jwt-nested-weak-secret-index-4aac734e05",
+      "path": "campaigns/jwt-nested-weak-secret/index.html",
+      "sha256": "79f72f09d1becba365d90d05e59d868140d44106ef5ac202536e86ff757823fb",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Nested JWT",
+      "route": "/campaigns/jwt-nested-weak-secret/"
+    },
+    {
+      "id": "file.campaigns-jwt-none-index-d0f02a7df7",
+      "path": "campaigns/jwt-none/index.html",
+      "sha256": "2d87b312af23755d2338234ed3ceb66ee72d16919c7bdd15094034c7272311f9",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "JWT Algorithm None",
+      "route": "/campaigns/jwt-none/"
+    },
+    {
+      "id": "file.campaigns-jwt-null-signature-index-7c8ec97965",
+      "path": "campaigns/jwt-null-signature/index.html",
+      "sha256": "2248b7a1a24e4b326a6e47125775d554f4089792863497e928db1713645654ae",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "JWT Null Signature",
+      "route": "/campaigns/jwt-null-signature/"
     },
     {
       "id": "file.campaigns-lazy-route-module-index-7a175f909a",
@@ -22906,6 +23027,46 @@
       "route": "/campaigns/session-bound-order-search/"
     },
     {
+      "id": "file.campaigns-sql-auth-bypass-index-79e6118538",
+      "path": "campaigns/sql-auth-bypass/index.html",
+      "sha256": "48989a28b6563470ea625eddc171340dc48c65b38b176c01a266de9753ff5ff0",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "SQL Synthetic Login Bypass",
+      "route": "/campaigns/sql-auth-bypass/"
+    },
+    {
+      "id": "file.campaigns-sql-double-quote-index-568c6363d3",
+      "path": "campaigns/sql-double-quote/index.html",
+      "sha256": "10df71a1d5ee2b3f5fa95c77f778e0964d7a354ef8b4a241efeaac0628934d81",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "SQL Double-Quote Identifier Injection",
+      "route": "/campaigns/sql-double-quote/"
+    },
+    {
+      "id": "file.campaigns-sql-single-quote-index-26162654af",
+      "path": "campaigns/sql-single-quote/index.html",
+      "sha256": "65bd2d4b3d4c5865fee26e5e4648067a8ef41de3807588bc989e9f293f0daf71",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "SQL Single-Quote Injection",
+      "route": "/campaigns/sql-single-quote/"
+    },
+    {
+      "id": "file.campaigns-stored-xss-index-eef2267558",
+      "path": "campaigns/stored-xss/index.html",
+      "sha256": "b2a1b5a5821064a86301c9cc580715131dd1ecfbf281db19d7aae0f5b0e8042e",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Stored XSS",
+      "route": "/campaigns/stored-xss/"
+    },
+    {
       "id": "file.campaigns-support-widget-index-3f8d0726ef",
       "path": "campaigns/support-widget/index.html",
       "sha256": "9c09ca24d272338f70cf67f767e30d3dcaf16e81e0f1b5661b0ec0ce0ce48b00",
@@ -22924,6 +23085,46 @@
       "reviewStatus": "reviewed",
       "title": "Transient Route Notice",
       "route": "/campaigns/transient-route-notice/"
+    },
+    {
+      "id": "file.campaigns-xss-attribute-index-97819fb130",
+      "path": "campaigns/xss-attribute/index.html",
+      "sha256": "13210fb010eeb0cf3b2ff0dbfa4b7148bdce97c2ecbbf6029b671749cfe5745e",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Attribute XSS",
+      "route": "/campaigns/xss-attribute/"
+    },
+    {
+      "id": "file.campaigns-xss-dom-index-39e7744fa7",
+      "path": "campaigns/xss-dom/index.html",
+      "sha256": "80335cb82f4c060bbc7576eb6a9621df65ab2da5ac25333a03b8f837cf4fd98f",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "DOM XSS",
+      "route": "/campaigns/xss-dom/"
+    },
+    {
+      "id": "file.campaigns-xss-query-code-index-4d3f9a01ae",
+      "path": "campaigns/xss-query-code/index.html",
+      "sha256": "79b1334b90b4082248157479ad3a23f171fc6c349a662a19b1226ea8eae6fa75",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Query to JavaScript XSS",
+      "route": "/campaigns/xss-query-code/"
+    },
+    {
+      "id": "file.campaigns-xss-reflected-index-3635c909e6",
+      "path": "campaigns/xss-reflected/index.html",
+      "sha256": "c4293220547b63336642548c9244fbb8a91b54416a6ecc16a432585cd431c41b",
+      "role": "presentation",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Reflected XSS",
+      "route": "/campaigns/xss-reflected/"
     },
     {
       "id": "file.demo-index-0bf44cb5b8",
@@ -26451,7 +26652,7 @@
     {
       "id": "file.jwt-index-9f67c22d1f",
       "path": "jwt/index.html",
-      "sha256": "23fe1c000a859b36e970e7a479f40e3fe0973aee2ba981e941f071f7e84e01a0",
+      "sha256": "38e4a0880714e42c34e2891864ad47866a1fc15caefae0da69d74845e7c08f81",
       "role": "presentation",
       "disposition": "index-only",
       "reviewStatus": "reviewed",
@@ -26477,6 +26678,176 @@
       "reviewStatus": "reviewed",
       "title": "JWTs stored in the live browser session",
       "route": "/jwt/storage/vulnerable/"
+    },
+    {
+      "id": "file.labs-access-control-index-3714a72cc8",
+      "path": "labs/access-control/index.html",
+      "sha256": "3612d4b4b79f4fec059a54b5acb38e96670a26631cb71279bdb88250123f4060",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Authenticated object authorization",
+      "route": "/labs/access-control/"
+    },
+    {
+      "id": "file.labs-browser-context-index-785bf25015",
+      "path": "labs/browser-context/index.html",
+      "sha256": "aa0a5fdda4782803ae22890cdaeef8a5e8e0fea13f4929a01d4a491bd461775c",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Evidence revealed by browser actions",
+      "route": "/labs/browser-context/"
+    },
+    {
+      "id": "file.labs-graphql-order-index-3ae8a1ac0f",
+      "path": "labs/graphql-order/index.html",
+      "sha256": "2d801221fd9922d926fc6516c9b056a18c2c34d1050ba61089b83abb87c4cde8",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "GraphQL cross-owner order query",
+      "route": "/labs/graphql-order/"
+    },
+    {
+      "id": "file.labs-idor-read-index-be9085d3fa",
+      "path": "labs/idor-read/index.html",
+      "sha256": "8247e33cafc92970014834bda43359474fc436e8f35d7cb1b9e70460c8b6950d",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Read another user's order",
+      "route": "/labs/idor-read/"
+    },
+    {
+      "id": "file.labs-idor-write-index-50af4fd8b7",
+      "path": "labs/idor-write/index.html",
+      "sha256": "1afdf7ec16a8e1ce0150b13eb5b35c05b1fa31ae6a46d98d6ec99cde1a54be43",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Update another user's order",
+      "route": "/labs/idor-write/"
+    },
+    {
+      "id": "file.labs-imported-request-preferences-index-606fa76a1c",
+      "path": "labs/imported-request-preferences/index.html",
+      "sha256": "5a738e65c8280bf3ae7796251597076d413d6d3cd759b526104e03f9138990ec",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Imported preferences alter a browser request",
+      "route": "/labs/imported-request-preferences/"
+    },
+    {
+      "id": "file.labs-index-5f3105d8e1",
+      "path": "labs/index.html",
+      "sha256": "42b4bfa9c642778a2a711eb4916fa941044d31122b89ece25406a8fca877c89f",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Choose a security lab category",
+      "route": "/labs/"
+    },
+    {
+      "id": "file.labs-jwt-nested-weak-secret-index-e198822b76",
+      "path": "labs/jwt-nested-weak-secret/index.html",
+      "sha256": "593dc33cfc701683ffcc887c532d9cd4e058a0d9aaed956ac07bbd433b320317",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "A weakly signed token inside JSON",
+      "route": "/labs/jwt-nested-weak-secret/"
+    },
+    {
+      "id": "file.labs-jwt-index-fcd27c6bf4",
+      "path": "labs/jwt/index.html",
+      "sha256": "f44f8c20d39e7542c54809d482bcf256b62724458521bb51476f98cd00197718",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "JWT verification and token evidence",
+      "route": "/labs/jwt/"
+    },
+    {
+      "id": "file.labs-on-demand-analytics-index-c705c3dce0",
+      "path": "labs/on-demand-analytics/index.html",
+      "sha256": "80c3912f122777e3d28b1b91765bb8993dee771de6bc1424a6d78c9089191ab8",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "A dependency appears only after an action",
+      "route": "/labs/on-demand-analytics/"
+    },
+    {
+      "id": "file.labs-real-lab-index-07460bbcaf",
+      "path": "labs/real-lab/index.html",
+      "sha256": "d43410a2e5f59644483b9863e06d4173a4ddef5c92ad32b64189fc83f1fa6c83",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Loading lab…",
+      "route": "/labs/real-lab/"
+    },
+    {
+      "id": "file.labs-session-bound-order-search-index-e0ab81b85c",
+      "path": "labs/session-bound-order-search/index.html",
+      "sha256": "af2bb4384a3f8e50629eecbe1c373e14b826a829952ee14f114e4a72b93dc550",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "A browser-owned POST reveals a query error",
+      "route": "/labs/session-bound-order-search/"
+    },
+    {
+      "id": "file.labs-spa-index-0f726fe0c7",
+      "path": "labs/spa/index.html",
+      "sha256": "0075eeeee56e4641b53491726fb78f78f0e5ec297a796f06d86f68ba0e0deebf",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Evidence that appears only after browser actions",
+      "route": "/labs/spa/"
+    },
+    {
+      "id": "file.labs-sql-index-d52f0ab53f",
+      "path": "labs/sql/index.html",
+      "sha256": "ef18dc5176c3a8f6684cb3a6e3d6ab4b2ff8ae4de5ca90932c0632508c73a4c1",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Three distinct in-memory SQL query contexts",
+      "route": "/labs/sql/"
+    },
+    {
+      "id": "file.labs-stored-xss-index-6ebfeef03d",
+      "path": "labs/stored-xss/index.html",
+      "sha256": "cbe6679e09f31a2c3a6b79ca36e92bafb1136fb82fe633770afde9dd5733b02b",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "One author, another viewer",
+      "route": "/labs/stored-xss/"
+    },
+    {
+      "id": "file.labs-support-widget-index-05de7168e5",
+      "path": "labs/support-widget/index.html",
+      "sha256": "be8e7368171b3d7f971cac1ea1cc618accee6c75ff2e7aa3d7c6fce9ad224be6",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Support reply crosses into HTML",
+      "route": "/labs/support-widget/"
+    },
+    {
+      "id": "file.labs-xss-index-421f8dde86",
+      "path": "labs/xss/index.html",
+      "sha256": "9d316ad22cf96f74029d7a69492ff3a06c1d081464b672b78e3738d5d2b3b4c0",
+      "role": "family-index",
+      "disposition": "index-only",
+      "reviewStatus": "reviewed",
+      "title": "Five paths to browser execution",
+      "route": "/labs/xss/"
     },
     {
       "id": "file.passive-api-docs-graphql-1cbc8a7d45",
@@ -26665,6 +27036,14 @@
       "route": "/passive/"
     },
     {
+      "id": "file.passive-real-labs-mjs-f71c5712e3",
+      "path": "passive/real-labs.mjs",
+      "sha256": "d1d7aaeb575bb97f80fd2098b643d44f2369961893be1e3ca08de915b16b8c82",
+      "role": "case-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
       "id": "file.passive-realtime-surfaces-491b76f825",
       "path": "passive/realtime_surfaces.html",
       "sha256": "f4f4b927371583be0ba1b983d103a2f4766762505b97b0c2c168a7504b9256b1",
@@ -26725,7 +27104,7 @@
     {
       "id": "file.passive-server-mjs-6b5bc0f960",
       "path": "passive/server.mjs",
-      "sha256": "e11c1106d173ff8dc176f9d83095be4c9ba74048c4b2901c2db97700e0260391",
+      "sha256": "345529fcce03653b447746747fc1902ce4b90ea575fc6aa4a0c5fbaf6954e3eb",
       "role": "runtime",
       "disposition": "helper-only",
       "reviewStatus": "reviewed",
@@ -26875,6 +27254,14 @@
           "reviewStatus": "reviewed"
         }
       ]
+    },
+    {
+      "id": "file.passive-workshop-labs-mjs-5643289796",
+      "path": "passive/workshop-labs.mjs",
+      "sha256": "2f34617c40e7ef94a02f2857538f2b8d7e0f610b8c2fbe880946b300da77d998",
+      "role": "case-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
     },
     {
       "id": "file.play-index-4636e6a206",
@@ -30036,6 +30423,70 @@
       "route": "/scanner/"
     },
     {
+      "id": "file.targets-access-control-idor-read-index-735ad7ff1b",
+      "path": "targets/access-control/idor-read/index.html",
+      "sha256": "258d34858aa06ccab0bb9018c788d810d247c112010029f2f371fb8f288feb3a",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "IDOR: read another user's order",
+      "route": "/targets/access-control/idor-read/",
+      "scenarios": [
+        {
+          "id": "source.targets-access-control-idor-read-index-735ad7ff1b.login",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "login",
+          "locator": "#login",
+          "label": "Start session",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-access-control-idor-read-index-735ad7ff1b.request",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "request",
+          "locator": "#request",
+          "label": "Read order",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-access-control-idor-write-index-02b08e40c7",
+      "path": "targets/access-control/idor-write/index.html",
+      "sha256": "b26bc10d656d80686fecfdfe0e473db53bf33320ea940e4b975d59e561e8d15d",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "IDOR: update another user's order",
+      "route": "/targets/access-control/idor-write/",
+      "scenarios": [
+        {
+          "id": "source.targets-access-control-idor-write-index-02b08e40c7.login",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "login",
+          "locator": "#login",
+          "label": "Start session",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-access-control-idor-write-index-02b08e40c7.request",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "request",
+          "locator": "#request",
+          "label": "Update order",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
       "id": "file.targets-angular-expression-dependency-expression-js-1e84d0926e",
       "path": "targets/angular-expression-dependency/expression.js",
       "sha256": "9c16bab59bfd3b561b5b095a1c8918e12443091c300a30e299739725ce0783d3",
@@ -30082,6 +30533,70 @@
           "anchor": "parse-expression",
           "locator": "#parse-expression",
           "label": "Evaluate expression",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-graphql-order-fixed-index-0e80ee3444",
+      "path": "targets/graphql/order/fixed/index.html",
+      "sha256": "55d68eed497bc335f71609c6f57cbcaca1e9092b0c2e8ce031e6328c6e591544",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Query an order with an owner check",
+      "route": "/targets/graphql/order/fixed/",
+      "scenarios": [
+        {
+          "id": "source.targets-graphql-order-fixed-index-0e80ee3444.login",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "login",
+          "locator": "#login",
+          "label": "Start session",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-graphql-order-fixed-index-0e80ee3444.request",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "request",
+          "locator": "#request",
+          "label": "Query order",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-graphql-order-vulnerable-index-fa82da5a89",
+      "path": "targets/graphql/order/vulnerable/index.html",
+      "sha256": "dd8a966e81e076a2bbdd1e03dd2f0cf09ec6e6a497bc055f9878400993ff3c1f",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Query an order by ID",
+      "route": "/targets/graphql/order/vulnerable/",
+      "scenarios": [
+        {
+          "id": "source.targets-graphql-order-vulnerable-index-fa82da5a89.login",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "login",
+          "locator": "#login",
+          "label": "Start session",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-graphql-order-vulnerable-index-fa82da5a89.request",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "request",
+          "locator": "#request",
+          "label": "Query order",
           "disposition": "migrate-atomic",
           "reviewStatus": "reviewed"
         }
@@ -30362,6 +30877,38 @@
           "anchor": "button-8-send-control",
           "locator": "button:nth-of-type(8)",
           "label": "Send control",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-jwt-lab-nested-json-weak-secret-index-2d11c0f48d",
+      "path": "targets/jwt-lab/nested-json-weak-secret/index.html",
+      "sha256": "8d262f4e03caade2a1abcf5820953c5c349fd02130684a63e84d6f7ee9707eaf",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Weakly signed JWT in a nested JSON POST",
+      "route": "/targets/jwt-lab/nested-json-weak-secret/",
+      "scenarios": [
+        {
+          "id": "source.targets-jwt-lab-nested-json-weak-secret-index-2d11c0f48d.issue",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "issue",
+          "locator": "#issue",
+          "label": "Issue user token",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-jwt-lab-nested-json-weak-secret-index-2d11c0f48d.send",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "send",
+          "locator": "#send",
+          "label": "Send nested JSON request",
           "disposition": "migrate-atomic",
           "reviewStatus": "reviewed"
         }
@@ -30968,6 +31515,106 @@
       "reviewStatus": "reviewed"
     },
     {
+      "id": "file.targets-stored-xss-fixed-index-ddad306080",
+      "path": "targets/stored-xss/fixed/index.html",
+      "sha256": "d18bf30c387ee70a8866bb5be969b5671cb412d881e0847236878ba47ee52a9c",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Render the same stored message as text",
+      "route": "/targets/stored-xss/fixed/",
+      "scenarios": [
+        {
+          "id": "source.targets-stored-xss-fixed-index-ddad306080.login",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "login",
+          "locator": "#login",
+          "label": "Start session",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-stored-xss-fixed-index-ddad306080.save",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "save",
+          "locator": "#save",
+          "label": "Save as Alice",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-stored-xss-fixed-index-ddad306080.load",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "load",
+          "locator": "#load",
+          "label": "Load as viewer",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-stored-xss-fixed-render-js-1dcf188a14",
+      "path": "targets/stored-xss/fixed/render.js",
+      "sha256": "ad73965a935fe35e8c8a50e00354af44fac7643306001879407bcb47a0bac175",
+      "role": "target-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.targets-stored-xss-vulnerable-index-a88614e624",
+      "path": "targets/stored-xss/vulnerable/index.html",
+      "sha256": "932e76a92ab3918debc4c962a419c7cc16819e8f15156246062a8843f9fee275",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "One author, another viewer",
+      "route": "/targets/stored-xss/vulnerable/",
+      "scenarios": [
+        {
+          "id": "source.targets-stored-xss-vulnerable-index-a88614e624.login",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "login",
+          "locator": "#login",
+          "label": "Start session",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-stored-xss-vulnerable-index-a88614e624.save",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "save",
+          "locator": "#save",
+          "label": "Save as Alice",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        },
+        {
+          "id": "source.targets-stored-xss-vulnerable-index-a88614e624.load",
+          "kind": "button",
+          "role": "assertion",
+          "anchor": "load",
+          "locator": "#load",
+          "label": "Load as viewer",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-stored-xss-vulnerable-render-js-86ce2293f9",
+      "path": "targets/stored-xss/vulnerable/render.js",
+      "sha256": "7179c518138c4cab82a059c96c8cf697104070ca61f5bbc98e2794432c14b1d6",
+      "role": "target-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
       "id": "file.targets-support-widget-fixed-index-9b5d0e78f0",
       "path": "targets/support-widget/fixed/index.html",
       "sha256": "c4a8729feb97fa12ccd869b5ab73b7141896000d65a619e5f3d185f6d05652c9",
@@ -31106,6 +31753,126 @@
       "role": "target-support",
       "disposition": "helper-only",
       "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.targets-xss-dom-fixed-app-js-d0b417d40c",
+      "path": "targets/xss/dom/fixed/app.js",
+      "sha256": "37a06a12d96d3c22ee00a908442cef8c3b67d37c3b411f94e79a0ea952e7ba6b",
+      "role": "target-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.targets-xss-dom-fixed-index-45bf788c8c",
+      "path": "targets/xss/dom/fixed/index.html",
+      "sha256": "5c02cc6dcb5118fb699c7383a27cf7b552ab37b9e2fe5c3c1c6bbf910cca3016",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Fragment-driven message preview",
+      "route": "/targets/xss/dom/fixed/",
+      "scenarios": [
+        {
+          "id": "source.targets-xss-dom-fixed-index-45bf788c8c.page",
+          "kind": "page-static",
+          "role": "assertion",
+          "anchor": "page",
+          "locator": "document",
+          "label": "Fragment-driven message preview",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-xss-dom-vulnerable-app-js-167b6822a2",
+      "path": "targets/xss/dom/vulnerable/app.js",
+      "sha256": "7ab31b7d698138b89812aaa81e339223d76492ba64788d0d97e5557edb6ef59e",
+      "role": "target-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.targets-xss-dom-vulnerable-index-b12dafd634",
+      "path": "targets/xss/dom/vulnerable/index.html",
+      "sha256": "e16e2b8b31610ef1c14d4267eba6063f17b2581e9cc22abbdc8e18766691d5f9",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Fragment-driven message preview",
+      "route": "/targets/xss/dom/vulnerable/",
+      "scenarios": [
+        {
+          "id": "source.targets-xss-dom-vulnerable-index-b12dafd634.page",
+          "kind": "page-static",
+          "role": "assertion",
+          "anchor": "page",
+          "locator": "document",
+          "label": "Fragment-driven message preview",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-xss-query-code-fixed-app-js-ee81565aff",
+      "path": "targets/xss/query-code/fixed/app.js",
+      "sha256": "e38b44c39ae89d84970cd316cf5372ef617c958e1eba568a7b03c131fc57720b",
+      "role": "target-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.targets-xss-query-code-fixed-index-9c1cd2f587",
+      "path": "targets/xss/query-code/fixed/index.html",
+      "sha256": "4b8eef56f321f1194141dc65cb437e3e9c1df4804efdda1dadbf12f68ed6408f",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Client-side preview",
+      "route": "/targets/xss/query-code/fixed/",
+      "scenarios": [
+        {
+          "id": "source.targets-xss-query-code-fixed-index-9c1cd2f587.page",
+          "kind": "page-static",
+          "role": "assertion",
+          "anchor": "page",
+          "locator": "document",
+          "label": "Client-side preview",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
+    },
+    {
+      "id": "file.targets-xss-query-code-vulnerable-app-js-99b6ee17fd",
+      "path": "targets/xss/query-code/vulnerable/app.js",
+      "sha256": "04937090a9ca45e65eac16a9e0887283d3b953598f71e76e06f0f4bb6655417b",
+      "role": "target-support",
+      "disposition": "helper-only",
+      "reviewStatus": "reviewed"
+    },
+    {
+      "id": "file.targets-xss-query-code-vulnerable-index-ad3b90d2c8",
+      "path": "targets/xss/query-code/vulnerable/index.html",
+      "sha256": "a23b43ae2d7c2f307bd428b3bc6184492db335a869f9404e3bc6f7f9d4fdec69",
+      "role": "atomic-target",
+      "disposition": "migrate-atomic",
+      "reviewStatus": "reviewed",
+      "title": "Client-side preview",
+      "route": "/targets/xss/query-code/vulnerable/",
+      "scenarios": [
+        {
+          "id": "source.targets-xss-query-code-vulnerable-index-ad3b90d2c8.page",
+          "kind": "page-static",
+          "role": "assertion",
+          "anchor": "page",
+          "locator": "document",
+          "label": "Client-side preview",
+          "disposition": "migrate-atomic",
+          "reviewStatus": "reviewed"
+        }
+      ]
     }
   ]
 }

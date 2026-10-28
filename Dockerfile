@@ -11,6 +11,9 @@ RUN apt-get update \
 
 WORKDIR /opt/ptk-playground
 
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
+
 COPY --chown=node:node . .
 
 ENV NODE_ENV=production \

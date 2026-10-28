@@ -16,10 +16,20 @@
   </div></header>
   <main id="main" class="page-shell">
     <section class="hero">
-      <div><p class="eyebrow">JWT browser and request evidence</p><h1>Follow one synthetic token across the browser and HTTP request surface.</h1><p class="hero__lede">These paired cases demonstrate browser-storage discovery and exact Authorization, cookie, form and nested-JSON request carriers. All tokens are synthetic and intentionally non-secret.</p></div>
+      <div><p class="eyebrow">JWT browser and request evidence</p><h1>Follow one synthetic token across the browser and HTTP request surface.</h1><p class="hero__lede">These paired cases demonstrate browser-storage discovery and exact Authorization, cookie, form and nested-JSON request carriers. The separate nested-JSON exploit case shows why a weak signing key matters. All tokens are synthetic.</p></div>
       <aside class="hero__panel"><p class="eyebrow">Two execution modes</p><h2>Static discovery, local active testing.</h2><p>Storage cases work on GitHub Pages. Request mutation needs the loopback-only Node or Docker runtime so POST bodies, cookies and response behavior are deterministic.</p></aside>
     </section>
     <aside class="notice notice--warning"><span class="notice__icon" aria-hidden="true">!</span><p><strong>Use only on authorised targets.</strong> The local APIs are deliberately vulnerable simulations and must not be exposed to an untrusted network.</p></aside>
+    <section class="section" aria-labelledby="attack-labs-title">
+      <div class="section-heading"><div><p class="eyebrow">JWT attack labs</p><h2 id="attack-labs-title">Five different verification questions</h2><p>PTK's JWT documentation names these five families. A working target is not a confirmed PTK finding; the mode and evidence for each case must be checked separately.</p></div></div>
+      <div class="entry-grid">
+        <article class="entry-card"><span class="badge badge--mixed">Target works · PTK finding pending</span><h3>None algorithm</h3><p>Unsigned synthetic token: HTTP 200 on vulnerable, 401 on repaired.</p><a class="button" href="../labs/jwt-none/">Open lab</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h3>Algorithm/key confusion</h3><p>Public RSA bytes used as an HMAC key grant synthetic admin only on the vulnerable route.</p><a class="button" href="../labs/jwt-alg-confusion/">Open lab</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h3>Weak HMAC secret</h3><p>A forged nested-JSON JWT succeeds with the weak key, not the repaired strong key.</p><a class="button" href="../labs/jwt-nested-weak-secret/">Open lab</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h3>Null signature</h3><p>Distinct from <code>alg:none</code>: HS256 with an empty signature succeeds only on the vulnerable route.</p><a class="button" href="../labs/jwt-null-signature/">Open lab</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">Target works · manual Full proof pending</span><h3>JWK header injection</h3><p>The vulnerable verifier trusts a bounded embedded public JWK; the repaired route pins its own key.</p><a class="button" href="../labs/jwt-jwk-injection/">Open lab</a></article>
+      </div>
+    </section>
     <section class="section" aria-labelledby="storage-title">
       <div class="section-heading"><div><p class="eyebrow">Static hosting</p><h2 id="storage-title">JWT discovery in browser state</h2><p>Open the review page, then open the PTK JWT tool. Compare it with the clean control on the same origin.</p></div></div>
       <div class="entry-grid">
@@ -31,6 +41,7 @@
       <div class="section-heading"><div><p class="eyebrow">Local runtime</p><h2 id="request-title">JWTs in captured requests</h2><p>Generate one bounded request at a time using Authorization, an HttpOnly cookie, a form field or a nested JSON property.</p></div></div>
       <div class="entry-grid">
         <article class="entry-card"><span class="badge badge--mixed">DAST</span><h3>Four exact request carriers</h3><p>Each vulnerable endpoint has a paired control with the same method, token and browser action.</p><a class="button" href="../targets/jwt-lab/dast/">Open local DAST cases</a></article>
+        <article class="entry-card"><span class="badge badge--primary">Exploit case</span><h3>Nested JSON weak-secret JWT</h3><p>Issue a user token, inspect and re-sign it, then compare admin authorization with the strong-key control.</p><a class="button" href="../targets/jwt-lab/nested-json-weak-secret/">Open nested JSON case</a></article>
         <article class="entry-card"><span class="badge badge--primary">PTK Pro · Coming soon</span><h3>Advanced verification behavior</h3><p>The same open fixtures also model algorithm-none, empty-signature, key-path and remote-key metadata handling without exposing private scanner rules.</p><a class="button button--secondary" href="../targets/jwt-lab/dast/">Review advanced cases</a></article>
       </div>
     </section>

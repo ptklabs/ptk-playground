@@ -28,7 +28,23 @@
         "imported-request-preferences",
         "history-order-router",
         "lazy-route-module",
-        "same-origin-child-tab"
+        "same-origin-child-tab",
+        "graphql-order",
+        "idor-read",
+        "idor-write",
+        "stored-xss",
+        "jwt-nested-weak-secret",
+        "jwt-none",
+        "jwt-alg-confusion",
+        "jwt-null-signature",
+        "jwt-jwk-injection",
+        "sql-single-quote",
+        "sql-double-quote",
+        "sql-auth-bypass",
+        "xss-reflected",
+        "xss-dom",
+        "xss-attribute",
+        "xss-query-code"
       ]
     },
     {

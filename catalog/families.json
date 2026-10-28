@@ -3,6 +3,18 @@
   "version": 1,
   "families": [
     {
+      "id": "family.access-control",
+      "title": "Access control",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "graphql-order",
+        "idor-read",
+        "idor-write"
+      ]
+    },
+    {
       "id": "family.action-loaded-dependencies",
       "title": "Action-loaded dependencies",
       "engines": [
@@ -111,6 +123,17 @@
       ]
     },
     {
+      "id": "family.authenticated-object-authorization",
+      "title": "Authenticated object authorization",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2",
+        "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f"
+      ]
+    },
+    {
       "id": "family.automation-canary",
       "title": "Automation canary",
       "engines": [
@@ -172,6 +195,21 @@
       ],
       "challengeIds": [
         "sast.cookie"
+      ]
+    },
+    {
+      "id": "family.cross-site-scripting",
+      "title": "Cross-site scripting",
+      "engines": [
+        "DAST",
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "xss-attribute",
+        "xss-dom",
+        "xss-query-code",
+        "xss-reflected"
       ]
     },
     {
@@ -534,6 +572,16 @@
       ],
       "challengeIds": [
         "passive.wp-admin-index"
+      ]
+    },
+    {
+      "id": "family.graphql-object-authorization",
+      "title": "GraphQL object authorization",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.api-labs-graphql-vulnerable-f5396d07"
       ]
     },
     {
@@ -1122,6 +1170,20 @@
       ]
     },
     {
+      "id": "family.jwt-authorization",
+      "title": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "jwt-alg-confusion",
+        "jwt-jwk-injection",
+        "jwt-nested-weak-secret",
+        "jwt-none",
+        "jwt-null-signature"
+      ]
+    },
+    {
       "id": "family.jwt-client-misuse",
       "title": "JWT client misuse",
       "engines": [
@@ -1129,6 +1191,16 @@
       ],
       "challengeIds": [
         "sast.atomic.sast-jwt-client-misuse.page"
+      ]
+    },
+    {
+      "id": "family.jwt-nested-json-authorization",
+      "title": "JWT nested JSON authorization",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666"
       ]
     },
     {
@@ -1402,6 +1474,18 @@
       ]
     },
     {
+      "id": "family.sql-injection",
+      "title": "SQL injection",
+      "engines": [
+        "DAST"
+      ],
+      "challengeIds": [
+        "sql-auth-bypass",
+        "sql-double-quote",
+        "sql-single-quote"
+      ]
+    },
+    {
       "id": "family.static-analysis",
       "title": "Static analysis",
       "engines": [
@@ -1429,6 +1513,18 @@
       ],
       "challengeIds": [
         "sast.atomic.sast-storage-security.page"
+      ]
+    },
+    {
+      "id": "family.stored-browser-content",
+      "title": "Stored browser content",
+      "engines": [
+        "DAST",
+        "IAST",
+        "SAST"
+      ],
+      "challengeIds": [
+        "stored-xss"
       ]
     },
     {

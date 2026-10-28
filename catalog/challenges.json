@@ -3,20 +3,20 @@
   "version": 1,
   "migrationStatus": "full-corpus-fixtures-complete",
   "summary": {
-    "challenges": 419,
-    "atomic": 297,
+    "challenges": 439,
+    "atomic": 317,
     "atomicObservations": 44,
     "advancedLabs": 78,
     "legacyCatalogueCases": 78,
-    "sourceLedgerFiles": 1392,
-    "authoredSourceFiles": 268,
+    "sourceLedgerFiles": 1449,
+    "authoredSourceFiles": 325,
     "generatedAtomicSast": 126,
     "generatedAtomicIast": 149,
-    "dastRuntimeTargets": 50,
-    "dastRuntimeRoutes": 223,
+    "dastRuntimeTargets": 54,
+    "dastRuntimeRoutes": 304,
     "scaPackages": 2,
     "scaScenarios": 5,
-    "classifiedScenarioMarkers": 1616,
+    "classifiedScenarioMarkers": 1636,
     "retainedAggregateAssertions": 0,
     "pendingScenarioReview": 0
   },
@@ -714,6 +714,824 @@
       "familyId": "family.related-browser-contexts-and-scope"
     },
     {
+      "id": "graphql-order",
+      "kind": "atomic-challenge",
+      "title": "GraphQL Cross-owner Order Query",
+      "summary": "Compare an Alice-to-Bob GraphQL order query with an owner-checking control.",
+      "category": "Access control",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "graphql-order-review",
+          "title": "Cross-owner GraphQL query",
+          "route": "./targets/graphql/order/vulnerable/",
+          "visibleBehavior": "Alice receives Bob's order via the documented Order query.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "graphql-order-control",
+          "title": "Owner-checked GraphQL query",
+          "route": "./targets/graphql/order/fixed/",
+          "visibleBehavior": "Alice receives FORBIDDEN for Bob's order but may query her own.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "graphql-order",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/graphql-order/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.access-control"
+    },
+    {
+      "id": "idor-read",
+      "kind": "atomic-challenge",
+      "title": "Authenticated IDOR: Read",
+      "summary": "Compare another user's order read with an ownership-enforcing control.",
+      "category": "Access control",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "idor-read-review",
+          "title": "Cross-owner read",
+          "route": "./targets/access-control/idor-read/vulnerable/",
+          "visibleBehavior": "Alice can read Bob's order by selecting its identifier.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "idor-read-control",
+          "title": "Owner-checked read",
+          "route": "./targets/access-control/idor-read/fixed/",
+          "visibleBehavior": "Alice receives 403 for Bob's order while Bob still reads it.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "idor-read",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/idor-read/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.access-control"
+    },
+    {
+      "id": "idor-write",
+      "kind": "atomic-challenge",
+      "title": "Authenticated IDOR: Update",
+      "summary": "Prove a cross-owner object mutation and its repaired control.",
+      "category": "Access control",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "idor-write-review",
+          "title": "Cross-owner update",
+          "route": "./targets/access-control/idor-write/vulnerable/",
+          "visibleBehavior": "Alice can change Bob's order note.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "idor-write-control",
+          "title": "Owner-checked update",
+          "route": "./targets/access-control/idor-write/fixed/",
+          "visibleBehavior": "Alice receives 403 and Bob's note remains unchanged.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "idor-write",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/idor-write/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.access-control"
+    },
+    {
+      "id": "stored-xss",
+      "kind": "atomic-challenge",
+      "title": "Stored XSS Across Two Sessions",
+      "summary": "Alice saves a message that Bob later renders; compare HTML and text sinks.",
+      "category": "Stored browser content",
+      "engines": [
+        "SAST",
+        "IAST",
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "stored-xss-review",
+          "title": "Stored message rendered as HTML",
+          "route": "./targets/stored-xss/vulnerable/",
+          "visibleBehavior": "Bob's page interprets Alice's stored markup.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "stored-xss-control",
+          "title": "Stored message rendered as text",
+          "route": "./targets/stored-xss/fixed/",
+          "visibleBehavior": "Bob sees the same message literally, without markup execution.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "stored-xss",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/stored-xss/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.stored-browser-content"
+    },
+    {
+      "id": "jwt-nested-weak-secret",
+      "kind": "atomic-challenge",
+      "title": "JWT Weak Secret in Nested JSON",
+      "summary": "Forge a synthetic admin JWT carried in auth.access_token and compare a strong-key control.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "jwt-nested-review",
+          "title": "Weak-key nested JWT",
+          "route": "./targets/jwt-lab/nested-json-weak-secret/",
+          "visibleBehavior": "A correctly forged admin token succeeds on the weak-key endpoint.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "jwt-nested-control",
+          "title": "Strong-key nested JWT",
+          "route": "./targets/jwt-lab/nested-json-weak-secret/",
+          "visibleBehavior": "The same forged token fails on the strong-key endpoint.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "jwt-nested-weak-secret",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/jwt-nested-weak-secret/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.jwt-authorization"
+    },
+    {
+      "id": "jwt-none",
+      "kind": "atomic-challenge",
+      "title": "JWT Algorithm None",
+      "summary": "Compare unsigned bearer-token acceptance with a rejecting verifier.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "jwt-none-review",
+          "title": "Unsigned token accepted",
+          "route": "./labs/jwt-none/?variant=vulnerable",
+          "visibleBehavior": "The unsigned synthetic bearer token receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "jwt-none-control",
+          "title": "Unsigned token rejected",
+          "route": "./labs/jwt-none/?variant=fixed",
+          "visibleBehavior": "The same unsigned bearer token receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "jwt-none",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/jwt-none/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.jwt-authorization"
+    },
+    {
+      "id": "jwt-alg-confusion",
+      "kind": "atomic-challenge",
+      "title": "JWT Algorithm Confusion",
+      "summary": "A published RSA public key becomes an HMAC signing key only at the review verifier.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "jwt-confusion-review",
+          "title": "Public-key HMAC accepted",
+          "route": "./labs/jwt-alg-confusion/?variant=vulnerable",
+          "visibleBehavior": "The HS256 admin forgery receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "jwt-confusion-control",
+          "title": "RS256 pinned",
+          "route": "./labs/jwt-alg-confusion/?variant=fixed",
+          "visibleBehavior": "The same HS256 forgery receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "jwt-alg-confusion",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/jwt-alg-confusion/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.jwt-authorization"
+    },
+    {
+      "id": "jwt-null-signature",
+      "kind": "atomic-challenge",
+      "title": "JWT Null Signature",
+      "summary": "An HS256 token with an empty signature is trusted by one synthetic verifier.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "jwt-null-signature-review",
+          "title": "Empty HS256 signature accepted",
+          "route": "./labs/jwt-null-signature/?variant=vulnerable",
+          "visibleBehavior": "The empty-signature synthetic admin token receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "jwt-null-signature-control",
+          "title": "HS256 signature required",
+          "route": "./labs/jwt-null-signature/?variant=fixed",
+          "visibleBehavior": "The same empty-signature admin token receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "jwt-null-signature",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/jwt-null-signature/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.jwt-authorization"
+    },
+    {
+      "id": "jwt-jwk-injection",
+      "kind": "atomic-challenge",
+      "title": "JWT Embedded JWK Injection",
+      "summary": "A synthetic verifier trusts a public key supplied by the JWT header.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "jwt-jwk-review",
+          "title": "Embedded public JWK trusted",
+          "route": "./labs/jwt-jwk-injection/?variant=vulnerable",
+          "visibleBehavior": "The attacker-key synthetic admin token receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "jwt-jwk-control",
+          "title": "Server key pinned",
+          "route": "./labs/jwt-jwk-injection/?variant=fixed",
+          "visibleBehavior": "The same attacker-key token receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "jwt-jwk-injection",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/jwt-jwk-injection/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.jwt-authorization"
+    },
+    {
+      "id": "sql-single-quote",
+      "kind": "atomic-challenge",
+      "title": "SQL Single-Quote Injection",
+      "summary": "A real string-literal query returns extra synthetic rows when input is concatenated.",
+      "category": "SQL injection",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "sql-single-review",
+          "title": "Concatenated category",
+          "route": "./labs/sql-single-quote/?variant=vulnerable",
+          "visibleBehavior": "The injected category returns four products instead of two.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "sql-single-control",
+          "title": "Bound category",
+          "route": "./labs/sql-single-quote/?variant=fixed",
+          "visibleBehavior": "The same injected category returns zero products.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "sql-single-quote",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/sql-single-quote/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.sql-injection"
+    },
+    {
+      "id": "sql-double-quote",
+      "kind": "atomic-challenge",
+      "title": "SQL Double-Quote Identifier Injection",
+      "summary": "An injected sort identifier changes actual query ordering.",
+      "category": "SQL injection",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "sql-double-review",
+          "title": "Concatenated sort identifier",
+          "route": "./labs/sql-double-quote/?variant=vulnerable",
+          "visibleBehavior": "The injected sort starts with Date rather than Apple.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "sql-double-control",
+          "title": "Allowlisted sort identifier",
+          "route": "./labs/sql-double-quote/?variant=fixed",
+          "visibleBehavior": "The injected identifier is rejected with HTTP 400.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "sql-double-quote",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/sql-double-quote/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.sql-injection"
+    },
+    {
+      "id": "sql-auth-bypass",
+      "kind": "atomic-challenge",
+      "title": "SQL Synthetic Login Bypass",
+      "summary": "An injected username bypasses a real SQLite password predicate.",
+      "category": "SQL injection",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "sql-auth-review",
+          "title": "Concatenated login predicate",
+          "route": "./labs/sql-auth-bypass/?variant=vulnerable",
+          "visibleBehavior": "The injected username grants the synthetic admin identity.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "sql-auth-control",
+          "title": "Bound login predicate",
+          "route": "./labs/sql-auth-bypass/?variant=fixed",
+          "visibleBehavior": "The same injected username receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "sql-auth-bypass",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/sql-auth-bypass/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.sql-injection"
+    },
+    {
+      "id": "xss-reflected",
+      "kind": "atomic-challenge",
+      "title": "Reflected XSS",
+      "summary": "A bounded query value executes a harmless marker only on the review response.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "xss-reflected-review",
+          "title": "Unsafe reflected response",
+          "route": "./targets/xss/reflected/vulnerable/",
+          "visibleBehavior": "The prepared query executes a harmless local marker.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "xss-reflected-control",
+          "title": "Encoded reflected response",
+          "route": "./targets/xss/reflected/fixed/",
+          "visibleBehavior": "The same query is visible as text and does not execute.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "xss-reflected",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/xss-reflected/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.cross-site-scripting"
+    },
+    {
+      "id": "xss-dom",
+      "kind": "atomic-challenge",
+      "title": "DOM XSS",
+      "summary": "A fragment message reaches innerHTML only on the review route.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "xss-dom-review",
+          "title": "Fragment to innerHTML",
+          "route": "./targets/xss/dom/vulnerable/",
+          "visibleBehavior": "The prepared hash executes a harmless local marker."
+        },
+        "repaired": {
+          "id": "xss-dom-control",
+          "title": "Fragment to textContent",
+          "route": "./targets/xss/dom/fixed/",
+          "visibleBehavior": "The same hash displays literally and does not execute."
+        }
+      },
+      "provenance": {
+        "missionId": "xss-dom",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/xss-dom/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.cross-site-scripting"
+    },
+    {
+      "id": "xss-attribute",
+      "kind": "atomic-challenge",
+      "title": "Reflected attribute XSS",
+      "summary": "A query breaks out of a quoted server-rendered attribute only on the review route.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "xss-attribute-review",
+          "title": "Unsafe result label",
+          "route": "./targets/xss/reflected-attribute/vulnerable/",
+          "visibleBehavior": "The prepared label executes a harmless local marker.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        "repaired": {
+          "id": "xss-attribute-control",
+          "title": "Encoded result label",
+          "route": "./targets/xss/reflected-attribute/fixed/",
+          "visibleBehavior": "The same label remains inside the attribute and does not execute.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      },
+      "provenance": {
+        "missionId": "xss-attribute",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/xss-attribute/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.cross-site-scripting"
+    },
+    {
+      "id": "xss-query-code",
+      "kind": "atomic-challenge",
+      "title": "Query to JavaScript XSS",
+      "summary": "A URL query reaches a client-side JavaScript execution sink only on review.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "availability": "available",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "xss-query-code-review",
+          "title": "Query in executable code",
+          "route": "./targets/xss/query-code/vulnerable/",
+          "visibleBehavior": "The prepared query executes a harmless local marker."
+        },
+        "repaired": {
+          "id": "xss-query-code-control",
+          "title": "Query rendered as data",
+          "route": "./targets/xss/query-code/fixed/",
+          "visibleBehavior": "The same query displays literally and does not execute."
+        }
+      },
+      "provenance": {
+        "missionId": "xss-query-code",
+        "legacyCaseIds": []
+      },
+      "guidance": {
+        "route": "./campaigns/xss-query-code/",
+        "objectiveCount": 3,
+        "supportsProgress": true,
+        "supportsHints": true,
+        "supportsProofTokens": false
+      },
+      "familyId": "family.cross-site-scripting"
+    },
+    {
       "id": "iast.atomic.iast-iast-runtime.button-1-inline-event",
       "kind": "atomic-challenge",
       "title": "\">Inline event",
@@ -794,6 +1612,223 @@
         "compatibilityRoute": "/iast/iast_open_redirect.advanced.html#btn-anchor"
       },
       "familyId": "family.iast-open-redirect-and-source-scoped-redirects"
+    },
+    {
+      "id": "dast.route.api-labs-graphql-vulnerable-f5396d07",
+      "kind": "atomic-challenge",
+      "title": "Api · Labs · Graphql · Vulnerable",
+      "summary": "A route-aware same session graphql order differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "GraphQL object authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.api-labs-graphql-vulnerable-f5396d07.review",
+          "title": "Api · Labs · Graphql · Vulnerable review route",
+          "route": "/api/labs/graphql/vulnerable",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "POST"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared same session graphql order differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.api-labs-graphql-vulnerable-f5396d07.control",
+          "title": "Api · Labs · Graphql · Vulnerable paired control",
+          "route": "/api/labs/graphql/fixed",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.api-labs-graphql-vulnerable-f5396d07"
+        ]
+      },
+      "familyId": "family.graphql-object-authorization"
+    },
+    {
+      "id": "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2",
+      "kind": "atomic-challenge",
+      "title": "Api · Labs · Idor read · Vulnerable · Objects · Order bob",
+      "summary": "A route-aware cross owner request differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "Authenticated object authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2.review",
+          "title": "Api · Labs · Idor read · Vulnerable · Objects · Order bob review route",
+          "route": "/api/labs/idor-read/vulnerable/objects/order-bob",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "GET",
+              "HEAD"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared cross owner request differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2.control",
+          "title": "Api · Labs · Idor read · Vulnerable · Objects · Order bob paired control",
+          "route": "/api/labs/idor-read/fixed/objects/order-bob",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2"
+        ]
+      },
+      "familyId": "family.authenticated-object-authorization"
+    },
+    {
+      "id": "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f",
+      "kind": "atomic-challenge",
+      "title": "Api · Labs · Idor write · Vulnerable · Objects · Order bob",
+      "summary": "A route-aware cross owner request differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "Authenticated object authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f.review",
+          "title": "Api · Labs · Idor write · Vulnerable · Objects · Order bob review route",
+          "route": "/api/labs/idor-write/vulnerable/objects/order-bob",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "POST"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared cross owner request differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f.control",
+          "title": "Api · Labs · Idor write · Vulnerable · Objects · Order bob paired control",
+          "route": "/api/labs/idor-write/fixed/objects/order-bob",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f"
+        ]
+      },
+      "familyId": "family.authenticated-object-authorization"
+    },
+    {
+      "id": "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666",
+      "kind": "atomic-challenge",
+      "title": "Api · Labs · Jwt · Nested · Vulnerable · Admin",
+      "summary": "A route-aware signed jwt request differential contract with explicit transport, method and loopback runtime requirements.",
+      "category": "JWT nested JSON authorization",
+      "engines": [
+        "DAST"
+      ],
+      "availability": "local-runtime",
+      "migrationStatus": "implemented",
+      "suitability": {
+        "manual": true,
+        "automation": true
+      },
+      "targets": {
+        "review": {
+          "id": "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666.review",
+          "title": "Api · Labs · Jwt · Nested · Vulnerable · Admin review route",
+          "route": "/api/labs/jwt/nested/vulnerable/admin",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "request": {
+            "methods": [
+              "POST"
+            ],
+            "transport": "http"
+          },
+          "visibleBehavior": "Observe the declared signed jwt request differential through the local route-aware runtime."
+        },
+        "repaired": {
+          "id": "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666.control",
+          "title": "Api · Labs · Jwt · Nested · Vulnerable · Admin paired control",
+          "route": "/api/labs/jwt/nested/fixed/admin",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http-or-https",
+            "loopbackOnly": true
+          },
+          "visibleBehavior": "The paired route preserves the workflow while removing the declared response or request weakness."
+        }
+      },
+      "provenance": {
+        "legacyCaseIds": [],
+        "sourceIds": [],
+        "runtimeContractIds": [
+          "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666"
+        ]
+      },
+      "familyId": "family.jwt-nested-json-authorization"
     },
     {
       "id": "iast.atomic.iast-iast-dom-xss.appendchild",

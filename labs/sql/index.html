@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SQL injection labs · PTK Playground</title><link rel="stylesheet" href="../../assets/css/playground.css"></head>
+<body><main class="page-shell">
+  <p class="eyebrow">Labs / SQL injection</p><h1>Three distinct in-memory SQL query contexts</h1>
+  <p>Each lab runs a real bounded SQLite query and compares it with a repaired control. The browser/API contrast is tested; current Full and Auto PTK findings remain unqualified.</p>
+  <div class="entry-grid">
+    <article class="entry-card"><h2>Single-quote string literal</h2><p>An injected category returns extra products; the bound query does not.</p><a class="button" href="../sql-single-quote/">Open lab</a></article>
+    <article class="entry-card"><h2>Double-quote identifier</h2><p>An injected sort key changes order; an allowlist rejects it.</p><a class="button" href="../sql-double-quote/">Open lab</a></article>
+    <article class="entry-card"><h2>Synthetic login bypass</h2><p>An injected username grants a synthetic admin identity; bound parameters reject it.</p><a class="button" href="../sql-auth-bypass/">Open lab</a></article>
+  </div>
+  <p><a href="../">All lab categories</a> · <a href="../../">Playground home</a></p>
+</main></body></html>

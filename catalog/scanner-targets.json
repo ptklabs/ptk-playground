@@ -505,6 +505,600 @@
           }
         }
       ]
+    },
+    {
+      "id": "graphql-order",
+      "title": "GraphQL Cross-owner Order Query",
+      "summary": "Compare an Alice-to-Bob GraphQL order query with an owner-checking control.",
+      "category": "Access control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/graphql-order/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "graphql-order-review",
+          "title": "Cross-owner GraphQL query",
+          "route": "./targets/graphql/order/vulnerable/",
+          "displayRoute": "/targets/graphql/order/vulnerable/",
+          "visibleBehavior": "Alice receives Bob's order via the documented Order query.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "graphql-order-control",
+          "title": "Owner-checked GraphQL query",
+          "route": "./targets/graphql/order/fixed/",
+          "displayRoute": "/targets/graphql/order/fixed/",
+          "visibleBehavior": "Alice receives FORBIDDEN for Bob's order but may query her own.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "idor-read",
+      "title": "Authenticated IDOR: Read",
+      "summary": "Compare another user's order read with an ownership-enforcing control.",
+      "category": "Access control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/idor-read/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "idor-read-review",
+          "title": "Cross-owner read",
+          "route": "./targets/access-control/idor-read/vulnerable/",
+          "displayRoute": "/targets/access-control/idor-read/vulnerable/",
+          "visibleBehavior": "Alice can read Bob's order by selecting its identifier.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "idor-read-control",
+          "title": "Owner-checked read",
+          "route": "./targets/access-control/idor-read/fixed/",
+          "displayRoute": "/targets/access-control/idor-read/fixed/",
+          "visibleBehavior": "Alice receives 403 for Bob's order while Bob still reads it.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "idor-write",
+      "title": "Authenticated IDOR: Update",
+      "summary": "Prove a cross-owner object mutation and its repaired control.",
+      "category": "Access control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/idor-write/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "idor-write-review",
+          "title": "Cross-owner update",
+          "route": "./targets/access-control/idor-write/vulnerable/",
+          "displayRoute": "/targets/access-control/idor-write/vulnerable/",
+          "visibleBehavior": "Alice can change Bob's order note.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "idor-write-control",
+          "title": "Owner-checked update",
+          "route": "./targets/access-control/idor-write/fixed/",
+          "displayRoute": "/targets/access-control/idor-write/fixed/",
+          "visibleBehavior": "Alice receives 403 and Bob's note remains unchanged.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "stored-xss",
+      "title": "Stored XSS Across Two Sessions",
+      "summary": "Alice saves a message that Bob later renders; compare HTML and text sinks.",
+      "category": "Stored browser content",
+      "engines": [
+        "SAST",
+        "IAST",
+        "DAST"
+      ],
+      "route": "./campaigns/stored-xss/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "stored-xss-review",
+          "title": "Stored message rendered as HTML",
+          "route": "./targets/stored-xss/vulnerable/",
+          "displayRoute": "/targets/stored-xss/vulnerable/",
+          "visibleBehavior": "Bob's page interprets Alice's stored markup.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "stored-xss-control",
+          "title": "Stored message rendered as text",
+          "route": "./targets/stored-xss/fixed/",
+          "displayRoute": "/targets/stored-xss/fixed/",
+          "visibleBehavior": "Bob sees the same message literally, without markup execution.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "jwt-nested-weak-secret",
+      "title": "JWT Weak Secret in Nested JSON",
+      "summary": "Forge a synthetic admin JWT carried in auth.access_token and compare a strong-key control.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/jwt-nested-weak-secret/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "jwt-nested-review",
+          "title": "Weak-key nested JWT",
+          "route": "./targets/jwt-lab/nested-json-weak-secret/",
+          "displayRoute": "/targets/jwt-lab/nested-json-weak-secret/",
+          "visibleBehavior": "A correctly forged admin token succeeds on the weak-key endpoint.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "jwt-nested-control",
+          "title": "Strong-key nested JWT",
+          "route": "./targets/jwt-lab/nested-json-weak-secret/",
+          "displayRoute": "/targets/jwt-lab/nested-json-weak-secret/",
+          "visibleBehavior": "The same forged token fails on the strong-key endpoint.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "jwt-none",
+      "title": "JWT Algorithm None",
+      "summary": "Compare unsigned bearer-token acceptance with a rejecting verifier.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/jwt-none/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "jwt-none-review",
+          "title": "Unsigned token accepted",
+          "route": "./labs/jwt-none/?variant=vulnerable",
+          "displayRoute": "/labs/jwt-none/?variant=vulnerable",
+          "visibleBehavior": "The unsigned synthetic bearer token receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "jwt-none-control",
+          "title": "Unsigned token rejected",
+          "route": "./labs/jwt-none/?variant=fixed",
+          "displayRoute": "/labs/jwt-none/?variant=fixed",
+          "visibleBehavior": "The same unsigned bearer token receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "jwt-alg-confusion",
+      "title": "JWT Algorithm Confusion",
+      "summary": "A published RSA public key becomes an HMAC signing key only at the review verifier.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/jwt-alg-confusion/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "jwt-confusion-review",
+          "title": "Public-key HMAC accepted",
+          "route": "./labs/jwt-alg-confusion/?variant=vulnerable",
+          "displayRoute": "/labs/jwt-alg-confusion/?variant=vulnerable",
+          "visibleBehavior": "The HS256 admin forgery receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "jwt-confusion-control",
+          "title": "RS256 pinned",
+          "route": "./labs/jwt-alg-confusion/?variant=fixed",
+          "displayRoute": "/labs/jwt-alg-confusion/?variant=fixed",
+          "visibleBehavior": "The same HS256 forgery receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "jwt-null-signature",
+      "title": "JWT Null Signature",
+      "summary": "An HS256 token with an empty signature is trusted by one synthetic verifier.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/jwt-null-signature/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "jwt-null-signature-review",
+          "title": "Empty HS256 signature accepted",
+          "route": "./labs/jwt-null-signature/?variant=vulnerable",
+          "displayRoute": "/labs/jwt-null-signature/?variant=vulnerable",
+          "visibleBehavior": "The empty-signature synthetic admin token receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "jwt-null-signature-control",
+          "title": "HS256 signature required",
+          "route": "./labs/jwt-null-signature/?variant=fixed",
+          "displayRoute": "/labs/jwt-null-signature/?variant=fixed",
+          "visibleBehavior": "The same empty-signature admin token receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "jwt-jwk-injection",
+      "title": "JWT Embedded JWK Injection",
+      "summary": "A synthetic verifier trusts a public key supplied by the JWT header.",
+      "category": "JWT authorization",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/jwt-jwk-injection/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "jwt-jwk-review",
+          "title": "Embedded public JWK trusted",
+          "route": "./labs/jwt-jwk-injection/?variant=vulnerable",
+          "displayRoute": "/labs/jwt-jwk-injection/?variant=vulnerable",
+          "visibleBehavior": "The attacker-key synthetic admin token receives HTTP 200.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "jwt-jwk-control",
+          "title": "Server key pinned",
+          "route": "./labs/jwt-jwk-injection/?variant=fixed",
+          "displayRoute": "/labs/jwt-jwk-injection/?variant=fixed",
+          "visibleBehavior": "The same attacker-key token receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "sql-single-quote",
+      "title": "SQL Single-Quote Injection",
+      "summary": "A real string-literal query returns extra synthetic rows when input is concatenated.",
+      "category": "SQL injection",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/sql-single-quote/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "sql-single-review",
+          "title": "Concatenated category",
+          "route": "./labs/sql-single-quote/?variant=vulnerable",
+          "displayRoute": "/labs/sql-single-quote/?variant=vulnerable",
+          "visibleBehavior": "The injected category returns four products instead of two.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "sql-single-control",
+          "title": "Bound category",
+          "route": "./labs/sql-single-quote/?variant=fixed",
+          "displayRoute": "/labs/sql-single-quote/?variant=fixed",
+          "visibleBehavior": "The same injected category returns zero products.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "sql-double-quote",
+      "title": "SQL Double-Quote Identifier Injection",
+      "summary": "An injected sort identifier changes actual query ordering.",
+      "category": "SQL injection",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/sql-double-quote/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "sql-double-review",
+          "title": "Concatenated sort identifier",
+          "route": "./labs/sql-double-quote/?variant=vulnerable",
+          "displayRoute": "/labs/sql-double-quote/?variant=vulnerable",
+          "visibleBehavior": "The injected sort starts with Date rather than Apple.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "sql-double-control",
+          "title": "Allowlisted sort identifier",
+          "route": "./labs/sql-double-quote/?variant=fixed",
+          "displayRoute": "/labs/sql-double-quote/?variant=fixed",
+          "visibleBehavior": "The injected identifier is rejected with HTTP 400.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "sql-auth-bypass",
+      "title": "SQL Synthetic Login Bypass",
+      "summary": "An injected username bypasses a real SQLite password predicate.",
+      "category": "SQL injection",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./campaigns/sql-auth-bypass/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "sql-auth-review",
+          "title": "Concatenated login predicate",
+          "route": "./labs/sql-auth-bypass/?variant=vulnerable",
+          "displayRoute": "/labs/sql-auth-bypass/?variant=vulnerable",
+          "visibleBehavior": "The injected username grants the synthetic admin identity.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "sql-auth-control",
+          "title": "Bound login predicate",
+          "route": "./labs/sql-auth-bypass/?variant=fixed",
+          "displayRoute": "/labs/sql-auth-bypass/?variant=fixed",
+          "visibleBehavior": "The same injected username receives HTTP 401.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "xss-reflected",
+      "title": "Reflected XSS",
+      "summary": "A bounded query value executes a harmless marker only on the review response.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "route": "./campaigns/xss-reflected/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "xss-reflected-review",
+          "title": "Unsafe reflected response",
+          "route": "./targets/xss/reflected/vulnerable/",
+          "displayRoute": "/targets/xss/reflected/vulnerable/",
+          "visibleBehavior": "The prepared query executes a harmless local marker.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "xss-reflected-control",
+          "title": "Encoded reflected response",
+          "route": "./targets/xss/reflected/fixed/",
+          "displayRoute": "/targets/xss/reflected/fixed/",
+          "visibleBehavior": "The same query is visible as text and does not execute.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "xss-dom",
+      "title": "DOM XSS",
+      "summary": "A fragment message reaches innerHTML only on the review route.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "route": "./campaigns/xss-dom/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "xss-dom-review",
+          "title": "Fragment to innerHTML",
+          "route": "./targets/xss/dom/vulnerable/",
+          "displayRoute": "/targets/xss/dom/vulnerable/",
+          "visibleBehavior": "The prepared hash executes a harmless local marker."
+        },
+        {
+          "variant": "repaired",
+          "id": "xss-dom-control",
+          "title": "Fragment to textContent",
+          "route": "./targets/xss/dom/fixed/",
+          "displayRoute": "/targets/xss/dom/fixed/",
+          "visibleBehavior": "The same hash displays literally and does not execute."
+        }
+      ]
+    },
+    {
+      "id": "xss-attribute",
+      "title": "Reflected attribute XSS",
+      "summary": "A query breaks out of a quoted server-rendered attribute only on the review route.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "route": "./campaigns/xss-attribute/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "xss-attribute-review",
+          "title": "Unsafe result label",
+          "route": "./targets/xss/reflected-attribute/vulnerable/",
+          "displayRoute": "/targets/xss/reflected-attribute/vulnerable/",
+          "visibleBehavior": "The prepared label executes a harmless local marker.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        },
+        {
+          "variant": "repaired",
+          "id": "xss-attribute-control",
+          "title": "Encoded result label",
+          "route": "./targets/xss/reflected-attribute/fixed/",
+          "displayRoute": "/targets/xss/reflected-attribute/fixed/",
+          "visibleBehavior": "The same label remains inside the attribute and does not execute.",
+          "runtime": {
+            "kind": "route-aware-server",
+            "protocol": "http",
+            "port": 3080
+          }
+        }
+      ]
+    },
+    {
+      "id": "xss-query-code",
+      "title": "Query to JavaScript XSS",
+      "summary": "A URL query reaches a client-side JavaScript execution sink only on review.",
+      "category": "Cross-site scripting",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "route": "./campaigns/xss-query-code/",
+      "targets": [
+        {
+          "variant": "review",
+          "id": "xss-query-code-review",
+          "title": "Query in executable code",
+          "route": "./targets/xss/query-code/vulnerable/",
+          "displayRoute": "/targets/xss/query-code/vulnerable/",
+          "visibleBehavior": "The prepared query executes a harmless local marker."
+        },
+        {
+          "variant": "repaired",
+          "id": "xss-query-code-control",
+          "title": "Query rendered as data",
+          "route": "./targets/xss/query-code/fixed/",
+          "displayRoute": "/targets/xss/query-code/fixed/",
+          "visibleBehavior": "The same query displays literally and does not execute."
+        }
+      ]
     }
   ]
 }

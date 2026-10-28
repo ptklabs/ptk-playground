@@ -101,7 +101,7 @@ test('playground desktop and mobile smoke stays local and renders the focused ca
       }
 
       assert.equal(await page.goto(`${baseUrl}/campaigns/`, { waitUntil: 'networkidle' }).then((response) => response.status()), 200)
-      assert.equal(await page.locator('[data-mission-card]').count(), 11)
+      assert.equal(await page.locator('[data-mission-card]').count(), 15)
       assert.equal(await page.locator('[data-product-preview]').count(), 3)
       assert.equal(await page.locator('[data-product-preview][data-preview-status="validated"]').count(), 2)
       assert.equal(await page.locator('[data-product-preview][data-preview-status="in-progress"]').count(), 1)
@@ -117,7 +117,7 @@ test('playground desktop and mobile smoke stays local and renders the focused ca
       assert.equal(await page.locator('[data-challenge-id="session-bound-order-search"] .challenge-card__preview').count(), 1)
       assert.match(await page.locator('[data-playlist-title]').textContent(), /browser is the source of truth/i)
       await page.goto(`${baseUrl}/play/?playlist=current-browser-missions`, { waitUntil: 'networkidle' })
-      assert.equal(await page.locator('[data-challenge-id]').count(), 11)
+      assert.equal(await page.locator('[data-challenge-id]').count(), 15)
       for (const [playlist, expected] of [
         ['static-to-runtime-evidence', 5],
         ['browser-state-and-navigation', 4],

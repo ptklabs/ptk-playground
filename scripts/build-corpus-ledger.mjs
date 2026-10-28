@@ -17,6 +17,7 @@ const inventoryRoots = [
   'play',
   'explore',
   'jwt',
+  'labs',
   'atomic',
   'targets',
   'assets/css',
@@ -459,6 +460,20 @@ for (const route of [
   '/targets/jwt-lab/form/fixed/api/session',
   '/targets/jwt-lab/json/vulnerable/api/session',
   '/targets/jwt-lab/json/fixed/api/session',
+  '/api/labs/session',
+  '/api/labs/me',
+  '/api/labs/reset',
+  '/api/labs/graphql/vulnerable',
+  '/api/labs/graphql/fixed',
+  '/api/labs/idor-read/vulnerable/objects/order-bob',
+  '/api/labs/idor-read/fixed/objects/order-bob',
+  '/api/labs/idor-write/vulnerable/objects/order-bob',
+  '/api/labs/idor-write/fixed/objects/order-bob',
+  '/api/labs/stored-xss/messages',
+  '/api/labs/jwt/nested/vulnerable/issue',
+  '/api/labs/jwt/nested/fixed/issue',
+  '/api/labs/jwt/nested/vulnerable/admin',
+  '/api/labs/jwt/nested/fixed/admin',
   '/passive/realtime/ws'
 ]) registerRoute(route, 'route-aware-runtime', 'passive/server.mjs')
 

@@ -15,12 +15,14 @@ Use these fixtures only in an environment you own or are authorised to test.
 
 Public site: <https://ptklabs.github.io/ptk-playground/>
 
-The site has two primary workflows:
+The site has three entry points:
 
 - **Play** — choose a short path, then use the linked mission's objectives,
   hints and visible proof tokens or open every target directly.
 - **Explore** — search the complete catalogue of focused cases and retained
   historical labs.
+- **Labs** — choose a JWT, XSS, SQL, browser-context or access-control category,
+  then open an individual vulnerable/repaired case.
 
 The guided BSides journey is available at:
 
@@ -57,6 +59,43 @@ positive result and the negative control. Some case cards may describe future
 coverage, but the playground contains no private rule definitions or attack
 payload catalogue.
 
+## Workshop labs
+
+Open `/labs/` on the loopback runtime to choose a category, then an individual case.
+Dedicated category pages are `/labs/jwt/`, `/labs/xss/`, `/labs/sql/`,
+`/labs/browser-context/` and `/labs/access-control/`; the older `/jwt/` and
+`/labs/spa/` routes remain available.
+
+Current cases include:
+
+- **SPA** — the existing 30 ms transient-route notice and separate History API and lazy-module cases.
+- **Access control** — separate read and update IDOR cases with synthetic Alice/Bob sessions. Use isolated browser contexts or profiles to keep the two cookie jars independent. Each case has a repaired ownership-check route.
+- **GraphQL order** — a bounded, documented POST operation that lets Alice query Bob's order on the review route. The repaired route returns `data.order: null` and `FORBIDDEN` while Alice's own order still succeeds. This is a manual PTK request/response proof case, not a claimed automatic BOLA finding; it has no introspection or arbitrary GraphQL operation support.
+- **XSS** — stored XSS across Alice's author session and Bob's viewer session, with a text-rendering control, alongside existing DOM cases.
+- **JWT** — the existing discovery and carrier cases plus a weak-HS256 token carried in the nested `auth.access_token` property of a JSON POST. A normal user token receives 403; a correctly forged admin token receives 200 only on the weak-key endpoint. The strong-key control rejects that same forgery.
+- **Focused JWT verification** — `/labs/jwt-none/` compares an unsigned `alg:none` bearer token (review 200, repaired 401). `/labs/jwt-alg-confusion/` compares an HS256 admin token signed with published synthetic RSA public-key bytes. `/labs/jwt-null-signature/` keeps `alg:HS256` but empties the signature; `/labs/jwt-jwk-injection/` signs with a temporary attacker key and embeds only its public JWK. Each new forged admin token receives 200 on review and 401 on repaired; a normal user token receives 403 on both admin routes. These are target/browser contrasts and manual Full PTK proof candidates, not claimed automatic findings. Auto has not been qualified for them.
+- **Actual SQL queries** — `/labs/sql-single-quote/`, `/labs/sql-double-quote/` and `/labs/sql-auth-bypass/` execute bounded in-memory SQLite SELECTs against synthetic rows. Their repaired controls bind values or allowlist the sort identifier. The older order-search syntax-error fixture remains available but is not a real injection proof.
+- **XSS variants** — `/labs/xss-reflected/` and `/labs/xss-dom/` join the existing two-session stored case. Each new review target executes a harmless page-local marker; its repaired target displays the same input as text. The marker is browser proof, not by itself a PTK finding.
+
+The session, stored-XSS and nested-JWT cases need `npm run demo` or the same
+Docker runtime; static hosting cannot implement their APIs. Identity selection
+is deliberately synthetic, not a real account system. All data remains local
+and is reset when the process/container restarts. A signed-in lab session can
+also call `POST /api/labs/reset` to clear orders and the saved message. Keep
+the runtime bound to loopback; do not test these deliberately vulnerable cases
+on an untrusted network. Fixture proof does not imply that PTK automatically
+finds every case: distinguish a scanner finding from a manual request/runtime
+proof during the workshop.
+
+The focused JWT/SQL/XSS cases also require the local route-aware runtime. The
+SQL engine is a pinned server-only dependency; it creates and closes a new
+in-memory database for each request. No database file, real account, external
+key lookup or unrestricted SQL endpoint is involved. Each focused lab page
+states one action, vulnerable/repaired outcomes, reset and its current PTK
+evidence tier. Until a pinned Full build proves a matching native finding, the
+home and catalogue label these as candidate labs. Separate SAST/IAST-specific
+cases and any advanced-rule detection claims need their own qualification.
+
 ## Why browser context matters
 
 | Evidence | What the playground demonstrates |
@@ -90,6 +129,7 @@ cookies, methods, SSE/WebSocket upgrades or HTTPS. Start the loopback-only
 route-aware runtime:
 
 ```bash
+npm ci
 npm run demo
 ```
 
@@ -98,6 +138,7 @@ Then open:
 - <http://127.0.0.1:3080/play/>
 - <http://127.0.0.1:3080/explore/>
 - <http://127.0.0.1:3080/passive/>
+- <http://127.0.0.1:3080/labs/>
 - <https://127.0.0.1:3443/> when local HTTPS is available
 
 The HTTPS listener uses a self-signed certificate intended only for this local

@@ -18,7 +18,8 @@
       <nav class="site-nav" aria-label="Playground navigation">
         <a href="./play/">Play</a>
         <a href="./explore/">Explore</a>
-        <a href="./jwt/">JWT Lab</a>
+        <a href="./labs/jwt/">JWT Labs</a>
+        <a href="./labs/">Labs</a>
       </nav>
     </div>
   </header>
@@ -32,6 +33,7 @@
         <div class="hero__actions">
           <a class="button" href="./play/">Play a guided path</a>
           <a class="button button--secondary" href="./explore/">Explore every challenge</a>
+          <a class="button button--secondary" href="./labs/">Open workshop labs</a>
         </div>
       </div>
       <aside class="hero__panel" aria-label="Current corpus accounting">
@@ -70,6 +72,18 @@
       </div>
     </section>
 
+    <section class="section" aria-labelledby="lab-tracks-title">
+      <div class="section-heading"><div><p class="eyebrow">Labs</p><h2 id="lab-tracks-title">Choose a lab category</h2><p>Each category lists its repeatable cases and says which PTK evidence has actually been verified. A vulnerable page alone is not a PTK finding.</p></div></div>
+      <div class="entry-grid">
+        <article class="entry-card"><span class="badge badge--mixed">JWT</span><h3>Token verification</h3><p>Compare five separate synthetic verifier attacks and browser token discovery, with PTK evidence status shown on each lab.</p><a class="button button--secondary" href="./labs/jwt/">Explore JWT labs</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">XSS</span><h3>Script execution</h3><p>Five vulnerable/repaired browser labs across reflection, storage, HTML attributes, and two DOM sinks; additional source-to-sink missions are clearly marked as candidates.</p><a class="button button--secondary" href="./labs/xss/">Explore XSS labs</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">SQL</span><h3>Query behavior</h3><p>Three distinct, bounded in-memory SQLite cases and their repaired controls.</p><a class="button button--secondary" href="./labs/sql/">Explore SQL labs</a></article>
+        <article class="entry-card"><span class="badge badge--primary">Browser context</span><h3>What a browser-only action reveals</h3><p>A dependency loaded after a click and a short-lived SPA route show why timing and runtime context matter.</p><a class="button button--secondary" href="./labs/browser-context/">Explore browser-context labs</a></article>
+        <article class="entry-card"><span class="badge badge--mixed">Access control</span><h3>Two users, one object</h3><p>Compare cross-owner reads, writes and a GraphQL query with ownership-enforcing controls.</p><a class="button button--secondary" href="./labs/access-control/">Explore access-control labs</a></article>
+      </div>
+      <p>Full-only manual proofs, detection fixtures and unqualified candidates are labelled on their category pages. <a href="./labs/">Browse all lab categories</a>.</p>
+    </section>
+
     <section class="section" aria-labelledby="browser-context-title">
       <div class="section-heading"><div><p class="eyebrow">Why browser context matters</p><h2 id="browser-context-title">Different engines observe different parts of one application.</h2></div></div>
       <div class="evidence-grid">
@@ -93,7 +107,7 @@
   <footer class="site-footer">
     <div class="site-footer__inner">
       <p>OWASP PTK Playground · Deliberately vulnerable fixtures for authorised testing.</p>
-      <nav aria-label="Project links"><a href="./play/">Play</a><a href="./explore/">Explore</a><a href="./jwt/">JWT Lab</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a><a href="https://github.com/ptklabs/ptk-playground">Source</a><a href="https://github.com/DenisPodgurskii/pentestkit/tree/master/docs/guide">Pentester guide</a></nav>
+      <nav aria-label="Project links"><a href="./play/">Play</a><a href="./explore/">Explore</a><a href="./labs/jwt/">JWT Labs</a><a href="https://owasp.org/www-project-penetration-testing-kit/">OWASP PTK</a><a href="https://github.com/ptklabs/ptk-playground">Source</a><a href="https://github.com/DenisPodgurskii/pentestkit/tree/master/docs/guide">Pentester guide</a></nav>
     </div>
   </footer>
 </body>

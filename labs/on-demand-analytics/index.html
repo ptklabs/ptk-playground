@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>On-Demand Analytics Lab · PTK Playground</title><link rel="stylesheet" href="../../assets/css/playground.css"></head>
+<body><main class="page-shell"><p class="eyebrow">Lab / Late dependency</p><h1>A dependency appears only after an action</h1>
+<p>Start Full PTK SCA before opening the review target. The initial document alone does not load the analytics dependency.</p>
+<ol><li><strong>Setup:</strong> open the <a href="../../targets/on-demand-analytics/vulnerable/">review target</a> and note that analytics has not loaded.</li><li><strong>One action:</strong> press <em>Open analytics workspace</em>.</li><li><strong>Vulnerable outcome:</strong> the same-origin jQuery 3.4.1 resource loads and the page displays <code>ANALYTICS-DEPENDENCY-LOADED</code>.</li><li><strong>Repaired outcome:</strong> perform the same action on the <a href="../../targets/on-demand-analytics/fixed/">repaired target</a>; the summary still works using jQuery 3.7.1 and displays <code>ANALYTICS-DEPENDENCY-REVIEWED</code>.</li></ol>
+<p><strong>Reset:</strong> reload the target to return to the unloaded state; begin a fresh PTK scan for an independent component result.</p>
+<p><strong>Exact PTK evidence to inspect:</strong> Full 10.0.0 Firefox positive/repaired controls confirm a review-only SCA finding for the action-loaded jQuery 3.4.1; the repaired 3.7.1 route did not emit that vulnerable-version finding. Other browsers still need their own qualification.</p>
+<p><a href="../">All labs</a> · <a href="../../campaigns/on-demand-analytics/">Guided mission</a></p></main></body></html>

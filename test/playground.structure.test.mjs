@@ -72,6 +72,7 @@ test('full-corpus source ledger is current and accounts for every selected sourc
     'play',
     'explore',
     'jwt',
+    'labs',
     'atomic',
     'targets',
     'assets/css',
@@ -621,7 +622,7 @@ test('scanner target catalogue is a minimal, exact projection of public missions
   assert.deepEqual(scannerTargets.missions, projected)
   const serialized = JSON.stringify(scannerTargets)
   assert.doesNotMatch(serialized, /completion|objectives|answer|payload|matcher|ruleId|policyId/)
-  assert.equal(scannerTargets.missions.reduce((total, mission) => total + mission.targets.length, 0), 22)
+  assert.equal(scannerTargets.missions.reduce((total, mission) => total + mission.targets.length, 0), missions.missions.length * 2)
 })
 
 test('public mission catalogue is local and has paired target contracts', () => {
@@ -643,7 +644,15 @@ test('public mission catalogue is local and has paired target contracts', () => 
       assert.ok(target.route.startsWith('./') && !target.route.startsWith('//'))
       if (target.runtime?.kind === 'route-aware-server') {
         const pathname = new URL(target.route.replace(/^\.\//, '/'), 'http://playground.test').pathname
-        assert.ok(routeServer.includes(`"${pathname}"`), `route server is missing mission target: ${pathname}`)
+        if (pathname.startsWith('/targets/xss/reflected/')) {
+          assert.match(routeServer, /serveReflectedXss\(req, res, url\)/)
+          assert.match(read('passive/real-labs.mjs'), /targets\\\/xss\\\/reflected/)
+        } else if (pathname.startsWith('/targets/xss/reflected-attribute/')) {
+          assert.match(routeServer, /serveAttributeXss\(req, res, url\)/)
+          assert.match(read('passive/real-labs.mjs'), /targets\\\/xss\\\/reflected-attribute/)
+        } else {
+          assert.ok(routeServer.includes(`"${pathname}"`), `route server is missing mission target: ${pathname}`)
+        }
       } else {
         const relative = target.route.replace(/^\.\//, '')
         assert.ok(fs.existsSync(path.join(repoRoot, relative)), `missing mission target: ${relative}`)
@@ -737,6 +746,7 @@ test('public product preview terminology is confined to the approved presentatio
     'README.md',
     'campaigns/index.html',
     'jwt/index.html',
+    'labs/xss/index.html',
     'catalog/missions.json',
     'catalog/challenges.json',
     'assets/js/playground.js',
@@ -759,7 +769,7 @@ test('public product preview terminology is confined to the approved presentatio
       .replace(/<style\b[\s\S]*?<\/style>/gi, '')
       .replace(/<pre\b[\s\S]*?<\/pre>/gi, '')
     assert.doesNotMatch(visibleMarkup, /\bportal\b/i, `${relative} exposes Portal terminology in visible text`)
-    if (!['campaigns/index.html', 'jwt/index.html'].includes(relative)) {
+    if (!['campaigns/index.html', 'jwt/index.html', 'labs/xss/index.html'].includes(relative)) {
       assert.doesNotMatch(visibleMarkup, /\bpro\b/i, `${relative} exposes product-preview terminology in visible text`)
     }
   }
@@ -809,7 +819,7 @@ test('public index pages use the shared self-hosted shell', () => {
   assert.match(read('index.html'), /href="\.\/play\/"/)
   assert.match(read('index.html'), /href="\.\/explore\/"/)
   for (const mission of missions.missions) {
-    assert.match(read(`${mission.route.replace(/^\.\//, '')}index.html`), /href="\.\.\/\.\.\/play\//)
+    assert.match(read(`${mission.route.replace(/^\.\//, '')}index.html`), /href="\.\.\/\.\.\/(?:play|labs|jwt)\//)
   }
 })
 
@@ -1306,7 +1316,9 @@ test('local demo container preserves the bounded route-aware security contract',
   assert.match(dockerfile, /^USER node$/m)
   assert.match(dockerfile, /^EXPOSE 3080 3443$/m)
   assert.match(dockerfile, /HEALTHCHECK[^\n]*\\\n\s*CMD \["node"/)
-  assert.doesNotMatch(dockerfile, /npm (?:ci|install)|playwright/i)
+  assert.match(dockerfile, /^RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund$/m)
+  assert.doesNotMatch(dockerfile, /npm install|playwright/i)
+  assert.deepEqual(packageJson.dependencies, { 'sql.js': '1.14.2' })
 
   assert.match(compose, /read_only:\s*true/)
   assert.match(compose, /127\.0\.0\.1:3080:3080/)

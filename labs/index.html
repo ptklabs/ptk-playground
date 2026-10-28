@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Labs · PTK Playground</title><link rel="stylesheet" href="../assets/css/playground.css"></head>
+<body><main class="page-shell">
+  <p class="eyebrow">Labs</p><h1>Choose a security lab category</h1>
+  <p>Run <code>npm run demo</code> for local API cases. Each category separates a working vulnerable/repaired target from a PTK finding proven on a specific extension build. Play and Explore remain available from the <a href="../">homepage</a>.</p>
+  <div class="entry-grid">
+    <article class="entry-card"><h2>JWT</h2><p>Five distinct synthetic verifier attacks, plus browser token-discovery exercises.</p><a class="button" href="./jwt/">All JWT labs</a></article>
+    <article class="entry-card"><h2>XSS</h2><p>Reflected, stored and DOM cases, including browser-state and short-lived sources.</p><a class="button" href="./xss/">All XSS labs</a></article>
+    <article class="entry-card"><h2>SQL injection</h2><p>Three real in-memory query contexts with repaired controls.</p><a class="button" href="./sql/">All SQL labs</a></article>
+    <article class="entry-card"><h2>Browser-context evidence</h2><p>Action-loaded dependencies, transient SPA state and other browser-only observations.</p><a class="button" href="./browser-context/">Browser-context labs</a></article>
+    <article class="entry-card"><h2>Access control</h2><p>Cross-owner REST and GraphQL behavior with synthetic users.</p><a class="button" href="./access-control/">Access-control labs</a></article>
+  </div>
+  <section class="section" id="sql-cases" aria-labelledby="sql-cases-title"><h2 id="sql-cases-title">SQL injection labs</h2><p>These are distinct bounded SQLite behaviors, not the older syntax-error simulation. Their vulnerable/repaired browser contrasts have been tested; PTK Full and Auto findings on the current candidate remain unqualified.</p>
+    <div class="entry-grid">
+      <article class="entry-card"><h3>Single-quote string literal</h3><p>Injected category changes returned product rows.</p><a class="button" href="./sql-single-quote/">Open lab</a></article>
+      <article class="entry-card"><h3>Double-quote identifier</h3><p>Injected sort key changes the returned order.</p><a class="button" href="./sql-double-quote/">Open lab</a></article>
+      <article class="entry-card"><h3>Authentication bypass</h3><p>Injected login predicate grants only a synthetic admin identity.</p><a class="button" href="./sql-auth-bypass/">Open lab</a></article>
+    </div>
+  </section>
+  <section class="section"><h2>Detection fixtures, not featured exploit labs</h2><p>These retain useful PTK observation exercises, but their current actions do not establish the full security impact suggested by an exploit lab.</p>
+    <p><a href="./support-widget/">Support widget</a> · <a href="./imported-request-preferences/">Imported request preferences</a> · <a href="./session-bound-order-search/">Session-bound order search</a></p>
+  </section>
+  <p><a href="../">Playground home</a> · <a href="../play/">Play</a> · <a href="../explore/">Explore</a></p>
+</main></body>
+</html>

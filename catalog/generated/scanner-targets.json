@@ -3,8 +3,8 @@
   "version": 2,
   "generatedFrom": "catalog/challenges.json",
   "summary": {
-    "challenges": 419,
-    "targets": 716
+    "challenges": 439,
+    "targets": 756
   },
   "targets": [
     {
@@ -438,6 +438,478 @@
       }
     },
     {
+      "id": "graphql-order-review",
+      "challengeId": "graphql-order",
+      "variant": "review",
+      "title": "Cross-owner GraphQL query",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/graphql/order/vulnerable/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "graphql-order-control",
+      "challengeId": "graphql-order",
+      "variant": "repaired",
+      "title": "Owner-checked GraphQL query",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/graphql/order/fixed/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "idor-read-review",
+      "challengeId": "idor-read",
+      "variant": "review",
+      "title": "Cross-owner read",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/access-control/idor-read/vulnerable/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "idor-read-control",
+      "challengeId": "idor-read",
+      "variant": "repaired",
+      "title": "Owner-checked read",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/access-control/idor-read/fixed/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "idor-write-review",
+      "challengeId": "idor-write",
+      "variant": "review",
+      "title": "Cross-owner update",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/access-control/idor-write/vulnerable/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "idor-write-control",
+      "challengeId": "idor-write",
+      "variant": "repaired",
+      "title": "Owner-checked update",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/access-control/idor-write/fixed/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "stored-xss-review",
+      "challengeId": "stored-xss",
+      "variant": "review",
+      "title": "Stored message rendered as HTML",
+      "engines": [
+        "SAST",
+        "IAST",
+        "DAST"
+      ],
+      "route": "./targets/stored-xss/vulnerable/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "stored-xss-control",
+      "challengeId": "stored-xss",
+      "variant": "repaired",
+      "title": "Stored message rendered as text",
+      "engines": [
+        "SAST",
+        "IAST",
+        "DAST"
+      ],
+      "route": "./targets/stored-xss/fixed/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-nested-review",
+      "challengeId": "jwt-nested-weak-secret",
+      "variant": "review",
+      "title": "Weak-key nested JWT",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/jwt-lab/nested-json-weak-secret/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-nested-control",
+      "challengeId": "jwt-nested-weak-secret",
+      "variant": "repaired",
+      "title": "Strong-key nested JWT",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./targets/jwt-lab/nested-json-weak-secret/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-none-review",
+      "challengeId": "jwt-none",
+      "variant": "review",
+      "title": "Unsigned token accepted",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-none/?variant=vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-none-control",
+      "challengeId": "jwt-none",
+      "variant": "repaired",
+      "title": "Unsigned token rejected",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-none/?variant=fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-confusion-review",
+      "challengeId": "jwt-alg-confusion",
+      "variant": "review",
+      "title": "Public-key HMAC accepted",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-alg-confusion/?variant=vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-confusion-control",
+      "challengeId": "jwt-alg-confusion",
+      "variant": "repaired",
+      "title": "RS256 pinned",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-alg-confusion/?variant=fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-null-signature-review",
+      "challengeId": "jwt-null-signature",
+      "variant": "review",
+      "title": "Empty HS256 signature accepted",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-null-signature/?variant=vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-null-signature-control",
+      "challengeId": "jwt-null-signature",
+      "variant": "repaired",
+      "title": "HS256 signature required",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-null-signature/?variant=fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-jwk-review",
+      "challengeId": "jwt-jwk-injection",
+      "variant": "review",
+      "title": "Embedded public JWK trusted",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-jwk-injection/?variant=vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "jwt-jwk-control",
+      "challengeId": "jwt-jwk-injection",
+      "variant": "repaired",
+      "title": "Server key pinned",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/jwt-jwk-injection/?variant=fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "sql-single-review",
+      "challengeId": "sql-single-quote",
+      "variant": "review",
+      "title": "Concatenated category",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/sql-single-quote/?variant=vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "sql-single-control",
+      "challengeId": "sql-single-quote",
+      "variant": "repaired",
+      "title": "Bound category",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/sql-single-quote/?variant=fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "sql-double-review",
+      "challengeId": "sql-double-quote",
+      "variant": "review",
+      "title": "Concatenated sort identifier",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/sql-double-quote/?variant=vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "sql-double-control",
+      "challengeId": "sql-double-quote",
+      "variant": "repaired",
+      "title": "Allowlisted sort identifier",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/sql-double-quote/?variant=fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "sql-auth-review",
+      "challengeId": "sql-auth-bypass",
+      "variant": "review",
+      "title": "Concatenated login predicate",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/sql-auth-bypass/?variant=vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "sql-auth-control",
+      "challengeId": "sql-auth-bypass",
+      "variant": "repaired",
+      "title": "Bound login predicate",
+      "engines": [
+        "DAST"
+      ],
+      "route": "./labs/sql-auth-bypass/?variant=fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "xss-reflected-review",
+      "challengeId": "xss-reflected",
+      "variant": "review",
+      "title": "Unsafe reflected response",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/reflected/vulnerable/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "xss-reflected-control",
+      "challengeId": "xss-reflected",
+      "variant": "repaired",
+      "title": "Encoded reflected response",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/reflected/fixed/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "xss-dom-review",
+      "challengeId": "xss-dom",
+      "variant": "review",
+      "title": "Fragment to innerHTML",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/dom/vulnerable/"
+    },
+    {
+      "id": "xss-dom-control",
+      "challengeId": "xss-dom",
+      "variant": "repaired",
+      "title": "Fragment to textContent",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/dom/fixed/"
+    },
+    {
+      "id": "xss-attribute-review",
+      "challengeId": "xss-attribute",
+      "variant": "review",
+      "title": "Unsafe result label",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/reflected-attribute/vulnerable/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "xss-attribute-control",
+      "challengeId": "xss-attribute",
+      "variant": "repaired",
+      "title": "Encoded result label",
+      "engines": [
+        "DAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/reflected-attribute/fixed/",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http",
+        "port": 3080
+      }
+    },
+    {
+      "id": "xss-query-code-review",
+      "challengeId": "xss-query-code",
+      "variant": "review",
+      "title": "Query in executable code",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/query-code/vulnerable/"
+    },
+    {
+      "id": "xss-query-code-control",
+      "challengeId": "xss-query-code",
+      "variant": "repaired",
+      "title": "Query rendered as data",
+      "engines": [
+        "SAST",
+        "IAST"
+      ],
+      "route": "./targets/xss/query-code/fixed/"
+    },
+    {
       "id": "iast.atomic.iast-iast-runtime.button-1-inline-event.review",
       "challengeId": "iast.atomic.iast-iast-runtime.button-1-inline-event",
       "variant": "review",
@@ -476,6 +948,151 @@
         "IAST"
       ],
       "route": "./atomic/iast/iast-iast-open-redirect/btn-anchor/fixed/"
+    },
+    {
+      "id": "dast.route.api-labs-graphql-vulnerable-f5396d07.review",
+      "challengeId": "dast.route.api-labs-graphql-vulnerable-f5396d07",
+      "variant": "review",
+      "title": "Api · Labs · Graphql · Vulnerable review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/graphql/vulnerable",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "POST"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.api-labs-graphql-vulnerable-f5396d07.control",
+      "challengeId": "dast.route.api-labs-graphql-vulnerable-f5396d07",
+      "variant": "repaired",
+      "title": "Api · Labs · Graphql · Vulnerable paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/graphql/fixed",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      }
+    },
+    {
+      "id": "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2.review",
+      "challengeId": "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2",
+      "variant": "review",
+      "title": "Api · Labs · Idor read · Vulnerable · Objects · Order bob review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/idor-read/vulnerable/objects/order-bob",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "GET",
+          "HEAD"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2.control",
+      "challengeId": "dast.route.api-labs-idor-read-vulnerable-objects-order-bob-501e03f2",
+      "variant": "repaired",
+      "title": "Api · Labs · Idor read · Vulnerable · Objects · Order bob paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/idor-read/fixed/objects/order-bob",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      }
+    },
+    {
+      "id": "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f.review",
+      "challengeId": "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f",
+      "variant": "review",
+      "title": "Api · Labs · Idor write · Vulnerable · Objects · Order bob review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/idor-write/vulnerable/objects/order-bob",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "POST"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f.control",
+      "challengeId": "dast.route.api-labs-idor-write-vulnerable-objects-order-bob-535a935f",
+      "variant": "repaired",
+      "title": "Api · Labs · Idor write · Vulnerable · Objects · Order bob paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/idor-write/fixed/objects/order-bob",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      }
+    },
+    {
+      "id": "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666.review",
+      "challengeId": "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666",
+      "variant": "review",
+      "title": "Api · Labs · Jwt · Nested · Vulnerable · Admin review route",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/jwt/nested/vulnerable/admin",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      },
+      "request": {
+        "methods": [
+          "POST"
+        ],
+        "transport": "http"
+      }
+    },
+    {
+      "id": "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666.control",
+      "challengeId": "dast.route.api-labs-jwt-nested-vulnerable-admin-20069666",
+      "variant": "repaired",
+      "title": "Api · Labs · Jwt · Nested · Vulnerable · Admin paired control",
+      "engines": [
+        "DAST"
+      ],
+      "route": "/api/labs/jwt/nested/fixed/admin",
+      "runtime": {
+        "kind": "route-aware-server",
+        "protocol": "http-or-https",
+        "loopbackOnly": true
+      }
     },
     {
       "id": "iast.atomic.iast-iast-dom-xss.appendchild.review",

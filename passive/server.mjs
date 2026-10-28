@@ -6,6 +6,8 @@ import https from "node:https";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { handleWorkshopLabApi } from "./workshop-labs.mjs";
+import { handleRealLabsApi, serveReflectedXss, serveAttributeXss } from "./real-labs.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const playgroundRoot = path.resolve(__dirname, "..");
@@ -55,6 +57,20 @@ const childContextPageHeaders = (isHttps) => ({
   "Set-Cookie": `ptk_child_context_session=active; Path=/targets/same-origin-child-tab/; HttpOnly; SameSite=Strict${isHttps ? "; Secure" : ""}`
 });
 
+const xssDomHeaders = (vulnerable) => ({
+  "Content-Security-Policy": `default-src 'none'; script-src 'self'${vulnerable ? " 'unsafe-inline'" : ''}; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
+  "Cache-Control": "no-store",
+  "Referrer-Policy": "no-referrer",
+  "X-Content-Type-Options": "nosniff"
+});
+
+const xssQueryCodeHeaders = (vulnerable) => ({
+  "Content-Security-Policy": `default-src 'none'; script-src 'self'${vulnerable ? " 'unsafe-eval'" : ''}; style-src 'self'; img-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
+  "Cache-Control": "no-store",
+  "Referrer-Policy": "no-referrer",
+  "X-Content-Type-Options": "nosniff"
+});
+
 const routeMap = new Map([
   ["/", playgroundFileResponse("index.html")],
   ["/index.html", playgroundFileResponse("index.html")],
@@ -81,6 +97,73 @@ const routeMap = new Map([
   ["/assets/js/catalogue-app.js", playgroundFileResponse("assets/js/catalogue-app.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/assets/js/jwt-storage-lab.js", playgroundFileResponse("assets/js/jwt-storage-lab.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/assets/js/jwt-dast-lab.js", playgroundFileResponse("assets/js/jwt-dast-lab.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/js/access-control-lab.js", playgroundFileResponse("assets/js/access-control-lab.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/js/graphql-lab.js", playgroundFileResponse("assets/js/graphql-lab.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/js/stored-xss-lab.js", playgroundFileResponse("assets/js/stored-xss-lab.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/js/jwt-nested-lab.js", playgroundFileResponse("assets/js/jwt-nested-lab.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/assets/js/real-labs.js", playgroundFileResponse("assets/js/real-labs.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/labs/", playgroundFileResponse("labs/index.html")],
+  ["/labs/jwt/", playgroundFileResponse("labs/jwt/index.html")],
+  ["/labs/sql/", playgroundFileResponse("labs/sql/index.html")],
+  ["/labs/browser-context/", playgroundFileResponse("labs/browser-context/index.html")],
+  ["/labs/spa/", playgroundFileResponse("labs/spa/index.html")],
+  ["/labs/access-control/", playgroundFileResponse("labs/access-control/index.html")],
+  ["/labs/xss/", playgroundFileResponse("labs/xss/index.html")],
+  ["/labs/support-widget/", playgroundFileResponse("labs/support-widget/index.html")],
+  ["/labs/imported-request-preferences/", playgroundFileResponse("labs/imported-request-preferences/index.html")],
+  ["/labs/on-demand-analytics/", playgroundFileResponse("labs/on-demand-analytics/index.html")],
+  ["/labs/session-bound-order-search/", playgroundFileResponse("labs/session-bound-order-search/index.html")],
+  ["/labs/idor-read/", playgroundFileResponse("labs/idor-read/index.html")],
+  ["/labs/graphql-order/", playgroundFileResponse("labs/graphql-order/index.html")],
+  ["/labs/idor-write/", playgroundFileResponse("labs/idor-write/index.html")],
+  ["/labs/stored-xss/", playgroundFileResponse("labs/stored-xss/index.html")],
+  ["/labs/jwt-nested-weak-secret/", playgroundFileResponse("labs/jwt-nested-weak-secret/index.html")],
+  ["/labs/jwt-none/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/jwt-alg-confusion/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/jwt-null-signature/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/jwt-jwk-injection/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/sql-single-quote/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/sql-double-quote/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/sql-auth-bypass/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/xss-reflected/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/xss-dom/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/xss-attribute/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/labs/xss-query-code/", playgroundFileResponse("labs/real-lab/index.html")],
+  ["/campaigns/idor-read/", playgroundFileResponse("campaigns/idor-read/index.html")],
+  ["/campaigns/graphql-order/", playgroundFileResponse("campaigns/graphql-order/index.html")],
+  ["/campaigns/idor-write/", playgroundFileResponse("campaigns/idor-write/index.html")],
+  ["/campaigns/stored-xss/", playgroundFileResponse("campaigns/stored-xss/index.html")],
+  ["/campaigns/jwt-nested-weak-secret/", playgroundFileResponse("campaigns/jwt-nested-weak-secret/index.html")],
+  ["/campaigns/jwt-none/", playgroundFileResponse("campaigns/jwt-none/index.html")],
+  ["/campaigns/jwt-alg-confusion/", playgroundFileResponse("campaigns/jwt-alg-confusion/index.html")],
+  ["/campaigns/jwt-null-signature/", playgroundFileResponse("campaigns/jwt-null-signature/index.html")],
+  ["/campaigns/jwt-jwk-injection/", playgroundFileResponse("campaigns/jwt-jwk-injection/index.html")],
+  ["/campaigns/sql-single-quote/", playgroundFileResponse("campaigns/sql-single-quote/index.html")],
+  ["/campaigns/sql-double-quote/", playgroundFileResponse("campaigns/sql-double-quote/index.html")],
+  ["/campaigns/sql-auth-bypass/", playgroundFileResponse("campaigns/sql-auth-bypass/index.html")],
+  ["/campaigns/xss-reflected/", playgroundFileResponse("campaigns/xss-reflected/index.html")],
+  ["/campaigns/xss-dom/", playgroundFileResponse("campaigns/xss-dom/index.html")],
+  ["/campaigns/xss-attribute/", playgroundFileResponse("campaigns/xss-attribute/index.html")],
+  ["/campaigns/xss-query-code/", playgroundFileResponse("campaigns/xss-query-code/index.html")],
+  ["/targets/access-control/idor-read/vulnerable/", playgroundFileResponse("targets/access-control/idor-read/index.html")],
+  ["/targets/access-control/idor-read/fixed/", playgroundFileResponse("targets/access-control/idor-read/index.html")],
+  ["/targets/access-control/idor-write/vulnerable/", playgroundFileResponse("targets/access-control/idor-write/index.html")],
+  ["/targets/access-control/idor-write/fixed/", playgroundFileResponse("targets/access-control/idor-write/index.html")],
+  ["/targets/graphql/order/vulnerable/", playgroundFileResponse("targets/graphql/order/vulnerable/index.html")],
+  ["/targets/graphql/order/fixed/", playgroundFileResponse("targets/graphql/order/fixed/index.html")],
+  ["/targets/stored-xss/vulnerable/", playgroundFileResponse("targets/stored-xss/vulnerable/index.html")],
+  ["/targets/stored-xss/vulnerable/render.js", playgroundFileResponse("targets/stored-xss/vulnerable/render.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/stored-xss/fixed/", playgroundFileResponse("targets/stored-xss/fixed/index.html")],
+  ["/targets/stored-xss/fixed/render.js", playgroundFileResponse("targets/stored-xss/fixed/render.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/jwt-lab/nested-json-weak-secret/", playgroundFileResponse("targets/jwt-lab/nested-json-weak-secret/index.html")],
+  ["/targets/xss/dom/vulnerable/", playgroundFileResponse("targets/xss/dom/vulnerable/index.html", { headers: xssDomHeaders(true) })],
+  ["/targets/xss/dom/vulnerable/app.js", playgroundFileResponse("targets/xss/dom/vulnerable/app.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/xss/dom/fixed/", playgroundFileResponse("targets/xss/dom/fixed/index.html", { headers: xssDomHeaders(false) })],
+  ["/targets/xss/dom/fixed/app.js", playgroundFileResponse("targets/xss/dom/fixed/app.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/xss/query-code/vulnerable/", playgroundFileResponse("targets/xss/query-code/vulnerable/index.html", { headers: xssQueryCodeHeaders(true) })],
+  ["/targets/xss/query-code/vulnerable/app.js", playgroundFileResponse("targets/xss/query-code/vulnerable/app.js", { contentType: "application/javascript; charset=utf-8" })],
+  ["/targets/xss/query-code/fixed/", playgroundFileResponse("targets/xss/query-code/fixed/index.html", { headers: xssQueryCodeHeaders(false) })],
+  ["/targets/xss/query-code/fixed/app.js", playgroundFileResponse("targets/xss/query-code/fixed/app.js", { contentType: "application/javascript; charset=utf-8" })],
   ["/play/", playgroundFileResponse("play/index.html")],
   ["/play/index.html", playgroundFileResponse("play/index.html")],
   ["/explore/", playgroundFileResponse("explore/index.html")],
@@ -792,6 +875,10 @@ function createRequestHandler(isHttps) {
       });
       return;
     }
+    if (await handleRealLabsApi(req, res, url.pathname)) return;
+    if (serveReflectedXss(req, res, url)) return;
+    if (serveAttributeXss(req, res, url)) return;
+    if (await handleWorkshopLabApi(req, res, url.pathname)) return;
     if (/^\/targets\/session-bound-order-search\/(?:vulnerable|fixed)\/api\/search$/.test(url.pathname)) {
       await serveOrderSearchApi(req, res, { pathname: url.pathname, isHttps });
       return;

@@ -108,12 +108,12 @@ test('GitHub Pages project subpath loads catalogues, campaigns and direct static
     }
 
     await page.goto(`${baseUrl}campaigns/`, { waitUntil: 'networkidle' })
-    assert.equal(await page.locator('[data-mission-card]').count(), 11)
+    assert.equal(await page.locator('[data-mission-card]').count(), 15)
     assert.equal(await page.locator('[data-product-preview]').count(), 3)
     assert.equal(await page.locator('[data-product-preview="saved-workspace"] a').getAttribute('href'), `${baseUrl}campaigns/saved-workspace/`)
     assert.equal(await page.locator('[data-product-preview="session-bound-order-search"] a').count(), 0)
     await page.goto(`${baseUrl}scanner/`, { waitUntil: 'networkidle' })
-    assert.equal(await page.locator('[data-scanner-target]').count(), 22)
+    assert.equal(await page.locator('[data-scanner-target]').count(), 30)
     await page.goto(`${baseUrl}play/`, { waitUntil: 'networkidle' })
     assert.equal(await page.locator('[data-challenge-id]').count(), 3)
     assert.equal(await page.locator('[data-playlist-list] .playlist-option').count(), 7)

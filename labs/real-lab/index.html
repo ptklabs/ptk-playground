@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Focused security lab · PTK Playground</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <link rel="stylesheet" href="../../assets/css/playground.css">
+  <script type="module" src="../../assets/js/real-labs.js"></script>
+</head>
+<body><main class="page-shell">
+  <p class="eyebrow">Focused local security lab</p>
+  <h1 id="lab-title">Loading lab…</h1>
+  <p id="lab-intro"></p>
+  <aside class="notice notice--warning"><span class="notice__icon" aria-hidden="true">!</span><p>Use <code>npm run demo</code> on loopback. This case needs the route-aware server; static hosting cannot reproduce its HTTP contract. Use only on an instance you own.</p></aside>
+  <section class="section"><h2>One repeatable action</h2><p id="lab-action"></p>
+    <p><button class="button" id="run-lab" type="button" hidden>Run paired requests</button>
+       <a class="button" id="review-link" hidden>Open vulnerable target</a>
+       <a class="button button--secondary" id="fixed-link" hidden>Open repaired target</a></p>
+    <pre class="status-line" id="lab-result" aria-live="polite">Not run</pre>
+  </section>
+  <section class="section"><h2>Expected contrast and reset</h2><p id="lab-expected"></p><p id="lab-reset"></p></section>
+  <section class="section"><h2>What PTK should prove</h2><p id="lab-evidence"></p><p><strong>Qualification:</strong> candidate. The target/browser contrast is separate from a native Full PTK finding; no automatic result is claimed until tested on the pinned extension.</p></section>
+  <p><a href="../">All labs</a> · <a href="../../">Playground home</a></p>
+</main></body>
+</html>

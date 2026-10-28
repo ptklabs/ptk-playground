@@ -32,6 +32,8 @@ const securityRoutes = new Set([
 ])
 
 function isSecurityTarget(pathname) {
+  if (/^\/api\/labs\/graphql\/(?:vulnerable|fixed)$/.test(pathname)) return true
+  if (/^\/api\/labs\/(?:idor-(?:read|write)\/(?:vulnerable|fixed)\/objects\/order-bob|jwt\/nested\/(?:vulnerable|fixed)\/admin)$/.test(pathname)) return true
   if (catalogDastRoutes.has(pathname)) return true
   if (securityRoutes.has(pathname)) return true
   if (/^\/targets\/session-bound-order-search\/(?:vulnerable|fixed)\/api\/search$/.test(pathname)) return true
@@ -50,6 +52,9 @@ function isSecurityTarget(pathname) {
 }
 
 function category(pathname) {
+  if (pathname.includes('/api/labs/graphql/')) return 'GraphQL object authorization'
+  if (pathname.includes('/api/labs/idor-')) return 'Authenticated object authorization'
+  if (pathname.includes('/api/labs/jwt/nested/')) return 'JWT nested JSON authorization'
   if (pathname.includes('/targets/jwt-lab/')) return 'JWT request carrier and verification'
   if (pathname.includes('/api/search')) return 'Authenticated active request'
   if (pathname.includes('/api/order')) return 'SPA-created authenticated active request'
@@ -64,6 +69,9 @@ function category(pathname) {
 }
 
 function evidence(pathname) {
+  if (pathname.includes('/api/labs/graphql/')) return 'same-session-graphql-order-differential'
+  if (pathname.includes('/api/labs/idor-')) return 'cross-owner-request-differential'
+  if (pathname.includes('/api/labs/jwt/nested/')) return 'signed-jwt-request-differential'
   if (pathname.includes('/targets/jwt-lab/')) return 'jwt-request-differential'
   if (pathname.includes('/api/search')) return 'bounded-active-request'
   if (pathname.includes('/api/order')) return 'bounded-json-active-request'
@@ -75,6 +83,10 @@ function evidence(pathname) {
 }
 
 const controlFor = new Map([
+  ['/api/labs/graphql/vulnerable', '/api/labs/graphql/fixed'],
+  ['/api/labs/idor-read/vulnerable/objects/order-bob', '/api/labs/idor-read/fixed/objects/order-bob'],
+  ['/api/labs/idor-write/vulnerable/objects/order-bob', '/api/labs/idor-write/fixed/objects/order-bob'],
+  ['/api/labs/jwt/nested/vulnerable/admin', '/api/labs/jwt/nested/fixed/admin'],
   ['/passive/cases/headers/powered-by.html', '/passive/cases/headers/secure-control.html'],
   ['/passive/fixtures/headers/weak-security.html', '/passive/fixtures/headers/secure-control.html'],
   ['/targets/session-bound-order-search/vulnerable/api/search', '/targets/session-bound-order-search/fixed/api/search'],
@@ -96,6 +108,7 @@ const contracts = routes
     const childContext = pathname.includes('/api/context')
     const jwtSession = pathname.includes('/targets/jwt-lab/') && pathname.endsWith('/api/session')
     const jwtSeed = pathname.includes('/targets/jwt-lab/cookie/') && pathname.endsWith('/api/seed')
+    const workshopPost = /^\/api\/labs\/(?:session|reset|graphql\/|idor-write\/|stored-xss\/messages|jwt\/nested\/(?:vulnerable|fixed)\/admin)/.test(pathname)
     const formRoute = ['/support/tickets/create', '/switch-tenant', '/passive/upload/index.html'].includes(pathname)
     const websocket = /realtime\/ws|socket\.io|sockjs/.test(pathname)
     const securityTarget = isSecurityTarget(pathname)
@@ -107,7 +120,7 @@ const contracts = routes
       category: category(pathname),
       evidence: evidence(pathname),
       transport: websocket ? 'websocket' : 'http',
-      methods: websocket ? ['GET-UPGRADE'] : activeSearch || activeOrder || jwtSession ? ['POST'] : childContext || jwtSeed ? ['GET'] : formRoute ? ['GET', 'POST'] : ['GET', 'HEAD'],
+      methods: websocket ? ['GET-UPGRADE'] : pathname === '/api/labs/stored-xss/messages' ? ['GET', 'POST'] : workshopPost || activeSearch || activeOrder || jwtSession ? ['POST'] : childContext || jwtSeed ? ['GET'] : formRoute ? ['GET', 'POST'] : ['GET', 'HEAD'],
       runtime: {
         kind: 'route-aware-server',
         protocol: activeSearch || pathname === '/passive/cases/headers/powered-by.html' || pathname === '/passive/cases/headers/secure-control.html' ? 'https' : activeOrder || childContext || jwtSession || jwtSeed ? 'http' : 'http-or-https',
